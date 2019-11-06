@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/clubhouse-pos-importer/static/css/main.b100e6da.chunk.css",
-    "main.js": "/clubhouse-pos-importer/static/js/main.80aa0a98.chunk.js",
-    "main.js.map": "/clubhouse-pos-importer/static/js/main.80aa0a98.chunk.js.map",
-    "runtime-main.js": "/clubhouse-pos-importer/static/js/runtime-main.7b1646e5.js",
-    "runtime-main.js.map": "/clubhouse-pos-importer/static/js/runtime-main.7b1646e5.js.map",
-    "static/js/2.0cbcd13a.chunk.js": "/clubhouse-pos-importer/static/js/2.0cbcd13a.chunk.js",
-    "static/js/2.0cbcd13a.chunk.js.map": "/clubhouse-pos-importer/static/js/2.0cbcd13a.chunk.js.map",
-    "index.html": "/clubhouse-pos-importer/index.html",
-    "precache-manifest.33444166a8b72236a757ce6e59cf68f1.js": "/clubhouse-pos-importer/precache-manifest.33444166a8b72236a757ce6e59cf68f1.js",
-    "service-worker.js": "/clubhouse-pos-importer/service-worker.js",
-    "static/css/main.b100e6da.chunk.css.map": "/clubhouse-pos-importer/static/css/main.b100e6da.chunk.css.map",
-    "static/media/logo.svg": "/clubhouse-pos-importer/static/media/logo.25bf045c.svg"
+    "main.css": "/clubhouse-pos-importer/index.html/static/css/main.b100e6da.chunk.css",
+    "main.js": "/clubhouse-pos-importer/index.html/static/js/main.5b625e8c.chunk.js",
+    "main.js.map": "/clubhouse-pos-importer/index.html/static/js/main.5b625e8c.chunk.js.map",
+    "runtime-main.js": "/clubhouse-pos-importer/index.html/static/js/runtime-main.c11ff883.js",
+    "runtime-main.js.map": "/clubhouse-pos-importer/index.html/static/js/runtime-main.c11ff883.js.map",
+    "static/js/2.0cbcd13a.chunk.js": "/clubhouse-pos-importer/index.html/static/js/2.0cbcd13a.chunk.js",
+    "static/js/2.0cbcd13a.chunk.js.map": "/clubhouse-pos-importer/index.html/static/js/2.0cbcd13a.chunk.js.map",
+    "index.html": "/clubhouse-pos-importer/index.html/index.html",
+    "precache-manifest.d68d5493dfa2bc4864e7894a1ffad296.js": "/clubhouse-pos-importer/index.html/precache-manifest.d68d5493dfa2bc4864e7894a1ffad296.js",
+    "service-worker.js": "/clubhouse-pos-importer/index.html/service-worker.js",
+    "static/css/main.b100e6da.chunk.css.map": "/clubhouse-pos-importer/index.html/static/css/main.b100e6da.chunk.css.map",
+    "static/media/logo.svg": "/clubhouse-pos-importer/index.html/static/media/logo.25bf045c.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.7b1646e5.js",
+    "static/js/runtime-main.c11ff883.js",
     "static/js/2.0cbcd13a.chunk.js",
     "static/css/main.b100e6da.chunk.css",
-    "static/js/main.80aa0a98.chunk.js"
+    "static/js/main.5b625e8c.chunk.js"
   ]
 }

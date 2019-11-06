@@ -2,7 +2,7 @@
     "name": "clubhouse-pos-importer",
     "version": "0.1.0",
     "private": true,
-    "homepage": "https://jaikamat.github.io/clubhouse-pos-importer/",
+    "homepage": "https://jaikamat.github.io/clubhouse-pos-importer/index.html",
     "dependencies": {
         "react": "^16.11.0",
         "react-dom": "^16.11.0",

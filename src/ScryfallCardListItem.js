@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Image, Dropdown } from 'semantic-ui-react';
+import { Segment, Image, Input, Button, Form, Select } from 'semantic-ui-react';
 
 const finishes = [
     { key: 'NONFOIL', text: 'Nonfoil', value: 'NONFOIL' },
@@ -26,6 +26,7 @@ function checkCardFinish(nonfoilProp, foilProp) {
 
 export default class ScryfallCardListItem extends Component {
     state = {
+        quantity: 0,
         selectedFinish: checkCardFinish(this.props.nonfoil, this.props.foil)
             .selectedFinish,
         selectedCondition: 'NM',
@@ -45,11 +46,18 @@ export default class ScryfallCardListItem extends Component {
         });
     };
 
+    handleQuantityChange = (e, { value }) => {
+        this.setState({ quantity: value }, () => {
+            console.log(this.state);
+        });
+    };
+
     render() {
         const {
             selectedFinish,
             selectedCondition,
-            finishDisabled
+            finishDisabled,
+            quantity
         } = this.state;
         const { image_uris, name, set_name, set, artist } = this.props;
 
@@ -61,20 +69,39 @@ export default class ScryfallCardListItem extends Component {
                     size="tiny"
                 />
                 {name} | {set_name} ({String(set).toUpperCase()}) | {artist}
-                <Dropdown
-                    defaultValue={selectedFinish}
-                    selection
-                    options={finishes}
-                    disabled={finishDisabled}
-                    onChange={this.handleFinishChange}
-                />
-                <Dropdown
-                    defaultValue={selectedCondition}
-                    selection
-                    options={cardConditions}
-                    onChange={this.handleConditionChange}
-                />
-                --- QTY
+                <Form>
+                    <Form.Group>
+                        <Form.Field
+                            label="Finish"
+                            control={Select}
+                            defaultValue={selectedFinish}
+                            options={finishes}
+                            disabled={finishDisabled}
+                            onChange={this.handleFinishChange}
+                        />
+                        <Form.Field
+                            label="Condition"
+                            control={Select}
+                            defaultValue={selectedCondition}
+                            options={cardConditions}
+                            onChange={this.handleConditionChange}
+                        />
+                        <Form.Field
+                            control={Input}
+                            type="number"
+                            label="Quantity"
+                            onChange={this.handleQuantityChange}
+                        />
+                        <Form.Field
+                            label="Add to Lightspeed?"
+                            control={Button}
+                            primary
+                            disabled={quantity <= 0}
+                        >
+                            Submit
+                        </Form.Field>
+                    </Form.Group>
+                </Form>
             </Segment>
         );
     }

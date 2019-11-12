@@ -8,7 +8,7 @@ class Home extends React.Component {
     handleSearchSelect = async term => {
         try {
             const { data } = await axios.get(
-                encodeURI(`https://api.scryfall.com/cards/search?q=!"${term}"`)
+                encodeURI(`https://api.scryfall.com/cards/search?q=!"${term}" unique:prints`)
             );
             console.log(data.data);
             // this.setState({ searchResults: data.data });

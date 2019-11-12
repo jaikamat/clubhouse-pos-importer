@@ -2,13 +2,6 @@ import React from 'react';
 import SearchBar from './SearchBar';
 import axios from 'axios';
 import ScryfallCardList from './ScryfallCardList';
-import { Segment } from 'semantic-ui-react';
-
-function createCardList(cards) {
-    return cards.map(c => {
-        return <ScryfallCardList />;
-    });
-}
 
 class Home extends React.Component {
     state = { searchResults: [] };
@@ -18,7 +11,6 @@ class Home extends React.Component {
             const { data } = await axios.get(
                 encodeURI(`https://api.scryfall.com/cards/search?q=!"${term}" unique:prints`)
             );
-            console.log(data.data);
             this.setState({ searchResults: data.data });
         } catch (e) {
             console.log(e);
@@ -35,7 +27,7 @@ class Home extends React.Component {
                     </p>
 
                     <SearchBar handleSearchSelect={this.handleSearchSelect} />
-                    <Segment.Group>{createCardList(this.state.searchResults)}</Segment.Group>
+                    <ScryfallCardList cards={this.state.searchResults} />
                 </header>
             </div>
         );

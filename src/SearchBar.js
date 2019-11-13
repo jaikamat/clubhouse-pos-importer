@@ -9,7 +9,7 @@ class SearchBar extends React.Component {
         term: '',
         autocomplete: [],
         results: [],
-        query: ''
+        defaultSearchValue: 'Search for a card'
     };
 
     handleSearchChange = (e, { value }) => {
@@ -21,7 +21,7 @@ class SearchBar extends React.Component {
                 term: '',
                 results: [],
                 autocomplete: [],
-                query: ''
+                defaultSearchValue: 'Search for a card'
             });
 
         setTimeout(async () => {
@@ -45,7 +45,8 @@ class SearchBar extends React.Component {
     };
 
     render() {
-        const { results, isLoading } = this.state;
+        const { results, isLoading, defaultSearchValue } = this.state;
+
         return (
             <Search
                 onSearchChange={_.debounce(this.handleSearchChange, 500, {
@@ -54,6 +55,7 @@ class SearchBar extends React.Component {
                 onResultSelect={this.handleResultSelect}
                 loading={isLoading}
                 results={results}
+                placeholder={defaultSearchValue}
             />
         );
     }

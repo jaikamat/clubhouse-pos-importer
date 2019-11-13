@@ -5,7 +5,7 @@ import AuthCallback from './AuthCallback';
 
 function Main() {
     return (
-        <div>
+        <div style={{ marginTop: '40px' }}>
             <Switch>
                 <Route exact path="/" component={Home} />
                 <Route exact path="/authcallback" component={AuthCallback} />

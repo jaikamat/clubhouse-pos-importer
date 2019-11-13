@@ -22,15 +22,13 @@ class Home extends React.Component {
     render() {
         return (
             <div>
-                <header className="App-header">
-                    <p>
-                        Creating an app for my Local Game Shop (LGS) to manage their custom
-                        inventory via LightSpeed POS!
-                    </p>
+                <p>
+                    Creating an app for my Local Game Shop (LGS) to manage their
+                    custom inventory via LightSpeed POS!
+                </p>
 
-                    <SearchBar handleSearchSelect={this.handleSearchSelect} />
-                    <ScryfallCardList cards={this.state.searchResults} />
-                </header>
+                <SearchBar handleSearchSelect={this.handleSearchSelect} />
+                <ScryfallCardList cards={this.state.searchResults} />
             </div>
         );
     }

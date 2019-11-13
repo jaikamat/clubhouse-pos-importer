@@ -28,3 +28,4 @@ yarn-error.log*
 api
 
 /gc_functions/node_modules
+/gc_functions/.env

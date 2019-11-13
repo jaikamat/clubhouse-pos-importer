@@ -6,6 +6,10 @@ class Header extends React.Component {
         return (
             <Menu inverted color="blue" fixed="top">
                 <Menu.Item name="Clubhouse Collection" />
+                <Menu.Menu position="right">
+                    <Menu.Item name="Inventory" />
+                    <Menu.Item name="New Sale" />
+                </Menu.Menu>
             </Menu>
         );
     }

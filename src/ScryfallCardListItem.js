@@ -69,7 +69,7 @@ export default class ScryfallCardListItem extends Component {
             finishDisabled,
             quantity
         } = this.state;
-        const { image_uris, name, set_name, set, artist } = this.props;
+        const { image_uris, name, set_name, set, rarity } = this.props;
 
         return (
             <Segment>
@@ -80,17 +80,13 @@ export default class ScryfallCardListItem extends Component {
                     <Grid.Column width={13} verticalAlign="middle">
                         <Grid.Row>
                             <Header as="h3">
-                                {name}
-                                <Header.Subheader>
-                                    <Label
-                                        horizontal
-                                        color="dbdbdb"
-                                        style={{ marginLeft: 0 }}
-                                    >
-                                        {set_name} ({String(set).toUpperCase()})
-                                    </Label>
-                                    | {artist}
-                                </Header.Subheader>
+                                {name}{' '}
+                                <i
+                                    className={`ss ss-fw ss-${set} ss-${rarity}`}
+                                />
+                                <Label horizontal>
+                                    {set_name} ({String(set).toUpperCase()})
+                                </Label>
                             </Header>
                         </Grid.Row>
                         <Grid.Row>

@@ -1,5 +1,15 @@
 import React, { Component } from 'react';
-import { Segment, Image, Input, Button, Form, Select } from 'semantic-ui-react';
+import {
+    Segment,
+    Image,
+    Input,
+    Button,
+    Form,
+    Select,
+    Grid,
+    Header,
+    Label
+} from 'semantic-ui-react';
 
 const finishes = [
     { key: 'NONFOIL', text: 'Nonfoil', value: 'NONFOIL' },
@@ -63,45 +73,63 @@ export default class ScryfallCardListItem extends Component {
 
         return (
             <Segment>
-                <Image
-                    src={image_uris.normal}
-                    verticalAlign="middle"
-                    size="tiny"
-                />
-                {name} | {set_name} ({String(set).toUpperCase()}) | {artist}
-                <Form>
-                    <Form.Group>
-                        <Form.Field
-                            label="Finish"
-                            control={Select}
-                            defaultValue={selectedFinish}
-                            options={finishes}
-                            disabled={finishDisabled}
-                            onChange={this.handleFinishChange}
-                        />
-                        <Form.Field
-                            label="Condition"
-                            control={Select}
-                            defaultValue={selectedCondition}
-                            options={cardConditions}
-                            onChange={this.handleConditionChange}
-                        />
-                        <Form.Field
-                            control={Input}
-                            type="number"
-                            label="Quantity"
-                            onChange={this.handleQuantityChange}
-                        />
-                        <Form.Field
-                            label="Add to Lightspeed?"
-                            control={Button}
-                            primary
-                            disabled={quantity <= 0}
-                        >
-                            Submit
-                        </Form.Field>
-                    </Form.Group>
-                </Form>
+                <Grid>
+                    <Grid.Column width={2}>
+                        <Image src={image_uris.normal} fluid />
+                    </Grid.Column>
+                    <Grid.Column width={13} verticalAlign="middle">
+                        <Grid.Row>
+                            <Header as="h3">
+                                {name}
+                                <Header.Subheader>
+                                    <Label
+                                        horizontal
+                                        color="dbdbdb"
+                                        style={{ marginLeft: 0 }}
+                                    >
+                                        {set_name} ({String(set).toUpperCase()})
+                                    </Label>
+                                    | {artist}
+                                </Header.Subheader>
+                            </Header>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Form>
+                                <Form.Group>
+                                    <Form.Field
+                                        label="Finish"
+                                        control={Select}
+                                        defaultValue={selectedFinish}
+                                        options={finishes}
+                                        disabled={finishDisabled}
+                                        onChange={this.handleFinishChange}
+                                    />
+                                    <Form.Field
+                                        label="Condition"
+                                        control={Select}
+                                        defaultValue={selectedCondition}
+                                        options={cardConditions}
+                                        onChange={this.handleConditionChange}
+                                    />
+                                    <Form.Field
+                                        control={Input}
+                                        type="number"
+                                        label="Quantity"
+                                        onChange={this.handleQuantityChange}
+                                    />
+                                    <Form.Field
+                                        label="Add to Lightspeed?"
+                                        control={Button}
+                                        primary
+                                        disabled={quantity <= 0}
+                                    >
+                                        Submit
+                                    </Form.Field>
+                                </Form.Group>
+                            </Form>
+                        </Grid.Row>
+                    </Grid.Column>
+                </Grid>
             </Segment>
         );
     }

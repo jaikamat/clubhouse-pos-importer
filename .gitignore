@@ -26,3 +26,5 @@ yarn-error.log*
 
 /clubhouse_data
 api
+
+/gc_functions/node_modules

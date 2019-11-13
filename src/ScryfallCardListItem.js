@@ -93,6 +93,12 @@ export default class ScryfallCardListItem extends Component {
                             <Form>
                                 <Form.Group>
                                     <Form.Field
+                                        control={Input}
+                                        type="number"
+                                        label="Quantity"
+                                        onChange={this.handleQuantityChange}
+                                    />
+                                    <Form.Field
                                         label="Finish"
                                         control={Select}
                                         defaultValue={selectedFinish}
@@ -106,12 +112,6 @@ export default class ScryfallCardListItem extends Component {
                                         defaultValue={selectedCondition}
                                         options={cardConditions}
                                         onChange={this.handleConditionChange}
-                                    />
-                                    <Form.Field
-                                        control={Input}
-                                        type="number"
-                                        label="Quantity"
-                                        onChange={this.handleQuantityChange}
                                     />
                                     <Form.Field
                                         label="Add to Inventory?"

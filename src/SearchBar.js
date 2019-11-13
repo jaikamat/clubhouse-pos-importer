@@ -49,7 +49,7 @@ class SearchBar extends React.Component {
 
         return (
             <Search
-                onSearchChange={_.debounce(this.handleSearchChange, 500, {
+                onSearchChange={_.debounce(this.handleSearchChange, 300, {
                     trailing: true
                 })}
                 onResultSelect={this.handleResultSelect}

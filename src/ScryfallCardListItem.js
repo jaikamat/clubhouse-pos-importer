@@ -75,7 +75,7 @@ export default class ScryfallCardListItem extends Component {
             <Segment>
                 <Grid>
                     <Grid.Column width={2}>
-                        <Image src={image_uris.normal} fluid />
+                        <Image src={image_uris.normal} size="tiny" />
                     </Grid.Column>
                     <Grid.Column width={13} verticalAlign="middle">
                         <Grid.Row>
@@ -114,7 +114,7 @@ export default class ScryfallCardListItem extends Component {
                                         onChange={this.handleQuantityChange}
                                     />
                                     <Form.Field
-                                        label="Add to Lightspeed?"
+                                        label="Add to Inventory?"
                                         control={Button}
                                         primary
                                         disabled={quantity <= 0}

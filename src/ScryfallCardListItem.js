@@ -59,9 +59,7 @@ export default class ScryfallCardListItem extends Component {
     };
 
     handleQuantityChange = (e, { value }) => {
-        this.setState({ quantity: parseInt(value) }, () => {
-            console.log(this.state);
-        });
+        this.setState({ quantity: parseInt(value) });
     };
 
     handleInventoryAdd = async (e, { value }) => {
@@ -71,7 +69,7 @@ export default class ScryfallCardListItem extends Component {
 
         try {
             this.setState({ submitDisable: true });
-            const res = await axios.post(
+            const { data } = await axios.post(
                 'https://us-central1-clubhouse-collection.cloudfunctions.net/addCardToInventory',
                 {
                     quantity: quantity,
@@ -79,11 +77,23 @@ export default class ScryfallCardListItem extends Component {
                     cardInfo: { ...this.props }
                 }
             );
-            console.log(res);
+            console.log(data.value);
         } catch (err) {
             console.log(err);
         } finally {
-            this.setState({ submitDisable: false });
+            this.setState({
+                quantity: 0,
+                selectedFinish: checkCardFinish(
+                    this.props.nonfoil,
+                    this.props.foil
+                ).selectedFinish,
+                selectedCondition: 'NM',
+                finishDisabled: checkCardFinish(
+                    this.props.nonfoil,
+                    this.props.foil
+                ).finishDisabled,
+                submitDisable: false
+            });
         }
     };
 
@@ -122,6 +132,7 @@ export default class ScryfallCardListItem extends Component {
                                         control={Input}
                                         type="number"
                                         label="Quantity"
+                                        value={quantity}
                                         onChange={this.handleQuantityChange}
                                     />
                                     <Form.Field
@@ -144,7 +155,7 @@ export default class ScryfallCardListItem extends Component {
                                         control={Button}
                                         primary
                                         disabled={
-                                            quantity <= 0 || submitDisable
+                                            quantity === 0 || submitDisable
                                         }
                                         onClick={this.handleInventoryAdd}
                                     >

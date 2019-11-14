@@ -17,7 +17,7 @@ async function addCardToInventory(quantity, type, cardInfo) {
 
         const db = client.db('test');
 
-        message = await db.collection('card_inventory').findOneAndUpdate(
+        const data = await db.collection('card_inventory').findOneAndUpdate(
             { _id: cardInfo.id },
             {
                 $inc: {
@@ -26,11 +26,19 @@ async function addCardToInventory(quantity, type, cardInfo) {
                 $setOnInsert: cardInfo
             },
             {
-                upsert: true
+                upsert: true,
+                projection: {
+                    _id: true,
+                    qoh: true,
+                    name: true,
+                    setName: true,
+                    set: true
+                },
+                returnOriginal: false
             }
         );
 
-        status = 'Card successfully added to database';
+        status = data;
     } catch (err) {
         status = err;
     } finally {

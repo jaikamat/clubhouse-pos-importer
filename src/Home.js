@@ -13,14 +13,16 @@ class Home extends React.Component {
             const searchRes = await axios.get(
                 `https://api.scryfall.com/cards/search?q=!${encodedTerm}%20unique%3Aprints%20game%3Apaper`
             );
-            console.log(searchRes);
 
-            let inventoryRes = await axios.post(
+            const ids = searchRes.data.data.map(el => el.id);
+            const inventoryRes = await axios.post(
                 'https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsFromInventory',
                 {
-                    scryfallIds: searchRes.data.data.map(el => el.id)
+                    scryfallIds: ids
                 }
             );
+
+            console.log(searchRes);
             console.log(inventoryRes);
 
             this.setState({

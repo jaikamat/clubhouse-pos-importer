@@ -6,7 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "addCardToInventory": "functions-framework --target=addCardToInventory",
-        "getCardsFromInventory": "functions-framework --target=getCardsFromInventory"
+        "getCardQuantitiesFromInventory": "functions-framework --target=getCardQuantitiesFromInventory"
     },
     "author": "",
     "license": "ISC",

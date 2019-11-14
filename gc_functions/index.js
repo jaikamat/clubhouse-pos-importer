@@ -1,6 +1,6 @@
 const addCardToInventory = require('./addCardToInventory').addCardToInventory;
-const getCardsFromInventory = require('./getCardsFromInventory')
-    .getCardsFromInventory;
+const getCardQuantitiesFromInventory = require('./getCardQuantitiesFromInventory')
+    .getCardQuantitiesFromInventory;
 
 exports.addCardToInventory = addCardToInventory;
-exports.getCardsFromInventory = getCardsFromInventory;
+exports.getCardQuantitiesFromInventory = getCardQuantitiesFromInventory;

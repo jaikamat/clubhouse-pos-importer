@@ -59,19 +59,27 @@ export default class ScryfallCardListItem extends Component {
     };
 
     handleQuantityChange = (e, { value }) => {
-        this.setState({ quantity: value }, () => {
+        this.setState({ quantity: parseInt(value) }, () => {
             console.log(this.state);
         });
     };
 
     handleInventoryAdd = async (e, { value }) => {
         const { quantity, selectedFinish, selectedCondition } = this.state;
+        // This is the identifier for quantities of different finishes/conditions in the db
+        const type = `${selectedFinish}_${selectedCondition}`;
 
         try {
             this.setState({ submitDisable: true });
-            const type = `${selectedFinish}_${selectedCondition}`;
-            console.log(quantity, type);
-            console.log({ ...this.props });
+            const res = await axios.post(
+                'https://us-central1-clubhouse-collection.cloudfunctions.net/addCardToInventory',
+                {
+                    quantity: quantity,
+                    type: type,
+                    cardInfo: { ...this.props }
+                }
+            );
+            console.log(res);
         } catch (err) {
             console.log(err);
         } finally {

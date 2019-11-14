@@ -1,13 +1,15 @@
 const MongoClient = require('mongodb').MongoClient;
-const assert = require('assert');
 require('dotenv').config();
 
-async function addCardToInventory(data) {
+// 'TYPE' Refers to the configuration of Finishes and Conditions
+async function addCardToInventory(quantity, type, cardInfo) {
     const uri = `mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@cluster0-uytsf.gcp.mongodb.net/test?retryWrites=true&w=majority`;
     const client = await new MongoClient(uri, {
         useNewUrlParser: true,
         useUnifiedTopology: true
     });
+
+    let status;
 
     try {
         await client.connect();
@@ -15,29 +17,40 @@ async function addCardToInventory(data) {
 
         const db = client.db('test');
 
-        let d = await db
-            .collection('card_inventory')
-            .insertOne({ hello: 'world' });
+        message = await db.collection('card_inventory').findOneAndUpdate(
+            { _id: cardInfo.id },
+            {
+                $inc: {
+                    [`qoh.${type}`]: quantity
+                },
+                $setOnInsert: cardInfo
+            },
+            {
+                upsert: true
+            }
+        );
 
-        // get item
-        // if no item, create item
-        // _id = scryfallId and
-
-        assert.equal(1, d.insertedCount);
+        status = 'Card successfully added to database';
     } catch (err) {
-        console.log(err);
+        status = err;
     } finally {
         await client.close();
+        return status;
     }
 }
 
-exports.writeCardDataToDB = async (req, res) => {
+exports.addCardToInventory = async (req, res) => {
+    res.set('Access-Control-Allow-Headers', '*');
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'POST');
+
     try {
-        await writeData(req.body);
-        res.status(200).send('DB was updated');
-    } catch (e) {
-        console.log(e);
-        res.status(500).send('Server error');
+        const { quantity, type, cardInfo } = req.body;
+        const message = await addCardToInventory(quantity, type, cardInfo);
+        res.status(200).send(message);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
     }
 };
 

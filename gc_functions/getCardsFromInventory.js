@@ -18,17 +18,20 @@ async function getCardsFromInventory(scryfallIds) {
 
         const data = await db.collection('card_inventory').find(
             {
-                _id: {
-                    $in: scryfallIds
-                }
+                _id: { $in: scryfallIds }
             },
             {
-                _id: true,
-                qoh: true
+                projection: {
+                    _id: true,
+                    qoh: true,
+                    name: true,
+                    setName: true,
+                    set: true
+                }
             }
         );
 
-        status = data;
+        status = await data.toArray();
     } catch (err) {
         status = err;
     } finally {

@@ -4,16 +4,29 @@ import axios from 'axios';
 import ScryfallCardList from './ScryfallCardList';
 
 class Home extends React.Component {
-    state = { searchResults: [] };
+    state = { searchResults: [], inventoryQuantities: [] };
 
     handleSearchSelect = async term => {
         const encodedTerm = encodeURI(`"${term}"`);
 
         try {
-            const { data } = await axios.get(
+            const searchRes = await axios.get(
                 `https://api.scryfall.com/cards/search?q=!${encodedTerm}%20unique%3Aprints%20game%3Apaper`
             );
-            this.setState({ searchResults: data.data });
+            console.log(searchRes);
+
+            let inventoryRes = await axios.post(
+                'https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsFromInventory',
+                {
+                    scryfallIds: searchRes.data.data.map(el => el.id)
+                }
+            );
+            console.log(inventoryRes);
+
+            this.setState({
+                searchResults: searchRes.data.data,
+                inventoryQuantities: inventoryRes.data.data
+            });
         } catch (e) {
             console.log(e);
         }
@@ -28,7 +41,10 @@ class Home extends React.Component {
                 </p>
 
                 <SearchBar handleSearchSelect={this.handleSearchSelect} />
-                <ScryfallCardList cards={this.state.searchResults} />
+                <ScryfallCardList
+                    cards={this.state.searchResults}
+                    quantities={this.state.inventoryQuantities}
+                />
             </div>
         );
     }

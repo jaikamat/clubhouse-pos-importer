@@ -10,6 +10,7 @@ import {
     Header,
     Label
 } from 'semantic-ui-react';
+import axios from 'axios';
 
 const finishes = [
     { key: 'NONFOIL', text: 'Nonfoil', value: 'NONFOIL' },
@@ -41,7 +42,8 @@ export default class ScryfallCardListItem extends Component {
             .selectedFinish,
         selectedCondition: 'NM',
         finishDisabled: checkCardFinish(this.props.nonfoil, this.props.foil)
-            .finishDisabled
+            .finishDisabled,
+        submitDisable: false
     };
 
     handleFinishChange = (e, { value }) => {
@@ -62,12 +64,28 @@ export default class ScryfallCardListItem extends Component {
         });
     };
 
+    handleInventoryAdd = async (e, { value }) => {
+        const { quantity, selectedFinish, selectedCondition } = this.state;
+
+        try {
+            this.setState({ submitDisable: true });
+            const type = `${selectedFinish}_${selectedCondition}`;
+            console.log(quantity, type);
+            console.log({ ...this.props });
+        } catch (err) {
+            console.log(err);
+        } finally {
+            this.setState({ submitDisable: false });
+        }
+    };
+
     render() {
         const {
             selectedFinish,
             selectedCondition,
             finishDisabled,
-            quantity
+            quantity,
+            submitDisable
         } = this.state;
         const { image_uris, name, set_name, set, rarity } = this.props;
 
@@ -117,7 +135,10 @@ export default class ScryfallCardListItem extends Component {
                                         label="Add to Inventory?"
                                         control={Button}
                                         primary
-                                        disabled={quantity <= 0}
+                                        disabled={
+                                            quantity <= 0 || submitDisable
+                                        }
+                                        onClick={this.handleInventoryAdd}
                                     >
                                         Submit
                                     </Form.Field>

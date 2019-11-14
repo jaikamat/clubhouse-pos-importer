@@ -1,8 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 require('dotenv').config();
 
-// 'TYPE' Refers to the configuration of Finishes and Conditions
-async function addCardToInventory(quantity, type, cardInfo) {
+async function getCardsFromInventory(scryfallIds) {
     const uri = `mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@cluster0-uytsf.gcp.mongodb.net/test?retryWrites=true&w=majority`;
     const client = await new MongoClient(uri, {
         useNewUrlParser: true,
@@ -17,24 +16,15 @@ async function addCardToInventory(quantity, type, cardInfo) {
 
         const db = client.db('test');
 
-        const data = await db.collection('card_inventory').findOneAndUpdate(
-            { _id: cardInfo.id },
+        const data = await db.collection('card_inventory').find(
             {
-                $inc: {
-                    [`qoh.${type}`]: quantity
-                },
-                $setOnInsert: cardInfo
+                _id: {
+                    $in: scryfallIds
+                }
             },
             {
-                upsert: true,
-                projection: {
-                    _id: true,
-                    qoh: true,
-                    name: true,
-                    setName: true,
-                    set: true
-                },
-                returnOriginal: false
+                _id: true,
+                qoh: true
             }
         );
 
@@ -48,14 +38,14 @@ async function addCardToInventory(quantity, type, cardInfo) {
     }
 }
 
-exports.addCardToInventory = async (req, res) => {
+exports.getCardsFromInventory = async (req, res) => {
     res.set('Access-Control-Allow-Headers', '*');
     res.set('Access-Control-Allow-Origin', '*');
     res.set('Access-Control-Allow-Methods', 'POST');
 
     try {
-        const { quantity, type, cardInfo } = req.body;
-        const message = await addCardToInventory(quantity, type, cardInfo);
+        const { scryfallIds } = req.body;
+        const message = await getCardsFromInventory(scryfallIds);
         res.status(200).send(message);
     } catch (err) {
         console.log(err);
@@ -63,4 +53,4 @@ exports.addCardToInventory = async (req, res) => {
     }
 };
 
-exports.addCardToInventory = addCardToInventory;
+exports.getCardsFromInventory = getCardsFromInventory;

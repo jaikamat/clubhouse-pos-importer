@@ -7,7 +7,7 @@ class Header extends React.Component {
             <Menu inverted color="blue" fixed="top">
                 <Menu.Item name="Clubhouse Collection" />
                 <Menu.Menu position="right">
-                    <Menu.Item name="Inventory" />
+                    <Menu.Item name="Manage Inventory" />
                     <Menu.Item name="New Sale" />
                 </Menu.Menu>
             </Menu>

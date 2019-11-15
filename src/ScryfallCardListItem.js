@@ -143,7 +143,7 @@ export default class ScryfallCardListItem extends Component {
                                     <Form.Field
                                         label="Finish"
                                         control={Select}
-                                        defaultValue={selectedFinish}
+                                        value={selectedFinish}
                                         options={finishes}
                                         disabled={finishDisabled}
                                         onChange={this.handleFinishChange}
@@ -151,7 +151,7 @@ export default class ScryfallCardListItem extends Component {
                                     <Form.Field
                                         label="Condition"
                                         control={Select}
-                                        defaultValue={selectedCondition}
+                                        value={selectedCondition}
                                         options={cardConditions}
                                         onChange={this.handleConditionChange}
                                     />

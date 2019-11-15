@@ -17,7 +17,8 @@ async function addCardToInventory(quantity, type, cardInfo) {
 
         const db = client.db('test');
 
-        const data = await db.collection('card_inventory').findOneAndUpdate(
+        // Upsert the new quantity in the document
+        await db.collection('card_inventory').findOneAndUpdate(
             { _id: cardInfo.id },
             {
                 $inc: {
@@ -35,6 +36,29 @@ async function addCardToInventory(quantity, type, cardInfo) {
                     set: true
                 },
                 returnOriginal: false
+            }
+        );
+
+        // Validate inventory quantites to never be negative numbers
+        await db.collection('card_inventory').update(
+            {
+                _id: cardInfo.id,
+                [`qoh.${type}`]: { $lt: 0 }
+            },
+            { $set: { [`qoh.${type}`]: 0 } }
+        );
+
+        // Get the updated document for return
+        const data = await db.collection('card_inventory').findOne(
+            { _id: cardInfo.id },
+            {
+                projection: {
+                    _id: true,
+                    qoh: true,
+                    name: true,
+                    setName: true,
+                    set: true
+                }
             }
         );
 

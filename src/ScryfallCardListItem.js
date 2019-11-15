@@ -79,7 +79,7 @@ export default class ScryfallCardListItem extends Component {
                     cardInfo: { ...this.props }
                 }
             );
-            console.log(data.value);
+            console.log(data);
 
             this.setState({
                 quantity: 0,
@@ -93,7 +93,7 @@ export default class ScryfallCardListItem extends Component {
                     this.props.foil
                 ).finishDisabled,
                 submitDisable: false,
-                inventoryQty: data.value.qoh
+                inventoryQty: data.qoh
             });
         } catch (err) {
             console.log(err);

@@ -23,8 +23,6 @@ export default function QohParser(props) {
         return `Foil: 0 | Nonfoil: 0`;
     }
 
-    const convertedQty = Object.entries(inventoryQty);
-
     const foilQty =
         (inventoryQty.FOIL_NM || 0) +
         (inventoryQty.FOIL_LP || 0) +
@@ -37,6 +35,5 @@ export default function QohParser(props) {
         (inventoryQty.NONFOIL_MP || 0) +
         (inventoryQty.NONFOIL_HP || 0);
 
-    console.log(convertedQty);
     return `Foil: ${foilQty} | Nonfoil: ${nonfoilQty}`;
 }

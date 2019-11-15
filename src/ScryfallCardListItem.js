@@ -45,7 +45,8 @@ export default class ScryfallCardListItem extends Component {
         finishDisabled: checkCardFinish(this.props.nonfoil, this.props.foil)
             .finishDisabled,
         submitDisable: false,
-        inventoryQty: this.props.inventoryQty
+        inventoryQty: this.props.inventoryQty,
+        submitLoading: false
     };
 
     handleFinishChange = (e, { value }) => {
@@ -70,7 +71,7 @@ export default class ScryfallCardListItem extends Component {
         const type = `${selectedFinish}_${selectedCondition}`;
 
         try {
-            this.setState({ submitDisable: true });
+            this.setState({ submitDisable: true, submitLoading: true });
             const { data } = await axios.post(
                 'https://us-central1-clubhouse-collection.cloudfunctions.net/addCardToInventory',
                 {
@@ -93,7 +94,8 @@ export default class ScryfallCardListItem extends Component {
                     this.props.foil
                 ).finishDisabled,
                 submitDisable: false,
-                inventoryQty: data.qoh
+                inventoryQty: data.qoh,
+                submitLoading: false
             });
         } catch (err) {
             console.log(err);
@@ -107,7 +109,8 @@ export default class ScryfallCardListItem extends Component {
             finishDisabled,
             quantity,
             submitDisable,
-            inventoryQty
+            inventoryQty,
+            submitLoading
         } = this.state;
         const { image_uris, name, set_name, set, rarity } = this.props;
 
@@ -155,7 +158,7 @@ export default class ScryfallCardListItem extends Component {
                                         options={cardConditions}
                                         onChange={this.handleConditionChange}
                                     />
-                                    <Form.Field
+                                    <Form.Button
                                         label="Add to Inventory?"
                                         control={Button}
                                         primary
@@ -163,9 +166,10 @@ export default class ScryfallCardListItem extends Component {
                                             quantity === 0 || submitDisable
                                         }
                                         onClick={this.handleInventoryAdd}
+                                        loading={submitLoading}
                                     >
                                         Submit
-                                    </Form.Field>
+                                    </Form.Button>
                                 </Form.Group>
                             </Form>
                         </Grid.Row>

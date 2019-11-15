@@ -11,6 +11,7 @@ import {
     Label
 } from 'semantic-ui-react';
 import axios from 'axios';
+import QohParser from './QohParser';
 
 const finishes = [
     { key: 'NONFOIL', text: 'Nonfoil', value: 'NONFOIL' },
@@ -43,7 +44,8 @@ export default class ScryfallCardListItem extends Component {
         selectedCondition: 'NM',
         finishDisabled: checkCardFinish(this.props.nonfoil, this.props.foil)
             .finishDisabled,
-        submitDisable: false
+        submitDisable: false,
+        inventoryQty: this.props.inventoryQty
     };
 
     handleFinishChange = (e, { value }) => {
@@ -78,9 +80,7 @@ export default class ScryfallCardListItem extends Component {
                 }
             );
             console.log(data.value);
-        } catch (err) {
-            console.log(err);
-        } finally {
+
             this.setState({
                 quantity: 0,
                 selectedFinish: checkCardFinish(
@@ -92,8 +92,11 @@ export default class ScryfallCardListItem extends Component {
                     this.props.nonfoil,
                     this.props.foil
                 ).finishDisabled,
-                submitDisable: false
+                submitDisable: false,
+                inventoryQty: data.value.qoh
             });
+        } catch (err) {
+            console.log(err);
         }
     };
 
@@ -103,7 +106,8 @@ export default class ScryfallCardListItem extends Component {
             selectedCondition,
             finishDisabled,
             quantity,
-            submitDisable
+            submitDisable,
+            inventoryQty
         } = this.state;
         const { image_uris, name, set_name, set, rarity } = this.props;
 
@@ -123,6 +127,7 @@ export default class ScryfallCardListItem extends Component {
                                 <Label horizontal>
                                     {set_name} ({String(set).toUpperCase()})
                                 </Label>
+                                <QohParser inventoryQty={inventoryQty} />
                             </Header>
                         </Grid.Row>
                         <Grid.Row>

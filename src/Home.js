@@ -22,12 +22,12 @@ class Home extends React.Component {
                 }
             );
 
-            console.log(searchRes);
-            console.log(inventoryRes);
+            console.log(searchRes.data);
+            console.log(inventoryRes.data);
 
             this.setState({
                 searchResults: searchRes.data.data,
-                inventoryQuantities: inventoryRes.data.data
+                inventoryQuantities: inventoryRes.data
             });
         } catch (e) {
             console.log(e);

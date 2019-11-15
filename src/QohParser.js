@@ -1,3 +1,6 @@
+import React from 'react';
+import { Label, Header } from 'semantic-ui-react';
+
 // This component parses the `qoh` object from mongo into something
 // more presentable
 
@@ -16,7 +19,9 @@
 export default function QohParser(props) {
     const inventoryQty = props.inventoryQty;
 
-    if (!inventoryQty) return 'None in stock';
+    if (!inventoryQty) {
+        return `Foil: 0 | Nonfoil: 0`;
+    }
 
     const convertedQty = Object.entries(inventoryQty);
 

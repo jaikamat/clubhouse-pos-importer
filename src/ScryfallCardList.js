@@ -7,6 +7,7 @@ function ScryfallCardList(props) {
     const cardList = props.cards.map(card => {
         return (
             <ScryfallCardListItem
+                showImage={props.showImages}
                 key={card.id}
                 {...card}
                 inventoryQty={props.quantities[card.id]}

@@ -117,9 +117,11 @@ export default class ScryfallCardListItem extends Component {
         return (
             <Segment>
                 <Grid>
-                    <Grid.Column width={2}>
-                        <Image src={image_uris.normal} size="tiny" />
-                    </Grid.Column>
+                    {this.props.showImage && (
+                        <Grid.Column width={2}>
+                            <Image src={image_uris.normal} size="tiny" />
+                        </Grid.Column>
+                    )}
                     <Grid.Column width={13} verticalAlign="middle">
                         <Grid.Row>
                             <Header as="h3">

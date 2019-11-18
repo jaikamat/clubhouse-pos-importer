@@ -2,9 +2,10 @@ import React from 'react';
 import SearchBar from './SearchBar';
 import axios from 'axios';
 import ScryfallCardList from './ScryfallCardList';
+import { Checkbox } from 'semantic-ui-react';
 
 class Home extends React.Component {
-    state = { searchResults: [], inventoryQuantities: [] };
+    state = { searchResults: [], inventoryQuantities: [], showImages: true };
 
     handleSearchSelect = async term => {
         const encodedTerm = encodeURI(`"${term}"`);
@@ -34,6 +35,10 @@ class Home extends React.Component {
         }
     };
 
+    handleImageToggle = () => {
+        this.setState({ showImages: !this.state.showImages });
+    };
+
     render() {
         return (
             <div>
@@ -43,7 +48,14 @@ class Home extends React.Component {
                 </p>
 
                 <SearchBar handleSearchSelect={this.handleSearchSelect} />
+                <Checkbox
+                    toggle
+                    label="Toggle images"
+                    onClick={this.handleImageToggle}
+                    defaultChecked
+                ></Checkbox>
                 <ScryfallCardList
+                    showImages={this.state.showImages}
                     cards={this.state.searchResults}
                     quantities={this.state.inventoryQuantities}
                 />

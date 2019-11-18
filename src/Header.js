@@ -8,6 +8,7 @@ class Header extends React.Component {
                 <Menu.Item name="Clubhouse Collection" />
                 <Menu.Menu position="right">
                     <Menu.Item name="Manage Inventory" />
+                    <Menu.Item name="Browse Inventory" />
                     <Menu.Item name="New Sale" />
                 </Menu.Menu>
             </Menu>

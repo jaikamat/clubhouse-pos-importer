@@ -1,6 +1,8 @@
 import React from 'react';
-import SearchBar from './SearchBar';
 import axios from 'axios';
+import { Grid, Container, Segment } from 'semantic-ui-react';
+import SearchBar from './SearchBar';
+import BrowseCardList from './BrowseCardList';
 
 export default class Sale extends React.Component {
     state = {
@@ -10,7 +12,7 @@ export default class Sale extends React.Component {
 
     handleResultSelect = async term => {
         try {
-            const cards = await axios.get(
+            const { data } = await axios.get(
                 `https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsByTitle`,
                 {
                     params: {
@@ -18,14 +20,32 @@ export default class Sale extends React.Component {
                     }
                 }
             );
+            console.log(data);
 
-            this.setState({ searchResults: cards });
+            this.setState({ searchResults: data });
         } catch (err) {
             console.log(err);
         }
     };
 
     render() {
-        return <SearchBar handleSearchSelect={this.handleResultSelect} />;
+        const { searchResults } = this.state;
+        return (
+            <div>
+                <SearchBar handleSearchSelect={this.handleResultSelect} />
+                <Grid>
+                    <Grid.Row>
+                        <Grid.Column width="10">
+                            <Segment>
+                                <BrowseCardList cards={searchResults} />
+                            </Segment>
+                        </Grid.Column>
+                        <Grid.Column width="6">
+                            <Segment>Sale here</Segment>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+            </div>
+        );
     }
 }

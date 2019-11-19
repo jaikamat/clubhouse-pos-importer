@@ -33,6 +33,7 @@ export default class BrowseCardItem extends React.Component {
         selectedFinishCondition: '',
         selectedFinishConditionQty: 0,
         quantityToSell: 0,
+        price: 0,
         conditionOptions: createConditionOptions(this.props.qoh, this.props.id)
     };
 
@@ -52,13 +53,23 @@ export default class BrowseCardItem extends React.Component {
         });
     };
 
+    handlePriceChange = (e, { value }) => {
+        this.setState({
+            price: value
+        });
+    };
+
     handleAddToSale = () => {
-        console.log('adding to sale!');
-        console.log(
-            this.props.id,
-            this.props.name,
-            this.state.selectedFinishCondition,
-            this.state.quantityToSell
+        const { id, name, set } = this.props;
+        const { selectedFinishCondition, quantityToSell, price } = this.state;
+
+        this.props.addToSaleList(
+            id,
+            name,
+            set,
+            selectedFinishCondition,
+            quantityToSell,
+            price
         );
 
         // Reset state
@@ -76,9 +87,11 @@ export default class BrowseCardItem extends React.Component {
     render() {
         const { name, image_uris, set, set_name, rarity, qoh } = this.props;
         const {
+            selectedFinishCondition,
             selectedFinishConditionQty,
             conditionOptions,
-            quantityToSell
+            quantityToSell,
+            price
         } = this.state;
 
         return (
@@ -106,6 +119,7 @@ export default class BrowseCardItem extends React.Component {
                                         selection
                                         placeholder="Select inventory"
                                         options={conditionOptions}
+                                        value={selectedFinishCondition}
                                         label="Select finish/condition"
                                         onChange={
                                             this.handleSelectedFinishCondition
@@ -117,6 +131,14 @@ export default class BrowseCardItem extends React.Component {
                                         label="Quantity to sell"
                                         value={quantityToSell}
                                         onChange={this.handleQuantityChange}
+                                        disabled={!selectedFinishConditionQty}
+                                    />
+                                    <Form.Field
+                                        control={Input}
+                                        type="number"
+                                        label="Price"
+                                        value={price}
+                                        onChange={this.handlePriceChange}
                                         disabled={!selectedFinishConditionQty}
                                     />
                                     <Form.Button

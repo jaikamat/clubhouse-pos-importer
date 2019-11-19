@@ -7,15 +7,19 @@ import {
     Label,
     Form,
     Input,
-    Dropdown
+    Dropdown,
+    Button
 } from 'semantic-ui-react';
 import QohParser from './QohParser';
 
-function createConditionOptions(qoh) {
+function createConditionOptions(qoh, id) {
     return Object.entries(qoh).map(d => {
+        const [conditionFinish, qty] = d;
+
         return {
-            text: `${removeHyphen(d[0])} | Qty: ${d[1]}`,
-            value: d[0]
+            text: `${removeHyphen(conditionFinish)} | Qty: ${qty}`,
+            value: conditionFinish,
+            key: `${id}${conditionFinish}`
         };
     });
 }
@@ -26,20 +30,57 @@ function removeHyphen(str) {
 
 export default class BrowseCardItem extends React.Component {
     state = {
-        selectedInventory: '',
+        selectedFinishCondition: '',
+        selectedFinishConditionQty: 0,
         quantityToSell: 0,
-        conditionOptions: createConditionOptions(this.props.qoh)
+        conditionOptions: createConditionOptions(this.props.qoh, this.props.id)
+    };
+
+    handleQuantityChange = (e, { value }) => {
+        const { selectedFinishConditionQty } = this.state;
+        if (value > selectedFinishConditionQty) {
+            value = selectedFinishConditionQty;
+        }
+        if (value < 0) value = 0;
+        this.setState({ quantityToSell: parseInt(value) });
+    };
+
+    handleSelectedFinishCondition = (e, { value }) => {
+        this.setState({
+            selectedFinishCondition: value,
+            selectedFinishConditionQty: this.props.qoh[value]
+        });
+    };
+
+    handleAddToSale = () => {
+        console.log('adding to sale!');
+        console.log(
+            this.props.id,
+            this.props.name,
+            this.state.selectedFinishCondition,
+            this.state.quantityToSell
+        );
+
+        // Reset state
+        this.setState({
+            selectedFinishCondition: '',
+            selectedFinishConditionQty: 0,
+            quantityToSell: 0,
+            conditionOptions: createConditionOptions(
+                this.props.qoh,
+                this.props.id
+            )
+        });
     };
 
     render() {
         const { name, image_uris, set, set_name, rarity, qoh } = this.props;
         const {
-            selectedInventory,
+            selectedFinishConditionQty,
             conditionOptions,
             quantityToSell
         } = this.state;
 
-        console.log(conditionOptions);
         return (
             <Segment>
                 <Grid>
@@ -66,13 +107,27 @@ export default class BrowseCardItem extends React.Component {
                                         placeholder="Select inventory"
                                         options={conditionOptions}
                                         label="Select finish/condition"
+                                        onChange={
+                                            this.handleSelectedFinishCondition
+                                        }
                                     />
                                     <Form.Field
                                         control={Input}
                                         type="number"
                                         label="Quantity to sell"
                                         value={quantityToSell}
+                                        onChange={this.handleQuantityChange}
+                                        disabled={!selectedFinishConditionQty}
                                     />
+                                    <Form.Button
+                                        label="Add to sale?"
+                                        control={Button}
+                                        primary
+                                        onClick={this.handleAddToSale}
+                                        disabled={!quantityToSell}
+                                    >
+                                        Sell
+                                    </Form.Button>
                                 </Form.Group>
                             </Form>
                         </Grid.Column>

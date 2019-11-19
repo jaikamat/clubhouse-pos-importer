@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment } from 'semantic-ui-react';
+import { Segment, Button, Icon } from 'semantic-ui-react';
 
 export default function SaleLineItem(props) {
     const deleteLineItem = () => {
@@ -12,7 +12,9 @@ export default function SaleLineItem(props) {
                 {props.name} | {props.set.toUpperCase()} |{' '}
                 {props.finishCondition} | {props.qtyToSell} | {props.price}
             </span>
-            <p onClick={deleteLineItem}>X</p>
+            <Button primary icon onClick={deleteLineItem}>
+                <Icon name="cancel"></Icon>
+            </Button>
         </Segment>
     );
 }

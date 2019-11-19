@@ -77,6 +77,7 @@ export default class BrowseCardItem extends React.Component {
             selectedFinishCondition: '',
             selectedFinishConditionQty: 0,
             quantityToSell: 0,
+            price: 0,
             conditionOptions: createConditionOptions(
                 this.props.qoh,
                 this.props.id

@@ -1,11 +1,10 @@
 import React from 'react';
 import axios from 'axios';
-import { Grid, Container, Segment, Header } from 'semantic-ui-react';
+import { Grid, Segment, Header, Button, Modal, Icon } from 'semantic-ui-react';
 import SearchBar from './SearchBar';
 import BrowseCardList from './BrowseCardList';
 import SaleLineItem from './SaleLineItem';
 import _ from 'lodash';
-import { networkInterfaces } from 'os';
 
 export default class Sale extends React.Component {
     state = {
@@ -61,9 +60,7 @@ export default class Sale extends React.Component {
             return el.id === id && el.finishCondition === finishCondition;
         });
 
-        this.setState({
-            saleListCards: newState
-        });
+        this.setState({ saleListCards: newState });
     };
 
     render() {
@@ -98,6 +95,33 @@ export default class Sale extends React.Component {
                             <Segment>
                                 <Segment.Group>{list}</Segment.Group>
                             </Segment>
+                            {saleListCards.length > 0 && (
+                                <Modal
+                                    trigger={
+                                        <Button primary>Finalize sale</Button>
+                                    }
+                                    basic
+                                >
+                                    <Modal.Content>
+                                        <Header inverted as="h2">
+                                            Finalize this sale and move to
+                                            Lightspeed?
+                                        </Header>
+                                        <p>
+                                            Undoing this action will be quite
+                                            painful
+                                        </p>
+                                    </Modal.Content>
+                                    <Modal.Actions>
+                                        <Button basic color="red" inverted>
+                                            <Icon name="remove" /> No
+                                        </Button>
+                                        <Button color="green" inverted>
+                                            <Icon name="checkmark" /> Yes
+                                        </Button>
+                                    </Modal.Actions>
+                                </Modal>
+                            )}
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>

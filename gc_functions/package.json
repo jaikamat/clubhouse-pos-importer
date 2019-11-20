@@ -8,7 +8,8 @@
         "addCardToInventory": "functions-framework --target=addCardToInventory",
         "getCardQuantitiesFromInventory": "functions-framework --target=getCardQuantitiesFromInventory",
         "getCardsByTitle": "functions-framework --target=getCardsByTitle",
-        "refreshLightspeedAuthToken": "functions-framework --target=refreshLightspeedAuthToken"
+        "refreshLightspeedAuthToken": "functions-framework --target=refreshLightspeedAuthToken",
+        "finalizeSale": "functions-framework --target=finalizeSale"
     },
     "author": "",
     "license": "ISC",

@@ -7,13 +7,16 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "addCardToInventory": "functions-framework --target=addCardToInventory",
         "getCardQuantitiesFromInventory": "functions-framework --target=getCardQuantitiesFromInventory",
-        "getCardsByTitle": "functions-framework --target=getCardsByTitle"
+        "getCardsByTitle": "functions-framework --target=getCardsByTitle",
+        "refreshLightspeedAuthToken": "functions-framework --target=refreshLightspeedAuthToken"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
         "@google-cloud/functions-framework": "^1.3.2",
         "dotenv": "^8.2.0",
-        "mongodb": "^3.3.4"
+        "mongodb": "^3.3.4",
+        "request": "^2.88.0",
+        "request-promise-native": "^1.0.8"
     }
 }

@@ -6,11 +6,14 @@ import BrowseCardList from './BrowseCardList';
 import SaleLineItem from './SaleLineItem';
 import _ from 'lodash';
 
+const initialState = {
+    searchResults: [],
+    saleListCards: [],
+    showModal: false
+};
+
 export default class Sale extends React.Component {
-    state = {
-        searchResults: [],
-        saleListCards: []
-    };
+    state = initialState;
 
     handleResultSelect = async term => {
         try {
@@ -22,7 +25,6 @@ export default class Sale extends React.Component {
                     }
                 }
             );
-            console.log(data);
 
             this.setState({ searchResults: data });
         } catch (err) {
@@ -30,26 +32,21 @@ export default class Sale extends React.Component {
         }
     };
 
-    addToSaleList = (id, name, set, finishCondition, qtyToSell, price) => {
-        const card = {
-            id: id,
-            name: name,
-            set: set,
-            finishCondition: finishCondition,
-            qtyToSell: qtyToSell,
-            price: price
-        };
+    addToSaleList = (card, finishCondition, qtyToSell, price) => {
+        const newCard = { ...card, finishCondition, qtyToSell, price };
+        const oldState = [...this.state.saleListCards];
 
-        const oldState = this.state.saleListCards;
         // Need to make sure same ID's with differing conditions are separate line-items
         const idx = oldState.findIndex(el => {
-            return el.id === id && el.finishCondition === finishCondition;
+            return (
+                el.id === newCard.id && el.finishCondition === finishCondition
+            );
         });
 
         if (idx !== -1) {
-            oldState.splice(idx, 1, card);
+            oldState.splice(idx, 1, newCard);
         } else {
-            oldState.push(card);
+            oldState.push(newCard);
         }
 
         this.setState({ saleListCards: oldState });
@@ -63,8 +60,19 @@ export default class Sale extends React.Component {
         this.setState({ saleListCards: newState });
     };
 
+    finalizeSale = () => {
+        console.log(this.state.saleListCards);
+        console.log('Finalized Sale! Wohoo!');
+
+        this.setState(initialState);
+    };
+
+    closeModal = () => {
+        this.setState({ showModal: false });
+    };
+
     render() {
-        const { searchResults, saleListCards } = this.state;
+        const { searchResults, saleListCards, showModal } = this.state;
 
         const list = saleListCards.map(c => {
             return (
@@ -97,14 +105,24 @@ export default class Sale extends React.Component {
                             </Segment>
                             {saleListCards.length > 0 && (
                                 <Modal
+                                    open={showModal}
                                     trigger={
-                                        <Button primary>Finalize sale</Button>
+                                        <Button
+                                            primary
+                                            onClick={() => {
+                                                this.setState({
+                                                    showModal: true
+                                                });
+                                            }}
+                                        >
+                                            Finalize sale
+                                        </Button>
                                     }
                                     basic
                                 >
                                     <Modal.Content>
                                         <Header inverted as="h2">
-                                            Finalize this sale and move to
+                                            Finalize this sale to complete in
                                             Lightspeed?
                                         </Header>
                                         <p>
@@ -113,10 +131,19 @@ export default class Sale extends React.Component {
                                         </p>
                                     </Modal.Content>
                                     <Modal.Actions>
-                                        <Button basic color="red" inverted>
+                                        <Button
+                                            basic
+                                            color="red"
+                                            inverted
+                                            onClick={this.closeModal}
+                                        >
                                             <Icon name="remove" /> No
                                         </Button>
-                                        <Button color="green" inverted>
+                                        <Button
+                                            color="green"
+                                            inverted
+                                            onClick={this.finalizeSale}
+                                        >
                                             <Icon name="checkmark" /> Yes
                                         </Button>
                                     </Modal.Actions>

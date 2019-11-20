@@ -1,17 +1,22 @@
 import React from 'react';
-import { Segment, Button, Icon } from 'semantic-ui-react';
+import { Segment, Button, Icon, Header, Label } from 'semantic-ui-react';
 
 export default function SaleLineItem(props) {
     const deleteLineItem = () => {
         props.deleteLineItem(props.id, props.finishCondition);
     };
 
+    const { name, set, finishCondition, qtyToSell, price, rarity } = props;
+
     return (
         <Segment>
-            <span>
-                {props.name} | {props.set.toUpperCase()} |{' '}
-                {props.finishCondition} | {props.qtyToSell} | {props.price}
-            </span>
+            <Header as="h4">
+                {name} <i className={`ss ss-fw ss-${set} ss-${rarity}`} />
+                <Label horizontal>{String(set).toUpperCase()}</Label>
+                <span>
+                    {finishCondition} | {qtyToSell} | {price}
+                </span>
+            </Header>
             <Button primary icon onClick={deleteLineItem}>
                 <Icon name="cancel"></Icon>
             </Button>

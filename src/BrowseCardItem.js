@@ -64,9 +64,7 @@ export default class BrowseCardItem extends React.Component {
         const { selectedFinishCondition, quantityToSell, price } = this.state;
 
         this.props.addToSaleList(
-            id,
-            name,
-            set,
+            { ...this.props },
             selectedFinishCondition,
             quantityToSell,
             price

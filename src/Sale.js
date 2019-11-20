@@ -122,12 +122,12 @@ export default class Sale extends React.Component {
                                 >
                                     <Modal.Content>
                                         <Header inverted as="h2">
-                                            Finalize this sale to complete in
-                                            Lightspeed?
+                                            Finalize this sale for Lightspeed?
                                         </Header>
                                         <p>
-                                            Undoing this action will be quite
-                                            painful
+                                            Click 'Yes' to complete the sale in
+                                            Lightspeed. Undoing this action will
+                                            be quite painful
                                         </p>
                                     </Modal.Content>
                                     <Modal.Actions>

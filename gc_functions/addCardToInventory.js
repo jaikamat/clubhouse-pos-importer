@@ -15,6 +15,10 @@ async function addCardToInventory(quantity, type, cardInfo) {
         await client.connect();
         console.log('Successfully connected to mongo');
 
+        console.log(
+            `Update Info: QTY:${quantity}, ${type}, ${cardInfo.name}, ${cardInfo.id}`
+        );
+
         const db = client.db('test');
 
         // Upsert the new quantity in the document
@@ -40,7 +44,7 @@ async function addCardToInventory(quantity, type, cardInfo) {
         );
 
         // Validate inventory quantites to never be negative numbers
-        await db.collection('card_inventory').update(
+        await db.collection('card_inventory').updateOne(
             {
                 _id: cardInfo.id,
                 [`qoh.${type}`]: { $lt: 0 }

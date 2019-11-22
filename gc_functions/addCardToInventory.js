@@ -77,11 +77,23 @@ async function addCardToInventory(quantity, type, cardInfo) {
 }
 
 exports.addCardToInventory = async (req, res) => {
-    res.set('Access-Control-Allow-Headers', '*');
-    res.set('Access-Control-Allow-Origin', '*');
-    res.set('Access-Control-Allow-Methods', 'POST');
+    // Note: The finishSale function will trigger twice if we do not
+    // detect an OPTIONS complex CORS preflight request, which causes errors
+    // as the request body is undefined on first execution
+    if (req.method === 'OPTIONS') {
+        // Send response to OPTIONS requests
+        res.set('Access-Control-Allow-Headers', '*');
+        res.set('Access-Control-Allow-Origin', '*');
+        res.set('Access-Control-Allow-Methods', 'POST');
+        res.set('Access-Control-Max-Age', '3600');
+        res.status(204).send('');
+    }
 
     try {
+        res.set('Access-Control-Allow-Headers', '*');
+        res.set('Access-Control-Allow-Origin', '*');
+        res.set('Access-Control-Allow-Methods', 'POST');
+
         const { quantity, type, cardInfo } = req.body;
         const message = await addCardToInventory(quantity, type, cardInfo);
         res.status(200).send(message);

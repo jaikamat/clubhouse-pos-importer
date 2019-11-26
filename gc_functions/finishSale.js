@@ -1,99 +1,125 @@
 const request = require('request-promise-native');
 const axios = require('axios');
+const MongoClient = require('mongodb').MongoClient;
 require('dotenv').config();
 
-// // // These cards are the saleItems from the New Sale feature
-// // async function finalizeSale(cards) {
-// //     try {
-// //         // const res = await request.get({
-// //         //     url: process.env.REFRESH_LIGHTSPEED_AUTH_TOKEN
-// //         // });
+function createSaleLine(card) {
+    const { price, qtyToSell, finishCondition, name, set_name } = card;
 
-// //         // const data = JSON.parse(res);
+    return `${name} | ${set_name} | Qty sold: ${qtyToSell} | Condition: ${finishCondition} | Price/unit: ${price}`;
+}
 
-// //         const firstCard = cards[0];
+async function updateCardInventory(card) {
+    const { qtyToSell, finishCondition, id, name } = card;
+    const uri = `mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@cluster0-uytsf.gcp.mongodb.net/test?retryWrites=true&w=majority`;
+    const client = await new MongoClient(uri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    });
 
-// //         console.log('cards.length inner function', cards.length);
+    let status;
 
-// //         console.log('id', firstCard.id);
-// //         console.log('qtyToSell', firstCard.qtyToSell);
-// //         console.log('finishCondition', firstCard.finishCondition);
+    try {
+        await client.connect();
+        console.log('Successfully connected to mongo');
 
-// //         // const alterInventoryLevels = cards.map(async card => {
-// //         //     return await axios.post(
-// //         //         'https://us-central1-clubhouse-collection.cloudfunctions.net/finalizeSale',
-// //         //         {
-// //         //             quantity: -Math.abs(firstCard.qtyToSell),
-// //         //             type: firstCard.finishCondition,
-// //         //             cardInfo: firstCard
-// //         //         }
-// //         //     );
-// //         // });
+        console.log(
+            `Update: QTY: ${qtyToSell}, ${finishCondition}, ${name}, ${id}`
+        );
 
-// //         // return await Promise.all(alterInventoryLevels);
-// //     } catch (err) {
-// //         console.log(err);
-// //     }
-// // }
+        const db = client.db('test');
 
-// // exports.finalizeSale = async (req, res) => {
-// //     res.set('Access-Control-Allow-Headers', '*');
-// //     res.set('Access-Control-Allow-Origin', '*');
-// //     res.set('Access-Control-Allow-Methods', 'POST');
+        // Upsert the new qtyToSell in the document
+        await db.collection('card_inventory').findOneAndUpdate(
+            { _id: id },
+            {
+                $inc: {
+                    [`qoh.${finishCondition}`]: -Math.abs(qtyToSell)
+                }
+            },
+            {
+                projection: {
+                    _id: true,
+                    qoh: true,
+                    name: true,
+                    setName: true,
+                    set: true
+                },
+                returnOriginal: false
+            }
+        );
 
-// //     try {
-// //         const cards = req.body.cards;
+        // Validate inventory quantites to never be negative numbers
+        await db.collection('card_inventory').updateOne(
+            {
+                _id: id,
+                [`qoh.${finishCondition}`]: { $lt: 0 }
+            },
+            { $set: { [`qoh.${finishCondition}`]: 0 } }
+        );
 
-// //         for (let prop in req.body) {
-// //             if (req.body.hasOwnProperty(prop)) {
-// //                 console.log(prop);
-// //             }
-// //         }
+        // Get the updated document for return
+        const data = await db.collection('card_inventory').findOne(
+            { _id: id },
+            {
+                projection: {
+                    _id: true,
+                    qoh: true,
+                    name: true,
+                    setName: true,
+                    set: true
+                }
+            }
+        );
 
-// //         console.log('cards.length outer function', cards.length);
-// //         const message = await finalizeSale(cards);
-// //         res.status(200).send(message);
-// //     } catch (err) {
-// //         console.log(err);
-// //         res.status(500).send(err);
-// //     }
-// // };
+        status = data;
+    } catch (err) {
+        status = err;
+    } finally {
+        await client.close();
+        console.log('Disconnected from mongo');
+        return status;
+    }
+}
 
-// // exports.finalizeSale = finalizeSale;
+async function createLightspeedSale(authToken, cards) {
+    try {
+        const url = `https://api.lightspeedapp.com/API/Account/${process.env.LIGHTSPEED_ACCT_ID}/Sale.json`;
 
-// async function finalizeSale(cards) {
-//     try {
-//         console.log('got the cards!', cards.length);
-//         return cards.length;
-//     } catch (err) {
-//         console.log(err);
-//     }
-// }
+        const config = {
+            headers: { Authorization: `Bearer ${authToken}` }
+        };
+
+        const saleLines = cards.map(card => {
+            return { note: createSaleLine(card) };
+        });
+
+        const bodyParameters = {
+            completed: false,
+            SaleLines: {
+                SaleLine: saleLines
+            }
+        };
+
+        return await axios.post(url, bodyParameters, config);
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 async function finishSale(cards) {
     try {
-        const res = await request.get({
+        const { access_token } = await request.get({
             url: process.env.REFRESH_LIGHTSPEED_AUTH_TOKEN
         });
 
-        console.log(Array.isArray(cards));
-        console.log(typeof cards);
-        const firstCard = cards[0] ? cards[0] : 'Something is broken';
+        await createLightspeedSale(access_token, cards);
 
-        // const firstCard = cards[0];
+        const dbRes = cards.map(async card => {
+            return await updateCardInventory(card);
+        });
 
-        // const firstCardCommit = await axios.post(
-        //     'https://us-central1-clubhouse-collection.cloudfunctions.net/finalizeSale',
-        //     {
-        //         quantity: -Math.abs(firstCard.qtyToSell),
-        //         type: firstCard.finishCondition,
-        //         cardInfo: firstCard
-        //     }
-        // );
-
-        const data = JSON.parse(res);
-
-        return { cards: cards, data: data };
+        return await Promise.all(dbRes);
     } catch (err) {
         console.log(err);
     }
@@ -121,6 +147,6 @@ exports.finishSale = async (req, res) => {
         const data = await finishSale(cards);
         res.status(200).send(data);
     } catch (err) {
-        res.statues(400).send(err);
+        res.status(400).send(err);
     }
 };

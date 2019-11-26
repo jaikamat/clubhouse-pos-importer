@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+
 import { Grid, Segment, Header, Button, Modal, Icon } from 'semantic-ui-react';
 import SearchBar from './SearchBar';
 import BrowseCardList from './BrowseCardList';
@@ -60,11 +61,21 @@ export default class Sale extends React.Component {
         this.setState({ saleListCards: newState });
     };
 
-    finalizeSale = () => {
-        console.log(this.state.saleListCards);
-        console.log('Finalized Sale! Wohoo!');
+    finalizeSale = async () => {
+        try {
+            const res = await axios.post(
+                'https://us-central1-clubhouse-collection.cloudfunctions.net/finishSale',
+                {
+                    cards: this.state.saleListCards
+                }
+            );
 
-        this.setState(initialState);
+            console.log(res);
+
+            this.setState(initialState);
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     closeModal = () => {

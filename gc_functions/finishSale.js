@@ -109,11 +109,13 @@ async function createLightspeedSale(authToken, cards) {
 
 async function finishSale(cards) {
     try {
-        const { access_token } = await request.get({
+        const data = await request.get({
             url: process.env.REFRESH_LIGHTSPEED_AUTH_TOKEN
         });
 
-        await createLightspeedSale(access_token, cards);
+        const { access_token } = JSON.parse(data);
+
+        // await createLightspeedSale(access_token, cards);
 
         const dbRes = cards.map(async card => {
             return await updateCardInventory(card);

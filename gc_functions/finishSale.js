@@ -91,11 +91,22 @@ async function createLightspeedSale(authToken, cards) {
         };
 
         const saleLines = cards.map(card => {
-            return { note: createSaleLine(card) };
+            return {
+                Note: { note: createSaleLine(card) },
+                taxClassID: 0,
+                unitPrice: card.price,
+                avgCost: 0,
+                fifoCost: 0,
+                unitQuantity: card.qtyToSell
+            };
         });
 
         const bodyParameters = {
             completed: false,
+            taxCategoryID: 0,
+            employeeID: 1,
+            shopID: 1, // Retro is the shop; Lance separates by register
+            registerID: 2, // Designates The Clubhouse
             SaleLines: {
                 SaleLine: saleLines
             }
@@ -109,19 +120,24 @@ async function createLightspeedSale(authToken, cards) {
 
 async function finishSale(cards) {
     try {
-        const data = await request.get({
+        const token = await request.get({
             url: process.env.REFRESH_LIGHTSPEED_AUTH_TOKEN
         });
 
-        const { access_token } = JSON.parse(data);
+        const { access_token } = JSON.parse(token);
 
-        // await createLightspeedSale(access_token, cards);
+        const { data } = await createLightspeedSale(access_token, cards);
 
-        const dbRes = cards.map(async card => {
+        const dbInserts = cards.map(async card => {
             return await updateCardInventory(card);
         });
 
-        return await Promise.all(dbRes);
+        const dbRes = await Promise.all(dbInserts);
+
+        return {
+            cards_upserted: dbRes,
+            sale_data: data
+        };
     } catch (err) {
         console.log(err);
     }

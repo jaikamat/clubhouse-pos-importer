@@ -1,5 +1,6 @@
 import React from 'react';
 import { Menu } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 class Header extends React.Component {
     render() {
@@ -7,9 +8,15 @@ class Header extends React.Component {
             <Menu inverted color="blue" fixed="top">
                 <Menu.Item name="Clubhouse Collection" />
                 <Menu.Menu position="right">
-                    <Menu.Item name="Manage Inventory" />
-                    <Menu.Item name="Browse Inventory" />
-                    <Menu.Item name="New Sale" />
+                    <Link to="/manage-inventory">
+                        <Menu.Item name="Manage Inventory" />
+                    </Link>
+                    <Link to="/new-sale">
+                        <Menu.Item name="New Sale" />
+                    </Link>
+                    <Link to="/">
+                        <Menu.Item name="Browse Inventory" />
+                    </Link>
                 </Menu.Menu>
             </Menu>
         );

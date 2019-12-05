@@ -12,6 +12,7 @@ import {
 } from 'semantic-ui-react';
 import axios from 'axios';
 import QohParser from './QohParser';
+import { ADD_CARD_TO_INVENTORY } from './api_resources';
 
 const finishes = [
     { key: 'NONFOIL', text: 'Nonfoil', value: 'NONFOIL' },
@@ -72,14 +73,11 @@ export default class ScryfallCardListItem extends Component {
 
         try {
             this.setState({ submitDisable: true, submitLoading: true });
-            const { data } = await axios.post(
-                'https://us-central1-clubhouse-collection.cloudfunctions.net/addCardToInventory',
-                {
-                    quantity: quantity,
-                    type: type,
-                    cardInfo: { ...this.props }
-                }
-            );
+            const { data } = await axios.post(ADD_CARD_TO_INVENTORY, {
+                quantity: quantity,
+                type: type,
+                cardInfo: { ...this.props }
+            });
             console.log(data);
 
             this.setState({

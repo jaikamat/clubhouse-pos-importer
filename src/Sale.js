@@ -6,6 +6,7 @@ import SearchBar from './SearchBar';
 import BrowseCardList from './BrowseCardList';
 import SaleLineItem from './SaleLineItem';
 import _ from 'lodash';
+import { GET_CARDS_BY_TITLE, FINISH_SALE } from './api_resources';
 
 const initialState = {
     searchResults: [],
@@ -18,14 +19,11 @@ export default class Sale extends React.Component {
 
     handleResultSelect = async term => {
         try {
-            const { data } = await axios.get(
-                `https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsByTitle`,
-                {
-                    params: {
-                        title: term
-                    }
+            const { data } = await axios.get(GET_CARDS_BY_TITLE, {
+                params: {
+                    title: term
                 }
-            );
+            });
 
             this.setState({ searchResults: data });
         } catch (err) {
@@ -63,12 +61,9 @@ export default class Sale extends React.Component {
 
     finalizeSale = async () => {
         try {
-            const res = await axios.post(
-                'https://us-central1-clubhouse-collection.cloudfunctions.net/finishSale',
-                {
-                    cards: this.state.saleListCards
-                }
-            );
+            const res = await axios.post(FINISH_SALE, {
+                cards: this.state.saleListCards
+            });
 
             console.log(res);
 

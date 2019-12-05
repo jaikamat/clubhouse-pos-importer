@@ -2,6 +2,7 @@ import React from 'react';
 import { Search } from 'semantic-ui-react';
 import _ from 'lodash';
 import axios from 'axios';
+import { SCRYFALL_AUTOCOMPLETE } from './api_resources';
 
 class SearchBar extends React.Component {
     state = {
@@ -26,7 +27,7 @@ class SearchBar extends React.Component {
 
         setTimeout(async () => {
             const { data } = await axios.get(
-                `https://api.scryfall.com/cards/autocomplete?q=${this.state.term}`
+                `${SCRYFALL_AUTOCOMPLETE}?q=${this.state.term}`
             );
 
             const formattedResults = data.data.map(el => {

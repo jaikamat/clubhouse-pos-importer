@@ -3,6 +3,7 @@ import SearchBar from './SearchBar';
 import axios from 'axios';
 import ScryfallCardList from './ScryfallCardList';
 import { Checkbox } from 'semantic-ui-react';
+import { SCRYFALL_SEARCH, GET_CARDS_FROM_INVENTORY } from './api_resources';
 
 class Home extends React.Component {
     state = { searchResults: [], inventoryQuantities: [], showImages: true };
@@ -12,16 +13,13 @@ class Home extends React.Component {
 
         try {
             const searchRes = await axios.get(
-                `https://api.scryfall.com/cards/search?q=!${encodedTerm}%20unique%3Aprints%20game%3Apaper`
+                `${SCRYFALL_SEARCH}?q=!${encodedTerm}%20unique%3Aprints%20game%3Apaper`
             );
 
             const ids = searchRes.data.data.map(el => el.id);
-            const inventoryRes = await axios.post(
-                'https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsFromInventory',
-                {
-                    scryfallIds: ids
-                }
-            );
+            const inventoryRes = await axios.post(GET_CARDS_FROM_INVENTORY, {
+                scryfallIds: ids
+            });
 
             console.log(searchRes.data);
             console.log(inventoryRes.data);

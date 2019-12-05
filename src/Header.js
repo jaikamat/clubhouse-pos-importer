@@ -14,7 +14,7 @@ class Header extends React.Component {
                     <Link to="/new-sale">
                         <Menu.Item name="New Sale" />
                     </Link>
-                    <Link to="/">
+                    <Link to="/browse-inventory">
                         <Menu.Item name="Browse Inventory" />
                     </Link>
                 </Menu.Menu>

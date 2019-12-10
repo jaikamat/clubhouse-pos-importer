@@ -71,16 +71,16 @@ export default class Sale extends React.Component {
     finalizeSale = async () => {
         try {
             this.setState({ submitLoading: true });
-            const res = await axios.post(FINISH_SALE, {
+            const { data } = await axios.post(FINISH_SALE, {
                 cards: this.state.saleListCards
             });
 
-            console.log(res);
+            const saleID = data.sale_data.Sale.saleID;
 
             const toastjsx = (
                 <Message positive compact>
                     <Message.Header>Sale created in Lightspeed!</Message.Header>
-                    The id number is #####
+                    The id number is #{saleID}
                 </Message>
             );
 

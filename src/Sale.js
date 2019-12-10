@@ -19,7 +19,8 @@ import { GET_CARDS_BY_TITLE, FINISH_SALE } from './api_resources';
 const initialState = {
     searchResults: [],
     saleListCards: [],
-    showModal: false
+    showModal: false,
+    submitLoading: false
 };
 
 export default class Sale extends React.Component {
@@ -69,6 +70,7 @@ export default class Sale extends React.Component {
 
     finalizeSale = async () => {
         try {
+            this.setState({ submitLoading: true });
             const res = await axios.post(FINISH_SALE, {
                 cards: this.state.saleListCards
             });
@@ -97,7 +99,12 @@ export default class Sale extends React.Component {
     };
 
     render() {
-        const { searchResults, saleListCards, showModal } = this.state;
+        const {
+            searchResults,
+            saleListCards,
+            showModal,
+            submitLoading
+        } = this.state;
 
         const list = saleListCards.map(c => {
             return (
@@ -168,6 +175,7 @@ export default class Sale extends React.Component {
                                             color="green"
                                             inverted
                                             onClick={this.finalizeSale}
+                                            loading={submitLoading}
                                         >
                                             <Icon name="checkmark" /> Yes
                                         </Button>

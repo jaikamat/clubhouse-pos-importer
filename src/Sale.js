@@ -1,7 +1,15 @@
 import React from 'react';
 import axios from 'axios';
-
-import { Grid, Segment, Header, Button, Modal, Icon } from 'semantic-ui-react';
+import toaster from 'toasted-notes';
+import {
+    Grid,
+    Segment,
+    Header,
+    Button,
+    Modal,
+    Icon,
+    Message
+} from 'semantic-ui-react';
 import SearchBar from './SearchBar';
 import BrowseCardList from './BrowseCardList';
 import SaleLineItem from './SaleLineItem';
@@ -66,6 +74,17 @@ export default class Sale extends React.Component {
             });
 
             console.log(res);
+
+            const toastjsx = (
+                <Message positive compact>
+                    <Message.Header>Sale created in Lightspeed!</Message.Header>
+                    The id number is #####
+                </Message>
+            );
+
+            toaster.notify(() => toastjsx, {
+                position: 'bottom-right'
+            });
 
             this.setState(initialState);
         } catch (e) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Button, Icon, Header, Label } from 'semantic-ui-react';
+import { Card, Button, Icon, Header, Label } from 'semantic-ui-react';
 import Price from './Price';
 
 export default function SaleLineItem(props) {
@@ -15,21 +15,24 @@ export default function SaleLineItem(props) {
     } = props;
 
     return (
-        <Segment>
-            <Header as="h4">
-                {name} <i className={`ss ss-fw ss-${set} ss-${rarity}`} />
-                <Label horizontal>{String(set).toUpperCase()}</Label>
+        <Card fluid>
+            <Card.Content>
+                <Card.Header as="h4">
+                    {name} <i className={`ss ss-fw ss-${set} ss-${rarity}`} />
+                    <Label horizontal>{String(set).toUpperCase()}</Label>
+                </Card.Header>
                 <span>
-                    {finishCondition} | {qtyToSell} | <Price num={price} />
+                    {qtyToSell}x @ <Price num={price} /> | {finishCondition}
                 </span>
-            </Header>
+                <Card.Description></Card.Description>
+            </Card.Content>
             <Button
-                primary
+                style={{ color: 'D3D3D3' }}
                 icon
                 onClick={() => deleteLineItem(id, finishCondition)}
             >
                 <Icon name="cancel"></Icon>
             </Button>
-        </Segment>
+        </Card>
     );
 }

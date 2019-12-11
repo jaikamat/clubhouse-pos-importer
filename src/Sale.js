@@ -13,6 +13,7 @@ import {
 import SearchBar from './SearchBar';
 import BrowseCardList from './BrowseCardList';
 import SaleLineItem from './SaleLineItem';
+import SalePriceTotal from './SalePriceTotal';
 import _ from 'lodash';
 import { GET_CARDS_BY_TITLE, FINISH_SALE } from './api_resources';
 
@@ -71,6 +72,7 @@ export default class Sale extends React.Component {
     finalizeSale = async () => {
         try {
             this.setState({ submitLoading: true });
+
             const { data } = await axios.post(FINISH_SALE, {
                 cards: this.state.saleListCards
             });
@@ -132,55 +134,63 @@ export default class Sale extends React.Component {
                         </Grid.Column>
                         <Grid.Column width="6">
                             <Header as="h2">Sale Items</Header>
-                            <Segment>
-                                <Segment.Group>{list}</Segment.Group>
-                            </Segment>
+                            <Segment>{list}</Segment>
                             {saleListCards.length > 0 && (
-                                <Modal
-                                    open={showModal}
-                                    trigger={
-                                        <Button
-                                            primary
-                                            onClick={() => {
-                                                this.setState({
-                                                    showModal: true
-                                                });
-                                            }}
-                                        >
-                                            Finalize sale
-                                        </Button>
-                                    }
-                                    basic
-                                >
-                                    <Modal.Content>
-                                        <Header inverted as="h2">
-                                            Finalize this sale for Lightspeed?
-                                        </Header>
-                                        <p>
-                                            Click 'Yes' to complete the sale in
-                                            Lightspeed. Undoing this action will
-                                            be quite painful
-                                        </p>
-                                    </Modal.Content>
-                                    <Modal.Actions>
-                                        <Button
-                                            basic
-                                            color="red"
-                                            inverted
-                                            onClick={this.closeModal}
-                                        >
-                                            <Icon name="remove" /> No
-                                        </Button>
-                                        <Button
-                                            color="green"
-                                            inverted
-                                            onClick={this.finalizeSale}
-                                            loading={submitLoading}
-                                        >
-                                            <Icon name="checkmark" /> Yes
-                                        </Button>
-                                    </Modal.Actions>
-                                </Modal>
+                                <Segment clearing>
+                                    <Header floated="left">
+                                        <Header sub>Subtotal</Header>
+                                        <SalePriceTotal
+                                            saleList={saleListCards}
+                                        />
+                                    </Header>
+                                    <Modal
+                                        basic
+                                        open={showModal}
+                                        trigger={
+                                            <Button
+                                                floated="right"
+                                                primary
+                                                onClick={() => {
+                                                    this.setState({
+                                                        showModal: true
+                                                    });
+                                                }}
+                                            >
+                                                Finalize sale
+                                            </Button>
+                                        }
+                                    >
+                                        <Modal.Content>
+                                            <Header inverted as="h2">
+                                                Finalize this sale for
+                                                Lightspeed?
+                                            </Header>
+                                            <p>
+                                                Click 'Yes' to complete the sale
+                                                in Lightspeed. Undoing this
+                                                action will be quite painful
+                                            </p>
+                                        </Modal.Content>
+                                        <Modal.Actions>
+                                            <Button
+                                                basic
+                                                color="red"
+                                                inverted
+                                                onClick={this.closeModal}
+                                            >
+                                                <Icon name="remove" /> No
+                                            </Button>
+                                            <Button
+                                                color="green"
+                                                inverted
+                                                onClick={this.finalizeSale}
+                                                loading={submitLoading}
+                                            >
+                                                <Icon name="checkmark" /> Yes
+                                            </Button>
+                                        </Modal.Actions>
+                                    </Modal>
+                                </Segment>
                             )}
                         </Grid.Column>
                     </Grid.Row>

@@ -40,11 +40,6 @@ class Home extends React.Component {
     render() {
         return (
             <div>
-                <p>
-                    Creating an app for my Local Game Shop (LGS) to manage their
-                    custom inventory via LightSpeed POS!
-                </p>
-
                 <SearchBar handleSearchSelect={this.handleSearchSelect} />
                 <Checkbox
                     toggle

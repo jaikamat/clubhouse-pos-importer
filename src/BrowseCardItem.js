@@ -84,7 +84,15 @@ export default class BrowseCardItem extends React.Component {
     };
 
     render() {
-        const { name, image_uris, set, set_name, rarity, qoh } = this.props;
+        const {
+            name,
+            image_uris,
+            set,
+            set_name,
+            rarity,
+            qoh,
+            prices
+        } = this.props;
         const {
             selectedFinishCondition,
             selectedFinishConditionQty,

@@ -2,7 +2,7 @@ import React from 'react';
 import SearchBar from './SearchBar';
 import axios from 'axios';
 import ScryfallCardList from './ScryfallCardList';
-import { Checkbox } from 'semantic-ui-react';
+import { Checkbox, Header } from 'semantic-ui-react';
 import { SCRYFALL_SEARCH, GET_CARDS_FROM_INVENTORY } from './api_resources';
 
 class Home extends React.Component {
@@ -40,13 +40,17 @@ class Home extends React.Component {
     render() {
         return (
             <div>
-                <SearchBar handleSearchSelect={this.handleSearchSelect} />
-                <Checkbox
-                    toggle
-                    label="Toggle images"
-                    onClick={this.handleImageToggle}
-                    defaultChecked
-                ></Checkbox>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <SearchBar handleSearchSelect={this.handleSearchSelect} />
+                    <div>
+                        <Header sub>Image Toggle</Header>
+                        <Checkbox
+                            toggle
+                            onClick={this.handleImageToggle}
+                            defaultChecked
+                        ></Checkbox>
+                    </div>
+                </div>
                 <ScryfallCardList
                     showImages={this.state.showImages}
                     cards={this.state.searchResults}

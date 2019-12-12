@@ -78,7 +78,6 @@ export default class ScryfallCardListItem extends Component {
                 type: type,
                 cardInfo: { ...this.props }
             });
-            console.log(data);
 
             this.setState({
                 quantity: 0,
@@ -110,7 +109,7 @@ export default class ScryfallCardListItem extends Component {
             inventoryQty,
             submitLoading
         } = this.state;
-        const { image_uris, name, set_name, set, rarity } = this.props;
+        const { image_uris, name, set_name, set, rarity, prices } = this.props;
 
         return (
             <Segment>

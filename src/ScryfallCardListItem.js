@@ -63,7 +63,9 @@ export default class ScryfallCardListItem extends Component {
     };
 
     handleQuantityChange = (e, { value }) => {
-        this.setState({ quantity: parseInt(value) });
+        const val = parseInt(value);
+        const quantity = isNaN(val) ? '' : val; // Check for NaN
+        this.setState({ quantity: quantity });
     };
 
     handleInventoryAdd = async (e, { value }) => {
@@ -162,7 +164,9 @@ export default class ScryfallCardListItem extends Component {
                                         control={Button}
                                         primary
                                         disabled={
-                                            quantity === 0 || submitDisable
+                                            quantity === 0 ||
+                                            quantity === '' ||
+                                            submitDisable
                                         }
                                         onClick={this.handleInventoryAdd}
                                         loading={submitLoading}

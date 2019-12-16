@@ -144,6 +144,7 @@ export default class ScryfallCardListItem extends Component {
                                 {name}{' '}
                                 <i
                                     className={`ss ss-fw ss-${set} ss-${rarity}`}
+                                    style={{ fontSize: '30px' }}
                                 />
                                 <Label horizontal>
                                     {set_name} ({String(set).toUpperCase()})

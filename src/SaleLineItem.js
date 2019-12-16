@@ -19,7 +19,11 @@ export default function SaleLineItem(props) {
         <Card fluid>
             <Card.Content>
                 <Card.Header as="h4">
-                    {name} <i className={`ss ss-fw ss-${set} ss-${rarity}`} />
+                    {name}{' '}
+                    <i
+                        className={`ss ss-fw ss-${set} ss-${rarity}`}
+                        style={{ fontSize: '30px' }}
+                    />
                     <Label horizontal>
                         {set_name} ({set.toUpperCase()})
                     </Label>

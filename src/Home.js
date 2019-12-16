@@ -40,16 +40,16 @@ class Home extends React.Component {
     render() {
         return (
             <div>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <SearchBar handleSearchSelect={this.handleSearchSelect} />
-                    <div>
+                <div>
+                    {/* <div>
                         <Header sub>Image Toggle</Header>
                         <Checkbox
                             toggle
                             onClick={this.handleImageToggle}
                             defaultChecked
                         ></Checkbox>
-                    </div>
+                    </div> */}
+                    <SearchBar handleSearchSelect={this.handleSearchSelect} />
                 </div>
                 <ScryfallCardList
                     showImages={this.state.showImages}

@@ -8,10 +8,12 @@ import {
     Select,
     Grid,
     Header,
-    Label
+    Label,
+    Message
 } from 'semantic-ui-react';
 import axios from 'axios';
 import QohParser from './QohParser';
+import toaster from 'toasted-notes';
 import { ADD_CARD_TO_INVENTORY } from './api_resources';
 
 const finishes = [
@@ -70,15 +72,30 @@ export default class ScryfallCardListItem extends Component {
 
     handleInventoryAdd = async (e, { value }) => {
         const { quantity, selectedFinish, selectedCondition } = this.state;
+        const { name } = this.props;
         // This is the identifier for quantities of different finishes/conditions in the db
         const type = `${selectedFinish}_${selectedCondition}`;
 
         try {
             this.setState({ submitDisable: true, submitLoading: true });
+
             const { data } = await axios.post(ADD_CARD_TO_INVENTORY, {
                 quantity: quantity,
                 type: type,
                 cardInfo: { ...this.props }
+            });
+
+            const toastjsx = (
+                <Message positive compact>
+                    <Message.Header>
+                        {quantity}x {name} {quantity > 0 ? 'added' : 'removed'}!
+                    </Message.Header>
+                </Message>
+            );
+
+            toaster.notify(() => toastjsx, {
+                position: 'bottom-right',
+                duration: 2000
             });
 
             this.setState({

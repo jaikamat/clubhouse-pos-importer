@@ -10,6 +10,7 @@ import {
     Dropdown,
     Button
 } from 'semantic-ui-react';
+import MarketPrice from './MarketPrice';
 import QohParser from './QohParser';
 
 function createConditionOptions(qoh, id) {
@@ -84,15 +85,7 @@ export default class BrowseCardItem extends React.Component {
     };
 
     render() {
-        const {
-            name,
-            image_uris,
-            set,
-            set_name,
-            rarity,
-            qoh,
-            prices
-        } = this.props;
+        const { name, image_uris, set, set_name, rarity, qoh, id } = this.props;
         const {
             selectedFinishCondition,
             selectedFinishConditionQty,
@@ -119,6 +112,9 @@ export default class BrowseCardItem extends React.Component {
                                     {set_name} ({String(set).toUpperCase()})
                                 </Label>
                                 <QohParser inventoryQty={qoh} />
+                                <Label horizontal>
+                                    <MarketPrice id={id} />
+                                </Label>
                             </Header>
                             <Form>
                                 <Form.Group>

@@ -57,6 +57,7 @@ class SearchBar extends React.Component {
                 loading={isLoading}
                 results={results}
                 placeholder={defaultSearchValue}
+                selectFirstResult={true}
             />
         );
     }

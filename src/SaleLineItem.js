@@ -6,6 +6,7 @@ export default function SaleLineItem(props) {
     const {
         name,
         set,
+        set_name,
         finishCondition,
         qtyToSell,
         price,
@@ -19,7 +20,9 @@ export default function SaleLineItem(props) {
             <Card.Content>
                 <Card.Header as="h4">
                     {name} <i className={`ss ss-fw ss-${set} ss-${rarity}`} />
-                    <Label horizontal>{String(set).toUpperCase()}</Label>
+                    <Label horizontal>
+                        {set_name} ({set.toUpperCase()})
+                    </Label>
                 </Card.Header>
                 <span>
                     {qtyToSell}x @ <Price num={price} /> | {finishCondition}

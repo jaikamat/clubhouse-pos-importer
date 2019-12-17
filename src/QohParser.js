@@ -16,9 +16,7 @@ import { Label, Header } from 'semantic-ui-react';
 //     NONFOIL_HP: 0
 // };
 
-export default function QohParser(props) {
-    const inventoryQty = props.inventoryQty;
-
+export default function QohParser({ inventoryQty }) {
     if (!inventoryQty) {
         return `Foil: 0 | Nonfoil: 0`;
     }

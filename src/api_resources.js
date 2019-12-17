@@ -9,6 +9,8 @@ module.exports = {
         'https://us-central1-clubhouse-collection.cloudfunctions.net/finishSale',
     ADD_CARD_TO_INVENTORY:
         'https://us-central1-clubhouse-collection.cloudfunctions.net/addCardToInventory',
+    GET_INVENTORY_QUERY:
+        'https://us-central1-clubhouse-collection.cloudfunctions.net/inventorySearchQuery',
     SCRYFALL_AUTOCOMPLETE: 'https://api.scryfall.com/cards/autocomplete',
     SCRYFALL_SEARCH: 'https://api.scryfall.com/cards/search',
     SCRYFALL_ID_SEARCH: 'https://api.scryfall.com/cards/'

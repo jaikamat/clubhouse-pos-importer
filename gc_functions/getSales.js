@@ -1,0 +1,60 @@
+const MongoClient = require('mongodb').MongoClient;
+require('dotenv').config();
+
+async function getSales(cardName) {
+    const uri = `mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@cluster0-uytsf.gcp.mongodb.net/test?retryWrites=true&w=majority`;
+    const client = await new MongoClient(uri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    });
+
+    try {
+        await client.connect();
+        console.log('Successfully connected to mongo');
+
+        const db = client.db('test');
+
+        // Returns only the relevant queried cards from the card_list array of cards involved in the sale
+        // Refer to https://blog.fullstacktraining.com/retrieve-only-queried-element-in-an-object-array-in-mongodb-collection/
+        const data = await db.collection('sales_data').aggregate([
+            { $match: { 'card_list.name': cardName } },
+            {
+                $project: {
+                    card_list: {
+                        $filter: {
+                            input: '$card_list',
+                            as: 'card_list',
+                            cond: { $eq: ['$$card_list.name', cardName] }
+                        }
+                    },
+                    sale_data: 1
+                }
+            }
+        ]);
+
+        return await data.toArray();
+    } catch (err) {
+        console.log(err);
+        return err;
+    } finally {
+        await client.close();
+        console.log('Disconnected from mongo');
+    }
+}
+
+exports.getSales = async (req, res) => {
+    res.set('Access-Control-Allow-Headers', '*');
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'GET');
+
+    try {
+        const { cardName } = req.query;
+        const message = await getSales(cardName);
+        res.status(200).send(message);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+};
+
+exports.getSales = getSales;

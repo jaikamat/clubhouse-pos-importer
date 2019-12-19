@@ -17,6 +17,22 @@ import SalePriceTotal from './SalePriceTotal';
 import _ from 'lodash';
 import { GET_CARDS_BY_TITLE, FINISH_SALE } from './api_resources';
 
+/**
+ * Helper function to create toasts!
+ * @param {Object} param0
+ */
+const createToast = ({ color, header, message, position }) => {
+    return toaster.notify(
+        () => (
+            <Message color={color} compact>
+                <Message.Header>{header}</Message.Header>
+                {message}
+            </Message>
+        ),
+        { position: position }
+    );
+};
+
 const initialState = {
     searchResults: [],
     saleListCards: [],
@@ -79,19 +95,23 @@ export default class Sale extends React.Component {
 
             const saleID = data.sale_data.Sale.saleID;
 
-            const toastjsx = (
-                <Message positive compact>
-                    <Message.Header>Sale created in Lightspeed!</Message.Header>
-                    The id number is #{saleID}
-                </Message>
-            );
-
-            toaster.notify(() => toastjsx, {
+            createToast({
+                mood: 'green',
+                header: 'Sale created in Lightspeed!',
+                message: `The id number is #${saleID}`,
                 position: 'bottom-right'
             });
 
             this.setState(initialState);
         } catch (e) {
+            createToast({
+                mood: 'red',
+                header: 'Error!',
+                message: `Sale was not created`,
+                position: 'bottom-right'
+            });
+
+            this.setState(initialState);
             console.log(e);
         }
     };
@@ -108,11 +128,11 @@ export default class Sale extends React.Component {
             submitLoading
         } = this.state;
 
-        const list = saleListCards.map(c => {
+        const list = saleListCards.map(card => {
             return (
                 <SaleLineItem
-                    {...c}
-                    key={`${c.id}${c.finishCondition}${c.qtyToSell}`}
+                    {...card}
+                    key={`${card.id}${card.finishCondition}${card.qtyToSell}`}
                     deleteLineItem={this.removeFromSaleList}
                 />
             );

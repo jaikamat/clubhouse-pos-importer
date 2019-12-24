@@ -8,8 +8,6 @@ async function getCardsByTitle(title) {
         useUnifiedTopology: true
     });
 
-    let status;
-
     try {
         await client.connect();
         console.log('Successfully connected to mongo');
@@ -20,15 +18,13 @@ async function getCardsByTitle(title) {
             name: title
         });
 
-        const documents = await data.toArray();
-
-        status = documents;
+        return await data.toArray();
     } catch (err) {
-        status = err;
+        console.log(err);
+        return err;
     } finally {
         await client.close();
         console.log('Disconnected from mongo');
-        return status;
     }
 }
 

@@ -9,8 +9,6 @@ async function addCardToInventory(quantity, type, cardInfo) {
         useUnifiedTopology: true
     });
 
-    let status;
-
     try {
         await client.connect();
         console.log('Successfully connected to mongo');
@@ -53,7 +51,7 @@ async function addCardToInventory(quantity, type, cardInfo) {
         );
 
         // Get the updated document for return
-        const data = await db.collection('card_inventory').findOne(
+        return await db.collection('card_inventory').findOne(
             { _id: cardInfo.id },
             {
                 projection: {
@@ -65,14 +63,12 @@ async function addCardToInventory(quantity, type, cardInfo) {
                 }
             }
         );
-
-        status = data;
     } catch (err) {
-        status = err;
+        console.log(err);
+        return err;
     } finally {
         await client.close();
         console.log('Disconnected from mongo');
-        return status;
     }
 }
 

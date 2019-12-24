@@ -25,8 +25,6 @@ async function updateCardInventory(card) {
         useUnifiedTopology: true
     });
 
-    let status;
-
     try {
         await client.connect();
         console.log('Successfully connected to mongo');
@@ -67,7 +65,7 @@ async function updateCardInventory(card) {
         );
 
         // Get the updated document for return
-        const data = await db.collection('card_inventory').findOne(
+        return await db.collection('card_inventory').findOne(
             { _id: id },
             {
                 projection: {
@@ -79,14 +77,12 @@ async function updateCardInventory(card) {
                 }
             }
         );
-
-        status = data;
     } catch (err) {
-        status = err;
+        console.log(err);
+        return err;
     } finally {
         await client.close();
         console.log('Disconnected from mongo');
-        return status;
     }
 }
 
@@ -129,6 +125,7 @@ async function createLightspeedSale(authToken, cards) {
         return await axios.post(url, bodyParameters, config);
     } catch (err) {
         console.log(err);
+        return err;
     }
 }
 
@@ -202,6 +199,7 @@ async function finishSale(cards) {
         };
     } catch (err) {
         console.log(err);
+        return err;
     }
 }
 

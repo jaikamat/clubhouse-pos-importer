@@ -8,8 +8,6 @@ async function getCardQuantitiesFromInventory(scryfallIds) {
         useUnifiedTopology: true
     });
 
-    let status;
-
     try {
         await client.connect();
         console.log('Successfully connected to mongo');
@@ -34,13 +32,13 @@ async function getCardQuantitiesFromInventory(scryfallIds) {
 
         documents.forEach(d => (res[d._id] = d.qoh));
 
-        status = res;
+        return res;
     } catch (err) {
-        status = err;
+        console.log(err);
+        return err;
     } finally {
         await client.close();
         console.log('Disconnected from mongo');
-        return status;
     }
 }
 

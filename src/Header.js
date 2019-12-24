@@ -14,8 +14,11 @@ class Header extends React.Component {
                     <Link to="/new-sale">
                         <Menu.Item name="New Sale" />
                     </Link>
-                    <Link to="/browse-inventory">
+                    {/* <Link to="/browse-inventory">
                         <Menu.Item name="Browse Inventory" />
+                    </Link> */}
+                    <Link to="/browse-sales">
+                        <Menu.Item name="Browse Sales" />
                     </Link>
                 </Menu.Menu>
             </Menu>

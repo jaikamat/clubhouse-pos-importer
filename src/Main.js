@@ -2,21 +2,24 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Home from './Home';
 import Sale from './Sale';
+import BrowseSales from './BrowseSales';
 import BrowseInventory from './BrowseInventory';
+import { Container } from 'semantic-ui-react';
 
 function Main() {
     return (
-        <div style={{ marginTop: '40px' }}>
+        <Container style={{ marginTop: '40px' }}>
             <Switch>
                 <Route exact path="/manage-inventory" component={Home} />
                 <Route exact path="/new-sale" component={Sale} />
-                <Route
+                {/* <Route
                     exact
                     path="/browse-inventory"
                     component={BrowseInventory}
-                />
+                /> */}
+                <Route exact path="/browse-sales" component={BrowseSales} />
             </Switch>
-        </div>
+        </Container>
     );
 }
 

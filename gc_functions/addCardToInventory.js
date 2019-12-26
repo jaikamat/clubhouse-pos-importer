@@ -3,8 +3,7 @@ require('dotenv').config();
 
 // 'TYPE' Refers to the configuration of Finishes and Conditions
 async function addCardToInventory(quantity, type, cardInfo) {
-    const uri = `mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@cluster0-uytsf.gcp.mongodb.net/test?retryWrites=true&w=majority`;
-    const client = await new MongoClient(uri, {
+    const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true
     });

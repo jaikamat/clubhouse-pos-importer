@@ -19,8 +19,8 @@ function createSaleLine(card) {
  */
 async function updateCardInventory(card) {
     const { qtyToSell, finishCondition, id, name } = card;
-    const uri = `mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@cluster0-uytsf.gcp.mongodb.net/test?retryWrites=true&w=majority`;
-    const client = await new MongoClient(uri, {
+
+    const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true
     });
@@ -136,13 +136,10 @@ async function createLightspeedSale(authToken, cards) {
  * @param cardList - an array of cards that were involved in the sale
  */
 async function createSale(saleData, cardList) {
-    const uri = `mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@cluster0-uytsf.gcp.mongodb.net/test?retryWrites=true&w=majority`;
-    const client = await new MongoClient(uri, {
+    const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true
     });
-
-    let status;
 
     try {
         await client.connect();
@@ -151,18 +148,16 @@ async function createSale(saleData, cardList) {
 
         const db = client.db('test');
 
-        const data = await db.collection('sales_data').insertOne({
+        return await db.collection('sales_data').insertOne({
             sale_data: saleData,
             card_list: cardList
         });
-
-        status = data;
     } catch (err) {
-        status = err;
+        console.log(err);
+        return err;
     } finally {
         await client.close();
         console.log('Disconnected from mongo');
-        return status;
     }
 }
 

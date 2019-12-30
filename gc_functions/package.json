@@ -9,7 +9,7 @@
         "getCardQuantitiesFromInventory": "functions-framework --target=getCardQuantitiesFromInventory",
         "getCardsByTitle": "functions-framework --target=getCardsByTitle",
         "refreshLightspeedAuthToken": "functions-framework --target=refreshLightspeedAuthToken",
-        "finalizeSale": "functions-framework --target=finalizeSale"
+        "getJwt": "functions-framework --target=getJwt"
     },
     "author": "",
     "license": "ISC",

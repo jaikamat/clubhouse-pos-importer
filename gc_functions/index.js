@@ -3,9 +3,9 @@ const refreshLightspeedAuthToken = require('./refreshLightspeedAuthToken')
     .refreshLightspeedAuthToken;
 const getCardQuantitiesFromInventory = require('./getCardQuantitiesFromInventory')
     .getCardQuantitiesFromInventory;
-const finalizeSale = require('./finalizeSale').finalizeSale;
+const getJwt = require('./getJwt').getJwt;
 
 exports.addCardToInventory = addCardToInventory;
 exports.getCardQuantitiesFromInventory = getCardQuantitiesFromInventory;
 exports.refreshLightspeedAuthToken = refreshLightspeedAuthToken;
-exports.finalizeSale = finalizeSale;
+exports.getJwt = getJwt;

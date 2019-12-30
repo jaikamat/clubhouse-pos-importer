@@ -29,3 +29,4 @@ api
 
 /gc_functions/node_modules
 /gc_functions/.env
+/gc_functions/createUser.js

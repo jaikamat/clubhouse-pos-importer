@@ -15,12 +15,14 @@ async function getJwt(username, submittedPass) {
 
         const db = client.db('test');
 
-        const { password } = await db.collection('users').findOne({
+        const user = await db.collection('users').findOne({
             username: username
         });
 
-        // Determine if the user is authorized
-        const match = await bcrypt.compareSync(submittedPass, password);
+        if (!user) return 'Not authorized';
+
+        // Determine if the fetched user is authorized
+        const match = await bcrypt.compareSync(submittedPass, user.password);
 
         if (match) {
             const token = jwt.sign(

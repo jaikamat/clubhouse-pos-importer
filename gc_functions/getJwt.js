@@ -30,7 +30,7 @@ async function getJwt(username, submittedPass) {
                 process.env.PRIVATE_KEY
             );
 
-            return token;
+            return { token: token };
         } else {
             return 'Not authorized';
         }
@@ -51,7 +51,7 @@ exports.getJwt = async (req, res) => {
     try {
         const { username, password } = req.body;
         const token = await getJwt(username, password);
-        res.status(200).send({ token: token });
+        res.status(200).send(token);
     } catch (err) {
         console.log(err);
         res.status(500).send(err);

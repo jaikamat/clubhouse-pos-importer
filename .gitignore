@@ -29,3 +29,8 @@ api
 
 /gc_functions/node_modules
 /gc_functions/.env
+
+/migration_scripts/csv_data
+/migration_scripts/output
+/migration_scripts/scryfall_data
+/migration_scripts/node_modules

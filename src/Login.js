@@ -1,27 +1,9 @@
 import React from 'react';
-import axios from 'axios';
-import { LOGIN } from './api_resources';
 import { Form, Button } from 'semantic-ui-react';
+import { Redirect } from 'react-router-dom';
 
 class Login extends React.Component {
     state = { username: '', password: '' };
-
-    login = async () => {
-        const { username, password } = this.state;
-
-        try {
-            const { data } = await axios.post(LOGIN, { username, password });
-            if (data.token !== 'Not authorized') {
-                localStorage.setItem('clubhouse_JWT', data.token);
-                console.log('token was set!');
-            } else {
-                localStorage.clear();
-                console.log('Not authorized!');
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    };
 
     handleInputChange = (e, { value }) => {
         this.setState({ [e.target.name]: value });
@@ -29,6 +11,11 @@ class Login extends React.Component {
 
     render() {
         const { username, password } = this.state;
+        const { loggedIn } = this.props;
+
+        if (loggedIn) {
+            return <Redirect to="/manage-inventory" />;
+        }
 
         return (
             <Form>
@@ -45,6 +32,7 @@ class Login extends React.Component {
                     <Form.Input
                         name="password"
                         placeholder="Password"
+                        type="password"
                         label="Password"
                         value={password}
                         onChange={this.handleInputChange}
@@ -52,7 +40,7 @@ class Login extends React.Component {
                 </Form.Field>
                 <Button
                     type="submit"
-                    onClick={this.login}
+                    onClick={() => this.props.handleLogin(username, password)}
                     disabled={!username || !password}
                 >
                     Submit

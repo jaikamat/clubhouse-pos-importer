@@ -96,7 +96,7 @@ export default class Sale extends React.Component {
             const saleID = data.sale_data.Sale.saleID;
 
             createToast({
-                mood: 'green',
+                color: 'green',
                 header: 'Sale created in Lightspeed!',
                 message: `The id number is #${saleID}`,
                 position: 'bottom-right'
@@ -105,7 +105,7 @@ export default class Sale extends React.Component {
             this.setState(initialState);
         } catch (e) {
             createToast({
-                mood: 'red',
+                color: 'red',
                 header: 'Error!',
                 message: `Sale was not created`,
                 position: 'bottom-right'

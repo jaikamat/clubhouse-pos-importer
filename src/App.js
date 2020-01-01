@@ -18,12 +18,16 @@ class App extends React.Component {
                 this.setState({
                     loggedIn: !!localStorage.getItem('clubhouse_JWT')
                 });
+
+                return { authed: true };
             } else {
                 localStorage.clear();
 
                 this.setState({
                     loggedIn: !!localStorage.getItem('clubhouse_JWT')
                 });
+
+                return { authed: false };
             }
         } catch (err) {
             console.log(err);

@@ -1,16 +1,63 @@
 import React from 'react';
-import { Form, Button } from 'semantic-ui-react';
+import toaster from 'toasted-notes';
+import { Form, Button, Message } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
 
+/**
+ * Helper function to create toasts!
+ * @param {Object} param0
+ */
+const createToast = ({ color, header, message, position }) => {
+    return toaster.notify(
+        () => (
+            <Message color={color} compact>
+                <Message.Header>{header}</Message.Header>
+                {message}
+            </Message>
+        ),
+        { position: position }
+    );
+};
+
+const initialState = { username: '', password: '', btnLoading: false };
+
 class Login extends React.Component {
-    state = { username: '', password: '' };
+    state = initialState;
 
     handleInputChange = (e, { value }) => {
         this.setState({ [e.target.name]: value });
     };
 
-    render() {
+    login = async () => {
         const { username, password } = this.state;
+
+        this.setState({ btnLoading: true });
+
+        const { authed } = await this.props.handleLogin(username, password);
+
+        this.setState({ btnLoading: false });
+
+        if (authed) {
+            this.setState(initialState);
+            createToast({
+                color: 'green',
+                header: 'Success!',
+                message: `You were logged in`,
+                position: 'bottom-right'
+            });
+        } else {
+            this.setState(initialState);
+            createToast({
+                color: 'red',
+                header: 'Error',
+                message: `Login failed`,
+                position: 'bottom-right'
+            });
+        }
+    };
+
+    render() {
+        const { username, password, btnLoading } = this.state;
         const { loggedIn } = this.props;
 
         if (loggedIn) {
@@ -40,8 +87,9 @@ class Login extends React.Component {
                 </Form.Field>
                 <Button
                     type="submit"
-                    onClick={() => this.props.handleLogin(username, password)}
+                    onClick={this.login}
                     disabled={!username || !password}
+                    loading={btnLoading}
                 >
                     Submit
                 </Button>

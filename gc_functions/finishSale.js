@@ -1,7 +1,15 @@
 const request = require('request-promise-native');
 const axios = require('axios');
 const MongoClient = require('mongodb').MongoClient;
+const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
+
+/**
+ * Initialize express app and use CORS middleware
+ */
+const app = express();
+app.use(cors());
 
 /**
  * Helper fn used to create employee-readable note lines in the Lightspeed POS system
@@ -198,28 +206,19 @@ async function finishSale(cards) {
     }
 }
 
-exports.finishSale = async (req, res) => {
-    // Note: The finishSale function will trigger twice if we do not
-    // detect an OPTIONS complex CORS preflight request, which causes errors
-    // as the request body is undefined on first execution
-    if (req.method === 'OPTIONS') {
-        // Send response to OPTIONS requests
-        res.set('Access-Control-Allow-Headers', '*');
-        res.set('Access-Control-Allow-Origin', '*');
-        res.set('Access-Control-Allow-Methods', 'POST');
-        res.set('Access-Control-Max-Age', '3600');
-        res.status(204).send('');
-    }
-
+/**
+ * Create root post route
+ */
+app.post('/', async (req, res) => {
     try {
-        res.set('Access-Control-Allow-Headers', '*');
-        res.set('Access-Control-Allow-Origin', '*');
-        res.set('Access-Control-Allow-Methods', 'POST');
-
         const { cards } = req.body;
         const data = await finishSale(cards);
         res.status(200).send(data);
     } catch (err) {
+        console.log(err);
         res.status(400).send(err);
     }
-};
+});
+
+// Export the app to GCF
+exports.finishSale = app;

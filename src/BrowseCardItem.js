@@ -10,6 +10,7 @@ import {
     Dropdown,
     Button
 } from 'semantic-ui-react';
+import CardImage from './CardImage';
 import MarketPrice from './MarketPrice';
 import QohParser from './QohParser';
 
@@ -85,7 +86,16 @@ export default class BrowseCardItem extends React.Component {
     };
 
     render() {
-        const { name, image_uris, set, set_name, rarity, qoh, id } = this.props;
+        const {
+            name,
+            image_uris,
+            set,
+            set_name,
+            rarity,
+            qoh,
+            id,
+            card_faces
+        } = this.props;
         const {
             selectedFinishCondition,
             selectedFinishConditionQty,
@@ -99,7 +109,10 @@ export default class BrowseCardItem extends React.Component {
                 <Grid>
                     <Grid.Row>
                         <Grid.Column width="2">
-                            <Image size="tiny" src={image_uris.small} />
+                            <CardImage
+                                image_uris={image_uris}
+                                card_faces={card_faces}
+                            />
                         </Grid.Column>
                         <Grid.Column width="14">
                             <Header as="h3">

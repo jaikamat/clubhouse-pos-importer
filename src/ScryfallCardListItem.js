@@ -15,6 +15,7 @@ import axios from 'axios';
 import QohParser from './QohParser';
 import toaster from 'toasted-notes';
 import MarketPrice from './MarketPrice';
+import CardImage from './CardImage';
 import { ADD_CARD_TO_INVENTORY } from './api_resources';
 
 const finishes = [
@@ -129,14 +130,25 @@ export default class ScryfallCardListItem extends Component {
             inventoryQty,
             submitLoading
         } = this.state;
-        const { image_uris, name, set_name, set, rarity, id } = this.props;
+        const {
+            image_uris,
+            name,
+            set_name,
+            set,
+            rarity,
+            id,
+            card_faces
+        } = this.props;
 
         return (
             <Segment>
                 <Grid>
                     {this.props.showImage && (
                         <Grid.Column width={2}>
-                            <Image src={image_uris.normal} size="tiny" />
+                            <CardImage
+                                image_uris={image_uris}
+                                card_faces={card_faces}
+                            />
                         </Grid.Column>
                     )}
                     <Grid.Column width={13} verticalAlign="middle">

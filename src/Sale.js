@@ -141,9 +141,9 @@ export default class Sale extends React.Component {
         return (
             <div>
                 <SearchBar handleSearchSelect={this.handleResultSelect} />
-                <Grid>
+                <Grid stackable={true}>
                     <Grid.Row>
-                        <Grid.Column width="10">
+                        <Grid.Column width="11">
                             <Header as="h2">Inventory</Header>
                             <Segment>
                                 <BrowseCardList
@@ -152,7 +152,7 @@ export default class Sale extends React.Component {
                                 />
                             </Segment>
                         </Grid.Column>
-                        <Grid.Column width="6">
+                        <Grid.Column width="5">
                             <Header as="h2">Sale Items</Header>
                             <Segment>{list}</Segment>
                             {saleListCards.length > 0 && (

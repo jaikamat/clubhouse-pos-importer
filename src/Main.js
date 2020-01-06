@@ -10,7 +10,7 @@ import { Container } from 'semantic-ui-react';
 function Main({ handleLogin, loggedIn }) {
     // Use the render syntax in the Login component to bind passed props
     return (
-        <Container style={{ marginTop: '40px' }}>
+        <div style={{ marginTop: '40px', marginLeft: '20px', marginRight: '20px' }}>
             <br />
             <Switch>
                 <Route exact path="/manage-inventory" component={Home} />
@@ -31,7 +31,7 @@ function Main({ handleLogin, loggedIn }) {
                     )}
                 />
             </Switch>
-        </Container>
+        </div>
     );
 }
 

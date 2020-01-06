@@ -123,6 +123,7 @@ export default class BrowseCardItem extends React.Component {
                                     {set_name} ({String(set).toUpperCase()})
                                 </Label>
                                 <QohParser inventoryQty={qoh} />
+                                {' '}
                                 <Label horizontal>
                                     <MarketPrice id={id} />
                                 </Label>

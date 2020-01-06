@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Button, Icon, Header, Label } from 'semantic-ui-react';
+import { Card, Button, Icon, Label } from 'semantic-ui-react';
 import Price from './Price';
 
 export default function SaleLineItem(props) {

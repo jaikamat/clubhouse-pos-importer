@@ -1,6 +1,3 @@
-import React from 'react';
-import { Label, Header } from 'semantic-ui-react';
-
 // This component parses the `qoh` object from mongo into something
 // more presentable
 

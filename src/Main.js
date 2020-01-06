@@ -5,7 +5,6 @@ import Sale from './Sale';
 import BrowseSales from './BrowseSales';
 import Login from './Login';
 import Logout from './Logout';
-import { Container } from 'semantic-ui-react';
 
 function Main({ handleLogin, loggedIn }) {
     // Use the render syntax in the Login component to bind passed props

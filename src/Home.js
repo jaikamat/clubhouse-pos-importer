@@ -2,7 +2,8 @@ import React from 'react';
 import SearchBar from './SearchBar';
 import axios from 'axios';
 import ScryfallCardList from './ScryfallCardList';
-import { Checkbox, Header } from 'semantic-ui-react';
+// Un-comment this if hide-image feature is needed
+// import { Checkbox, Header } from 'semantic-ui-react';
 import { SCRYFALL_SEARCH, GET_CARDS_FROM_INVENTORY } from './api_resources';
 
 class Home extends React.Component {

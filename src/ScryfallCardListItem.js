@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import {
     Segment,
-    Image,
     Input,
     Button,
     Form,
     Select,
-    Grid,
-    Header,
     Label,
-    Message
+    Message,
+    Item
 } from 'semantic-ui-react';
 import axios from 'axios';
 import QohParser from './QohParser';
@@ -142,18 +140,16 @@ export default class ScryfallCardListItem extends Component {
 
         return (
             <Segment>
-                <Grid>
-                    {this.props.showImage && (
-                        <Grid.Column width={2}>
+                <Item.Group divided>
+                    <Item>
+                        <Item.Image size="tiny">
                             <CardImage
                                 image_uris={image_uris}
                                 card_faces={card_faces}
                             />
-                        </Grid.Column>
-                    )}
-                    <Grid.Column width={13} verticalAlign="middle">
-                        <Grid.Row>
-                            <Header as="h3">
+                        </Item.Image>
+                        <Item.Content>
+                            <Item.Header as='h3'>
                                 {name}{' '}
                                 <i
                                     className={`ss ss-fw ss-${set} ss-${rarity}`}
@@ -166,52 +162,52 @@ export default class ScryfallCardListItem extends Component {
                                 <Label horizontal>
                                     <MarketPrice id={id} />
                                 </Label>
-                            </Header>
-                        </Grid.Row>
-                        <Grid.Row>
-                            <Form>
-                                <Form.Group>
-                                    <Form.Field
-                                        control={Input}
-                                        type="number"
-                                        label="Quantity"
-                                        value={quantity}
-                                        onChange={this.handleQuantityChange}
-                                    />
-                                    <Form.Field
-                                        label="Finish"
-                                        control={Select}
-                                        value={selectedFinish}
-                                        options={finishes}
-                                        disabled={finishDisabled}
-                                        onChange={this.handleFinishChange}
-                                    />
-                                    <Form.Field
-                                        label="Condition"
-                                        control={Select}
-                                        value={selectedCondition}
-                                        options={cardConditions}
-                                        onChange={this.handleConditionChange}
-                                    />
-                                    <Form.Button
-                                        label="Add to Inventory?"
-                                        control={Button}
-                                        primary
-                                        disabled={
-                                            quantity === 0 ||
-                                            quantity === '' ||
-                                            submitDisable
-                                        }
-                                        onClick={this.handleInventoryAdd}
-                                        loading={submitLoading}
-                                    >
-                                        Submit
+                            </Item.Header>
+                            <Item.Description>
+                                <Form>
+                                    <Form.Group>
+                                        <Form.Field
+                                            control={Input}
+                                            type="number"
+                                            label="Quantity"
+                                            value={quantity}
+                                            onChange={this.handleQuantityChange}
+                                        />
+                                        <Form.Field
+                                            label="Finish"
+                                            control={Select}
+                                            value={selectedFinish}
+                                            options={finishes}
+                                            disabled={finishDisabled}
+                                            onChange={this.handleFinishChange}
+                                        />
+                                        <Form.Field
+                                            label="Condition"
+                                            control={Select}
+                                            value={selectedCondition}
+                                            options={cardConditions}
+                                            onChange={this.handleConditionChange}
+                                        />
+                                        <Form.Button
+                                            label="Add to Inventory?"
+                                            control={Button}
+                                            primary
+                                            disabled={
+                                                quantity === 0 ||
+                                                quantity === '' ||
+                                                submitDisable
+                                            }
+                                            onClick={this.handleInventoryAdd}
+                                            loading={submitLoading}
+                                        >
+                                            Submit
                                     </Form.Button>
-                                </Form.Group>
-                            </Form>
-                        </Grid.Row>
-                    </Grid.Column>
-                </Grid>
+                                    </Form.Group>
+                                </Form>
+                            </Item.Description>
+                        </Item.Content>
+                    </Item>
+                </Item.Group>
             </Segment>
         );
     }

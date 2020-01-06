@@ -1,14 +1,12 @@
 import React from 'react';
 import {
-    Grid,
-    Image,
     Segment,
-    Header,
     Label,
     Form,
     Input,
     Dropdown,
-    Button
+    Button,
+    Item
 } from 'semantic-ui-react';
 import CardImage from './CardImage';
 import MarketPrice from './MarketPrice';
@@ -106,16 +104,16 @@ export default class BrowseCardItem extends React.Component {
 
         return (
             <Segment>
-                <Grid>
-                    <Grid.Row>
-                        <Grid.Column width="2">
+                <Item.Group divided>
+                    <Item>
+                        <Item.Image size="tiny">
                             <CardImage
                                 image_uris={image_uris}
                                 card_faces={card_faces}
                             />
-                        </Grid.Column>
-                        <Grid.Column width="14">
-                            <Header as="h3">
+                        </Item.Image>
+                        <Item.Content>
+                            <Item.Header as="h3">
                                 {name}{' '}
                                 <i
                                     className={`ss ss-fw ss-${set} ss-${rarity}`}
@@ -128,50 +126,52 @@ export default class BrowseCardItem extends React.Component {
                                 <Label horizontal>
                                     <MarketPrice id={id} />
                                 </Label>
-                            </Header>
-                            <Form>
-                                <Form.Group>
-                                    <Form.Field
-                                        control={Dropdown}
-                                        selection
-                                        placeholder="Select inventory"
-                                        options={conditionOptions}
-                                        value={selectedFinishCondition}
-                                        label="Select finish/condition"
-                                        onChange={
-                                            this.handleSelectedFinishCondition
-                                        }
-                                    />
-                                    <Form.Field
-                                        control={Input}
-                                        type="number"
-                                        label="Quantity to sell"
-                                        value={quantityToSell}
-                                        onChange={this.handleQuantityChange}
-                                        disabled={!selectedFinishConditionQty}
-                                    />
-                                    <Form.Field
-                                        control={Input}
-                                        type="number"
-                                        label="Price"
-                                        value={price}
-                                        onChange={this.handlePriceChange}
-                                        disabled={!selectedFinishConditionQty}
-                                    />
-                                    <Form.Button
-                                        label="Add to sale?"
-                                        control={Button}
-                                        primary
-                                        onClick={this.handleAddToSale}
-                                        disabled={!quantityToSell}
-                                    >
-                                        Sell
+                            </Item.Header>
+                            <Item.Description>
+                                <Form>
+                                    <Form.Group>
+                                        <Form.Field
+                                            control={Dropdown}
+                                            selection
+                                            placeholder="Select inventory"
+                                            options={conditionOptions}
+                                            value={selectedFinishCondition}
+                                            label="Select finish/condition"
+                                            onChange={
+                                                this.handleSelectedFinishCondition
+                                            }
+                                        />
+                                        <Form.Field
+                                            control={Input}
+                                            type="number"
+                                            label="Quantity to sell"
+                                            value={quantityToSell}
+                                            onChange={this.handleQuantityChange}
+                                            disabled={!selectedFinishConditionQty}
+                                        />
+                                        <Form.Field
+                                            control={Input}
+                                            type="number"
+                                            label="Price"
+                                            value={price}
+                                            onChange={this.handlePriceChange}
+                                            disabled={!selectedFinishConditionQty}
+                                        />
+                                        <Form.Button
+                                            label="Add to sale?"
+                                            control={Button}
+                                            primary
+                                            onClick={this.handleAddToSale}
+                                            disabled={!quantityToSell}
+                                        >
+                                            Sell
                                     </Form.Button>
-                                </Form.Group>
-                            </Form>
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
+                                    </Form.Group>
+                                </Form>
+                            </Item.Description>
+                        </Item.Content>
+                    </Item>
+                </Item.Group>
             </Segment>
         );
     }

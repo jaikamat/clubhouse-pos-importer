@@ -7,7 +7,7 @@ class Header extends React.Component {
     render() {
         const { loggedIn } = this.props;
         return (
-            <Menu inverted color="blue" fixed="top">
+            <Menu inverted color="blue" fixed="top" style={{ boxShadow: '0 3px 5px 0 rgba(0,0,0,.25)' }}>
                 <Menu.Item>
                     <img src={ballLogo} style={{ marginRight: '7px' }} />
                     <span><h3>Clubhouse Collection</h3></span>

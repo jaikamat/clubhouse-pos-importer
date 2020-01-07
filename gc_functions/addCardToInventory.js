@@ -1,6 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const express = require('express');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 /**
@@ -8,6 +9,29 @@ require('dotenv').config();
  */
 const app = express();
 app.use(cors());
+
+/**
+ * Middleware to check for Bearer token by validating JWT
+ */
+app.use((req, res, next) => {
+    let token = req.headers['authorization']; // Express headers converted to lowercase
+
+    if (token.startsWith('Bearer ')) {
+        token = token.slice(7, token.length);
+    }
+
+    if (token) {
+        try {
+            // Will throw error if validation fails
+            jwt.verify(token, process.env.PRIVATE_KEY);
+            return next();
+        } catch (err) {
+            res.status(401).send('Invalid token');
+        }
+    } else {
+        res.status(401).send('No token present on request');
+    }
+})
 
 // `type` Refers to the configuration of Finishes and Conditions
 async function addCardToInventory(quantity, type, cardInfo) {

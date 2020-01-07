@@ -1,6 +1,7 @@
 import React from 'react';
 import SearchBar from './SearchBar';
 import axios from 'axios';
+import makeAuthHeader from './makeAuthHeader';
 import ScryfallCardList from './ScryfallCardList';
 // Un-comment this if hide-image feature is needed
 // import { Checkbox, Header } from 'semantic-ui-react';
@@ -14,13 +15,12 @@ class Home extends React.Component {
 
         try {
             const searchRes = await axios.get(
-                `${SCRYFALL_SEARCH}?q=!${encodedTerm}%20unique%3Aprints%20game%3Apaper`
+                `${SCRYFALL_SEARCH}?q=!${encodedTerm}%20unique%3Aprints%20game%3Apaper`,
+                { headers: makeAuthHeader() }
             );
 
             const ids = searchRes.data.data.map(el => el.id);
-            const inventoryRes = await axios.post(GET_CARDS_FROM_INVENTORY, {
-                scryfallIds: ids
-            });
+            const inventoryRes = await axios.post(GET_CARDS_FROM_INVENTORY, { scryfallIds: ids }, { headers: makeAuthHeader() });
 
             console.log(searchRes.data);
             console.log(inventoryRes.data);

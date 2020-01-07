@@ -2,6 +2,7 @@ import React from 'react';
 import { Search } from 'semantic-ui-react';
 import _ from 'lodash';
 import axios from 'axios';
+import makeAuthHeader from './makeAuthHeader';
 import { SCRYFALL_AUTOCOMPLETE } from './api_resources';
 
 class SearchBar extends React.Component {
@@ -27,7 +28,8 @@ class SearchBar extends React.Component {
 
         setTimeout(async () => {
             const { data } = await axios.get(
-                `${SCRYFALL_AUTOCOMPLETE}?q=${this.state.term}`
+                `${SCRYFALL_AUTOCOMPLETE}?q=${this.state.term}`,
+                { headers: makeAuthHeader() }
             );
 
             const formattedResults = data.data.map(el => {

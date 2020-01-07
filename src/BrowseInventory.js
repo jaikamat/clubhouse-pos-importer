@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import InventoryTable from './InventoryTable';
+import makeAuthHeader from './makeAuthHeader';
 import { GET_INVENTORY_QUERY } from './api_resources';
 
 class BrowseInventory extends React.Component {
@@ -18,7 +19,7 @@ class BrowseInventory extends React.Component {
     };
 
     async componentDidMount() {
-        const { data } = await axios.get(GET_INVENTORY_QUERY);
+        const { data } = await axios.get(GET_INVENTORY_QUERY, { headers: makeAuthHeader() });
         this.setState({ inventory: data });
     }
 

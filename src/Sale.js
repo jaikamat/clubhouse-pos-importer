@@ -15,6 +15,7 @@ import BrowseCardList from './BrowseCardList';
 import SaleLineItem from './SaleLineItem';
 import SalePriceTotal from './SalePriceTotal';
 import _ from 'lodash';
+import makeAuthHeader from './makeAuthHeader';
 import { GET_CARDS_BY_TITLE, FINISH_SALE } from './api_resources';
 
 /**
@@ -46,9 +47,8 @@ export default class Sale extends React.Component {
     handleResultSelect = async term => {
         try {
             const { data } = await axios.get(GET_CARDS_BY_TITLE, {
-                params: {
-                    title: term
-                }
+                params: { title: term },
+                headers: makeAuthHeader()
             });
 
             this.setState({ searchResults: data });
@@ -91,7 +91,7 @@ export default class Sale extends React.Component {
 
             const { data } = await axios.post(FINISH_SALE, {
                 cards: this.state.saleListCards
-            });
+            }, { headers: makeAuthHeader() });
 
             const saleID = data.sale_data.Sale.saleID;
 

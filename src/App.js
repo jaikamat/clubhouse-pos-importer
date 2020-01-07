@@ -1,6 +1,7 @@
 import React from 'react';
 import Main from './Main';
 import Header from './Header';
+import makeAuthHeader from './makeAuthHeader';
 import { LOGIN } from './api_resources';
 import axios from 'axios';
 
@@ -10,7 +11,7 @@ class App extends React.Component {
     // This is passed to the Login component as props to trigger a re-render of the root navbar
     handleLogin = async (username, password) => {
         try {
-            const { data } = await axios.post(LOGIN, { username, password });
+            const { data } = await axios.post(LOGIN, { username, password }, { headers: makeAuthHeader() });
 
             if (data.token) {
                 localStorage.setItem('clubhouse_JWT', data.token);

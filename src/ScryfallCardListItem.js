@@ -14,6 +14,7 @@ import QohParser from './QohParser';
 import toaster from 'toasted-notes';
 import MarketPrice from './MarketPrice';
 import CardImage from './CardImage';
+import makeAuthHeader from './makeAuthHeader';
 import { ADD_CARD_TO_INVENTORY } from './api_resources';
 
 const finishes = [
@@ -82,8 +83,8 @@ export default class ScryfallCardListItem extends Component {
             const { data } = await axios.post(ADD_CARD_TO_INVENTORY, {
                 quantity: quantity,
                 type: type,
-                cardInfo: { ...this.props }
-            });
+                cardInfo: { ...this.props },
+            }, { headers: makeAuthHeader() });
 
             const toastjsx = (
                 <Message positive compact>

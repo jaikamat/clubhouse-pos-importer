@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import SearchBar from './SearchBar';
 import SalesList from './SalesList';
 import axios from 'axios';
+import makeAuthHeader from './makeAuthHeader';
 import { GET_SALES_BY_TITLE } from './api_resources';
 
 class BrowseSales extends Component {
@@ -9,9 +10,8 @@ class BrowseSales extends Component {
 
     handleSearchSelect = async cardName => {
         const { data } = await axios.get(GET_SALES_BY_TITLE, {
-            params: {
-                cardName: cardName
-            }
+            params: { cardName: cardName },
+            headers: makeAuthHeader()
         });
 
         this.setState({ salesList: data, cardName: cardName });

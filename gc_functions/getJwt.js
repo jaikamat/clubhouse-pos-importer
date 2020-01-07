@@ -1,7 +1,15 @@
 const MongoClient = require('mongodb').MongoClient;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
+
+/**
+ * Initialize express app and use CORS middleware
+ */
+const app = express();
+app.use(cors());
 
 async function getJwt(username, submittedPass) {
     const client = await new MongoClient(process.env.MONGO_URI, {
@@ -43,11 +51,7 @@ async function getJwt(username, submittedPass) {
     }
 }
 
-exports.getJwt = async (req, res) => {
-    res.set('Access-Control-Allow-Headers', '*');
-    res.set('Access-Control-Allow-Origin', '*');
-    res.set('Access-Control-Allow-Methods', 'POST');
-
+app.post('/', async (req, res) => {
     try {
         const { username, password } = req.body;
         const token = await getJwt(username, password);
@@ -56,4 +60,6 @@ exports.getJwt = async (req, res) => {
         console.log(err);
         res.status(500).send(err);
     }
-};
+})
+
+exports.getJwt = app;

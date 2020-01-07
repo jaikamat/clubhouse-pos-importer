@@ -1,5 +1,13 @@
 const MongoClient = require('mongodb').MongoClient;
+const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
+
+/**
+ * Initialize express app and use CORS middleware
+ */
+const app = express();
+app.use(cors());
 
 async function getCardsByTitle(title) {
     const client = await new MongoClient(process.env.MONGO_URI, {
@@ -27,11 +35,7 @@ async function getCardsByTitle(title) {
     }
 }
 
-exports.getCardsByTitle = async (req, res) => {
-    res.set('Access-Control-Allow-Headers', '*');
-    res.set('Access-Control-Allow-Origin', '*');
-    res.set('Access-Control-Allow-Methods', 'GET');
-
+app.get('/', async (req, res) => {
     try {
         const { title } = req.query;
         const message = await getCardsByTitle(title);
@@ -40,6 +44,6 @@ exports.getCardsByTitle = async (req, res) => {
         console.log(err);
         res.status(500).send(err);
     }
-};
+})
 
-exports.getCardsByTitle = getCardsByTitle;
+exports.getCardsByTitle = app;

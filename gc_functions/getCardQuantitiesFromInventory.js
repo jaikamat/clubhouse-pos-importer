@@ -1,5 +1,13 @@
 const MongoClient = require('mongodb').MongoClient;
+const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
+
+/**
+ * Initialize express app and use CORS middleware
+ */
+const app = express();
+app.use(cors());
 
 async function getCardQuantitiesFromInventory(scryfallIds) {
     const client = await new MongoClient(process.env.MONGO_URI, {
@@ -41,11 +49,7 @@ async function getCardQuantitiesFromInventory(scryfallIds) {
     }
 }
 
-exports.getCardQuantitiesFromInventory = async (req, res) => {
-    res.set('Access-Control-Allow-Headers', '*');
-    res.set('Access-Control-Allow-Origin', '*');
-    res.set('Access-Control-Allow-Methods', 'POST');
-
+app.post('/', async (req, res) => {
     try {
         const { scryfallIds } = req.body;
         const message = await getCardQuantitiesFromInventory(scryfallIds);
@@ -54,6 +58,6 @@ exports.getCardQuantitiesFromInventory = async (req, res) => {
         console.log(err);
         res.status(500).send(err);
     }
-};
+})
 
-exports.getCardQuantitiesFromInventory = getCardQuantitiesFromInventory;
+exports.getCardQuantitiesFromInventory = app;

@@ -1,7 +1,15 @@
 const MongoClient = require('mongodb').MongoClient;
+const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
 
-// 'TYPE' Refers to the configuration of Finishes and Conditions
+/**
+ * Initialize express app and use CORS middleware
+ */
+const app = express();
+app.use(cors());
+
+// `type` Refers to the configuration of Finishes and Conditions
 async function addCardToInventory(quantity, type, cardInfo) {
     const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,
@@ -71,11 +79,7 @@ async function addCardToInventory(quantity, type, cardInfo) {
     }
 }
 
-exports.addCardToInventory = async (req, res) => {
-    res.set('Access-Control-Allow-Headers', '*');
-    res.set('Access-Control-Allow-Origin', '*');
-    res.set('Access-Control-Allow-Methods', 'POST');
-
+app.post('/', async (req, res) => {
     try {
         const { quantity, type, cardInfo } = req.body;
         const message = await addCardToInventory(quantity, type, cardInfo);
@@ -84,6 +88,6 @@ exports.addCardToInventory = async (req, res) => {
         console.log(err);
         res.status(500).send(err);
     }
-};
+})
 
-exports.addCardToInventory = addCardToInventory;
+exports.addCardToInventory = app;

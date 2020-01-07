@@ -1,5 +1,13 @@
 const request = require('request-promise-native');
+const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
+
+/**
+ * Initialize express app and use CORS middleware
+ */
+const app = express();
+app.use(cors());
 
 async function refreshLightspeedAuthToken() {
     try {
@@ -21,11 +29,7 @@ async function refreshLightspeedAuthToken() {
     }
 }
 
-exports.refreshLightspeedAuthToken = async (req, res) => {
-    res.set('Access-Control-Allow-Headers', '*');
-    res.set('Access-Control-Allow-Origin', '*');
-    res.set('Access-Control-Allow-Methods', 'GET');
-
+app.get('/', async (req, res) => {
     try {
         const message = await refreshLightspeedAuthToken();
         res.status(200).send(message);
@@ -33,6 +37,6 @@ exports.refreshLightspeedAuthToken = async (req, res) => {
         console.log(err);
         res.status(500).send(err);
     }
-};
+})
 
-exports.refreshLightspeedAuthToken = refreshLightspeedAuthToken;
+exports.refreshLightspeedAuthToken = app;

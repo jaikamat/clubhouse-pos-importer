@@ -119,7 +119,7 @@ export default class BrowseCardItem extends React.Component {
                                     className={`ss ss-fw ss-${set} ss-${rarity}`}
                                     style={{ fontSize: '30px' }}
                                 />
-                                <Label>
+                                <Label color="grey">
                                     {set_name} ({String(set).toUpperCase()})
                                 </Label>
                                 <QohParser inventoryQty={qoh} />

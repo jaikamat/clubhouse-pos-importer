@@ -18,7 +18,7 @@ class MarketPrice extends React.Component {
         const { price } = this.state;
         return (
             <span>
-                Est. price {price === 0 ? 'not found' : <Price num={price} />}
+                Est. {price === 0 ? 'not found' : <Price num={price} />}
             </span>
         );
     }

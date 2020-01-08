@@ -187,8 +187,9 @@ export default class Sale extends React.Component {
                                             </Header>
                                             <p>
                                                 Click 'Yes' to complete the sale
-                                                in Lightspeed. Undoing this
-                                                action will be quite painful
+                                                in Lightspeed. Please ensure that
+                                                you have all cards in hand and double-checked
+                                                the pull list. Undoing this action will be quite painful!
                                             </p>
                                         </Modal.Content>
                                         <Modal.Actions>

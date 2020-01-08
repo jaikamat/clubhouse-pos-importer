@@ -157,12 +157,12 @@ export default class ScryfallCardListItem extends Component {
                                     className={`ss ss-fw ss-${set} ss-${rarity}`}
                                     style={{ fontSize: '30px' }}
                                 />
-                                <Label horizontal>
+                                <Label>
                                     {set_name} ({String(set).toUpperCase()})
                                 </Label>
                                 <QohParser inventoryQty={inventoryQty} />
                                 {' '}
-                                <Label horizontal>
+                                <Label tag>
                                     <MarketPrice id={id} />
                                 </Label>
                             </Item.Header>

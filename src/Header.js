@@ -16,10 +16,10 @@ class Header extends React.Component {
                     {loggedIn && <Dropdown item icon="bars">
                         <Dropdown.Menu>
                             <React.Fragment>
-                                <Dropdown.Item as={Link} to="/manage-inventory"><Icon name="plus" />Manage Inventory</Dropdown.Item>
-                                <Dropdown.Item as={Link} to="/new-sale" ><Icon name="dollar sign" />New Sale</Dropdown.Item>
-                                <Dropdown.Item as={Link} to="/browse-sales" ><Icon name="eye" />Browse Sales</Dropdown.Item>
-                                <Dropdown.Item as={Link} to="/logout" ><Icon name="log out" />Logout</Dropdown.Item>
+                                <Dropdown.Item as={Link} to="/manage-inventory"><Icon name="plus" color="blue" />Manage Inventory</Dropdown.Item>
+                                <Dropdown.Item as={Link} to="/new-sale" ><Icon name="dollar sign" color="blue" />New Sale</Dropdown.Item>
+                                <Dropdown.Item as={Link} to="/browse-sales" ><Icon name="eye" color="blue" />Browse Sales</Dropdown.Item>
+                                <Dropdown.Item as={Link} to="/logout" ><Icon name="log out" color="blue" />Logout</Dropdown.Item>
                             </React.Fragment>
                         </Dropdown.Menu>
                     </Dropdown>}

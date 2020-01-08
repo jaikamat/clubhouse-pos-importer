@@ -9,7 +9,7 @@ const Logout = props => {
 
     return (
         <React.Fragment>
-            <Header as="h4"><i>Until we meet again, friend...</i></Header>
+            <Header as="h3" color="grey"><i>Until we meet again, friend...</i></Header>
             <Button onClick={() => props.handleLogin('', '')}>Logout</Button>
         </React.Fragment>
     );

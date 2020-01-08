@@ -22,9 +22,6 @@ class Home extends React.Component {
             const ids = searchRes.data.data.map(el => el.id);
             const inventoryRes = await axios.post(GET_CARDS_FROM_INVENTORY, { scryfallIds: ids }, { headers: makeAuthHeader() });
 
-            console.log(searchRes.data);
-            console.log(inventoryRes.data);
-
             this.setState({
                 searchResults: searchRes.data.data,
                 inventoryQuantities: inventoryRes.data

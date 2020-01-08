@@ -5,7 +5,7 @@ import makeAuthHeader from './makeAuthHeader';
 import { SCRYFALL_ID_SEARCH } from './api_resources';
 
 class MarketPrice extends React.Component {
-    state = { price: 'not found' };
+    state = { price: null };
 
     async componentDidMount() {
         const { id } = this.props;
@@ -18,7 +18,7 @@ class MarketPrice extends React.Component {
         const { price } = this.state;
         return (
             <span>
-                Est. {price === 0 ? 'not found' : <Price num={price} />}
+                Est. {price ? <Price num={price} /> : 'not found'}
             </span>
         );
     }

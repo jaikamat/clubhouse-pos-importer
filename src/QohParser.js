@@ -34,13 +34,19 @@ export default function QohParser({ inventoryQty }) {
             (inventoryQty.NONFOIL_HP || 0);
     }
 
+    const foilColor = {};
+    if (foilQty > 0) { foilColor.color = 'blue'; }
+
+    const nonfoilColor = {};
+    if (nonfoilQty > 0) { nonfoilColor.color = 'blue'; }
+
     return (
         <React.Fragment>
-            <Label color={foilQty ? 'blue' : 'gray'} image>
+            <Label {...foilColor} image>
                 Foil
         <Label.Detail>{foilQty}</Label.Detail>
             </Label>
-            <Label color={nonfoilQty ? 'blue' : 'gray'} image>
+            <Label {...nonfoilColor} image>
                 Nonfoil
         <Label.Detail>{nonfoilQty}</Label.Detail>
             </Label>

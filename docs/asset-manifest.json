@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/clubhouse-pos-importer/static/css/main.34de6062.chunk.css",
-    "main.js": "/clubhouse-pos-importer/static/js/main.498d0185.chunk.js",
-    "main.js.map": "/clubhouse-pos-importer/static/js/main.498d0185.chunk.js.map",
+    "main.js": "/clubhouse-pos-importer/static/js/main.ea969488.chunk.js",
+    "main.js.map": "/clubhouse-pos-importer/static/js/main.ea969488.chunk.js.map",
     "runtime-main.js": "/clubhouse-pos-importer/static/js/runtime-main.7b1646e5.js",
     "runtime-main.js.map": "/clubhouse-pos-importer/static/js/runtime-main.7b1646e5.js.map",
     "static/css/2.20c71af9.chunk.css": "/clubhouse-pos-importer/static/css/2.20c71af9.chunk.css",
-    "static/js/2.1b94210c.chunk.js": "/clubhouse-pos-importer/static/js/2.1b94210c.chunk.js",
-    "static/js/2.1b94210c.chunk.js.map": "/clubhouse-pos-importer/static/js/2.1b94210c.chunk.js.map",
+    "static/js/2.70e96c08.chunk.js": "/clubhouse-pos-importer/static/js/2.70e96c08.chunk.js",
+    "static/js/2.70e96c08.chunk.js.map": "/clubhouse-pos-importer/static/js/2.70e96c08.chunk.js.map",
     "index.html": "/clubhouse-pos-importer/index.html",
-    "precache-manifest.be3a006242d384386c2c28ea4f5d8971.js": "/clubhouse-pos-importer/precache-manifest.be3a006242d384386c2c28ea4f5d8971.js",
+    "precache-manifest.dd575ac59305a1a858eca91244845698.js": "/clubhouse-pos-importer/precache-manifest.dd575ac59305a1a858eca91244845698.js",
     "service-worker.js": "/clubhouse-pos-importer/service-worker.js",
     "static/css/2.20c71af9.chunk.css.map": "/clubhouse-pos-importer/static/css/2.20c71af9.chunk.css.map",
     "static/css/main.34de6062.chunk.css.map": "/clubhouse-pos-importer/static/css/main.34de6062.chunk.css.map",
@@ -19,8 +19,8 @@
   "entrypoints": [
     "static/js/runtime-main.7b1646e5.js",
     "static/css/2.20c71af9.chunk.css",
-    "static/js/2.1b94210c.chunk.js",
+    "static/js/2.70e96c08.chunk.js",
     "static/css/main.34de6062.chunk.css",
-    "static/js/main.498d0185.chunk.js"
+    "static/js/main.ea969488.chunk.js"
   ]
 }

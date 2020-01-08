@@ -61,29 +61,46 @@ async function createJson() {
         }
 
         if (!matchFlag) {
-            notMatched.push({ set_name: card.Edition, card_name: card.Name });
+            notMatched.push(card);
         }
 
-        console.log(`index: ${i} | match count: ${matched.length}`);
+        console.log(`index: ${i + 1} | match count: ${matched.length}`);
     }
 
-    console.log('Matched ', matched.length);
-    console.log('Skipped ', skipped.length);
-    console.log('Not Matched ', notMatched.length);
+    console.log(`Matched: ${matched.length}`);
+    console.log(`Skipped: ${skipped.length}`);
+    console.log(`Not Matched: ${notMatched.length}`);
+    console.log(`Input length total: ${clubhouseData.length} | Output length total: ${matched.length + skipped.length + notMatched.length}`);
 
     fs.writeFileSync(
         `./output/matched.json`,
         JSON.stringify(matched, null, ' ')
     );
 
-    fs.writeFileSync(
-        `./output/skipped.json`,
-        JSON.stringify(_.uniq(skipped), null, ' ')
-    );
+    const skippedFormatted = skipped.map(el => {
+        const isFoil = el.Foil === 'foil' ? 'true' : 'false';
+        const isAltered = el.Altered === 'altered' ? 'true' : 'false';
+
+        return `${el.Name} | Set: ${el.Edition} | Foil: ${isFoil} | Altered: ${isAltered} | Qty: ${el.Count}`;
+    })
 
     fs.writeFileSync(
-        `./output/notMatched.json`,
-        JSON.stringify(_.uniq(notMatched), null, ' ')
+        `./output/skipped.txt`,
+        skippedFormatted.join('\n'),
+        "utf8"
+    );
+
+    const notMatchedFormatted = notMatched.map(el => {
+        const isFoil = el.Foil === 'foil' ? 'true' : 'false';
+        const isAltered = el.Altered === 'altered' ? 'true' : 'false';
+
+        return `${el.Name} | Set: ${el.Edition} | Foil: ${isFoil} | Altered: ${isAltered} | Qty: ${el.Count}`;
+    })
+
+    fs.writeFileSync(
+        `./output/notMatched.txt`,
+        notMatchedFormatted.join('\n'),
+        "utf8"
     );
 
     console.log(`Files written!`);

@@ -9,7 +9,7 @@ import Logout from './Logout';
 function Main({ handleLogin, loggedIn }) {
     // Use the render syntax in the Login component to bind passed props
     return (
-        <div style={{ marginTop: '52.63px', marginLeft: '20px', marginRight: '20px' }}>
+        <div style={{ paddingTop: '52.63px', marginLeft: '20px', marginRight: '20px' }}>
             <br />
             <Switch>
                 <Route exact path="/manage-inventory" component={Home} />

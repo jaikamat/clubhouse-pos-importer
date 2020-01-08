@@ -9,7 +9,7 @@ class Header extends React.Component {
         return (
             <Menu inverted color="blue" fixed="top" style={{ boxShadow: '0 3px 5px 0 rgba(0,0,0,.25)' }}>
                 <Menu.Item>
-                    <img src={ballLogo} style={{ marginRight: '7px' }} />
+                    <img src={ballLogo} style={{ marginRight: '7px' }} alt="logo" />
                     <span><h3>Clubhouse Collection</h3></span>
                 </Menu.Item>
                 <Menu.Menu position="right">

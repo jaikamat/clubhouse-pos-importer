@@ -1,5 +1,4 @@
 import React from 'react';
-import { Segment } from 'semantic-ui-react';
 import ScryfallCardListItem from './ScryfallCardListItem';
 
 function ScryfallCardList(props) {
@@ -15,7 +14,7 @@ function ScryfallCardList(props) {
         );
     });
 
-    return <Segment.Group>{cardList}</Segment.Group>;
+    return cardList
 }
 
 export default ScryfallCardList;

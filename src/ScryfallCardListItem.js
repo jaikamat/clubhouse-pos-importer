@@ -12,7 +12,7 @@ import {
 import axios from 'axios';
 import QohParser from './QohParser';
 import toaster from 'toasted-notes';
-import MarketPrice from './MarketPrice';
+import Price from './Price';
 import CardImage from './CardImage';
 import makeAuthHeader from './makeAuthHeader';
 import { ADD_CARD_TO_INVENTORY } from './api_resources';
@@ -136,7 +136,8 @@ export default class ScryfallCardListItem extends Component {
             set,
             rarity,
             id,
-            card_faces
+            card_faces,
+            prices
         } = this.props;
 
         return (
@@ -163,7 +164,7 @@ export default class ScryfallCardListItem extends Component {
                                 <QohParser inventoryQty={inventoryQty} />
                                 {' '}
                                 <Label tag>
-                                    <MarketPrice id={id} />
+                                    Est. {prices.usd ? <Price num={prices.usd} /> : 'not found'}
                                 </Label>
                             </Item.Header>
                             <Item.Description>

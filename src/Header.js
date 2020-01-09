@@ -3,11 +3,16 @@ import ballLogo from './logos/magic-ball.png'
 import { Menu, Icon, Dropdown } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
+const style = {
+    background: "linear-gradient(#2185d0, #206ac6)",
+    boxShadow: '0 3px 5px 0 rgba(0,0,0,.25)'
+}
+
 class Header extends React.Component {
     render() {
         const { loggedIn } = this.props;
         return (
-            <Menu inverted color="blue" fixed="top" style={{ boxShadow: '0 3px 5px 0 rgba(0,0,0,.25)' }}>
+            <Menu inverted fixed="top" style={style}>
                 <Menu.Item>
                     <img src={ballLogo} style={{ marginRight: '7px' }} alt="logo" />
                     <span><h3>Clubhouse Collection</h3></span>

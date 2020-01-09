@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/clubhouse-pos-importer/static/css/main.34de6062.chunk.css",
-    "main.js": "/clubhouse-pos-importer/static/js/main.39e1fa93.chunk.js",
-    "main.js.map": "/clubhouse-pos-importer/static/js/main.39e1fa93.chunk.js.map",
+    "main.js": "/clubhouse-pos-importer/static/js/main.246abafd.chunk.js",
+    "main.js.map": "/clubhouse-pos-importer/static/js/main.246abafd.chunk.js.map",
     "runtime-main.js": "/clubhouse-pos-importer/static/js/runtime-main.314649fa.js",
     "runtime-main.js.map": "/clubhouse-pos-importer/static/js/runtime-main.314649fa.js.map",
     "static/css/2.8ed2336d.chunk.css": "/clubhouse-pos-importer/static/css/2.8ed2336d.chunk.css",
     "static/js/2.5e27e4cb.chunk.js": "/clubhouse-pos-importer/static/js/2.5e27e4cb.chunk.js",
     "static/js/2.5e27e4cb.chunk.js.map": "/clubhouse-pos-importer/static/js/2.5e27e4cb.chunk.js.map",
     "index.html": "/clubhouse-pos-importer/index.html",
-    "precache-manifest.8e19c0a2c564f890e300a56c68374f3d.js": "/clubhouse-pos-importer/precache-manifest.8e19c0a2c564f890e300a56c68374f3d.js",
+    "precache-manifest.556404fb056660dacc64b63d1e6a1cbd.js": "/clubhouse-pos-importer/precache-manifest.556404fb056660dacc64b63d1e6a1cbd.js",
     "service-worker.js": "/clubhouse-pos-importer/service-worker.js",
     "static/css/2.8ed2336d.chunk.css.map": "/clubhouse-pos-importer/static/css/2.8ed2336d.chunk.css.map",
     "static/css/main.34de6062.chunk.css.map": "/clubhouse-pos-importer/static/css/main.34de6062.chunk.css.map",
@@ -22,6 +22,6 @@
     "static/css/2.8ed2336d.chunk.css",
     "static/js/2.5e27e4cb.chunk.js",
     "static/css/main.34de6062.chunk.css",
-    "static/js/main.39e1fa93.chunk.js"
+    "static/js/main.246abafd.chunk.js"
   ]
 }

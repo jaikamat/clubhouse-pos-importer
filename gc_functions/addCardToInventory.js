@@ -2,6 +2,7 @@ const MongoClient = require('mongodb').MongoClient;
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const DATABASE_NAME = 'test';
 require('dotenv').config();
 
 /**
@@ -48,7 +49,7 @@ async function addCardToInventory(quantity, type, cardInfo) {
             `Update Info: QTY:${quantity}, ${type}, ${cardInfo.name}, ${cardInfo.id}`
         );
 
-        const db = client.db('test');
+        const db = client.db(DATABASE_NAME);
 
         // Upsert the new quantity in the document
         await db.collection('card_inventory').findOneAndUpdate(

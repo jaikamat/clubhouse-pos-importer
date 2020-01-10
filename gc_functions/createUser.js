@@ -1,5 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 const bcrypt = require('bcrypt');
+const DATABASE_NAME = 'test';
 require('dotenv').config();
 
 async function createUser(username, password1, password2) {
@@ -21,7 +22,7 @@ async function createUser(username, password1, password2) {
         const salt = bcrypt.genSaltSync(saltRounds);
         const hash = bcrypt.hashSync(password1, salt);
 
-        const db = client.db('test');
+        const db = client.db(DATABASE_NAME);
 
         const userCreated = await db.collection('users').insertOne({
             username: username,

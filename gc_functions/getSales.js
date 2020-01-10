@@ -1,6 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const express = require('express');
 const cors = require('cors');
+const DATABASE_NAME = 'test';
 require('dotenv').config();
 
 /**
@@ -19,7 +20,7 @@ async function getSales(cardName) {
         await client.connect();
         console.log('Successfully connected to mongo');
 
-        const db = client.db('test');
+        const db = client.db(DATABASE_NAME);
 
         // Returns only the relevant queried cards from the card_list array of cards involved in the sale
         // Refer to https://blog.fullstacktraining.com/retrieve-only-queried-element-in-an-object-array-in-mongodb-collection/

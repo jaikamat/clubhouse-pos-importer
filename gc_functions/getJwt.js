@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const cors = require('cors');
+const DATABASE_NAME = 'test';
 require('dotenv').config();
 
 /**
@@ -21,7 +22,7 @@ async function getJwt(username, submittedPass) {
         await client.connect();
         console.log('Successfully connected to mongo');
 
-        const db = client.db('test');
+        const db = client.db(DATABASE_NAME);
 
         const user = await db.collection('users').findOne({
             username: username

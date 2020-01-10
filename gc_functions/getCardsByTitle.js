@@ -1,6 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const express = require('express');
 const cors = require('cors');
+const DATABASE_NAME = 'test';
 require('dotenv').config();
 
 /**
@@ -19,7 +20,7 @@ async function getCardsByTitle(title) {
         await client.connect();
         console.log('Successfully connected to mongo');
 
-        const db = client.db('test');
+        const db = client.db(DATABASE_NAME);
 
         const data = await db.collection('card_inventory').find({
             name: title

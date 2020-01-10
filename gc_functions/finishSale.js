@@ -4,6 +4,7 @@ const MongoClient = require('mongodb').MongoClient;
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const DATABASE_NAME = 'test';
 require('dotenv').config();
 
 /**
@@ -65,7 +66,7 @@ async function updateCardInventory(card) {
             `Update: QTY: ${qtyToSell}, ${finishCondition}, ${name}, ${id}`
         );
 
-        const db = client.db('test');
+        const db = client.db(DATABASE_NAME);
 
         // Upsert the new qtyToSell in the document
         await db.collection('card_inventory').findOneAndUpdate(
@@ -178,7 +179,7 @@ async function createSale(saleData, cardList) {
         console.log('Successfully connected to mongo');
         console.log(`Creating new sale`);
 
-        const db = client.db('test');
+        const db = client.db(DATABASE_NAME);
 
         return await db.collection('sales_data').insertOne({
             sale_data: saleData,

@@ -35,14 +35,12 @@ class Login extends React.Component {
 
         const { authed } = await this.props.handleLogin(username, password);
 
-        this.setState({ btnLoading: false });
-
         if (authed) {
-            this.setState(initialState);
+            // Do not set state here to mitigate React setState warning after component unmounted due to redirect
             createToast({
                 color: 'green',
-                header: 'Success!',
-                message: `You were logged in`,
+                header: 'Success',
+                message: `Enjoy your time here!`,
                 position: 'bottom-right'
             });
         } else {
@@ -50,7 +48,7 @@ class Login extends React.Component {
             createToast({
                 color: 'red',
                 header: 'Error',
-                message: `Login failed`,
+                message: `Username or password was incorrect`,
                 position: 'bottom-right'
             });
         }

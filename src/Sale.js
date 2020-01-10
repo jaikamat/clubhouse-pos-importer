@@ -1,14 +1,12 @@
 import React from 'react';
 import axios from 'axios';
-import toaster from 'toasted-notes';
 import {
     Grid,
     Segment,
     Header,
     Button,
     Modal,
-    Icon,
-    Message
+    Icon
 } from 'semantic-ui-react';
 import SearchBar from './SearchBar';
 import BrowseCardList from './BrowseCardList';
@@ -17,22 +15,7 @@ import SalePriceTotal from './SalePriceTotal';
 import _ from 'lodash';
 import makeAuthHeader from './makeAuthHeader';
 import { GET_CARDS_BY_TITLE, FINISH_SALE } from './api_resources';
-
-/**
- * Helper function to create toasts!
- * @param {Object} param0
- */
-const createToast = ({ color, header, message, position }) => {
-    return toaster.notify(
-        () => (
-            <Message color={color} compact>
-                <Message.Header>{header}</Message.Header>
-                {message}
-            </Message>
-        ),
-        { position: position }
-    );
-};
+import createToast from './createToast';
 
 const initialState = {
     searchResults: [],
@@ -99,7 +82,6 @@ export default class Sale extends React.Component {
                 color: 'green',
                 header: 'Sale created in Lightspeed!',
                 message: `The id number is #${saleID}`,
-                position: 'bottom-right'
             });
 
             this.setState(initialState);
@@ -108,7 +90,6 @@ export default class Sale extends React.Component {
                 color: 'red',
                 header: 'Error!',
                 message: `Sale was not created`,
-                position: 'bottom-right'
             });
 
             this.setState(initialState);
@@ -186,7 +167,7 @@ export default class Sale extends React.Component {
                                                 Lightspeed?
                                             </Header>
                                             <p>
-                                                Click 'Yes' to complete the sale
+                                                Click 'Yes' to create a sale
                                                 in Lightspeed. Please ensure that
                                                 you have all cards in hand and double-checked
                                                 the pull list. Undoing this action will be quite painful!

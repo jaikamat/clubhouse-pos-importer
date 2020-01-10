@@ -1,23 +1,7 @@
 import React from 'react';
-import toaster from 'toasted-notes';
-import { Form, Button, Message } from 'semantic-ui-react';
+import createToast from './createToast';
+import { Form, Button } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
-
-/**
- * Helper function to create toasts!
- * @param {Object} param0
- */
-const createToast = ({ color, header, message, position }) => {
-    return toaster.notify(
-        () => (
-            <Message color={color} compact>
-                <Message.Header>{header}</Message.Header>
-                {message}
-            </Message>
-        ),
-        { position: position }
-    );
-};
 
 const initialState = { username: '', password: '', btnLoading: false };
 
@@ -41,7 +25,6 @@ class Login extends React.Component {
                 color: 'green',
                 header: 'Success',
                 message: `Enjoy your time here!`,
-                position: 'bottom-right'
             });
         } else {
             this.setState(initialState);
@@ -49,7 +32,6 @@ class Login extends React.Component {
                 color: 'red',
                 header: 'Error',
                 message: `Username or password was incorrect`,
-                position: 'bottom-right'
             });
         }
     };

@@ -6,12 +6,11 @@ import {
     Form,
     Select,
     Label,
-    Message,
     Item
 } from 'semantic-ui-react';
 import axios from 'axios';
 import QohParser from './QohParser';
-import toaster from 'toasted-notes';
+import createToast from './createToast';
 import Price from './Price';
 import CardImage from './CardImage';
 import makeAuthHeader from './makeAuthHeader';
@@ -86,16 +85,9 @@ export default class ScryfallCardListItem extends Component {
                 cardInfo: { ...this.props },
             }, { headers: makeAuthHeader() });
 
-            const toastjsx = (
-                <Message positive compact>
-                    <Message.Header>
-                        {quantity}x {name} {quantity > 0 ? 'added' : 'removed'}!
-                    </Message.Header>
-                </Message>
-            );
-
-            toaster.notify(() => toastjsx, {
-                position: 'bottom-right',
+            createToast({
+                color: 'green',
+                header: `${quantity}x ${name} ${quantity > 0 ? 'added' : 'removed'}!`,
                 duration: 2000
             });
 
@@ -135,7 +127,6 @@ export default class ScryfallCardListItem extends Component {
             set_name,
             set,
             rarity,
-            id,
             card_faces,
             prices
         } = this.props;

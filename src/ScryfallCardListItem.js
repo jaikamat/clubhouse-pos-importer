@@ -11,9 +11,9 @@ import {
 import axios from 'axios';
 import QohParser from './QohParser';
 import createToast from './createToast';
-import Price from './Price';
 import CardImage from './CardImage';
 import makeAuthHeader from './makeAuthHeader';
+import MarketPrice from './MarketPrice'
 import { ADD_CARD_TO_INVENTORY } from './api_resources';
 
 const finishes = [
@@ -128,7 +128,7 @@ export default class ScryfallCardListItem extends Component {
             set,
             rarity,
             card_faces,
-            prices
+            id
         } = this.props;
 
         return (
@@ -155,7 +155,7 @@ export default class ScryfallCardListItem extends Component {
                                 <QohParser inventoryQty={inventoryQty} />
                                 {' '}
                                 <Label tag>
-                                    Est. {prices.usd ? <Price num={prices.usd} /> : 'not found'}
+                                    <MarketPrice id={id} />
                                 </Label>
                             </Item.Header>
                             <Item.Description>

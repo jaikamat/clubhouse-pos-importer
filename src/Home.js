@@ -5,25 +5,32 @@ import makeAuthHeader from './makeAuthHeader';
 import ScryfallCardList from './ScryfallCardList';
 // Un-comment this if hide-image feature is needed
 // import { Checkbox, Header } from 'semantic-ui-react';
-import { SCRYFALL_SEARCH, GET_CARDS_FROM_INVENTORY } from './api_resources';
+import { GET_CARD_QTY_FROM_INVENTORY, GET_SCRYFALL_BULK_BY_TITLE } from './api_resources';
 
 class Home extends React.Component {
     state = { searchResults: [], inventoryQuantities: [], showImages: true };
 
     handleSearchSelect = async term => {
-        const encodedTerm = encodeURI(`"${term}"`);
-
         try {
-            const searchRes = await axios.get(
-                `${SCRYFALL_SEARCH}?q=!${encodedTerm}%20unique%3Aprints%20game%3Apaper`,
+            const { data } = await axios.get(
+                GET_SCRYFALL_BULK_BY_TITLE,
+                {
+                    params: { title: term },
+                    headers: makeAuthHeader()
+                }
+            );
+
+            const ids = data.map(el => el.id);
+
+            // Fetches only the in-stock qty of a card tied to an `id`
+            const inventoryRes = await axios.post(
+                GET_CARD_QTY_FROM_INVENTORY,
+                { scryfallIds: ids },
                 { headers: makeAuthHeader() }
             );
 
-            const ids = searchRes.data.data.map(el => el.id);
-            const inventoryRes = await axios.post(GET_CARDS_FROM_INVENTORY, { scryfallIds: ids }, { headers: makeAuthHeader() });
-
             this.setState({
-                searchResults: searchRes.data.data,
+                searchResults: data,
                 inventoryQuantities: inventoryRes.data
             });
         } catch (e) {

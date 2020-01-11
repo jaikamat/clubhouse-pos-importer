@@ -6,7 +6,8 @@ import {
     Header,
     Button,
     Modal,
-    Icon
+    Icon,
+    Divider
 } from 'semantic-ui-react';
 import SearchBar from './SearchBar';
 import BrowseCardList from './BrowseCardList';
@@ -121,21 +122,46 @@ export default class Sale extends React.Component {
 
         return (
             <div>
-                <SearchBar handleSearchSelect={this.handleResultSelect} />
+                <React.Fragment>
+                    <Grid>
+                        <Grid.Row verticalAlign="middle">
+                            <SearchBar handleSearchSelect={this.handleResultSelect} />
+                        </Grid.Row>
+
+                    </Grid>
+                </React.Fragment>
                 <Grid stackable={true}>
                     <Grid.Row>
                         <Grid.Column width="11">
                             <Header as="h2">Inventory</Header>
-                            <Segment>
-                                <BrowseCardList
-                                    cards={searchResults}
-                                    addToSaleList={this.addToSaleList}
-                                />
-                            </Segment>
+                            <Divider />
+
+                            {!searchResults.length && <Segment placeholder>
+                                <Header icon>
+                                    <Icon name="search" />
+                                    Search for inventory to sell
+                                </Header>
+                            </Segment>}
+
+                            <BrowseCardList
+                                cards={searchResults}
+                                addToSaleList={this.addToSaleList}
+                            />
                         </Grid.Column>
                         <Grid.Column width="5">
                             <Header as="h2">Sale Items</Header>
-                            <Segment>{list}</Segment>
+                            <Divider />
+
+                            {!saleListCards.length && <Segment placeholder>
+                                <Header icon>
+                                    <Icon name="plus" />
+                                    View/manage customer sale list here
+                                </Header>
+                            </Segment>}
+
+                            <React.Fragment>
+                                {list}
+                            </React.Fragment>
                             {saleListCards.length > 0 && (
                                 <Segment clearing>
                                     <Header floated="left">

@@ -3,6 +3,7 @@ import SearchBar from './SearchBar';
 import axios from 'axios';
 import makeAuthHeader from './makeAuthHeader';
 import ScryfallCardList from './ScryfallCardList';
+import { Segment, Header, Icon } from 'semantic-ui-react'
 // Un-comment this if hide-image feature is needed
 // import { Checkbox, Header } from 'semantic-ui-react';
 import { GET_CARD_QTY_FROM_INVENTORY, GET_SCRYFALL_BULK_BY_TITLE } from './api_resources';
@@ -43,6 +44,8 @@ class Home extends React.Component {
     };
 
     render() {
+        const { searchResults } = this.state;
+
         return (
             <div>
                 <div>
@@ -56,6 +59,12 @@ class Home extends React.Component {
                     </div> */}
                     <SearchBar handleSearchSelect={this.handleSearchSelect} />
                 </div>
+                {!searchResults.length && <Segment placeholder>
+                    <Header icon>
+                        <Icon name="search" />
+                        Search for cards to update
+                                </Header>
+                </Segment>}
                 <ScryfallCardList
                     showImages={this.state.showImages}
                     cards={this.state.searchResults}

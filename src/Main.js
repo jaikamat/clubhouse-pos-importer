@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import Home from './Home';
 import Sale from './Sale';
 import BrowseSales from './BrowseSales';
+import PublicInventory from './PublicInventory';
 import Login from './Login';
 import Logout from './Logout';
 
@@ -15,6 +16,7 @@ function Main({ handleLogin, loggedIn }) {
                 <Route exact path="/manage-inventory" component={Home} />
                 <Route exact path="/new-sale" component={Sale} />
                 <Route exact path="/browse-sales" component={BrowseSales} />
+                <Route exact path="/public-inventory" component={PublicInventory} />
                 <Route
                     exact
                     path="/login"

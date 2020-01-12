@@ -18,6 +18,7 @@ class Header extends React.Component {
                     <span><h3>Clubhouse Collection</h3></span>
                 </Menu.Item>
                 <Menu.Menu position="right">
+                    <Menu.Item position="right" as={Link} to="/public-inventory">Search</Menu.Item>
                     {loggedIn && <Dropdown item icon="bars">
                         <Dropdown.Menu>
                             <React.Fragment>

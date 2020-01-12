@@ -41,7 +41,7 @@ export default class PublicInventory extends React.Component {
         // Creates text to notify the user of zero-result searches
         const searchNotification = () => {
             if (searchTerm && !searchResults.length) { // Check to make sure the user has searched and no results
-                return <p>Zero results for <em>{searchTerm}</em></p>
+                return <p><em>{searchTerm}</em> is out of stock</p>
             }
             return <p>Search for a card</p>; // Default text before search
         }

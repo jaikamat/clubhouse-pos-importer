@@ -7,7 +7,7 @@ import {
     Button,
     Modal,
     Icon,
-    Divider
+    Divider,
 } from 'semantic-ui-react';
 import SearchBar from './SearchBar';
 import BrowseCardList from './BrowseCardList';
@@ -22,7 +22,8 @@ const initialState = {
     searchResults: [],
     saleListCards: [],
     showModal: false,
-    submitLoading: false
+    submitLoading: false,
+    searchTerm: ''
 };
 
 export default class Sale extends React.Component {
@@ -35,7 +36,7 @@ export default class Sale extends React.Component {
                 headers: makeAuthHeader()
             });
 
-            this.setState({ searchResults: data });
+            this.setState({ searchResults: data, searchTerm: term });
         } catch (err) {
             console.log(err);
         }
@@ -107,7 +108,8 @@ export default class Sale extends React.Component {
             searchResults,
             saleListCards,
             showModal,
-            submitLoading
+            submitLoading,
+            searchTerm
         } = this.state;
 
         const list = saleListCards.map(card => {
@@ -120,28 +122,33 @@ export default class Sale extends React.Component {
             );
         });
 
-        return (
-            <div>
-                <React.Fragment>
-                    <Grid>
-                        <Grid.Row verticalAlign="middle">
-                            <SearchBar handleSearchSelect={this.handleResultSelect} />
-                        </Grid.Row>
+        // Creates text to notify the user of zero-result searches
+        const searchNotification = () => {
+            if (searchTerm && !searchResults.length) { // Check to make sure the user has searched and no results
+                return <p>Zero results for <em>{searchTerm}</em></p>
+            }
+            return <p>Search for inventory to sell</p>; // Default text before search
+        }
 
-                    </Grid>
-                </React.Fragment>
+        return (
+            <React.Fragment>
+                <Grid.Row style={{ display: 'flex', alignItems: 'center' }}>
+                    <SearchBar handleSearchSelect={this.handleResultSelect} />
+                </Grid.Row>
+                <br />
                 <Grid stackable={true}>
                     <Grid.Row>
                         <Grid.Column width="11">
                             <Header as="h2">Inventory</Header>
                             <Divider />
 
-                            {!searchResults.length && <Segment placeholder>
-                                <Header icon>
-                                    <Icon name="search" />
-                                    Search for inventory to sell
-                                </Header>
-                            </Segment>}
+                            {!searchResults.length &&
+                                <Segment placeholder>
+                                    <Header icon>
+                                        <Icon name="search" />
+                                        <span>{searchNotification()}</span>
+                                    </Header>
+                                </Segment>}
 
                             <BrowseCardList
                                 cards={searchResults}
@@ -152,16 +159,18 @@ export default class Sale extends React.Component {
                             <Header as="h2">Sale Items</Header>
                             <Divider />
 
-                            {!saleListCards.length && <Segment placeholder>
-                                <Header icon>
-                                    <Icon name="plus" />
-                                    View/manage customer sale list here
+                            {!saleListCards.length &&
+                                <Segment placeholder>
+                                    <Header icon>
+                                        <Icon name="plus" />
+                                        View and manage customer sale list here
                                 </Header>
-                            </Segment>}
+                                </Segment>}
 
                             <React.Fragment>
                                 {list}
                             </React.Fragment>
+
                             {saleListCards.length > 0 && (
                                 <Segment clearing>
                                     <Header floated="left">
@@ -189,14 +198,13 @@ export default class Sale extends React.Component {
                                     >
                                         <Modal.Content>
                                             <Header inverted as="h2">
-                                                Finalize this sale for
-                                                Lightspeed?
+                                                Finalize this sale?
                                             </Header>
                                             <p>
                                                 Click 'Yes' to create a sale
                                                 in Lightspeed. Please ensure that
                                                 you have all cards in hand and double-checked
-                                                the pull list. Undoing this action will be quite painful!
+                                                the pull list. Undoing this action will require manual data entry!
                                             </p>
                                         </Modal.Content>
                                         <Modal.Actions>
@@ -221,9 +229,9 @@ export default class Sale extends React.Component {
                                 </Segment>
                             )}
                         </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-            </div>
+                    </Grid.Row >
+                </Grid >
+            </React.Fragment >
         );
     }
 }

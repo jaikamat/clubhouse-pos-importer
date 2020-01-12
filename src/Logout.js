@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { Button, Header } from 'semantic-ui-react';
+import { Button, Header, Container } from 'semantic-ui-react';
 
 const Logout = props => {
     if (!props.loggedIn) {
@@ -9,8 +9,10 @@ const Logout = props => {
 
     return (
         <React.Fragment>
-            <Header as="h3" color="grey"><i>Until we meet again, friend...</i></Header>
-            <Button onClick={() => props.handleLogin('', '')}>Logout</Button>
+            <Container fluid>
+                <Header as="h3" color="grey"><i>Until we meet again, friend...</i></Header>
+                <Button onClick={() => props.handleLogin('', '')}>Logout</Button>
+            </Container>
         </React.Fragment>
     );
 };

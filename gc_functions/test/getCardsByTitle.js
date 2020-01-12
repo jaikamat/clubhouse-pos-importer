@@ -23,7 +23,17 @@ async function getCardsByTitle(title) {
         const db = client.db(DATABASE_NAME);
 
         const data = await db.collection('card_inventory').find({
-            name: title
+            name: title,
+            $or: [
+                { "qoh.FOIL_NM": { $gt: 0 } },
+                { "qoh.FOIL_LP": { $gt: 0 } },
+                { "qoh.FOIL_MP": { $gt: 0 } },
+                { "qoh.FOIL_HP": { $gt: 0 } },
+                { "qoh.NONFOIL_NM": { $gt: 0 } },
+                { "qoh.NONFOIL_LP": { $gt: 0 } },
+                { "qoh.NONFOIL_MP": { $gt: 0 } },
+                { "qoh.NONFOIL_HP": { $gt: 0 } }
+            ]
         });
 
         return await data.toArray();

@@ -48,13 +48,18 @@ async function createJson() {
                 card.Name === scryCard.name &&
                 card.Edition === scryCard.set_name
             ) {
+                // Note: We must pass by value, not by reference to the output array,
+                // so we use this hack to duplicate the original object on the fly
+                const outputScryCard = JSON.parse(JSON.stringify(scryCard));
                 const quantity = parseInt(card.Count);
 
-                card.Foil
-                    ? (scryCard.qoh = { FOIL_NM: quantity })
-                    : (scryCard.qoh = { NONFOIL_NM: quantity });
+                if (card.Foil === 'foil') {
+                    outputScryCard.qoh = { FOIL_NM: quantity };
+                } else {
+                    outputScryCard.qoh = { NONFOIL_NM: quantity };
+                }
 
-                matched.push(scryCard);
+                matched.push(outputScryCard);
                 matchFlag = true;
                 break;
             }

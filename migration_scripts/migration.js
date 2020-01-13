@@ -1,5 +1,5 @@
 const csv = require('csvtojson');
-const csvPath = './csv_data/Inventory_TheClubhouse_2019.December.11.csv';
+const csvPath = './csv_data/Inventory_TheClubhouse_2020.January.13_1.csv';
 const scryfallData = require('./scryfall_data/scryfall-default-cards.json');
 const fs = require('fs');
 const _ = require('lodash');
@@ -79,7 +79,7 @@ async function createJson() {
 
     const skippedFormatted = skipped.map(el => {
         const isFoil = el.Foil === 'foil' ? 'true' : 'false';
-        const isAltered = el.Altered === 'altered' ? 'true' : 'false';
+        const isAltered = el['Altered Art'] === 'altered' ? 'true' : 'false';
 
         return `${el.Name} | Set: ${el.Edition} | Foil: ${isFoil} | Altered: ${isAltered} | Qty: ${el.Count}`;
     })
@@ -92,7 +92,7 @@ async function createJson() {
 
     const notMatchedFormatted = notMatched.map(el => {
         const isFoil = el.Foil === 'foil' ? 'true' : 'false';
-        const isAltered = el.Altered === 'altered' ? 'true' : 'false';
+        const isAltered = el['Altered Art'] === 'altered' ? 'true' : 'false';
 
         return `${el.Name} | Set: ${el.Edition} | Foil: ${isFoil} | Altered: ${isAltered} | Qty: ${el.Count}`;
     })

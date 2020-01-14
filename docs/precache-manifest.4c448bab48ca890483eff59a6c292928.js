@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "667c766b01d8a927543c65452737b764",
+    "revision": "fd246ceb6821c2a0653f3dec368b3612",
     "url": "/clubhouse-pos-importer/index.html"
   },
   {
-    "revision": "e0796e9446f50d974740",
+    "revision": "8435d3f7b19e75d1d52c",
     "url": "/clubhouse-pos-importer/static/css/2.20c71af9.chunk.css"
   },
   {
-    "revision": "889fe76246ddff41393b",
+    "revision": "1bbda3575308e3c7981f",
     "url": "/clubhouse-pos-importer/static/css/main.34de6062.chunk.css"
   },
   {
-    "revision": "e0796e9446f50d974740",
-    "url": "/clubhouse-pos-importer/static/js/2.38be3cf9.chunk.js"
+    "revision": "8435d3f7b19e75d1d52c",
+    "url": "/clubhouse-pos-importer/static/js/2.217f3b6e.chunk.js"
   },
   {
-    "revision": "889fe76246ddff41393b",
-    "url": "/clubhouse-pos-importer/static/js/main.1c48a4be.chunk.js"
+    "revision": "1bbda3575308e3c7981f",
+    "url": "/clubhouse-pos-importer/static/js/main.ab47198e.chunk.js"
   },
   {
     "revision": "3ed9413a20815c0c4877",

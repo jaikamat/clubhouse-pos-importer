@@ -11,6 +11,7 @@ import {
 import CardImage from './CardImage';
 import MarketPrice from './MarketPrice';
 import QohParser from './QohParser';
+import $ from 'jquery';
 
 function createConditionOptions(qoh, id) {
     return Object.entries(qoh).map(d => {
@@ -80,6 +81,9 @@ export default class BrowseCardItem extends React.Component {
                 this.props.id
             )
         });
+
+        // Highlight the input after successful card add
+        $('#searchBar').focus().select();
     };
 
     render() {

@@ -15,6 +15,7 @@ import CardImage from './CardImage';
 import makeAuthHeader from './makeAuthHeader';
 import MarketPrice from './MarketPrice'
 import { ADD_CARD_TO_INVENTORY } from './api_resources';
+import $ from 'jquery';
 
 const finishes = [
     { key: 'NONFOIL', text: 'Nonfoil', value: 'NONFOIL' },
@@ -106,6 +107,9 @@ export default class ScryfallCardListItem extends Component {
                 inventoryQty: data.qoh,
                 submitLoading: false
             });
+
+            // Highlight the input after successful card add
+            $('#searchBar').focus().select();
         } catch (err) {
             console.log(err);
         }

@@ -60,6 +60,7 @@ class SearchBar extends React.Component {
                 results={results}
                 placeholder={defaultSearchValue}
                 selectFirstResult={true}
+                id="searchBar"
             />
         );
     }

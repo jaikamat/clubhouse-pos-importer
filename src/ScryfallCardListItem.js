@@ -71,6 +71,20 @@ export default class ScryfallCardListItem extends Component {
         this.setState({ quantity: quantity });
     };
 
+    // Remove input placeholder when user tries to enter a number (to reduce user error)
+    handleFocus = () => {
+        if (this.state.quantity === 0) {
+            this.setState({ quantity: '' })
+        }
+    }
+
+    // Restore input placeholder when user blurs field
+    handleBlur = () => {
+        if (this.state.quantity === '') {
+            this.setState({ quantity: 0 })
+        }
+    }
+
     handleInventoryAdd = async (e, { value }) => {
         const { quantity, selectedFinish, selectedCondition } = this.state;
         const { name } = this.props;
@@ -171,6 +185,8 @@ export default class ScryfallCardListItem extends Component {
                                             label="Quantity"
                                             value={quantity}
                                             onChange={this.handleQuantityChange}
+                                            onFocus={this.handleFocus}
+                                            onBlur={this.handleBlur}
                                         />
                                         <Form.Field
                                             label="Finish"

@@ -40,11 +40,15 @@ export default class BrowseCardItem extends React.Component {
 
     handleQuantityChange = (e, { value }) => {
         const { selectedFinishConditionQty } = this.state;
-        if (value > selectedFinishConditionQty) {
-            value = selectedFinishConditionQty;
+        let numVal = parseInt(value);
+
+        if (numVal > selectedFinishConditionQty) {
+            numVal = selectedFinishConditionQty;
         }
-        if (value < 0) value = 0;
-        this.setState({ quantityToSell: parseInt(value) });
+
+        if (isNaN((numVal)) || numVal < 0) { numVal = 0; }
+
+        this.setState({ quantityToSell: numVal });
     };
 
     handleSelectedFinishCondition = (e, { value }) => {
@@ -55,10 +59,26 @@ export default class BrowseCardItem extends React.Component {
     };
 
     handlePriceChange = (e, { value }) => {
-        this.setState({
-            price: value
-        });
+        let numVal = Number(value);
+
+        if (isNaN((numVal)) || numVal < 0) { numVal = 0; }
+
+        this.setState({ price: numVal });
     };
+
+    // Remove input placeholder when user tries to enter a number (to reduce user error)
+    handleFocus = (property) => {
+        if (this.state[property] === 0) {
+            this.setState({ [property]: '' })
+        }
+    }
+
+    // Restore input placeholder when user blurs field
+    handleBlur = (property) => {
+        if (this.state[property] === '') {
+            this.setState({ [property]: 0 })
+        }
+    }
 
     handleAddToSale = () => {
         const { selectedFinishCondition, quantityToSell, price } = this.state;
@@ -152,6 +172,8 @@ export default class BrowseCardItem extends React.Component {
                                             value={quantityToSell}
                                             onChange={this.handleQuantityChange}
                                             disabled={!selectedFinishConditionQty}
+                                            onFocus={() => this.handleFocus('quantityToSell')}
+                                            onBlur={() => this.handleBlur('quantityToSell')}
                                         />
                                         <Form.Field
                                             control={Input}
@@ -160,6 +182,9 @@ export default class BrowseCardItem extends React.Component {
                                             value={price}
                                             onChange={this.handlePriceChange}
                                             disabled={!selectedFinishConditionQty}
+                                            onFocus={() => this.handleFocus('price')}
+                                            onBlur={() => this.handleBlur('price')}
+                                            step={0.5}
                                         />
                                         <Form.Button
                                             label="Add to sale?"

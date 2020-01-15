@@ -1,6 +1,7 @@
 import React from 'react';
 import QohParser from './QohParser';
-import { Image } from 'semantic-ui-react'
+import { Image, Label } from 'semantic-ui-react';
+import MarketPrice from './MarketPrice';
 
 const wrapperStyle = {
     position: 'relative',
@@ -10,11 +11,20 @@ const wrapperStyle = {
 const overlayStyle = {
     backgroundColor: 'rgba(0,0,0,0.8)',
     padding: '9px 9px 9px 9px',
-    position: 'absolute',
     zIndex: '1',
-    bottom: '0px',
-    left: '14px',
-    borderRadius: '7px'
+    borderRadius: '10px 10px 0 0',
+    position: 'absolute',
+    width: '300px',
+    bottom: '0'
+};
+
+const inlineBlock = {
+    display: 'inline-block',
+};
+
+const floatRight = {
+    display: 'inline-block',
+    float: 'right'
 };
 
 const roundedStyle = {
@@ -30,13 +40,18 @@ const image = (image_uris, card_faces) => {
     }
 };
 
-export default function PublicCardItem({ image_uris, card_faces, qoh }) {
+export default function PublicCardItem({ image_uris, card_faces, qoh, id }) {
     return (
         <React.Fragment>
             <div style={wrapperStyle}>
                 {image(image_uris, card_faces)}
                 <div style={overlayStyle}>
-                    <QohParser inventoryQty={qoh} />
+                    <div style={inlineBlock}>
+                        <QohParser inventoryQty={qoh} />
+                    </div>
+                    <div style={floatRight}>
+                        <Label tag><MarketPrice id={id} /></Label>
+                    </div>
                 </div>
             </div>
         </React.Fragment>

@@ -54,7 +54,13 @@ export default class PublicInventory extends React.Component {
                 <br />
                 <Grid stackable={true}>
                     <Grid.Column>
-                        <Header as="h2">Inventory Search</Header>
+                        <Header as="h2">
+                            Inventory Search
+                            <Header.Subheader>
+                                <em>Card prices based on non-premium printings and are subject to change</em>
+                            </Header.Subheader>
+                        </Header>
+
                         <Divider />
 
                         {!searchResults.length &&

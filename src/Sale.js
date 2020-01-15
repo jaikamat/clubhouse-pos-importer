@@ -11,8 +11,8 @@ import {
 } from 'semantic-ui-react';
 import SearchBar from './SearchBar';
 import BrowseCardList from './BrowseCardList';
-import SaleLineItem from './SaleLineItem';
 import SalePriceTotal from './SalePriceTotal';
+import CustomerSaleList from './CustomerSaleList';
 import _ from 'lodash';
 import makeAuthHeader from './makeAuthHeader';
 import { GET_CARDS_BY_TITLE, FINISH_SALE } from './api_resources';
@@ -42,6 +42,9 @@ export default class Sale extends React.Component {
         }
     };
 
+    /**
+     * Adds product to the sale list
+     */
     addToSaleList = (card, finishCondition, qtyToSell, price) => {
         const newCard = { ...card, finishCondition, qtyToSell, price };
         const oldState = [...this.state.saleListCards];
@@ -62,6 +65,9 @@ export default class Sale extends React.Component {
         this.setState({ saleListCards: oldState });
     };
 
+    /**
+     * Removes product from the sale list (this function is passed to the sale line items through props)
+     */
     removeFromSaleList = (id, finishCondition) => {
         const newState = _.reject([...this.state.saleListCards], el => {
             return el.id === id && el.finishCondition === finishCondition;
@@ -70,6 +76,9 @@ export default class Sale extends React.Component {
         this.setState({ saleListCards: newState });
     };
 
+    /**
+     * Extracts the saleList state and uses it to complete sale
+     */
     finalizeSale = async () => {
         try {
             this.setState({ submitLoading: true });
@@ -111,16 +120,6 @@ export default class Sale extends React.Component {
             submitLoading,
             searchTerm
         } = this.state;
-
-        const list = saleListCards.map(card => {
-            return (
-                <SaleLineItem
-                    {...card}
-                    key={`${card.id}${card.finishCondition}${card.qtyToSell}`}
-                    deleteLineItem={this.removeFromSaleList}
-                />
-            );
-        });
 
         // Creates text to notify the user of zero-result searches
         const searchNotification = () => {
@@ -168,7 +167,10 @@ export default class Sale extends React.Component {
                                 </Segment>}
 
                             <React.Fragment>
-                                {list}
+                                <CustomerSaleList
+                                    removeFromSaleList={this.removeFromSaleList}
+                                    saleList={saleListCards}
+                                />
                             </React.Fragment>
 
                             {saleListCards.length > 0 && (
@@ -202,9 +204,9 @@ export default class Sale extends React.Component {
                                             </Header>
                                             <p>
                                                 Click 'Yes' to create a sale
-                                                in Lightspeed. Please ensure that
-                                                you have all cards in hand and double-checked
-                                                the pull list. Undoing this action will require manual data entry!
+                                                in Lightspeed. Ensure that
+                                                you have all cards pulled and double-checked
+                                                the customer list. Undoing this action will require manual data entry!
                                             </p>
                                         </Modal.Content>
                                         <Modal.Actions>

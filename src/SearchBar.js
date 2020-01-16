@@ -15,9 +15,9 @@ class SearchBar extends React.Component {
     };
 
     handleSearchChange = (e, { value }) => {
-        this.setState({ isLoading: true, term: value });
+        this.setState({ term: value });
 
-        if (this.state.term.length < 1)
+        if (this.state.term.length < 1) {
             return this.setState({
                 isLoading: false,
                 term: '',
@@ -25,6 +25,14 @@ class SearchBar extends React.Component {
                 autocomplete: [],
                 defaultSearchValue: 'Search for a card'
             });
+        }
+
+        // Don't search if only 2 letters in box
+        if (this.state.term.length < 3) {
+            return;
+        }
+
+        this.setState({ isLoading: true });
 
         setTimeout(async () => {
             const { data } = await axios.get(
@@ -34,13 +42,13 @@ class SearchBar extends React.Component {
 
             const formattedResults = data.data.map(el => {
                 return { title: el };
-            });
+            }).slice(0, 7);
 
             this.setState({
                 results: formattedResults,
                 isLoading: false
             });
-        }, 300);
+        }, 100);
     };
 
     handleResultSelect = (e, { result }) => {
@@ -52,7 +60,8 @@ class SearchBar extends React.Component {
 
         return (
             <Search
-                onSearchChange={_.debounce(this.handleSearchChange, 300, {
+                onSearchChange={_.debounce(this.handleSearchChange, 500, {
+                    leading: false,
                     trailing: true
                 })}
                 onResultSelect={this.handleResultSelect}

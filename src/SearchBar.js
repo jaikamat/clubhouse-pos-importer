@@ -4,6 +4,7 @@ import _ from 'lodash';
 import axios from 'axios';
 import makeAuthHeader from './makeAuthHeader';
 import { SCRYFALL_AUTOCOMPLETE } from './api_resources';
+import $ from 'jquery';
 
 class SearchBar extends React.Component {
     state = {
@@ -70,6 +71,7 @@ class SearchBar extends React.Component {
                 placeholder={defaultSearchValue}
                 selectFirstResult={true}
                 id="searchBar"
+                onFocus={() => { $('#searchBar').select() }}
             />
         );
     }

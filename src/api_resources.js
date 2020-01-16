@@ -22,6 +22,10 @@ const endpoints = {
         `https://us-central1-clubhouse-collection.cloudfunctions.net/getSales${env}`,
     GET_SCRYFALL_BULK_BY_TITLE:
         `https://us-central1-clubhouse-collection.cloudfunctions.net/getScryfallBulkCardsByTitle${env}`,
+    GET_CARDS_BY_FILTER:
+        `https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsByFilter${env}`,
+    GET_SET_NAMES:
+        `https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsByFilter${env}/set_names`,
     LOGIN:
         `https://us-central1-clubhouse-collection.cloudfunctions.net/getJwt${env}`,
 

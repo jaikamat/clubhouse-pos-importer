@@ -31,6 +31,10 @@ api
 /gc_functions/production/.env
 /gc_functions/test/.env
 /gc_functions/.env
+/gc_functions/production/.env
+/gc_functions/test/.env
+/gc_functions/pricing_update_scripts/.env
+/gc_functions/prices.json
 
 /migration_scripts/csv_data
 /migration_scripts/output

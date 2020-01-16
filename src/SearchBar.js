@@ -72,6 +72,7 @@ class SearchBar extends React.Component {
                 selectFirstResult={true}
                 id="searchBar"
                 onFocus={() => { $('#searchBar').select() }}
+                onBlur={this.props.onBlur} // Used to clear state in the Browse Inventory feature
             />
         );
     }

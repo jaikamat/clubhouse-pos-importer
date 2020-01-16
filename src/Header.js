@@ -6,7 +6,8 @@ import { AuthContext } from './AuthProvider';
 
 const style = {
     background: "linear-gradient(#2185d0, #206ac6)",
-    boxShadow: '0 3px 5px 0 rgba(0,0,0,.25)'
+    boxShadow: '0 3px 5px 0 rgba(0,0,0,.25)',
+    zIndex: 1001 // Needs to be visible over Dimmer in DeckboxClone component
 }
 
 class Header extends React.Component {
@@ -27,6 +28,7 @@ class Header extends React.Component {
                                         <React.Fragment>
                                             <Dropdown.Item as={Link} to="/manage-inventory"><Icon name="plus" color="blue" />Manage Inventory</Dropdown.Item>
                                             <Dropdown.Item as={Link} to="/new-sale" ><Icon name="dollar sign" color="blue" />New Sale</Dropdown.Item>
+                                            <Dropdown.Item as={Link} to="/browse-inventory" ><Icon name="box" color="blue" />Browse Inventory</Dropdown.Item>
                                             <Dropdown.Item as={Link} to="/browse-sales" ><Icon name="eye" color="blue" />Browse Sales</Dropdown.Item>
                                             <Dropdown.Item as={Link} to="/logout" ><Icon name="log out" color="blue" />Logout</Dropdown.Item>
                                         </React.Fragment>

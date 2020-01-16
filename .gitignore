@@ -28,6 +28,8 @@ yarn-error.log*
 api
 
 /gc_functions/node_modules
+/gc_functions/production/.env
+/gc_functions/test/.env
 /gc_functions/.env
 
 /migration_scripts/csv_data

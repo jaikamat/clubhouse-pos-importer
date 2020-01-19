@@ -1,6 +1,6 @@
 import React from 'react';
 import QohParser from './QohParser';
-import { Image, Label } from 'semantic-ui-react';
+import { Image } from 'semantic-ui-react';
 import MarketPrice from './MarketPrice';
 
 const wrapperStyle = {
@@ -50,7 +50,7 @@ export default function PublicCardItem({ image_uris, card_faces, qoh, id }) {
                         <QohParser inventoryQty={qoh} />
                     </div>
                     <div style={floatRight}>
-                        <Label tag><MarketPrice id={id} /></Label>
+                        <MarketPrice id={id} />
                     </div>
                 </div>
             </div>

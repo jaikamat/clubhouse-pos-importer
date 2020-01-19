@@ -12,21 +12,39 @@ import CardImage from './CardImage';
 import MarketPrice from './MarketPrice';
 import QohParser from './QohParser';
 import $ from 'jquery';
+import _ from 'lodash';
 
+/**
+ * Creates a list of conditions for the dropdown menu from the `qoh`
+ * Note: Is this not needed if we default select initially?
+ * @param {Object} qoh
+ * @param {String} id
+ */
 function createConditionOptions(qoh, id) {
-    return Object.entries(qoh).map(d => {
+    const removeZeroedQuantites = _.pickBy(qoh, p => p > 0); // Quantites of zero not included
+
+    return Object.entries(removeZeroedQuantites).map(d => {
         const [conditionFinish, qty] = d;
 
         return {
-            text: `${removeHyphen(conditionFinish)} | Qty: ${qty}`,
+            text: `${conditionFinish.split('_').join(' | ')} | Qty: ${qty}`,
             value: conditionFinish,
             key: `${id}${conditionFinish}`
         };
     });
 }
 
-function removeHyphen(str) {
-    return str.split('_').join(' | ');
+/**
+ * Creates initial selectedFinish value, used for the MarketPrice component
+ * Returns FOIL or NONFOIL depending on what's in current inventory (qoh)
+ * @param {Object} qoh
+ */
+function createInitialSelectedFinish(qoh) {
+    const removeZeroedQuantites = _.pickBy(qoh, p => p > 0);
+    // Isolate only the FOIL or NONFOIL values with mapping
+    const keysMapped = _.keys(removeZeroedQuantites).map(k => k.split('_')[0]);
+    const uniqueValues = _.uniq(keysMapped);
+    return uniqueValues.indexOf('NONFOIL') > -1 ? 'NONFOIL' : 'FOIL';
 }
 
 export default class BrowseCardItem extends React.Component {
@@ -35,6 +53,8 @@ export default class BrowseCardItem extends React.Component {
         selectedFinishConditionQty: 0,
         quantityToSell: 0,
         price: 0,
+        // Excludes condition ex. `FOIL` rather than `FOIL_NM`. Initialize at nonfoil unless only foil printing
+        selectedFinish: createInitialSelectedFinish(this.props.qoh),
         conditionOptions: createConditionOptions(this.props.qoh, this.props.id)
     };
 
@@ -54,15 +74,14 @@ export default class BrowseCardItem extends React.Component {
     handleSelectedFinishCondition = (e, { value }) => {
         this.setState({
             selectedFinishCondition: value,
-            selectedFinishConditionQty: this.props.qoh[value]
+            selectedFinishConditionQty: this.props.qoh[value],
+            selectedFinish: value.split('_')[0] // Change selectedFinish after user selection
         });
     };
 
     handlePriceChange = (e, { value }) => {
         let numVal = Number(value);
-
         if (isNaN((numVal)) || numVal < 0) { numVal = 0; }
-
         this.setState({ price: numVal });
     };
 
@@ -82,6 +101,7 @@ export default class BrowseCardItem extends React.Component {
 
     handleAddToSale = () => {
         const { selectedFinishCondition, quantityToSell, price } = this.state;
+        const { qoh, id } = this.props;
 
         this.props.addToSaleList(
             { ...this.props },
@@ -96,10 +116,8 @@ export default class BrowseCardItem extends React.Component {
             selectedFinishConditionQty: 0,
             quantityToSell: 0,
             price: 0,
-            conditionOptions: createConditionOptions(
-                this.props.qoh,
-                this.props.id
-            )
+            conditionOptions: createConditionOptions(qoh, id),
+            selectedFinish: createInitialSelectedFinish(qoh)
         });
 
         // Highlight the input after successful card add
@@ -117,9 +135,11 @@ export default class BrowseCardItem extends React.Component {
             id,
             card_faces
         } = this.props;
+
         const {
             selectedFinishCondition,
             selectedFinishConditionQty,
+            selectedFinish,
             conditionOptions,
             quantityToSell,
             price
@@ -147,9 +167,7 @@ export default class BrowseCardItem extends React.Component {
                                 </Label>
                                 <QohParser inventoryQty={qoh} />
                                 {' '}
-                                <Label tag>
-                                    <MarketPrice id={id} />
-                                </Label>
+                                <MarketPrice id={id} finish={selectedFinish} />
                             </Item.Header>
                             <Item.Description>
                                 <Form>
@@ -161,9 +179,7 @@ export default class BrowseCardItem extends React.Component {
                                             options={conditionOptions}
                                             value={selectedFinishCondition}
                                             label="Select finish/condition"
-                                            onChange={
-                                                this.handleSelectedFinishCondition
-                                            }
+                                            onChange={this.handleSelectedFinishCondition}
                                         />
                                         <Form.Field
                                             control={Input}

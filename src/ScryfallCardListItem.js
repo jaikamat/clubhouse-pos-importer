@@ -29,7 +29,12 @@ const cardConditions = [
     { key: 'HP', text: 'Heavy Play', value: 'HP' }
 ];
 
-// Use this function to seed state from props
+/**
+ * Seeds state from props. Used to determine if cards have only foil, nonfoil, or both printings
+ * from their `foil` and `nonfoil`
+ * @param {Boolean} nonfoilProp
+ * @param {Boolean} foilProp
+ */
 function checkCardFinish(nonfoilProp, foilProp) {
     if (!nonfoilProp && foilProp) {
         return { selectedFinish: 'FOIL', finishDisabled: true };
@@ -87,7 +92,7 @@ export default class ScryfallCardListItem extends Component {
 
     handleInventoryAdd = async (e, { value }) => {
         const { quantity, selectedFinish, selectedCondition } = this.state;
-        const { name } = this.props;
+        const { name, nonfoil, foil } = this.props;
         // This is the identifier for quantities of different finishes/conditions in the db
         const type = `${selectedFinish}_${selectedCondition}`;
 
@@ -108,15 +113,9 @@ export default class ScryfallCardListItem extends Component {
 
             this.setState({
                 quantity: 0,
-                selectedFinish: checkCardFinish(
-                    this.props.nonfoil,
-                    this.props.foil
-                ).selectedFinish,
+                selectedFinish: checkCardFinish(nonfoil, foil).selectedFinish,
                 selectedCondition: 'NM',
-                finishDisabled: checkCardFinish(
-                    this.props.nonfoil,
-                    this.props.foil
-                ).finishDisabled,
+                finishDisabled: checkCardFinish(nonfoil, foil).finishDisabled,
                 submitDisable: false,
                 inventoryQty: data.qoh,
                 submitLoading: false
@@ -172,9 +171,7 @@ export default class ScryfallCardListItem extends Component {
                                 </Label>
                                 <QohParser inventoryQty={inventoryQty} />
                                 {' '}
-                                <Label tag>
-                                    <MarketPrice id={id} />
-                                </Label>
+                                <MarketPrice id={id} finish={selectedFinish} />
                             </Item.Header>
                             <Item.Description>
                                 <Form>

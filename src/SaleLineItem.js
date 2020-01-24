@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Icon, Label, Item, Segment } from 'semantic-ui-react';
+import { Button, Icon, Label, Table } from 'semantic-ui-react';
 import Price from './Price';
 
 export default function SaleLineItem(props) {
@@ -16,35 +16,26 @@ export default function SaleLineItem(props) {
     } = props;
 
     return (
-        <Segment>
-            <Item.Group>
-                <Item>
-                    <Item.Content>
-                        <Item.Header as="h4">
-                            {name}{' '}
-                            <i
-                                className={`ss ss-fw ss-${set} ss-${rarity}`}
-                                style={{ fontSize: '30px' }}
-                            />
-                            <Label color="grey">
-                                {set.toUpperCase()}
-                            </Label>
-                        </Item.Header>
-                        <Item.Meta>
-                            <span>
-                                {qtyToSell}x @ <Price num={price} /> | {finishCondition}
-                            </span>
-                            <Button
-                                floated="right"
-                                icon
-                                onClick={() => deleteLineItem(id, finishCondition)}
-                            >
-                                <Icon name="cancel"></Icon>
-                            </Button>
-                        </Item.Meta>
-                    </Item.Content>
-                </Item>
-            </Item.Group>
-        </Segment>
+        <Table.Row>
+            <Table.Cell><h4>{name}</h4></Table.Cell>
+            <Table.Cell singleLine>
+                <i
+                    className={`ss ss-fw ss-${set} ss-${rarity}`}
+                    style={{ fontSize: '20px' }}
+                />
+                <Label color="grey">{set.toUpperCase()}</Label>
+            </Table.Cell>
+            <Table.Cell>
+                {qtyToSell}x @ <Price num={price} /> | {finishCondition}
+            </Table.Cell>
+            <Table.Cell>
+                <Button
+                    icon
+                    onClick={() => deleteLineItem(id, finishCondition)}
+                >
+                    <Icon name="cancel"></Icon>
+                </Button>
+            </Table.Cell>
+        </Table.Row>
     );
 }

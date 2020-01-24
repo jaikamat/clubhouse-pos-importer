@@ -7,7 +7,7 @@ import {
     Button,
     Modal,
     Icon,
-    Divider,
+    Divider
 } from 'semantic-ui-react';
 import SearchBar from './SearchBar';
 import BrowseCardList from './BrowseCardList';
@@ -158,7 +158,7 @@ export default class Sale extends React.Component {
                             <Header as="h2">Sale Items</Header>
                             <Divider />
 
-                            {!saleListCards.length &&
+                            {saleListCards.length === 0 &&
                                 <Segment placeholder>
                                     <Header icon>
                                         <Icon name="plus" />
@@ -166,12 +166,12 @@ export default class Sale extends React.Component {
                                 </Header>
                                 </Segment>}
 
-                            <React.Fragment>
+                            {saleListCards.length > 0 && <React.Fragment>
                                 <CustomerSaleList
                                     removeFromSaleList={this.removeFromSaleList}
                                     saleList={saleListCards}
                                 />
-                            </React.Fragment>
+                            </React.Fragment>}
 
                             {saleListCards.length > 0 && (
                                 <Segment clearing>

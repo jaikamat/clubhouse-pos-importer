@@ -1,5 +1,6 @@
 import React from 'react';
-import SaleLineItem from './SaleLineItem'
+import SaleLineItem from './SaleLineItem';
+import { Table } from 'semantic-ui-react';
 
 /**
  * Manages sorting of customer sale lists
@@ -73,13 +74,18 @@ const CustomerSaleList = ({ saleList, removeFromSaleList }) => {
 
     const sortedCards = sortSaleList(saleList);
 
-    return sortedCards.map(card => {
-        return <SaleLineItem
-            {...card}
-            key={`${card.id}${card.finishCondition}${card.qtyToSell}`}
-            deleteLineItem={removeFromSaleList}
-        />
-    })
+    return <Table>
+        <Table.Body>
+            {sortedCards.map(card => {
+                return <SaleLineItem
+                    {...card}
+                    key={`${card.id}${card.finishCondition}${card.qtyToSell}`}
+                    deleteLineItem={removeFromSaleList}
+                />
+            })}
+        </Table.Body>
+    </Table>
+
 };
 
 export default CustomerSaleList;

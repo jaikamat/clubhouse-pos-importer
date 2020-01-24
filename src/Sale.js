@@ -13,10 +13,76 @@ import SearchBar from './SearchBar';
 import BrowseCardList from './BrowseCardList';
 import SalePriceTotal from './SalePriceTotal';
 import CustomerSaleList from './CustomerSaleList';
+import PrintList from './PrintList';
 import _ from 'lodash';
 import makeAuthHeader from './makeAuthHeader';
 import { GET_CARDS_BY_TITLE, FINISH_SALE } from './api_resources';
 import createToast from './createToast';
+
+/**
+ * Takes in an unordered group of cards and sorts them according to The Clubhouse's specs:
+ * WUBRG, then multicolor, then colorless, then land, alphabetically within each color/category
+ */
+function sortSaleList(cards) {
+    const ORDER = ['W', 'U', 'B', 'R', 'G', 'MULTI', 'COLORLESS', 'LAND'];
+
+    /**
+     * Main helper function that manages sort order
+     * @param {Object} card
+     */
+    function helpSort(card) {
+        let arrayConst = null;
+
+        let colorsLength = null;
+        let cardFace = null;
+
+        try {
+            // If colors don't exist, it's a flip card or storybook frame
+            colorsLength = card.colors.length;
+            cardFace = card;
+        } catch (e) {
+            try {
+                // Storybook frames from Eldraine may throw error
+                colorsLength = card.card_faces[0].colors.length;
+                cardFace = card.card_faces[0];
+            } catch (e) {
+                colorsLength = card.colors.length;
+                cardFace = card;
+            }
+        }
+
+        // Apply logic to return correct constant enum
+        if (colorsLength === 0) {
+            arrayConst = 'COLORLESS';
+        } else if (colorsLength === 1) {
+            arrayConst = cardFace.colors[0];
+        } else if (colorsLength > 1) {
+            arrayConst = 'MULTI';
+        }
+
+        // Drill into colorless cards, if they are lands or not
+        if (arrayConst === 'COLORLESS') {
+            if (cardFace.type_line.includes('Land')) {
+                arrayConst = 'LAND';
+            }
+        }
+
+        // Final check to guard against a null arrayConst
+        if (!arrayConst) { arrayConst = 'LAND' }
+
+        return arrayConst;
+    }
+
+    const alphaSort = cards.sort((a, b) => {
+        return a.name.localeCompare(b.name);
+    });
+
+    const sorted = alphaSort.sort((a, b) => {
+        return ORDER.indexOf(helpSort(a)) - ORDER.indexOf(helpSort(b));
+    });
+
+    return sorted;
+}
 
 const initialState = {
     searchResults: [],
@@ -62,7 +128,10 @@ export default class Sale extends React.Component {
             oldState.push(newCard);
         }
 
-        this.setState({ saleListCards: oldState });
+        // Sorting the saleList cards here, on add
+        const sortedCards = sortSaleList(oldState);
+
+        this.setState({ saleListCards: sortedCards });
     };
 
     /**
@@ -138,7 +207,7 @@ export default class Sale extends React.Component {
                 <Grid stackable={true}>
                     <Grid.Row>
                         <Grid.Column width="11">
-                            <Header as="h2">Inventory</Header>
+                            <Header as="h2" style={{ display: "inline-block" }}>Inventory</Header>
                             <Divider />
 
                             {!searchResults.length &&
@@ -155,7 +224,9 @@ export default class Sale extends React.Component {
                             />
                         </Grid.Column>
                         <Grid.Column width="5">
-                            <Header as="h2">Sale Items</Header>
+                            <Header as="h2" style={{ display: 'inline-block' }}>Sale Items</Header>
+
+                            <PrintList saleListCards={saleListCards} />
                             <Divider />
 
                             {saleListCards.length === 0 &&
@@ -164,14 +235,16 @@ export default class Sale extends React.Component {
                                         <Icon name="plus" />
                                         View and manage customer sale list here
                                 </Header>
-                                </Segment>}
+                                </Segment>
+                            }
 
                             {saleListCards.length > 0 && <React.Fragment>
                                 <CustomerSaleList
                                     removeFromSaleList={this.removeFromSaleList}
                                     saleList={saleListCards}
                                 />
-                            </React.Fragment>}
+                            </React.Fragment>
+                            }
 
                             {saleListCards.length > 0 && (
                                 <Segment clearing>

@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/clubhouse-pos-importer/static/css/main.34de6062.chunk.css",
-    "main.js": "/clubhouse-pos-importer/static/js/main.7f810eeb.chunk.js",
-    "main.js.map": "/clubhouse-pos-importer/static/js/main.7f810eeb.chunk.js.map",
+    "main.js": "/clubhouse-pos-importer/static/js/main.fb0fc536.chunk.js",
+    "main.js.map": "/clubhouse-pos-importer/static/js/main.fb0fc536.chunk.js.map",
     "runtime-main.js": "/clubhouse-pos-importer/static/js/runtime-main.7b1646e5.js",
     "runtime-main.js.map": "/clubhouse-pos-importer/static/js/runtime-main.7b1646e5.js.map",
     "static/css/2.20c71af9.chunk.css": "/clubhouse-pos-importer/static/css/2.20c71af9.chunk.css",
-    "static/js/2.9071827e.chunk.js": "/clubhouse-pos-importer/static/js/2.9071827e.chunk.js",
-    "static/js/2.9071827e.chunk.js.map": "/clubhouse-pos-importer/static/js/2.9071827e.chunk.js.map",
+    "static/js/2.c7e9b280.chunk.js": "/clubhouse-pos-importer/static/js/2.c7e9b280.chunk.js",
+    "static/js/2.c7e9b280.chunk.js.map": "/clubhouse-pos-importer/static/js/2.c7e9b280.chunk.js.map",
     "index.html": "/clubhouse-pos-importer/index.html",
-    "precache-manifest.0bc5c363c789fa7975aa96719498b3d2.js": "/clubhouse-pos-importer/precache-manifest.0bc5c363c789fa7975aa96719498b3d2.js",
+    "precache-manifest.be3d7c08ac5249adcf8d9d1913b9d21e.js": "/clubhouse-pos-importer/precache-manifest.be3d7c08ac5249adcf8d9d1913b9d21e.js",
     "service-worker.js": "/clubhouse-pos-importer/service-worker.js",
     "static/css/2.20c71af9.chunk.css.map": "/clubhouse-pos-importer/static/css/2.20c71af9.chunk.css.map",
     "static/css/main.34de6062.chunk.css.map": "/clubhouse-pos-importer/static/css/main.34de6062.chunk.css.map",
@@ -19,8 +19,8 @@
   "entrypoints": [
     "static/js/runtime-main.7b1646e5.js",
     "static/css/2.20c71af9.chunk.css",
-    "static/js/2.9071827e.chunk.js",
+    "static/js/2.c7e9b280.chunk.js",
     "static/css/main.34de6062.chunk.css",
-    "static/js/main.7f810eeb.chunk.js"
+    "static/js/main.fb0fc536.chunk.js"
   ]
 }

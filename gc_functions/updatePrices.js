@@ -5,7 +5,7 @@ const sourceJSON = require('../clubhouse_data/scryfall-default-cards.json');
 require('dotenv').config();
 
 const startTime = process.hrtime(); // Record time
-const limiter = new Bottleneck({ maxConcurrent: 1, minTime: 111 }); // 9 requests per second
+const limiter = new Bottleneck({ maxConcurrent: 1, minTime: 125 }); // 8 requests per second
 
 /**
  * Makes a request to scryfall for a card's data (with retries)
@@ -13,7 +13,7 @@ const limiter = new Bottleneck({ maxConcurrent: 1, minTime: 111 }); // 9 request
  */
 async function retrievePrice(cardID) {
     try {
-        const { body } = await superagent.get(`https://api.scryfall.com/cards/${cardID}`).retry(2);
+        const { body } = await superagent.get(`https://api.scryfall.com/cards/${cardID}`).retry(3);
         const { id, name, set, set_name, prices } = body;
 
         // Cast from String to Number
@@ -48,7 +48,9 @@ const allRequestPromises = sourceFiltered.map(d => throttledRetrievePrice(d.id))
 async function getAllPrices() {
     try {
         const results = await Promise.all(allRequestPromises);
-        fs.writeFileSync('./prices.json', JSON.stringify(results));
+        // If requests fail, the array value will be null and will block the mongoImport - remove them
+        const filteredResults = results.filter(d => d !== null);
+        fs.writeFileSync('./prices.json', JSON.stringify(filteredResults));
         const endTime = process.hrtime(startTime);
         console.info(`Completion time: ${endTime[0] / 60} minutes`);
         console.log(`${results.length} objects created from ${sourceJSON.length} source objects`);

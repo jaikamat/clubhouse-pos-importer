@@ -24,9 +24,8 @@ export default class DeckboxClone extends React.Component {
         try {
             this.setState({ isLoading: true });
 
-            const { title, setName, format, priceNum, priceFilter, finish, sortBy, sortByDirection } = filters;
             const { data } = await axios.get(GET_CARDS_BY_FILTER, {
-                params: { title, setName, format, priceNum, priceFilter, finish, sortBy, sortByDirection, page }
+                params: { ...filters, page }
             });
 
             const numPages = Math.ceil(data.total / LIMIT);

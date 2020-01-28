@@ -48,8 +48,9 @@ async function getDistinctSetNames() {
  * sortBy - `name` or `price`
  * sortByDirection - `1` or `-1`
  * page - used to modify internal SKIP constant for pagination
+ * colors - a sorted string, used to identify cards by one or more colors
  */
-async function getCardsByFilter({ title, setName, format, priceNum, priceFilter, finish, color, colorIdentity, sortBy, sortByDirection, page }) {
+async function getCardsByFilter({ title, setName, format, priceNum, priceFilter, finish, colors, colorIdentity, sortBy, sortByDirection, page }) {
     const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true
@@ -78,6 +79,9 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
         } else if (finish === 'NONFOIL') {
             endMatch['inventory.k'] = { $in: ['NONFOIL_NM', 'NONFOIL_LP', 'NONFOIL_MP', 'NONFOIL_HP'] }
         }
+
+        // End match colors matching logic
+        if (colors) endMatch.colors_string = colors;
 
         // Always ensure results are in stock
         endMatch[`inventory.v`] = { $gt: 0 };
@@ -117,6 +121,30 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
                             }
                         }]
                     },
+                    // NOTE: This is dependent on Scryfall sorting their color arrays in 'BGRUW' order
+                    colors_string: {
+                        $ifNull: [{
+                            $reduce: {
+                                input: '$colors',
+                                initialValue: '',
+                                in: { $concat: ['$$value', '$$this'] }
+                            }
+                        }, {
+                            // If the card is a flip card, its colors will be nested in the card_faces property.
+                            // We use the $let operator to evaluate its contents to a temp variable `colors` and extract the colors array
+                            $let: {
+                                vars: { colors: { $arrayElemAt: ['$card_faces', 0] } },
+                                // Here, we concat the array to a single string to $match on a substring
+                                in: {
+                                    $reduce: {
+                                        input: '$$colors.colors',
+                                        initialValue: '',
+                                        in: { $concat: ['$$value', '$$this'] }
+                                    }
+                                }
+                            }
+                        }]
+                    },
                     price_info: { $arrayElemAt: ["$price_info.prices", 0] },
                     inventory: { $objectToArray: "$qoh" }
                 }
@@ -144,7 +172,8 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
                         }
                     },
                     image_uri: 1,
-                    rarity: 1
+                    rarity: 1,
+                    colors_string: 1
                 }
             }, {
                 $match: endMatch
@@ -191,9 +220,9 @@ app.get('/set_names', async (req, res) => {
 
 app.get('/', async (req, res) => {
     try {
-        const { title, setName, format, priceNum, priceFilter, finish, color, colorIdentity, sortBy, sortByDirection, page } = req.query;
+        const { title, setName, format, priceNum, priceFilter, finish, colors, colorIdentity, sortBy, sortByDirection, page } = req.query;
         const message = await getCardsByFilter({
-            title, setName, format, priceNum, priceFilter, finish, color, colorIdentity, sortBy, sortByDirection, page
+            title, setName, format, priceNum, priceFilter, finish, colors, colorIdentity, sortBy, sortByDirection, page
         });
         res.status(200).send(message);
     } catch (err) {

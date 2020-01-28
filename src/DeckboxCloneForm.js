@@ -44,6 +44,14 @@ const sortByDirectionDropdownOptions = [
     { key: 'ascdirsort', value: -1, text: 'Descending' }
 ];
 
+const sortByColorDropdownOptions = [
+    { key: 'w', value: 'W', text: 'White' },
+    { key: 'u', value: 'U', text: 'Blue' },
+    { key: 'b', value: 'B', text: 'Black' },
+    { key: 'r', value: 'R', text: 'Red' },
+    { key: 'g', value: 'G', text: 'Green' }
+];
+
 const initialState = {
     title: '',
     setName: '',
@@ -52,6 +60,7 @@ const initialState = {
     priceFilter: 'gte',
     finish: '',
     sortBy: 'price',
+    colorsArray: [],
     sortByDirection: -1,
     setNames: []
 }
@@ -86,8 +95,12 @@ export default class DeckboxCloneForm extends React.Component {
             priceFilter,
             finish,
             sortBy,
-            sortByDirection
+            sortByDirection,
+            colorsArray
         } = this.state;
+
+        // Sort the colors here and concat prior to sending to the backend
+        const colors = colorsArray.sort().join('');
 
         return (
             <Segment>
@@ -130,6 +143,17 @@ export default class DeckboxCloneForm extends React.Component {
                         />
                     </Form.Group>
                     <Form.Group widths="4">
+
+                        <Form.Field
+                            control={Select}
+                            multiple
+                            label="Colors"
+                            placeholder="Colors"
+                            options={sortByColorDropdownOptions}
+                            name="colorsArray"
+                            onChange={this.handleDropdownChange}
+                        />
+
                         <Form.Field>
                             <label>Price Filter</label>
                             <Input
@@ -173,7 +197,8 @@ export default class DeckboxCloneForm extends React.Component {
                             priceFilter,
                             finish,
                             sortBy,
-                            sortByDirection
+                            sortByDirection,
+                            colors
                         })}>Submit</Form.Button>
                     </Form.Group>
                 </Form>

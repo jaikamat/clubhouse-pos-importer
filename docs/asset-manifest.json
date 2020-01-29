@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/clubhouse-pos-importer/static/css/main.34de6062.chunk.css",
-    "main.js": "/clubhouse-pos-importer/static/js/main.205896d8.chunk.js",
-    "main.js.map": "/clubhouse-pos-importer/static/js/main.205896d8.chunk.js.map",
+    "main.js": "/clubhouse-pos-importer/static/js/main.3e0950c4.chunk.js",
+    "main.js.map": "/clubhouse-pos-importer/static/js/main.3e0950c4.chunk.js.map",
     "runtime-main.js": "/clubhouse-pos-importer/static/js/runtime-main.7b1646e5.js",
     "runtime-main.js.map": "/clubhouse-pos-importer/static/js/runtime-main.7b1646e5.js.map",
     "static/css/2.20c71af9.chunk.css": "/clubhouse-pos-importer/static/css/2.20c71af9.chunk.css",
-    "static/js/2.71ace861.chunk.js": "/clubhouse-pos-importer/static/js/2.71ace861.chunk.js",
-    "static/js/2.71ace861.chunk.js.map": "/clubhouse-pos-importer/static/js/2.71ace861.chunk.js.map",
+    "static/js/2.41373f7b.chunk.js": "/clubhouse-pos-importer/static/js/2.41373f7b.chunk.js",
+    "static/js/2.41373f7b.chunk.js.map": "/clubhouse-pos-importer/static/js/2.41373f7b.chunk.js.map",
     "index.html": "/clubhouse-pos-importer/index.html",
-    "precache-manifest.aec3ae7ca2913b780649d5329d12d231.js": "/clubhouse-pos-importer/precache-manifest.aec3ae7ca2913b780649d5329d12d231.js",
+    "precache-manifest.f76c2dc1862e6b6f93e7bc10e97b0a30.js": "/clubhouse-pos-importer/precache-manifest.f76c2dc1862e6b6f93e7bc10e97b0a30.js",
     "service-worker.js": "/clubhouse-pos-importer/service-worker.js",
     "static/css/2.20c71af9.chunk.css.map": "/clubhouse-pos-importer/static/css/2.20c71af9.chunk.css.map",
     "static/css/main.34de6062.chunk.css.map": "/clubhouse-pos-importer/static/css/main.34de6062.chunk.css.map",
@@ -19,8 +19,8 @@
   "entrypoints": [
     "static/js/runtime-main.7b1646e5.js",
     "static/css/2.20c71af9.chunk.css",
-    "static/js/2.71ace861.chunk.js",
+    "static/js/2.41373f7b.chunk.js",
     "static/css/main.34de6062.chunk.css",
-    "static/js/main.205896d8.chunk.js"
+    "static/js/main.3e0950c4.chunk.js"
   ]
 }

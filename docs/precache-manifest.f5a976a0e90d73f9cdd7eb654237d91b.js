@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "7785cbcba2f93047061ffdaf8d987588",
+    "revision": "9f40b8fb7440dbe5cffbf9619a8b6820",
     "url": "/clubhouse-pos-importer/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/clubhouse-pos-importer/static/css/2.20c71af9.chunk.css"
   },
   {
-    "revision": "b2b72fe9339d8759f393",
+    "revision": "a30b6d010c52d9fff381",
     "url": "/clubhouse-pos-importer/static/css/main.2aefd140.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/clubhouse-pos-importer/static/js/2.c34688d5.chunk.js"
   },
   {
-    "revision": "b2b72fe9339d8759f393",
-    "url": "/clubhouse-pos-importer/static/js/main.3dde8b28.chunk.js"
+    "revision": "a30b6d010c52d9fff381",
+    "url": "/clubhouse-pos-importer/static/js/main.1122c410.chunk.js"
   },
   {
     "revision": "3ed9413a20815c0c4877",

@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "f69e5fa4d67f83b76da59a7a0af28a38",
+    "revision": "7785cbcba2f93047061ffdaf8d987588",
     "url": "/clubhouse-pos-importer/index.html"
   },
   {
-    "revision": "ece7c1b23054313ce851",
+    "revision": "df34435acac795e64626",
     "url": "/clubhouse-pos-importer/static/css/2.20c71af9.chunk.css"
   },
   {
-    "revision": "bc1bffd284279c54fbe5",
-    "url": "/clubhouse-pos-importer/static/css/main.34de6062.chunk.css"
+    "revision": "b2b72fe9339d8759f393",
+    "url": "/clubhouse-pos-importer/static/css/main.2aefd140.chunk.css"
   },
   {
-    "revision": "ece7c1b23054313ce851",
-    "url": "/clubhouse-pos-importer/static/js/2.41373f7b.chunk.js"
+    "revision": "df34435acac795e64626",
+    "url": "/clubhouse-pos-importer/static/js/2.c34688d5.chunk.js"
   },
   {
-    "revision": "bc1bffd284279c54fbe5",
-    "url": "/clubhouse-pos-importer/static/js/main.3e0950c4.chunk.js"
+    "revision": "b2b72fe9339d8759f393",
+    "url": "/clubhouse-pos-importer/static/js/main.3dde8b28.chunk.js"
   },
   {
     "revision": "3ed9413a20815c0c4877",

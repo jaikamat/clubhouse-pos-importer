@@ -16,7 +16,8 @@
         "react-spring": "^8.0.27",
         "semantic-ui-css": "^2.4.1",
         "semantic-ui-react": "^0.88.1",
-        "toasted-notes": "^3.0.0"
+        "toasted-notes": "^3.0.0",
+        "uuid": "^3.4.0"
     },
     "scripts": {
         "start_dev": "REACT_APP_ENVIRONMENT=development react-scripts start",

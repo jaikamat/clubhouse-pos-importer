@@ -28,8 +28,11 @@ class Header extends React.Component {
                                         <React.Fragment>
                                             <Dropdown.Item as={Link} to="/manage-inventory"><Icon name="plus" color="blue" />Manage Inventory</Dropdown.Item>
                                             <Dropdown.Item as={Link} to="/new-sale" ><Icon name="dollar sign" color="blue" />New Sale</Dropdown.Item>
+                                            <Dropdown.Item as={Link} to="/receiving" ><Icon name="list alternate outline" color="blue" />Receiving</Dropdown.Item>
+                                            <Dropdown.Divider />
                                             <Dropdown.Item as={Link} to="/browse-inventory" ><Icon name="box" color="blue" />Browse Inventory</Dropdown.Item>
                                             <Dropdown.Item as={Link} to="/browse-sales" ><Icon name="eye" color="blue" />Browse Sales</Dropdown.Item>
+                                            <Dropdown.Divider />
                                             <Dropdown.Item as={Link} to="/logout" ><Icon name="log out" color="blue" />Logout</Dropdown.Item>
                                         </React.Fragment>
                                     </Dropdown.Menu>

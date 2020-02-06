@@ -12,6 +12,7 @@ import QohParser from '../QohParser';
 import CardImage from '../CardImage';
 import MarketPrice from '../MarketPrice'
 import $ from 'jquery';
+import createToast from '../createToast';
 
 const finishes = [
     { key: 'NONFOIL', text: 'Nonfoil', value: 'NONFOIL' },
@@ -42,7 +43,7 @@ function checkCardFinish(nonfoil, foil) {
 }
 
 export default function ReceivingCardItem(props) {
-    const [quantity, setQuantity] = useState(0);
+    const [quantity, setQuantity] = useState(1);
     const [cashPrice, setCashPrice] = useState(0);
     const [creditPrice, setCreditPrice] = useState(0);
     const [selectedCondition, setSelectedCondition] = useState('NM');
@@ -76,48 +77,8 @@ export default function ReceivingCardItem(props) {
         setQuantity(val);
     };
 
-    // Remove input placeholder when user tries to enter a number (to reduce user error)
-    // Targets focusing the inputs based on `name` attributes
-    const handleFocus = e => {
-        const { value, name } = e.target;
-
-        if (parseInt(value) === 0) {
-            switch (name) {
-                case 'quantityInput':
-                    setQuantity('')
-                    break;
-                case 'cashInput':
-                    setCashPrice('')
-                    break;
-                case 'creditInput':
-                    setCreditPrice('')
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    // Restore input placeholder when input field blurs
-    const handleBlur = e => {
-        const { value, name } = e.target;
-
-        if (value === '') {
-            switch (name) {
-                case 'quantityInput':
-                    setQuantity(0)
-                    break;
-                case 'cashInput':
-                    setCashPrice(0)
-                    break;
-                case 'creditInput':
-                    setCreditPrice(0)
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
+    // Select the text when the input is focused, to replace the value (limits user error)
+    const handleFocus = e => e.target.select()
 
     const handleInventoryAdd = () => {
         props.addToList({
@@ -127,6 +88,19 @@ export default function ReceivingCardItem(props) {
             finishCondition: `${selectedFinish}_${selectedCondition}`, // ex. NONFOIL_NM
             cardInfo: { ...props }
         })
+
+        setQuantity(1);
+        setCashPrice(0);
+        setCreditPrice(0);
+        setSelectedCondition('NM');
+        setSelectedFinish(checkCardFinish(props.nonfoil, props.foil).selectedFinish);
+
+        createToast({
+            color: 'green',
+            header: `${quantity}x ${props.name} added to buylist!`,
+            duration: 2000
+        });
+
         // Highlight the input after successful card add
         $('#searchBar').focus().select();
     };
@@ -155,10 +129,11 @@ export default function ReceivingCardItem(props) {
         <Segment>
             <Item.Group divided>
                 <Item>
-                    <Item.Image size="tiny">
+                    <Item.Image size="small">
                         <CardImage
                             image_uris={image_uris}
                             card_faces={card_faces}
+                            hover={false}
                         />
                     </Item.Image>
                     <Item.Content>
@@ -187,8 +162,31 @@ export default function ReceivingCardItem(props) {
                                         value={quantity}
                                         onChange={handleQuantityChange}
                                         onFocus={handleFocus}
-                                        onBlur={handleBlur}
                                     />
+                                    <Form.Field
+                                        label="Credit Price"
+                                        name="creditInput"
+                                        control={Input}
+                                        type="number"
+                                        value={creditPrice}
+                                        options={cardConditions}
+                                        onChange={handleCreditPriceChange}
+                                        onFocus={handleFocus}
+                                        step="0.25"
+                                    />
+                                    <Form.Field
+                                        label="Cash Price"
+                                        name="cashInput"
+                                        control={Input}
+                                        type="number"
+                                        value={cashPrice}
+                                        options={cardConditions}
+                                        onChange={handleCashPriceChange}
+                                        onFocus={handleFocus}
+                                        step="0.25"
+                                    />
+                                </Form.Group>
+                                <Form.Group widths="12">
                                     <Form.Field
                                         label="Finish"
                                         control={Select}
@@ -203,32 +201,6 @@ export default function ReceivingCardItem(props) {
                                         value={selectedCondition}
                                         options={cardConditions}
                                         onChange={handleConditionChange}
-                                    />
-                                </Form.Group>
-                                <Form.Group widths="12">
-                                    <Form.Field
-                                        label="Cash Price"
-                                        name="cashInput"
-                                        control={Input}
-                                        type="number"
-                                        value={cashPrice}
-                                        options={cardConditions}
-                                        onChange={handleCashPriceChange}
-                                        onFocus={handleFocus}
-                                        onBlur={handleBlur}
-                                        step="0.1"
-                                    />
-                                    <Form.Field
-                                        label="Credit Price"
-                                        name="creditInput"
-                                        control={Input}
-                                        type="number"
-                                        value={creditPrice}
-                                        options={cardConditions}
-                                        onChange={handleCreditPriceChange}
-                                        onFocus={handleFocus}
-                                        onBlur={handleBlur}
-                                        step="0.1"
                                     />
                                     <Form.Button
                                         label="Add to List?"

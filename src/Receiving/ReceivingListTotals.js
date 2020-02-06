@@ -57,6 +57,7 @@ export default function ReceivingListTotals({ receivingList, selectAll, commitTo
             </Button> */}
 
             <Modal
+                closeOnDimmerClick={false}
                 trigger={
                     <Button color="primary" disabled={receivingList.length === 0} onClick={() => setShowModal(true)}>
                         Commit to inventory

@@ -7,6 +7,7 @@ import { Segment, Header, Icon, Grid, Divider, Table } from 'semantic-ui-react'
 import { ADD_CARD_TO_INVENTORY, GET_CARD_QTY_FROM_INVENTORY, GET_SCRYFALL_BULK_BY_TITLE } from '../api_resources';
 import ReceivingListItem from './ReceivingListItem';
 import ReceivingListTotals from './ReceivingListTotals';
+import createToast from '../createToast';
 import _ from 'lodash';
 import uuid from 'uuid'; // Used to crete unique keys for the list
 
@@ -85,7 +86,7 @@ export default function Receiving() {
             return { cashPrice, creditPrice, finishCondition, ...cardInfo, uuid_key: uuid(), tradeType: initialTradeType }
         }))
 
-        setReceivingList(newState);
+        setReceivingList(_.sortBy(newState, 'name'));
     }
 
     /**
@@ -159,10 +160,22 @@ export default function Receiving() {
             })
 
             await Promise.all(promises);
+
             setSearchResults([]);
             setReceivingList([]);
+
+            createToast({
+                color: 'green',
+                header: `${receivingList.length} cards were added to inventory!`,
+                duration: 2000
+            });
         } catch (e) {
             console.log(e);
+            createToast({
+                color: 'red',
+                header: `Something went wrong...`,
+                duration: 2000
+            });
         }
     }
 

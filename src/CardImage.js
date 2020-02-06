@@ -15,23 +15,23 @@ class CardImage extends React.Component {
     mouseOut = () => { this.setState({ hovered: false }) };
 
     render() {
-        const { image_uris, card_faces } = this.props
+        const { image_uris, card_faces, hover = true } = this.props // default prop `hover` must be true
         try {
             // If normal prop `image_uris.normal` doesn't exist, move to catch block for flip card faces
             return <Image
                 src={image_uris.normal}
                 size="tiny"
                 style={{ ...style, transform: `${this.state.hovered ? 'scale(1.75)' : 'scale(1)'}` }}
-                onMouseOver={this.mouseOver}
-                onMouseOut={this.mouseOut}
+                onMouseOver={hover ? this.mouseOver : null}
+                onMouseOut={hover ? this.mouseOut : null}
             />;
         } catch (e) {
             return <Image src={
                 card_faces[0].image_uris.normal}
                 size="tiny"
                 style={{ ...style, transform: `${this.state.hovered ? 'scale(1.75)' : 'scale(1)'}` }}
-                onMouseOver={this.mouseOver}
-                onMouseOut={this.mouseOut}
+                onMouseOver={hover ? this.mouseOver : null}
+                onMouseOut={hover ? this.mouseOut : null}
             />;
         }
     }

@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.css": "/clubhouse-pos-importer/static/css/main.2aefd140.chunk.css",
-    "main.js": "/clubhouse-pos-importer/static/js/main.1122c410.chunk.js",
-    "main.js.map": "/clubhouse-pos-importer/static/js/main.1122c410.chunk.js.map",
+    "main.css": "/clubhouse-pos-importer/static/css/main.2542e7a2.chunk.css",
+    "main.js": "/clubhouse-pos-importer/static/js/main.df852aaf.chunk.js",
+    "main.js.map": "/clubhouse-pos-importer/static/js/main.df852aaf.chunk.js.map",
     "runtime-main.js": "/clubhouse-pos-importer/static/js/runtime-main.7b1646e5.js",
     "runtime-main.js.map": "/clubhouse-pos-importer/static/js/runtime-main.7b1646e5.js.map",
     "static/css/2.20c71af9.chunk.css": "/clubhouse-pos-importer/static/css/2.20c71af9.chunk.css",
-    "static/js/2.c34688d5.chunk.js": "/clubhouse-pos-importer/static/js/2.c34688d5.chunk.js",
-    "static/js/2.c34688d5.chunk.js.map": "/clubhouse-pos-importer/static/js/2.c34688d5.chunk.js.map",
+    "static/js/2.e5d51aae.chunk.js": "/clubhouse-pos-importer/static/js/2.e5d51aae.chunk.js",
+    "static/js/2.e5d51aae.chunk.js.map": "/clubhouse-pos-importer/static/js/2.e5d51aae.chunk.js.map",
     "index.html": "/clubhouse-pos-importer/index.html",
-    "precache-manifest.f5a976a0e90d73f9cdd7eb654237d91b.js": "/clubhouse-pos-importer/precache-manifest.f5a976a0e90d73f9cdd7eb654237d91b.js",
+    "precache-manifest.37e65b6b441ff793df2da8459699460b.js": "/clubhouse-pos-importer/precache-manifest.37e65b6b441ff793df2da8459699460b.js",
     "service-worker.js": "/clubhouse-pos-importer/service-worker.js",
     "static/css/2.20c71af9.chunk.css.map": "/clubhouse-pos-importer/static/css/2.20c71af9.chunk.css.map",
-    "static/css/main.2aefd140.chunk.css.map": "/clubhouse-pos-importer/static/css/main.2aefd140.chunk.css.map",
+    "static/css/main.2542e7a2.chunk.css.map": "/clubhouse-pos-importer/static/css/main.2542e7a2.chunk.css.map",
     "static/media/semantic.min.css": "/clubhouse-pos-importer/static/media/outline-icons.ef60a4f6.woff",
     "static/media/magic-ball.png": "/clubhouse-pos-importer/static/media/magic-ball.c3fcddd6.png"
   },
   "entrypoints": [
     "static/js/runtime-main.7b1646e5.js",
     "static/css/2.20c71af9.chunk.css",
-    "static/js/2.c34688d5.chunk.js",
-    "static/css/main.2aefd140.chunk.css",
-    "static/js/main.1122c410.chunk.js"
+    "static/js/2.e5d51aae.chunk.js",
+    "static/css/main.2542e7a2.chunk.css",
+    "static/js/main.df852aaf.chunk.js"
   ]
 }

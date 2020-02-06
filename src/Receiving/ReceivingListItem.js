@@ -3,10 +3,7 @@ import { Table, Button, Label, Icon } from 'semantic-ui-react';
 import Price from '../Price';
 
 // Defines whether it uses cash or credit for trade types
-const TRADE_TYPE = {
-    CASH: 'CASH',
-    CREDIT: 'CREDIT'
-}
+const TRADE_TYPE = { CASH: 'CASH', CREDIT: 'CREDIT' };
 
 export default function ReceivingListItem({ name, set, rarity, cashPrice, creditPrice, finishCondition, uuid_key, removeFromList, tradeType, activeTradeType }) {
     const { CASH, CREDIT } = TRADE_TYPE;

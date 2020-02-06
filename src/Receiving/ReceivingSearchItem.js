@@ -47,6 +47,7 @@ export default function ReceivingCardItem(props) {
     const [cashPrice, setCashPrice] = useState(0);
     const [creditPrice, setCreditPrice] = useState(0);
     const [selectedCondition, setSelectedCondition] = useState('NM');
+    const [marketPrice, setMarketPrice] = useState(0);
     const [selectedFinish, setSelectedFinish] = useState(
         checkCardFinish(props.nonfoil, props.foil).selectedFinish // seed state from props
     );
@@ -58,16 +59,24 @@ export default function ReceivingCardItem(props) {
 
     const handleConditionChange = (e, { value }) => setSelectedCondition(value);
 
-    const handleCashPriceChange = (e, { value }) => {
+    // Validates/sanitizes user inputs by tracking the `name` attribute of the input element
+    const handlePriceChange = (e, { value }) => {
         let val = Number(value) || 0;
         if (val < 0) val = 0;
-        setCashPrice(val)
-    };
 
-    const handleCreditPriceChange = (e, { value }) => {
-        let val = Number(value) || 0;
-        if (val < 0) val = 0;
-        setCreditPrice(val);
+        switch (e.target.name) {
+            case "cashInput":
+                setCashPrice(val);
+                break;
+            case "marketPriceInput":
+                setMarketPrice(val);
+                break;
+            case "creditInput":
+                setCreditPrice(val);
+                break;
+            default:
+                break;
+        }
     }
 
     const handleQuantityChange = (e, { value }) => {
@@ -84,6 +93,7 @@ export default function ReceivingCardItem(props) {
         props.addToList({
             quantity,
             cashPrice,
+            marketPrice,
             creditPrice,
             finishCondition: `${selectedFinish}_${selectedCondition}`, // ex. NONFOIL_NM
             cardInfo: { ...props }
@@ -91,6 +101,7 @@ export default function ReceivingCardItem(props) {
 
         setQuantity(1);
         setCashPrice(0);
+        setMarketPrice(0);
         setCreditPrice(0);
         setSelectedCondition('NM');
         setSelectedFinish(checkCardFinish(props.nonfoil, props.foil).selectedFinish);
@@ -106,11 +117,15 @@ export default function ReceivingCardItem(props) {
     };
 
     /**
-     * Determines whether the `Add` button should be disabled depending on a number of properties
+     * Determines whether the `Add` button should be disabled
      */
     const submitDisabled = () => {
         const validateQty = quantity === 0 || quantity === '';
         const validateTradeTypes = !cashPrice && !creditPrice;
+
+        if (cashPrice > 0) {
+            return validateQty || validateTradeTypes || marketPrice === 0;
+        }
 
         return validateQty || validateTradeTypes;
     }
@@ -156,7 +171,6 @@ export default function ReceivingCardItem(props) {
                                 <Form.Group widths="12">
                                     <Form.Field
                                         control={Input}
-                                        name="quantityInput"
                                         type="number"
                                         label="Quantity"
                                         value={quantity}
@@ -169,8 +183,7 @@ export default function ReceivingCardItem(props) {
                                         control={Input}
                                         type="number"
                                         value={creditPrice}
-                                        options={cardConditions}
-                                        onChange={handleCreditPriceChange}
+                                        onChange={handlePriceChange}
                                         onFocus={handleFocus}
                                         step="0.25"
                                     />
@@ -180,10 +193,20 @@ export default function ReceivingCardItem(props) {
                                         control={Input}
                                         type="number"
                                         value={cashPrice}
-                                        options={cardConditions}
-                                        onChange={handleCashPriceChange}
+                                        onChange={handlePriceChange}
                                         onFocus={handleFocus}
                                         step="0.25"
+                                    />
+                                    <Form.Field
+                                        label="Market Price"
+                                        name="marketPriceInput"
+                                        control={Input}
+                                        type="number"
+                                        value={marketPrice}
+                                        onChange={handlePriceChange}
+                                        onFocus={handleFocus}
+                                        step="0.25"
+                                        disabled={cashPrice === 0}
                                     />
                                 </Form.Group>
                                 <Form.Group widths="12">

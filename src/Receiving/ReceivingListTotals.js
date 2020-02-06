@@ -1,19 +1,30 @@
 import React, { useState } from 'react';
 import { Segment, Statistic, Button, Modal, Header } from 'semantic-ui-react';
 import Price from '../Price';
-import './PrintReceivingList.css';
+import CashReport from './CashReport';
+import printCashReport from './printCashReport';
 
-const TRADE_TYPE = { CASH: 'CASH', CREDIT: 'CREDIT' }
+const TRADE_TYPE = { CASH: 'CASH', CREDIT: 'CREDIT' };
 
 export default function ReceivingListTotals({ receivingList, selectAll, commitToInventory }) {
     const { CASH, CREDIT } = TRADE_TYPE;
     const [loading, setLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [showCashModal, setShowCashModal] = useState(false);
+
+    const openCashModal = () => setShowCashModal(true);
+
+    const closeCashModal = () => setShowCashModal(false);
 
     const submitToInventory = async () => {
         setLoading(true);
         await commitToInventory();
         setLoading(false);
+    }
+
+    const handlePrintCashReport = () => {
+        setShowCashModal(false); // Close the modal so users don't have to after printing in new tab
+        printCashReport();
     }
 
     const cashTotal = receivingList.reduce((acc, curr) => {
@@ -25,10 +36,6 @@ export default function ReceivingListTotals({ receivingList, selectAll, commitTo
         let creditVal = curr.tradeType === CREDIT ? curr.creditPrice : 0;
         return acc + creditVal;
     }, 0);
-
-    // const print = () => {
-    //     window.print();
-    // }
 
     return <Segment>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -48,18 +55,36 @@ export default function ReceivingListTotals({ receivingList, selectAll, commitTo
                 </Statistic>
             </div>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-            {/* <Button
-                color={cashTotal > 0 ? 'green' : null}
-                disabled={cashTotal === 0}
-            >
-                Print cash report
-            </Button> */}
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Modal id="printme"
+                open={showCashModal}
+                trigger={
+                    <Button
+                        color={cashTotal > 0 ? 'green' : null}
+                        disabled={cashTotal === 0}
+                        onClick={openCashModal}>
+                        Generate cash report
+                    </Button>
+                }>
+                <Modal.Content>
+                    <CashReport
+                        receivingList={receivingList}
+                        closeCashModal={closeCashModal} />
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button onClick={handlePrintCashReport} color="primary">Print Report</Button>
+                    <Button onClick={closeCashModal}>Cancel</Button>
+                </Modal.Actions>
+            </Modal>
 
             <Modal
                 closeOnDimmerClick={false}
                 trigger={
-                    <Button color="primary" disabled={receivingList.length === 0} onClick={() => setShowModal(true)}>
+                    <Button
+                        color="primary"
+                        disabled={receivingList.length === 0}
+                        onClick={() => setShowModal(true)}>
                         Commit to inventory
                     </Button>
                 }
@@ -69,11 +94,11 @@ export default function ReceivingListTotals({ receivingList, selectAll, commitTo
                 <Header>Confirm receipt of new inventory?</Header>
                 <Modal.Content>
                     <p><b>Pressing 'Submit' will commit the following items to inventory:</b></p>
-                    <ul id="printme">{receivingList.map(c => {
-                        return <li>
-                            {c.name} | {c.set_name} ({c.set.toUpperCase()})
-                            </li>
-                    })}</ul>
+                    <ul>
+                        {receivingList.map(c => {
+                            return <li key={c.uuid_key}>{c.name} | {c.set_name}({c.set.toUpperCase()})</li>
+                        })}
+                    </ul>
                     <div>
                         <p><b>The customer is owed: </b></p>
                         <ul>

@@ -6,8 +6,7 @@ import { AuthContext } from './AuthProvider';
 
 const style = {
     background: "linear-gradient(#2185d0, #206ac6)",
-    boxShadow: '0 3px 5px 0 rgba(0,0,0,.25)',
-    zIndex: 1001 // Needs to be visible over Dimmer in DeckboxClone component
+    boxShadow: '0 3px 5px 0 rgba(0,0,0,.25)'
 }
 
 class Header extends React.Component {

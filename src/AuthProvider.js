@@ -23,6 +23,8 @@ class AuthProvider extends React.Component {
                     });
 
                     return { authed: true };
+                } else {
+                    return { authed: false };
                 }
             } catch (err) {
                 console.log(err);

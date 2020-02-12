@@ -53,7 +53,10 @@ class SearchBar extends React.Component {
     };
 
     handleResultSelect = (e, { result }) => {
-        $('#searchBar').select();
+        // This line is a hacky way to get around the fact that if we just select(), then
+        // when the user manually clicks the first (or any) result in the resultlist, it does not select,
+        // presumably because there is some collision between selecting the resultList element and focusing the input
+        setTimeout(() => $('#searchBar').select(), 10);
         this.props.handleSearchSelect(result.title);
     };
 

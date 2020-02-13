@@ -4,6 +4,12 @@ import Price from './Price';
 import './PrintList.css';
 import SalePriceTotal from './SalePriceTotal';
 
+const Row = ({ id, name, qtyToSell, finishCondition, set_name, price }) => {
+    return <li key={id}>
+        <b>{name} | x{qtyToSell} | {finishCondition} | {set_name} | <Price num={price} /></b>
+    </li>
+}
+
 export default class PrintList extends React.Component {
     state = { printClicked: false }
 
@@ -26,13 +32,10 @@ export default class PrintList extends React.Component {
                     </Button>
 
                     <div id="printme" style={{ display: printClicked ? 'inline-block' : 'none' }}>
-                        <ul>
-                            {saleListCards.map(c => <li key={c.id}><b>{c.name} | x{c.qtyToSell} | {c.finishCondition} | {c.set_name} | <Price num={c.price} /></b></li>)}
-                        </ul>
-
-                        Subtotal: <SalePriceTotal saleList={saleListCards} />
+                        <ul>{saleListCards.map(c => Row(c))}</ul>
+                        <span><b>Subtotal: <SalePriceTotal saleList={saleListCards} /></b></span>
                     </div>
-                </React.Fragment>
+                </React.Fragment >
             )
         } else {
             return null;

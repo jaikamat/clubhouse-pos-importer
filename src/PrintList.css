@@ -14,3 +14,9 @@
         overflow: hidden;
     }
 }
+
+@media screen {
+    #printme {
+        display: none !important;
+    }
+}

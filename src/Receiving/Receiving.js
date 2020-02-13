@@ -12,10 +12,7 @@ import _ from 'lodash';
 import uuid from 'uuid'; // Used to crete unique keys for the list
 
 // Defines whether the receivingListItem uses cash or credit for trade types
-const TRADE_TYPE = {
-    CASH: 'CASH',
-    CREDIT: 'CREDIT'
-}
+const TRADE_TYPE = { CASH: 'CASH', CREDIT: 'CREDIT' };
 
 function DefaultPlaceholder({ active, headerText }) {
     return (
@@ -73,7 +70,7 @@ export default function Receiving() {
     /**
      * Adds a card to the receiving list, with a unique uuid for identification
      */
-    const addToList = ({ quantity, cashPrice, creditPrice, finishCondition, cardInfo }) => {
+    const addToList = ({ quantity, cashPrice, marketPrice, creditPrice, finishCondition, cardInfo }) => {
 
         const previousState = [...receivingList];
         let initialTradeType = TRADE_TYPE.CREDIT;
@@ -83,7 +80,7 @@ export default function Receiving() {
 
         // Each line-item represents one card. Use _.times() to repeat
         const newState = previousState.concat(_.times(quantity, idx => {
-            return { cashPrice, creditPrice, finishCondition, ...cardInfo, uuid_key: uuid(), tradeType: initialTradeType }
+            return { cashPrice, marketPrice, creditPrice, finishCondition, ...cardInfo, uuid_key: uuid(), tradeType: initialTradeType }
         }))
 
         setReceivingList(_.sortBy(newState, 'name'));
@@ -142,6 +139,7 @@ export default function Receiving() {
             return _.omit(c, [
                 "cashPrice",
                 "creditPrice",
+                "marketPrice",
                 "inventoryQty",
                 "addToList",
                 "uuid_key",

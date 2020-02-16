@@ -57,7 +57,7 @@ export default function ReceivingListTotals({ receivingList, selectAll, commitTo
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Modal id="printme"
+            <Modal
                 open={showCashModal}
                 trigger={
                     <Button

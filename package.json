@@ -23,7 +23,7 @@
         "start_dev": "REACT_APP_ENVIRONMENT=development react-scripts start",
         "start": "react-scripts start",
         "build": "react-scripts build",
-        "test": "react-scripts test",
+        "test": "jest",
         "eject": "react-scripts eject"
     },
     "eslintConfig": {

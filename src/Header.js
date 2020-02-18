@@ -1,7 +1,7 @@
 import React from 'react';
 import ballLogo from './logos/magic-ball.png'
 import { Menu, Icon, Dropdown } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { AuthContext } from './AuthProvider';
 
 const style = {
@@ -11,6 +11,8 @@ const style = {
 
 class Header extends React.Component {
     render() {
+        const { pathname } = this.props.location;
+
         return (
             <AuthContext.Consumer>
                 {({ loggedIn }) => {
@@ -21,22 +23,40 @@ class Header extends React.Component {
                                 <span><h3>Clubhouse Collection</h3></span>
                             </Menu.Item>
                             <Menu.Menu position="right">
-                                <Menu.Item position="right" as={Link} to="/public-inventory">Search</Menu.Item>
+                                <Menu.Item active={pathname === '/public-inventory'} position="right" as={Link} replace to="/public-inventory">
+                                    Search
+                                </Menu.Item>
                                 {loggedIn && <Dropdown item icon="bars">
                                     <Dropdown.Menu>
-                                        <React.Fragment>
-                                            <Dropdown.Item as={Link} to="/manage-inventory"><Icon name="plus" color="blue" />Manage Inventory</Dropdown.Item>
-                                            <Dropdown.Item as={Link} to="/new-sale" ><Icon name="dollar sign" color="blue" />New Sale</Dropdown.Item>
-                                            <Dropdown.Item as={Link} to="/receiving" ><Icon name="list alternate outline" color="blue" />Receiving</Dropdown.Item>
-                                            <Dropdown.Divider />
-                                            <Dropdown.Item as={Link} to="/browse-inventory" ><Icon name="box" color="blue" />Browse Inventory</Dropdown.Item>
-                                            <Dropdown.Item as={Link} to="/browse-sales" ><Icon name="eye" color="blue" />Browse Sales</Dropdown.Item>
-                                            <Dropdown.Divider />
-                                            <Dropdown.Item as={Link} to="/logout" ><Icon name="log out" color="blue" />Logout</Dropdown.Item>
-                                        </React.Fragment>
+                                        <Dropdown.Item active={pathname === '/manage-inventory'} as={Link} replace to="/manage-inventory">
+                                            <Icon name="plus" color="blue" />Manage Inventory
+                                        </Dropdown.Item>
+                                        <Dropdown.Item active={pathname === '/new-sale'} as={Link} replace to="/new-sale" >
+                                            <Icon name="dollar sign" color="blue" />New Sale
+                                        </Dropdown.Item>
+                                        <Dropdown.Item active={pathname === '/receiving'} as={Link} replace to="/receiving" >
+                                            <Icon name="list alternate outline" color="blue" />Receiving
+                                        </Dropdown.Item>
+
+                                        <Dropdown.Divider />
+
+                                        <Dropdown.Item active={pathname === '/browse-inventory'} as={Link} replace to="/browse-inventory" >
+                                            <Icon name="box" color="blue" />Browse Inventory
+                                        </Dropdown.Item>
+                                        <Dropdown.Item active={pathname === '/browse-sales'} as={Link} replace to="/browse-sales" >
+                                            <Icon name="eye" color="blue" />Browse Sales
+                                        </Dropdown.Item>
+
+                                        <Dropdown.Divider />
+
+                                        <Dropdown.Item active={pathname === '/logout'} as={Link} replace to="/logout" >
+                                            <Icon name="log out" color="blue" />Logout
+                                        </Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>}
-                                {!loggedIn && <Menu.Item position="right" as={Link} to="/login">Log in</Menu.Item>}
+                                {!loggedIn && <Menu.Item active={pathname === '/login'} position="right" as={Link} replace to="/login">
+                                    Log in
+                                    </Menu.Item>}
                             </Menu.Menu>
                         </Menu >
                     );
@@ -46,4 +66,4 @@ class Header extends React.Component {
     }
 }
 
-export default Header;
+export default withRouter(props => <Header {...props} />);

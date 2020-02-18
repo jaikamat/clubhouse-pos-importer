@@ -89,6 +89,7 @@ const initialState = {
     saleListCards: [],
     showModal: false,
     submitLoading: false,
+    submitDisabled: false,
     searchTerm: ''
 };
 
@@ -150,7 +151,7 @@ export default class Sale extends React.Component {
      */
     finalizeSale = async () => {
         try {
-            this.setState({ submitLoading: true });
+            this.setState({ submitLoading: true, submitDisabled: true });
 
             const { data } = await axios.post(FINISH_SALE, {
                 cards: this.state.saleListCards
@@ -187,6 +188,7 @@ export default class Sale extends React.Component {
             saleListCards,
             showModal,
             submitLoading,
+            submitDisabled,
             searchTerm
         } = this.state;
 
@@ -296,6 +298,7 @@ export default class Sale extends React.Component {
                                                 inverted
                                                 onClick={this.finalizeSale}
                                                 loading={submitLoading}
+                                                disabled={submitDisabled}
                                             >
                                                 <Icon name="checkmark" /> Yes
                                             </Button>

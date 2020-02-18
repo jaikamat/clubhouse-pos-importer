@@ -31,7 +31,7 @@ export default function ReceivingListItem({ name, set, rarity, cashPrice, credit
             <Table.Cell>
                 <Button
                     active={tradeType === CASH}
-                    color={tradeType === CASH ? 'primary' : null}
+                    color={tradeType === CASH ? 'blue' : null}
                     onClick={() => activeTradeType(uuid_key, CASH)}
                     disabled={cashPrice === 0}
                     icon
@@ -42,7 +42,7 @@ export default function ReceivingListItem({ name, set, rarity, cashPrice, credit
             <Table.Cell>
                 <Button
                     active={tradeType === CREDIT}
-                    color={tradeType === CREDIT ? 'primary' : null}
+                    color={tradeType === CREDIT ? 'blue' : null}
                     onClick={() => activeTradeType(uuid_key, CREDIT)}
                     disabled={creditPrice === 0}
                     icon

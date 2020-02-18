@@ -73,7 +73,7 @@ export default function ReceivingListTotals({ receivingList, selectAll, commitTo
                         closeCashModal={closeCashModal} />
                 </Modal.Content>
                 <Modal.Actions>
-                    <Button onClick={handlePrintCashReport} color="primary">Print Report</Button>
+                    <Button onClick={handlePrintCashReport} color="blue">Print Report</Button>
                     <Button onClick={closeCashModal}>Cancel</Button>
                 </Modal.Actions>
             </Modal>
@@ -82,7 +82,7 @@ export default function ReceivingListTotals({ receivingList, selectAll, commitTo
                 closeOnDimmerClick={false}
                 trigger={
                     <Button
-                        color="primary"
+                        color="blue"
                         disabled={receivingList.length === 0}
                         onClick={() => setShowModal(true)}>
                         Commit to inventory

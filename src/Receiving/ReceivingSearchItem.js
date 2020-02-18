@@ -86,8 +86,38 @@ export default function ReceivingCardItem(props) {
         setQuantity(val);
     };
 
-    // Select the text when the input is focused, to replace the value (limits user error)
-    const handleFocus = e => e.target.select()
+
+    const handleFocus = e => {
+        switch (e.target.name) {
+            case "cashInput":
+                if (cashPrice === 0) setCashPrice('');
+                break;
+            case "marketPriceInput":
+                if (marketPrice === 0) setMarketPrice('');
+                break;
+            case "creditInput":
+                if (creditPrice === 0) setCreditPrice('');
+                break;
+            default:
+                break;
+        }
+    }
+
+    const handleBlur = e => {
+        switch (e.target.name) {
+            case "cashInput":
+                if (cashPrice === '') setCashPrice(0);
+                break;
+            case "marketPriceInput":
+                if (marketPrice === '') setMarketPrice(0);
+                break;
+            case "creditInput":
+                if (creditPrice === '') setCreditPrice(0);
+                break;
+            default:
+                break;
+        }
+    }
 
     const handleInventoryAdd = () => {
         props.addToList({
@@ -122,9 +152,10 @@ export default function ReceivingCardItem(props) {
     const submitDisabled = () => {
         const validateQty = quantity === 0 || quantity === '';
         const validateTradeTypes = !cashPrice && !creditPrice;
+        const validateMarketPrice = marketPrice === 0 || marketPrice === '';
 
         if (cashPrice > 0) {
-            return validateQty || validateTradeTypes || marketPrice === 0;
+            return validateQty || validateTradeTypes || validateMarketPrice;
         }
 
         return validateQty || validateTradeTypes;
@@ -175,7 +206,7 @@ export default function ReceivingCardItem(props) {
                                         label="Quantity"
                                         value={quantity}
                                         onChange={handleQuantityChange}
-                                        onFocus={handleFocus}
+                                        onFocus={e => e.target.select()}
                                     />
                                     <Form.Field
                                         label="Credit Price"
@@ -185,6 +216,7 @@ export default function ReceivingCardItem(props) {
                                         value={creditPrice}
                                         onChange={handlePriceChange}
                                         onFocus={handleFocus}
+                                        onBlur={handleBlur}
                                         step="0.25"
                                     />
                                     <Form.Field
@@ -195,6 +227,7 @@ export default function ReceivingCardItem(props) {
                                         value={cashPrice}
                                         onChange={handlePriceChange}
                                         onFocus={handleFocus}
+                                        onBlur={handleBlur}
                                         step="0.25"
                                     />
                                     <Form.Field
@@ -205,8 +238,9 @@ export default function ReceivingCardItem(props) {
                                         value={marketPrice}
                                         onChange={handlePriceChange}
                                         onFocus={handleFocus}
+                                        onBlur={handleBlur}
                                         step="0.25"
-                                        disabled={cashPrice === 0}
+                                        disabled={cashPrice === 0 || cashPrice === ''}
                                     />
                                 </Form.Group>
                                 <Form.Group widths="12">

@@ -18,7 +18,7 @@ import parseQoh from './utils/parseQoh';
 // };
 
 export default function QohLabels({ inventoryQty }) {
-    const [nonfoilQty, foilQty] = parseQoh(inventoryQty);
+    const [foilQty, nonfoilQty] = parseQoh(inventoryQty);
 
     const foilColor = {};
     if (foilQty > 0) { foilColor.color = 'blue'; }

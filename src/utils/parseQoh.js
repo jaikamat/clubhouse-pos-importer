@@ -28,9 +28,7 @@ export default function parseQoh(inventoryQty) {
             (inventoryQty.NONFOIL_LP || 0) +
             (inventoryQty.NONFOIL_MP || 0) +
             (inventoryQty.NONFOIL_HP || 0);
-
-        return [nonfoilQty, foilQty];
     }
 
-    return [0, 0];
+    return [foilQty, nonfoilQty];
 }

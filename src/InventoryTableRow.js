@@ -1,5 +1,5 @@
 import React from 'react';
-import QohParser from './QohParser';
+import QohLabels from './QohLabels';
 import { Table } from 'semantic-ui-react';
 
 const InventoryTableRow = ({ name, set_name, set, rarity, qoh }) => {
@@ -14,7 +14,7 @@ const InventoryTableRow = ({ name, set_name, set, rarity, qoh }) => {
             </Table.Cell>
             <Table.Cell>{set_name}</Table.Cell>
             <Table.Cell>
-                <QohParser inventoryQty={qoh} />
+                <QohLabels inventoryQty={qoh} />
             </Table.Cell>
         </Table.Row>
     );

@@ -1,5 +1,5 @@
 import React from 'react';
-import QohParser from './QohParser';
+import QohLabels from './QohLabels';
 import { Image } from 'semantic-ui-react';
 import MarketPrice from './MarketPrice';
 
@@ -40,7 +40,7 @@ export default function PublicCardItem({ image_uris, card_faces, qoh, id }) {
         <div style={wrapperStyle}>
             <div style={imageStyle}>{myImage}</div>
             <div style={inventoryStyle}>
-                <div><QohParser inventoryQty={qoh} /></div>
+                <div><QohLabels inventoryQty={qoh} /></div>
                 <MarketPrice id={id} />
             </div>
         </div>

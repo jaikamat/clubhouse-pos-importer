@@ -10,7 +10,7 @@ import {
 } from 'semantic-ui-react';
 import CardImage from './CardImage';
 import MarketPrice from './MarketPrice';
-import QohParser from './QohParser';
+import QohLabels from './QohLabels';
 import $ from 'jquery';
 import _ from 'lodash';
 
@@ -165,7 +165,7 @@ export default class BrowseCardItem extends React.Component {
                                 <Label color="grey">
                                     {set_name} ({String(set).toUpperCase()})
                                 </Label>
-                                <QohParser inventoryQty={qoh} />
+                                <QohLabels inventoryQty={qoh} />
                                 {' '}
                                 <MarketPrice id={id} finish={selectedFinish} />
                             </Item.Header>

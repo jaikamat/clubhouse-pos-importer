@@ -9,7 +9,7 @@ import {
     Item
 } from 'semantic-ui-react';
 import axios from 'axios';
-import QohParser from './QohParser';
+import QohLabels from './QohLabels';
 import createToast from './createToast';
 import CardImage from './CardImage';
 import makeAuthHeader from './makeAuthHeader';
@@ -169,7 +169,7 @@ export default class ScryfallCardListItem extends Component {
                                 <Label color="grey">
                                     {set_name} ({String(set).toUpperCase()})
                                 </Label>
-                                <QohParser inventoryQty={inventoryQty} />
+                                <QohLabels inventoryQty={inventoryQty} />
                                 {' '}
                                 <MarketPrice id={id} finish={selectedFinish} />
                             </Item.Header>

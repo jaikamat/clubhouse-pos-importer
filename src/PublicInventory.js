@@ -57,7 +57,7 @@ export default class PublicInventory extends React.Component {
                         <Header as="h2">
                             Inventory Search
                             <Header.Subheader>
-                                <em>Card prices based on non-premium printings and are subject to change</em>
+                                <em>Card prices subject to change. Consult a Clubhouse employee for final estimates</em>
                             </Header.Subheader>
                         </Header>
 

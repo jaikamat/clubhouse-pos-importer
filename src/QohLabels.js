@@ -1,5 +1,6 @@
 import React from 'react';
 import { Label } from 'semantic-ui-react';
+import parseQoh from './utils/parseQoh';
 
 // This component parses the `qoh` object from mongo into something
 // more presentable
@@ -16,23 +17,8 @@ import { Label } from 'semantic-ui-react';
 //     NONFOIL_HP: 0
 // };
 
-export default function QohParser({ inventoryQty }) {
-    let foilQty = 0;
-    let nonfoilQty = 0;
-
-    if (inventoryQty) { // Check to see if props exist
-        foilQty =
-            (inventoryQty.FOIL_NM || 0) +
-            (inventoryQty.FOIL_LP || 0) +
-            (inventoryQty.FOIL_MP || 0) +
-            (inventoryQty.FOIL_HP || 0);
-
-        nonfoilQty =
-            (inventoryQty.NONFOIL_NM || 0) +
-            (inventoryQty.NONFOIL_LP || 0) +
-            (inventoryQty.NONFOIL_MP || 0) +
-            (inventoryQty.NONFOIL_HP || 0);
-    }
+export default function QohLabels({ inventoryQty }) {
+    const [foilQty, nonfoilQty] = parseQoh(inventoryQty);
 
     const foilColor = {};
     if (foilQty > 0) { foilColor.color = 'blue'; }

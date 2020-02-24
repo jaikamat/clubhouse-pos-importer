@@ -1,30 +1,38 @@
 import React from 'react';
-import QohParser from './QohParser';
-import { Image } from 'semantic-ui-react';
+import { Image, Label } from 'semantic-ui-react';
 import MarketPrice from './MarketPrice';
+import styled from 'styled-components';
+import parseQoh from './utils/parseQoh';
 
-const wrapperStyle = {
-    display: 'inline-block',
-    margin: '10px 10px 10px 10px'
-};
+const Wrapper = styled.div`
+    display: inline-block;
+    margin: 10px 10px 10px 10px;
+`;
 
-const inventoryStyle = {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: '9px 9px 9px 9px',
-    backgroundColor: 'rgba(0, 0, 0, 0.9)',
-    borderRadius: '10px 10px 10px 10px',
-    boxShadow: '2px 2px 5px 0 rgba(0, 0, 0, 0.25)'
-};
+const InventoryWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0.9);
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.25);
+`;
 
-const imageStyle = {
-    width: '300px', // Width of the image when size="medium"
-    height: '418.3px', // Height of the image when size="medium"
-    boxShadow: '2px 2px 5px 0 rgba(0, 0, 0, 0.25)',
-    background: 'repeating-linear-gradient(45deg, #bfbfbf, #bfbfbf 10px, #b0b0b0 10px, #b0b0b0 20px)',
-    borderRadius: '15px'
-}
+const InventoryRow = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 5px;
+`;
+
+const ImageWrapper = styled.div`
+    width: 300px;
+    height: 418.3px;
+    box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.25);
+    background: repeating-linear-gradient(45deg, #bfbfbf, #bfbfbf 10px, #b0b0b0 10px, #b0b0b0 20px);
+    border-radius: 15px;
+`;
 
 export default function PublicCardItem({ image_uris, card_faces, qoh, id }) {
     let myImage;
@@ -36,13 +44,29 @@ export default function PublicCardItem({ image_uris, card_faces, qoh, id }) {
         myImage = <Image src={card_faces[0].image_uris.normal} size="medium" style={{ borderRadius: '15px' }} />
     }
 
+    const [foilQty, nonfoilQty] = parseQoh(qoh);
+
+    const displayFoil = (
+        <InventoryRow>
+            <Label color='blue' image>Foil<Label.Detail>{foilQty}</Label.Detail></Label>
+            <MarketPrice id={id} finish="FOIL" />
+        </InventoryRow>
+    );
+
+    const displayNonfoil = (
+        <InventoryRow>
+            <Label color='blue' image>Nonfoil<Label.Detail>{nonfoilQty}</Label.Detail></Label>
+            <MarketPrice id={id} />
+        </InventoryRow>
+    );
+
     return <React.Fragment>
-        <div style={wrapperStyle}>
-            <div style={imageStyle}>{myImage}</div>
-            <div style={inventoryStyle}>
-                <div><QohParser inventoryQty={qoh} /></div>
-                <MarketPrice id={id} />
-            </div>
-        </div>
+        <Wrapper>
+            <ImageWrapper>{myImage}</ImageWrapper>
+            <InventoryWrapper>
+                {foilQty > 0 ? displayFoil : null}
+                {nonfoilQty > 0 ? displayNonfoil : null}
+            </InventoryWrapper>
+        </Wrapper>
     </React.Fragment>
 }

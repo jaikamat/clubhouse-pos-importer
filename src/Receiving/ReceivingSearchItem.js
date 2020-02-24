@@ -8,7 +8,7 @@ import {
     Label,
     Item
 } from 'semantic-ui-react';
-import QohParser from '../QohParser';
+import QohLabels from '../QohLabels';
 import CardImage from '../CardImage';
 import MarketPrice from '../MarketPrice'
 import $ from 'jquery';
@@ -193,7 +193,7 @@ export default function ReceivingCardItem(props) {
                             <Label color="grey">
                                 {set_name} ({String(set).toUpperCase()})
                                 </Label>
-                            <QohParser inventoryQty={props.inventoryQty} />
+                            <QohLabels inventoryQty={props.inventoryQty} />
                             {' '}
                             <MarketPrice id={id} finish={selectedFinish} />
                         </Item.Header>

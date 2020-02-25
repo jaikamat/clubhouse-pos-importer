@@ -26,6 +26,8 @@ const endpoints = {
         `https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsByFilter${env}`,
     GET_SET_NAMES:
         `https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsByFilter${env}/set_names`,
+    SUSPEND_SALE:
+        `https://us-central1-clubhouse-collection.cloudfunctions.net/suspendSale${env}`,
     LOGIN:
         `https://us-central1-clubhouse-collection.cloudfunctions.net/getJwt${env}`,
 

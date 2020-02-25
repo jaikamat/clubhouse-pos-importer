@@ -16,9 +16,11 @@ import CustomerSaleList from './CustomerSaleList';
 import PrintList from './PrintList';
 import _ from 'lodash';
 import makeAuthHeader from './makeAuthHeader';
-import { GET_CARDS_BY_TITLE, FINISH_SALE } from './api_resources';
+import { GET_CARDS_BY_TITLE, FINISH_SALE, SUSPEND_SALE } from './api_resources';
 import createToast from './createToast';
 import sortSaleList from './utils/sortSaleList';
+import SuspendedSale from './SuspendedSale';
+import $ from 'jquery';
 
 const initialState = {
     searchResults: [],
@@ -26,7 +28,13 @@ const initialState = {
     showModal: false,
     submitLoading: false,
     submitDisabled: false,
-    searchTerm: ''
+    searchTerm: '',
+    suspendedSale: {
+        _id: '',
+        name: '',
+        notes: '',
+        list: []
+    }
 };
 
 export default class Sale extends React.Component {
@@ -40,8 +48,10 @@ export default class Sale extends React.Component {
             });
 
             this.setState({ searchResults: data, searchTerm: term });
-        } catch (err) {
-            console.log(err);
+
+            if (data.length === 0) { $('#searchBar').focus().select() }
+        } catch (e) {
+            console.log(e.response);
         }
     };
 
@@ -83,11 +93,67 @@ export default class Sale extends React.Component {
     };
 
     /**
+     * Restores a sale (assigns a saleList to state) from a suspended sale from the db
+     */
+    restoreSale = async (id) => {
+        try {
+            const { data } = await axios.get(`${SUSPEND_SALE}/${id}`);
+            this.setState({ saleListCards: data.list, suspendedSale: data });
+            createToast({ color: 'green', header: `You are viewing ${data.name}'s sale` });
+        } catch (e) {
+            console.log(e.response);
+            createToast({ color: 'red', header: `Error` });
+        }
+    }
+
+    /**
+     * Suspends a sale (persists it to mongo) via the SuspendedSale component and API
+     */
+    suspendSale = async ({ customerName, notes }) => {
+        const { _id } = this.state.suspendedSale;
+
+        try {
+            if (!!_id) await axios.delete(`${SUSPEND_SALE}/${_id}`); // If we're suspended, delete the previous to replace
+
+            const { data } = await axios.post(SUSPEND_SALE, {
+                customerName: customerName,
+                notes: notes,
+                saleList: this.state.saleListCards
+            })
+
+            this.setState(initialState);
+            createToast({ color: 'green', header: `${data.ops[0].name}'s sale was suspended` });
+        } catch (e) {
+            console.log(e.response);
+            createToast({ color: 'red', header: `Error`, message: `${e.response.data}` });
+        }
+    }
+
+    deleteSuspendedSale = async () => {
+        try {
+            const { _id, name } = this.state.suspendedSale;
+            await axios.delete(`${SUSPEND_SALE}/${_id}`);
+
+            this.setState(initialState);
+
+            createToast({ color: 'green', header: `${name}'s sale was deleted` });
+        } catch (e) {
+            console.log(e.response);
+            createToast({ color: 'red', header: `Error` });
+        }
+    }
+
+    /**
      * Extracts the saleList state and uses it to complete sale
      */
     finalizeSale = async () => {
+        const { _id } = this.state.suspendedSale;
+
         try {
             this.setState({ submitLoading: true, submitDisabled: true });
+
+            // Must delete currently suspended sale to faithfully restore inventory prior to sale
+            if (!!_id) await axios.delete(`${SUSPEND_SALE}/${_id}`);
 
             const { data } = await axios.post(FINISH_SALE, {
                 cards: this.state.saleListCards
@@ -105,12 +171,12 @@ export default class Sale extends React.Component {
         } catch (e) {
             createToast({
                 color: 'red',
-                header: 'Error!',
+                header: 'Error',
                 message: `Sale was not created`,
             });
 
             this.setState(initialState);
-            console.log(e);
+            console.log(e.response);
         }
     };
 
@@ -125,7 +191,8 @@ export default class Sale extends React.Component {
             showModal,
             submitLoading,
             submitDisabled,
-            searchTerm
+            searchTerm,
+            suspendedSale
         } = this.state;
 
         // Creates text to notify the user of zero-result searches
@@ -135,6 +202,11 @@ export default class Sale extends React.Component {
             }
             return <p>Search for inventory to sell</p>; // Default text before search
         }
+
+        const modalTrigger = <Button floated="right" primary
+            onClick={() => this.setState({ showModal: true })}>
+            Finalize sale
+        </Button>
 
         return (
             <React.Fragment>
@@ -162,9 +234,19 @@ export default class Sale extends React.Component {
                             />
                         </Grid.Column>
                         <Grid.Column width="5">
-                            <Header as="h2" style={{ display: 'inline-block' }}>Sale Items</Header>
+                            <Header as="h2" style={{ display: 'inline-block' }}>
+                                {suspendedSale.name === '' ? 'Sale Items' : `${suspendedSale.name}'s Items`}
+                            </Header>
 
+                            <SuspendedSale
+                                restoreSale={this.restoreSale}
+                                suspendSale={this.suspendSale}
+                                saleListLength={saleListCards.length}
+                                deleteSuspendedSale={this.deleteSuspendedSale}
+                                id={this.state.suspendedSale._id}
+                            />
                             <PrintList saleListCards={saleListCards} />
+
                             <Divider />
 
                             {saleListCards.length === 0 &&
@@ -173,16 +255,14 @@ export default class Sale extends React.Component {
                                         <Icon name="plus" />
                                         View and manage customer sale list here
                                 </Header>
-                                </Segment>
-                            }
+                                </Segment>}
 
                             {saleListCards.length > 0 && <React.Fragment>
                                 <CustomerSaleList
                                     removeFromSaleList={this.removeFromSaleList}
                                     saleList={saleListCards}
                                 />
-                            </React.Fragment>
-                            }
+                            </React.Fragment>}
 
                             {saleListCards.length > 0 && (
                                 <Segment clearing>
@@ -195,20 +275,7 @@ export default class Sale extends React.Component {
                                     <Modal
                                         basic
                                         open={showModal}
-                                        trigger={
-                                            <Button
-                                                floated="right"
-                                                primary
-                                                onClick={() => {
-                                                    this.setState({
-                                                        showModal: true
-                                                    });
-                                                }}
-                                            >
-                                                Finalize sale
-                                            </Button>
-                                        }
-                                    >
+                                        trigger={modalTrigger}>
                                         <Modal.Content>
                                             <Header inverted as="h2">
                                                 Finalize this sale?
@@ -225,8 +292,7 @@ export default class Sale extends React.Component {
                                                 basic
                                                 color="red"
                                                 inverted
-                                                onClick={this.closeModal}
-                                            >
+                                                onClick={this.closeModal}>
                                                 <Icon name="remove" /> No
                                             </Button>
                                             <Button
@@ -234,14 +300,12 @@ export default class Sale extends React.Component {
                                                 inverted
                                                 onClick={this.finalizeSale}
                                                 loading={submitLoading}
-                                                disabled={submitDisabled}
-                                            >
+                                                disabled={submitDisabled}>
                                                 <Icon name="checkmark" /> Yes
                                             </Button>
                                         </Modal.Actions>
                                     </Modal>
-                                </Segment>
-                            )}
+                                </Segment>)}
                         </Grid.Column>
                     </Grid.Row >
                 </Grid >

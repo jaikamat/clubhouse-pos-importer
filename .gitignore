@@ -40,3 +40,6 @@ api
 /migration_scripts/output
 /migration_scripts/scryfall_data
 /migration_scripts/node_modules
+
+# Ignore test login credentials
+/src/__tests__/data/.env

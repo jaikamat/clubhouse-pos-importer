@@ -27,6 +27,11 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject"
     },
+    "jest": {
+        "watchPathIgnorePatterns": [
+            "data"
+        ]
+    },
     "eslintConfig": {
         "extends": "react-app"
     },
@@ -43,6 +48,7 @@
         ]
     },
     "devDependencies": {
+        "dotenv": "^8.2.0",
         "puppeteer": "^2.1.1"
     }
 }

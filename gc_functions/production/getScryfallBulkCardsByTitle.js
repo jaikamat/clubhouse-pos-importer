@@ -1,7 +1,8 @@
 const MongoClient = require('mongodb').MongoClient;
 const express = require('express');
 const cors = require('cors');
-const DATABASE_NAME = 'scryfall_bulk_cards';
+const DATABASE_NAME = 'clubhouse_collection_production';
+const COLLECTION = 'scryfall_bulk_cards';
 require('dotenv').config();
 
 /**
@@ -26,7 +27,7 @@ async function getScryfallBulkCardsByTitle(title) {
 
         const db = client.db(DATABASE_NAME);
 
-        const data = await db.collection('cards').find({
+        const data = await db.collection(COLLECTION).find({
             name: title,
             games: 'paper'// searches the 'games' array for cards specific to paper printings
             // Need to suppress returning the _id to prevent collisions with own inventory DB

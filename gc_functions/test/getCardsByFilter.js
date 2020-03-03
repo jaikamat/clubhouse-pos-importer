@@ -63,12 +63,111 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
         const db = client.db(DATABASE_NAME);
         const SKIP = LIMIT * (Math.abs((Number(page)) || 1) - 1); // `page` starts at 1 for clarity
 
+        // Create aggregation
+        const aggregation = [];
+
         // Build the initialMatch
         const initialMatch = {};
 
         if (title) initialMatch.name = title; // TODO: This should search on substrings as well
         if (setName) initialMatch.set_name = setName;
-        if (format) initialMatch[`legalities.${format}`] = { $in: ['restricted', 'legal'] };
+
+        aggregation.push({ $match: initialMatch });
+
+        aggregation.push({
+            $lookup: {
+                from: "scryfall_pricing_data",
+                localField: "_id",
+                foreignField: "_id",
+                as: "price_info"
+            }
+        });
+
+        if (format) {
+            aggregation.push({
+                $lookup: {
+                    from: "scryfall_bulk_cards",
+                    localField: "_id",
+                    foreignField: "id",
+                    as: "format_legalities"
+                }
+            });
+        }
+
+        const addFields = {
+            image_uri: {
+                $ifNull: ['$image_uris.normal', {
+                    // If the card is a flip card, its image uri will be nested in the card_faces property.
+                    // We use the $let operator to evaluate its contents to a temp variable `image` and extract the image_uri
+                    $let: {
+                        vars: { image: { $arrayElemAt: ['$card_faces', 0] } },
+                        in: '$$image.image_uris.normal'
+                    }
+                }]
+            },
+            // NOTE: This is dependent on Scryfall sorting their color arrays in 'BGRUW' order
+            colors_string: {
+                $ifNull: [{
+                    $reduce: {
+                        input: '$colors',
+                        initialValue: '',
+                        in: { $concat: ['$$value', '$$this'] }
+                    }
+                }, {
+                    // If the card is a flip card, its colors will be nested in the card_faces property.
+                    // We use the $let operator to evaluate its contents to a temp variable `colors` and extract the colors array
+                    $let: {
+                        vars: { colors: { $arrayElemAt: ['$card_faces', 0] } },
+                        // Here, we concat the array to a single string to $match on a substring
+                        in: {
+                            $reduce: {
+                                input: '$$colors.colors',
+                                initialValue: '',
+                                in: { $concat: ['$$value', '$$this'] }
+                            }
+                        }
+                    }
+                }]
+            },
+            price_info: { $arrayElemAt: ["$price_info.prices", 0] },
+            inventory: { $objectToArray: "$qoh" }
+        };
+
+        if (format) {
+            addFields.format_legalities = { $arrayElemAt: ["$format_legalities.legalities", 0] };
+        }
+
+        aggregation.push({ $addFields: addFields });
+
+        aggregation.push({ $unwind: '$inventory' });
+
+        aggregation.push({
+            $project: {
+                _id: 1,
+                name: 1,
+                set_name: 1,
+                set: 1,
+                inventory: 1,
+                price: {
+                    $switch: {
+                        branches: [
+                            { case: { $eq: ["$inventory.k", "NONFOIL_NM"] }, then: "$price_info.usd" },
+                            { case: { $eq: ["$inventory.k", "NONFOIL_LP"] }, then: "$price_info.usd" },
+                            { case: { $eq: ["$inventory.k", "NONFOIL_MP"] }, then: "$price_info.usd" },
+                            { case: { $eq: ["$inventory.k", "NONFOIL_HP"] }, then: "$price_info.usd" },
+                            { case: { $eq: ["$inventory.k", "FOIL_NM"] }, then: "$price_info.usd_foil" },
+                            { case: { $eq: ["$inventory.k", "FOIL_LP"] }, then: "$price_info.usd_foil" },
+                            { case: { $eq: ["$inventory.k", "FOIL_MP"] }, then: "$price_info.usd_foil" },
+                            { case: { $eq: ["$inventory.k", "FOIL_HP"] }, then: "$price_info.usd_foil" }
+                        ]
+                    }
+                },
+                image_uri: 1,
+                rarity: 1,
+                colors_string: 1,
+                format_legalities: 1
+            }
+        });
 
         // Building the end match
         const endMatch = {};
@@ -79,6 +178,9 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
         } else if (finish === 'NONFOIL') {
             endMatch['inventory.k'] = { $in: ['NONFOIL_NM', 'NONFOIL_LP', 'NONFOIL_MP', 'NONFOIL_HP'] }
         }
+
+        // End match format legality logic
+        if (format) endMatch[`format_legalities.${format}`] = { $in: ['restricted', 'legal'] };
 
         // End match colors matching logic
         if (colors) endMatch.colors_string = colors;
@@ -91,106 +193,28 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
             endMatch.price = { [`$${priceFilter}`]: Number(priceNum) }
         }
 
-        // Passed to the $sort pipeline operator
-        const sortByFilter = {};
+        aggregation.push({ $match: endMatch });
 
+        const sortByFilter = {};
         const sortByProp = sortBy || 'price';
         const sortByDirectionProp = Number(sortByDirection) || -1;
-
         sortByFilter[sortByProp] = sortByDirectionProp;
 
-        const docs = await db.collection('card_inventory').aggregate([
-            {
-                $match: initialMatch
-            }, {
-                $lookup: {
-                    from: "scryfall_pricing_data",
-                    localField: "_id",
-                    foreignField: "_id",
-                    as: "price_info"
-                }
-            }, {
-                $addFields: {
-                    image_uri: {
-                        $ifNull: ['$image_uris.normal', {
-                            // If the card is a flip card, its image uri will be nested in the card_faces property.
-                            // We use the $let operator to evaluate its contents to a temp variable `image` and extract the image_uri
-                            $let: {
-                                vars: { image: { $arrayElemAt: ['$card_faces', 0] } },
-                                in: '$$image.image_uris.normal'
-                            }
-                        }]
-                    },
-                    // NOTE: This is dependent on Scryfall sorting their color arrays in 'BGRUW' order
-                    colors_string: {
-                        $ifNull: [{
-                            $reduce: {
-                                input: '$colors',
-                                initialValue: '',
-                                in: { $concat: ['$$value', '$$this'] }
-                            }
-                        }, {
-                            // If the card is a flip card, its colors will be nested in the card_faces property.
-                            // We use the $let operator to evaluate its contents to a temp variable `colors` and extract the colors array
-                            $let: {
-                                vars: { colors: { $arrayElemAt: ['$card_faces', 0] } },
-                                // Here, we concat the array to a single string to $match on a substring
-                                in: {
-                                    $reduce: {
-                                        input: '$$colors.colors',
-                                        initialValue: '',
-                                        in: { $concat: ['$$value', '$$this'] }
-                                    }
-                                }
-                            }
-                        }]
-                    },
-                    price_info: { $arrayElemAt: ["$price_info.prices", 0] },
-                    inventory: { $objectToArray: "$qoh" }
-                }
-            }, {
-                $unwind: '$inventory'
-            }, {
-                $project: {
-                    _id: 1,
-                    name: 1,
-                    set_name: 1,
-                    set: 1,
-                    inventory: 1,
-                    price: {
-                        $switch: {
-                            branches: [
-                                { case: { $eq: ["$inventory.k", "NONFOIL_NM"] }, then: "$price_info.usd" },
-                                { case: { $eq: ["$inventory.k", "NONFOIL_LP"] }, then: "$price_info.usd" },
-                                { case: { $eq: ["$inventory.k", "NONFOIL_MP"] }, then: "$price_info.usd" },
-                                { case: { $eq: ["$inventory.k", "NONFOIL_HP"] }, then: "$price_info.usd" },
-                                { case: { $eq: ["$inventory.k", "FOIL_NM"] }, then: "$price_info.usd_foil" },
-                                { case: { $eq: ["$inventory.k", "FOIL_LP"] }, then: "$price_info.usd_foil" },
-                                { case: { $eq: ["$inventory.k", "FOIL_MP"] }, then: "$price_info.usd_foil" },
-                                { case: { $eq: ["$inventory.k", "FOIL_HP"] }, then: "$price_info.usd_foil" }
-                            ]
-                        }
-                    },
-                    image_uri: 1,
-                    rarity: 1,
-                    colors_string: 1
-                }
-            }, {
-                $match: endMatch
-            }, {
-                $sort: sortByFilter
-            }, {
-                $facet: {
-                    cards: [
-                        { $skip: SKIP },
-                        { $limit: LIMIT }
-                    ],
-                    total_count: [
-                        { $count: 'num' }
-                    ]
-                }
+        aggregation.push({ $sort: sortByFilter });
+
+        aggregation.push({
+            $facet: {
+                cards: [
+                    { $skip: SKIP },
+                    { $limit: LIMIT }
+                ],
+                total_count: [
+                    { $count: 'num' }
+                ]
             }
-        ]).toArray();
+        });
+
+        const docs = await db.collection('card_inventory').aggregate(aggregation).toArray();
 
         const output = {};
 

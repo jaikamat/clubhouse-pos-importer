@@ -43,3 +43,6 @@ api
 
 # Ignore test login credentials
 /src/__tests__/data/.env
+
+# Ignore bulk cards
+/gc_functions/db_scripts/scryfall_bulk.json

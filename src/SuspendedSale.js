@@ -9,6 +9,17 @@ const Divider = styled.div`
     height: 100%;
 `;
 
+const ClearMargin = styled.div`
+    margin-top: 0px;
+    margin-bottom: 0px;
+`;
+
+const CharLimit = styled.p`
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.2);
+    float: right;
+`;
+
 export default function SuspendedSale({ restoreSale, deleteSuspendedSale, saleListLength, suspendSale, id }) {
     const [sales, setSales] = useState([]);
     const [saleID, setSaleID] = useState('');
@@ -27,6 +38,12 @@ export default function SuspendedSale({ restoreSale, deleteSuspendedSale, saleLi
         setSales(data);
     }
 
+    const clearFields = () => {
+        setCustomerName('');
+        setNotes('')
+        setSaleID('');
+    }
+
     // Get the previously suspended sales on mount and parent state (_id) change
     useEffect(() => { getSales(); }, [id]); // If the parent-level suspended-sale _id changes, we fetch again
 
@@ -41,6 +58,7 @@ export default function SuspendedSale({ restoreSale, deleteSuspendedSale, saleLi
         await suspendSale({ customerName, notes });
         setModalOpen(false); // Close the modal to avoid "flicker" when state re-renders
         await getSales(); // Parent _id does not change, re-fetch sales
+        clearFields();
         setDisabled(false);
         setLoadingBtn({ suspendBtn: false });
     }
@@ -50,6 +68,7 @@ export default function SuspendedSale({ restoreSale, deleteSuspendedSale, saleLi
         setLoadingBtn({ restoreBtn: true });
         await restoreSale(saleID);
         setModalOpen(false);
+        clearFields();
         setDisabled(false);
         setLoadingBtn({ restoreBtn: false });
     }
@@ -59,6 +78,7 @@ export default function SuspendedSale({ restoreSale, deleteSuspendedSale, saleLi
         setLoadingBtn({ deleteBtn: true });
         await deleteSuspendedSale();
         setModalOpen(false);
+        clearFields();
         setDisabled(false);
         setLoadingBtn({ deleteBtn: false });
     }
@@ -72,14 +92,26 @@ export default function SuspendedSale({ restoreSale, deleteSuspendedSale, saleLi
                         <Grid.Column width="7">
                             <h3>Suspend Sale</h3>
                             <Form>
-                                <Form.Input
-                                    label="Customer Name"
-                                    placeholder="Jace, the Mind Sculptor"
-                                    onChange={(e, { value }) => setCustomerName(value)} />
-                                <Form.TextArea
-                                    label="Notes"
-                                    placeholder="Sometimes, I forget things..."
-                                    onChange={(e, { value }) => setNotes(value)} />
+                                <ClearMargin>
+                                    <Form.Input
+                                        label="Customer Name"
+                                        placeholder="Jace, the Mind Sculptor"
+                                        value={customerName}
+                                        onChange={(e, { value }) => setCustomerName(value.substring(0, 50))} />
+                                </ClearMargin>
+                                <ClearMargin>
+                                    <CharLimit>{customerName.length}/50</CharLimit>
+                                </ClearMargin>
+                                <ClearMargin>
+                                    <Form.TextArea
+                                        label="Notes"
+                                        placeholder="Sometimes, I forget things..."
+                                        value={notes}
+                                        onChange={(e, { value }) => setNotes(value.substring(0, 150))} />
+                                </ClearMargin>
+                                <ClearMargin>
+                                    <CharLimit>{notes.length}/150</CharLimit>
+                                </ClearMargin>
                                 <Form.Button primary disabled={disabled || !customerName} loading={loadingBtn.suspendBtn} onClick={submitSuspendSale}>Suspend Sale</Form.Button>
                             </Form>
                         </Grid.Column>

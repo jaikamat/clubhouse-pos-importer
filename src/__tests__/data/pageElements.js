@@ -18,14 +18,15 @@ export default {
     firstSaleLineItemPrice: '#root > div:nth-child(2) > div.ui.stackable.grid > div > div.five.wide.column > table > tbody > tr > td:nth-child(3) > span',
     saleTotal: '#root > div:nth-child(2) > div.ui.stackable.grid > div > div.five.wide.column > div.ui.clearing.segment > div > span',
     saleMenuBtn: '#root > div:nth-child(2) > div.ui.stackable.grid > div > div.five.wide.column > button',
-    suspendSaleName: 'body > div.ui.page.modals.dimmer.transition.visible.active > div > div.content > div > div:nth-child(1) > form > div:nth-child(1) > div > input[type=text]',
-    suspendSaleNotes: 'body > div.ui.page.modals.dimmer.transition.visible.active > div > div.content > div > div:nth-child(1) > form > div:nth-child(2) > textarea',
-    suspendSaleSubmitBtn: 'body > div.ui.page.modals.dimmer.transition.visible.active > div > div.content > div > div:nth-child(1) > form > div:nth-child(3) > button',
+    suspendSaleName: 'body > div.ui.page.modals.dimmer.transition.visible.active > div > div.content > div > div:nth-child(1) > form > div:nth-child(1) > div > div > input[type=text]',
+    suspendSaleNotes: 'body > div.ui.page.modals.dimmer.transition.visible.active > div > div.content > div > div:nth-child(1) > form > div:nth-child(3) > div > textarea',
+    suspendSaleSubmitBtn: 'body > div.ui.page.modals.dimmer.transition.visible.active > div > div.content > div > div:nth-child(1) > form > div.field > button',
     firstSearchResultNonfoilQty: '#root > div:nth-child(2) > div.ui.stackable.grid > div > div.eleven.wide.column > div:nth-child(3) > div > div > div.content > h3 > div.ui.blue.image.label > div',
     restoreSaleMenu: 'body > div.ui.page.modals.dimmer.transition.visible.active > div > div.content > div > div > form > div:nth-child(1) > div',
     restoreSaleMenuFirstItem: 'body > div.ui.page.modals.dimmer.transition.visible.active > div > div.content > div > div > form > div:nth-child(1) > div > div.visible.menu.transition > div',
     restoreSaleMenuSubmitBtn: 'body > div.ui.page.modals.dimmer.transition.visible.active > div > div.content > div > div > form > div:nth-child(2) > button',
     saleListHeader: '#root > div:nth-child(2) > div.ui.stackable.grid > div > div.five.wide.column > h2',
     deleteSaleBtn: 'body > div.ui.page.modals.dimmer.transition.visible.active > div > div.actions > button.ui.red.button',
-    manageInventoryFirstItem: '#root > div:nth-child(2) > div.ui.segment > div > div > div.content > h3 > div.ui.blue.image.label > div'
+    manageInventoryFirstItem: '#root > div:nth-child(2) > div.ui.segment > div > div > div.content > h3 > div.ui.blue.image.label > div',
+    customerNameTextCount: 'body > div.ui.page.modals.dimmer.transition.visible.active > div > div.content > div > div:nth-child(1) > form > div:nth-child(2) > p'
 };

@@ -6,6 +6,7 @@ let page, browser;
 const homepage = process.env.URL;
 const [WIDTH, HEIGHT] = [1920, 1080]
 const TIMEOUT = 20000;
+const DELAY = 5;
 
 async function navigateToSales() {
     await page.$eval(ui.hamburger, b => b.click());
@@ -30,8 +31,8 @@ describe('Suspend sale workflow', () => {
         page = await browser.newPage();
         await page.goto(homepage);
         await page.$eval(ui.loginBtn, b => b.click());
-        await page.type(ui.usernameInput, process.env.DUMMY_USERNAME, { delay: 10 });
-        await page.type(ui.passwordInput, process.env.DUMMY_PASSWORD, { delay: 10 });
+        await page.type(ui.usernameInput, process.env.DUMMY_USERNAME, { delay: DELAY });
+        await page.type(ui.passwordInput, process.env.DUMMY_PASSWORD, { delay: DELAY });
         await page.$eval(ui.loginFormBtn, b => b.click());
         await page.waitForNavigation({ waitUntil: 'networkidle0' });
     }, TIMEOUT);
@@ -56,8 +57,8 @@ describe('Suspend sale workflow', () => {
         await searchForCard('birds of p');
         await page.$eval(ui.firstResultFinishCondition, d => d.click());
         await page.$eval(ui.firstFinishConditionDropdown, d => d.click());
-        await page.type(ui.firstQtySellInput, '2', { delay: 10 });
-        await page.type(ui.firstPriceSellInput, '7.77', { delay: 10 });
+        await page.type(ui.firstQtySellInput, '2', { delay: DELAY });
+        await page.type(ui.firstPriceSellInput, '7.77', { delay: DELAY });
         await page.$eval(ui.firstAddToSaleBtn, b => b.click());
         const cardTitle = await page.$eval(ui.firstSaleLineItemTitle, d => d.textContent);
         const cardPrice = await page.$eval(ui.firstSaleLineItemPrice, d => d.textContent);
@@ -69,11 +70,14 @@ describe('Suspend sale workflow', () => {
 
     test('Suspend the sale', async () => {
         await page.$eval(ui.saleMenuBtn, b => b.click());
-        await page.type(ui.suspendSaleName, 'Arcum Dagsson', { delay: 10 });
+        await page.type(ui.suspendSaleName, 'Arcum Dagsson', { delay: DELAY });
+        const text = await page.$eval(ui.customerNameTextCount, i => i.textContent);
+        expect(text).toBe('13/50');
         await page.$eval(ui.suspendSaleSubmitBtn, b => b.click());
         await page.waitFor(1000);
         await searchForCard('birds of paradise');
         const quantity = await page.$eval(ui.firstSearchResultNonfoilQty, d => d.textContent);
+        await page.waitFor(500);
         expect(quantity).toBe("1");
     }, TIMEOUT)
 
@@ -87,6 +91,7 @@ describe('Suspend sale workflow', () => {
         const cardTitle = await page.$eval(ui.firstSaleLineItemTitle, d => d.textContent);
         const cardPrice = await page.$eval(ui.firstSaleLineItemPrice, d => d.textContent);
         const saleTotal = await page.$eval(ui.saleTotal, d => d.textContent);
+        await page.waitFor(500);
         expect(headerText).toBe(`Arcum Dagsson's Items`);
         expect(cardTitle).toBe('Birds of Paradise');
         expect(cardPrice).toBe('$7.77');
@@ -97,8 +102,8 @@ describe('Suspend sale workflow', () => {
         await searchForCard('Multani, Maro So');
         await page.$eval(ui.firstResultFinishCondition, d => d.click());
         await page.$eval(ui.firstFinishConditionDropdown, d => d.click());
-        await page.type(ui.firstQtySellInput, '1', { delay: 10 });
-        await page.type(ui.firstPriceSellInput, '3.33', { delay: 10 });
+        await page.type(ui.firstQtySellInput, '1', { delay: DELAY });
+        await page.type(ui.firstPriceSellInput, '3.33', { delay: DELAY });
         await page.$eval(ui.firstAddToSaleBtn, b => b.click());
         const saleTotal = await page.$eval(ui.saleTotal, d => d.textContent);
         expect(saleTotal).toBe('$18.87');
@@ -106,7 +111,7 @@ describe('Suspend sale workflow', () => {
 
     test('Suspend the sale again', async () => {
         await page.$eval(ui.saleMenuBtn, b => b.click());
-        await page.type(ui.suspendSaleName, 'Arcum Dagsson v02', { delay: 10 });
+        await page.type(ui.suspendSaleName, 'Arcum Dagsson v02', { delay: DELAY });
         await page.$eval(ui.suspendSaleSubmitBtn, b => b.click());
         await page.waitFor(1000);
         await searchForCard('Multani, Maro So');
@@ -127,7 +132,7 @@ describe('Suspend sale workflow', () => {
     test('Delete the sale', async () => {
         await page.$eval(ui.saleMenuBtn, b => b.click());
         await page.$eval(ui.deleteSaleBtn, b => b.click());
-        await page.waitFor(500);
+        await page.waitFor(2000);
         const headerText = await page.$eval(ui.saleListHeader, h => h.textContent);
         expect(headerText).toBe(`Sale Items`);
     }, TIMEOUT)

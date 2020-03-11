@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Search } from 'semantic-ui-react';
 import _ from 'lodash';
 import axios from 'axios';
@@ -6,86 +6,59 @@ import makeAuthHeader from './makeAuthHeader';
 import { SCRYFALL_AUTOCOMPLETE } from './api_resources';
 import $ from 'jquery';
 
-class SearchBar extends React.Component {
-    state = {
-        isLoading: false,
-        term: '',
-        autocomplete: [],
-        results: [],
-        defaultSearchValue: 'Search for a card'
-    };
+export default function SearchBar(props) {
+    const [isLoading, setIsLoading] = useState(false);
+    const [results, setResults] = useState([]);
 
-    handleSearchChange = (e, { value }) => {
-        this.setState({ term: value });
-
-        if (this.state.term.length < 1) {
-            return this.setState({
-                isLoading: false,
-                term: '',
-                results: [],
-                autocomplete: [],
-                defaultSearchValue: 'Search for a card'
-            });
-        }
-
-        // Don't search if only 2 letters in box
-        if (this.state.term.length < 3) {
+    const handleSearchChange = (e, { value }) => { // `value` is the search input string
+        if (value.length < 1) {
+            setIsLoading(false);
+            setResults([]);
             return;
         }
 
-        this.setState({ isLoading: true });
+        if (value.length < 3) return; // Don't search if only 2 letters in input
+
+        setIsLoading(true);
 
         setTimeout(async () => {
             const { data } = await axios.get(
-                `${SCRYFALL_AUTOCOMPLETE}?q=${this.state.term}`,
+                `${SCRYFALL_AUTOCOMPLETE}?q=${value}`,
                 { headers: makeAuthHeader() }
             );
 
-            const formattedResults = data.data.map(el => {
-                return { title: el };
-            }).slice(0, 7);
+            const formattedResults = data.data.map(el => ({ title: el })).slice(0, 7);
 
-            this.setState({
-                results: formattedResults,
-                isLoading: false
-            });
+            setResults(formattedResults);
+            setIsLoading(false);
         }, 100);
     };
 
-    handleResultSelect = async (e, { result }) => {
+    const handleResultSelect = async (e, { result }) => {
         // This line is a hacky way to get around the fact that if we just select(), then
         // when the user manually clicks the first (or any) result in the resultlist, it does not select,
         // presumably because there is some collision between selecting the resultList element and focusing the input
         setTimeout(() => $('#searchBar').select(), 10);
         try {
-            this.setState({ isLoading: true });
-            await this.props.handleSearchSelect(result.title);
-            this.setState({ isLoading: false });
+            setIsLoading(true);
+            await props.handleSearchSelect(result.title);
+            setIsLoading(false);
         } catch (e) {
             console.log(e);
         }
     };
 
-    render() {
-        const { results, isLoading, defaultSearchValue } = this.state;
-
-        return (
-            <Search
-                onSearchChange={_.debounce(this.handleSearchChange, 500, {
-                    leading: false,
-                    trailing: true
-                })}
-                onResultSelect={this.handleResultSelect}
-                loading={isLoading}
-                results={results}
-                placeholder={defaultSearchValue}
-                selectFirstResult={true}
-                id="searchBar"
-                onFocus={e => e.target.select()}
-                onBlur={this.props.onBlur} // Used to clear state in the Browse Inventory feature
-            />
-        );
-    }
+    return (
+        <Search
+            onSearchChange={_.debounce(handleSearchChange, 500, { leading: false, trailing: true })}
+            onResultSelect={handleResultSelect}
+            loading={isLoading}
+            results={results}
+            placeholder="Search for a card"
+            selectFirstResult={true}
+            id="searchBar"
+            onFocus={e => e.target.select()}
+            onBlur={props.onBlur} // Used to clear state in the Browse Inventory feature
+        />
+    );
 }
-
-export default SearchBar;

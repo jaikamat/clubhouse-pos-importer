@@ -3,7 +3,7 @@ import SearchBar from './SearchBar';
 import axios from 'axios';
 import makeAuthHeader from './makeAuthHeader';
 import ScryfallCardList from './ScryfallCardList';
-import { Segment, Header, Icon } from 'semantic-ui-react'
+import { Segment, Header, Icon, Divider } from 'semantic-ui-react'
 import { GET_CARD_QTY_FROM_INVENTORY, GET_SCRYFALL_BULK_BY_TITLE } from './api_resources';
 
 class Home extends React.Component {
@@ -48,6 +48,9 @@ class Home extends React.Component {
             <React.Fragment>
                 <SearchBar handleSearchSelect={this.handleSearchSelect} />
 
+                <Header as="h2">Manage Inventory</Header>
+                <Divider />
+
                 {!searchResults.length &&
                     <Segment placeholder>
                         <Header icon>
@@ -55,6 +58,7 @@ class Home extends React.Component {
                             <em>"Searching the future for answers often leads to further questions."</em>
                         </Header>
                     </Segment>}
+
 
                 <ScryfallCardList
                     showImages={this.state.showImages}

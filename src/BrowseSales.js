@@ -4,6 +4,7 @@ import SalesList from './SalesList';
 import axios from 'axios';
 import makeAuthHeader from './makeAuthHeader';
 import { GET_SALES_BY_TITLE } from './api_resources';
+import { Header, Divider } from 'semantic-ui-react';
 
 class BrowseSales extends Component {
     state = { salesList: [], cardName: '' };
@@ -23,7 +24,10 @@ class BrowseSales extends Component {
         return (
             <div>
                 <SearchBar handleSearchSelect={this.handleSearchSelect} />
-                <br />
+
+                <Header as="h2">Browse Sales</Header>
+                <Divider />
+
                 <span>
                     <em>
                         {cardName !== '' && (

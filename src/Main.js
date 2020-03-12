@@ -7,7 +7,7 @@ import PublicInventory from './PublicInventory';
 import DeckboxClone from './DeckboxClone';
 import Login from './Login';
 import Logout from './Logout';
-import Receiving from './Receiving/Receiving'
+import Receiving from './Receiving/Receiving';
 
 export default function Main() {
     return (

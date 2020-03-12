@@ -25,6 +25,39 @@ async function searchForCard(name) {
     await page.waitFor(3000);
 }
 
+describe('Testing login/logout', () => {
+    beforeAll(async () => {
+        browser = await puppeteer.launch({ headless: false, slowMo: 50, args: [`--window-size=${WIDTH},${HEIGHT}`] });
+        page = await browser.newPage();
+    });
+
+    afterAll(async () => await browser.close());
+
+    test('Log in with invalid credentials', async () => {
+        await page.goto(homepage);
+        await page.$eval(ui.loginBtn, b => b.click());
+        await page.type(ui.usernameInput, 'notarealuser', { delay: DELAY });
+        await page.type(ui.passwordInput, 'notarealuser', { delay: DELAY });
+        await page.$eval(ui.loginFormBtn, b => b.click());
+        await page.waitFor(2000);
+        const usernameInputVal = await page.$eval(ui.usernameInput, i => i.value);
+        const passwordInputVal = await page.$eval(ui.passwordInput, i => i.value);
+        expect(usernameInputVal).toBe(''); // UI resets inputs if wrong creds
+        expect(passwordInputVal).toBe(''); // UI resets inputs if wrong creds
+        expect(page.url()).toBe('http://localhost:3000/#/login');
+    }, TIMEOUT);
+
+    test('Log in with valid credentials', async () => {
+        await page.goto(homepage);
+        await page.$eval(ui.loginBtn, b => b.click());
+        await page.type(ui.usernameInput, process.env.DUMMY_USERNAME, { delay: DELAY });
+        await page.type(ui.passwordInput, process.env.DUMMY_PASSWORD, { delay: DELAY });
+        await page.$eval(ui.loginFormBtn, b => b.click());
+        await page.waitFor(2000);
+        expect(page.url()).toBe('http://localhost:3000/#/manage-inventory');
+    }, TIMEOUT);
+});
+
 describe('Suspend sale workflow', () => {
     beforeAll(async () => {
         browser = await puppeteer.launch({ headless: false, slowMo: 50, args: [`--window-size=${WIDTH},${HEIGHT}`] });

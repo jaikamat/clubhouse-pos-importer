@@ -11,29 +11,24 @@ const {
 const axios = require('axios');
 
 let authToken;
-
-describe('First test', () => {
-    test('2 + 2 = 4', () => {
-        expect(2 + 2).toEqual(4);
-    })
-})
+const TIMEOUT = 20000;
 
 describe('Ensure development API is being hit', () => {
     test('ADD_CARD_TO_INVENTORY should be _test', () => {
         expect(ADD_CARD_TO_INVENTORY).toEqual(`https://us-central1-clubhouse-collection.cloudfunctions.net/addCardToInventory_test`);
-    });
+    }, TIMEOUT);
 
     test('GET_SCRYFALL_BULK_BY_TITLE should be _test', () => {
         expect(GET_SCRYFALL_BULK_BY_TITLE).toEqual(`https://us-central1-clubhouse-collection.cloudfunctions.net/getScryfallBulkCardsByTitle_test`);
-    });
+    }, TIMEOUT);
 
     test('GET_CARD_QTY_FROM_INVENTORY should be _test', () => {
         expect(GET_CARD_QTY_FROM_INVENTORY).toEqual(`https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsFromInventory_test`);
-    });
+    }, TIMEOUT);
 
     test('LOGIN should be _test', () => {
         expect(LOGIN).toEqual(`https://us-central1-clubhouse-collection.cloudfunctions.net/getJwt_test`);
-    });
+    }, TIMEOUT);
 })
 
 describe('Add and remove card workflow', () => {
@@ -50,7 +45,7 @@ describe('Add and remove card workflow', () => {
         authToken = data.token;
 
         expect(data.token).not.toBe(null);
-    })
+    }, TIMEOUT)
 
     test('Getting a card', async () => {
         const CARD_TITLE = 'Birds of Paradise';
@@ -63,7 +58,7 @@ describe('Add and remove card workflow', () => {
 
         // All cards should be named CARD_TITLE
         for (let card of data) { expect(card.name).toBe(CARD_TITLE); }
-    })
+    }, TIMEOUT)
 
     test('Adding some cards', async () => {
         const CARD_TITLE = 'Catalog';
@@ -108,7 +103,7 @@ describe('Add and remove card workflow', () => {
         const confirmedQty = confirmNewQoh.data[firstCardID][finishCondition]; // Store the quantity
 
         expect(confirmedQty).toBe(initialQOH[finishCondition] + quantityToAdd);
-    })
+    }, TIMEOUT)
 
     test('Removing some cards', async () => {
         const CARD_TITLE = 'Catalog';
@@ -153,7 +148,7 @@ describe('Add and remove card workflow', () => {
         const confirmedQty = confirmNewQoh.data[firstCardID][finishCondition]; // Store the quantity
 
         expect(confirmedQty).toBe(initialQOH[finishCondition] - quantityToSubtract);
-    })
+    }, TIMEOUT)
 
     test('Ensure quantites not negative', async () => {
         const CARD_TITLE = 'Catalog';
@@ -187,5 +182,5 @@ describe('Add and remove card workflow', () => {
         const newQOH = addToInventoryRes.data.qoh; // Store the response's quantity
 
         expect(newQOH[finishCondition]).toBeGreaterThanOrEqual(0);
-    })
+    }, TIMEOUT)
 })

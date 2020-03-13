@@ -15,7 +15,20 @@ class CardImage extends React.Component {
     mouseOut = () => { this.setState({ hovered: false }) };
 
     render() {
-        const { image_uris, card_faces, hover = true } = this.props // default prop `hover` must be true
+        const { image_uris, card_faces, image, hover = true } = this.props // default prop `hover` must be true
+
+        if (image) {
+            return <Image
+                src={image}
+                size="tiny"
+                style={{ ...style, transform: `${this.state.hovered ? 'scale(1.75)' : 'scale(1)'}` }}
+                onMouseOver={hover ? this.mouseOver : null}
+                onMouseOut={hover ? this.mouseOut : null}
+            />;
+        }
+
+        // TODO: This is obsolete logic that should be refactored out once all components ingest the ScryfallCard class,
+        // which manages the correct image URL itself
         try {
             // If normal prop `image_uris.normal` doesn't exist, move to catch block for flip card faces
             return <Image

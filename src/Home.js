@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SearchBar from './SearchBar';
 import axios from 'axios';
 import makeAuthHeader from './makeAuthHeader';
@@ -7,18 +7,16 @@ import { Segment, Header, Icon, Divider } from 'semantic-ui-react'
 import { GET_CARD_QTY_FROM_INVENTORY, GET_SCRYFALL_BULK_BY_TITLE } from './api_resources';
 import { InventoryCard } from './utils/ScryfallCard';
 
-class Home extends React.Component {
-    state = { searchResults: [], inventoryQuantities: [] };
+export default function Home() {
+    const [searchResults, setSearchResults] = useState([]);
 
-    handleSearchSelect = async term => {
+    const handleSearchSelect = async term => {
         try {
             const { data } = await axios.get(
-                GET_SCRYFALL_BULK_BY_TITLE,
-                {
-                    params: { title: term },
-                    headers: makeAuthHeader()
-                }
-            );
+                GET_SCRYFALL_BULK_BY_TITLE, {
+                params: { title: term },
+                headers: makeAuthHeader()
+            });
 
             const ids = data.map(el => el.id);
 
@@ -37,38 +35,28 @@ class Home extends React.Component {
                 return card;
             })
 
-            this.setState({ searchResults: modeledDataWithQoh });
+            setSearchResults(modeledDataWithQoh);
         } catch (e) {
             console.log(e);
         }
     };
 
-    render() {
-        const { searchResults } = this.state;
+    return (
+        <React.Fragment>
+            <SearchBar handleSearchSelect={handleSearchSelect} />
 
-        return (
-            <React.Fragment>
-                <SearchBar handleSearchSelect={this.handleSearchSelect} />
+            <Header as="h2">Manage Inventory</Header>
+            <Divider />
 
-                <Header as="h2">Manage Inventory</Header>
-                <Divider />
+            {!searchResults.length &&
+                <Segment placeholder>
+                    <Header icon>
+                        <Icon name="search" />
+                        <em>"Searching the future for answers often leads to further questions."</em>
+                    </Header>
+                </Segment>}
 
-                {!searchResults.length &&
-                    <Segment placeholder>
-                        <Header icon>
-                            <Icon name="search" />
-                            <em>"Searching the future for answers often leads to further questions."</em>
-                        </Header>
-                    </Segment>}
-
-
-                <ScryfallCardList
-                    cards={this.state.searchResults}
-                // quantities={this.state.inventoryQuantities}
-                />
-            </React.Fragment>
-        );
-    }
+            <ScryfallCardList cards={searchResults} />
+        </React.Fragment>
+    );
 }
-
-export default Home;

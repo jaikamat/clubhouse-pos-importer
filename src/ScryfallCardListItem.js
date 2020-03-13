@@ -16,6 +16,7 @@ import makeAuthHeader from './makeAuthHeader';
 import MarketPrice from './MarketPrice'
 import { ADD_CARD_TO_INVENTORY } from './api_resources';
 import $ from 'jquery';
+import { InventoryCard } from './utils/ScryfallCard';
 
 const finishes = [
     { key: 'NONFOIL', text: 'Nonfoil', value: 'NONFOIL' },
@@ -54,20 +55,16 @@ export default class ScryfallCardListItem extends Component {
         finishDisabled: checkCardFinish(this.props.nonfoil, this.props.foil)
             .finishDisabled,
         submitDisable: false,
-        inventoryQty: this.props.inventoryQty,
+        inventoryQty: this.props.qoh,
         submitLoading: false
     };
 
     handleFinishChange = (e, { value }) => {
-        this.setState({ selectedFinish: value }, () => {
-            console.log(this.state);
-        });
+        this.setState({ selectedFinish: value });
     };
 
     handleConditionChange = (e, { value }) => {
-        this.setState({ selectedCondition: value }, () => {
-            console.log(this.state);
-        });
+        this.setState({ selectedCondition: value });
     };
 
     handleQuantityChange = (e, { value }) => {
@@ -102,7 +99,7 @@ export default class ScryfallCardListItem extends Component {
             const { data } = await axios.post(ADD_CARD_TO_INVENTORY, {
                 quantity: quantity,
                 type: type,
-                cardInfo: { ...this.props },
+                cardInfo: { ...this.props.cachedOriginal }, // Persist the original data
             }, { headers: makeAuthHeader() });
 
             createToast({
@@ -117,7 +114,7 @@ export default class ScryfallCardListItem extends Component {
                 selectedCondition: 'NM',
                 finishDisabled: checkCardFinish(nonfoil, foil).finishDisabled,
                 submitDisable: false,
-                inventoryQty: data.qoh,
+                inventoryQty: new InventoryCard(data).qoh,
                 submitLoading: false
             });
 

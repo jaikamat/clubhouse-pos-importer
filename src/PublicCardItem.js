@@ -2,7 +2,6 @@ import React from 'react';
 import { Image, Label } from 'semantic-ui-react';
 import MarketPrice from './MarketPrice';
 import styled from 'styled-components';
-import parseQoh from './utils/parseQoh';
 
 const Wrapper = styled.div`
     display: inline-block;
@@ -34,17 +33,9 @@ const ImageWrapper = styled.div`
     border-radius: 15px;
 `;
 
-export default function PublicCardItem({ image_uris, card_faces, qoh, id }) {
-    let myImage;
-
-    try {
-        // If normal prop doesn't exist, move to catch block for flip card faces
-        myImage = <Image src={image_uris.normal} size="medium" style={{ borderRadius: '15px' }} />
-    } catch (e) {
-        myImage = <Image src={card_faces[0].image_uris.normal} size="medium" style={{ borderRadius: '15px' }} />
-    }
-
-    const [foilQty, nonfoilQty] = parseQoh(qoh);
+export default function PublicCardItem({ card }) {
+    const { id, cardImage } = card;
+    const [foilQty, nonfoilQty] = card.qohParsed;
 
     const displayFoil = (
         <InventoryRow>
@@ -62,7 +53,9 @@ export default function PublicCardItem({ image_uris, card_faces, qoh, id }) {
 
     return <React.Fragment>
         <Wrapper>
-            <ImageWrapper>{myImage}</ImageWrapper>
+            <ImageWrapper>
+                <Image src={cardImage} size="medium" style={{ borderRadius: '15px' }} />
+            </ImageWrapper>
             <InventoryWrapper>
                 {foilQty > 0 ? displayFoil : null}
                 {nonfoilQty > 0 ? displayNonfoil : null}

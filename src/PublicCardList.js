@@ -9,20 +9,13 @@ const gridStyle = {
     height: '100%'
 };
 
-export default function PublicCardList(props) {
-    const { cards, addToSaleList } = props;
-
-    return (
-        <Grid style={gridStyle} >
-            {cards.map(card => {
-                return (
-                    <PublicCardItem
-                        key={card.id}
-                        {...card}
-                        addToSaleList={addToSaleList}
-                    />
-                );
-            })}
-        </ Grid>
-    );
+export default function PublicCardList({ cards }) {
+    return <Grid style={gridStyle} >
+        {cards.map(c =>
+            <PublicCardItem
+                key={c.id}
+                card={c}
+            />
+        )}
+    </ Grid>
 }

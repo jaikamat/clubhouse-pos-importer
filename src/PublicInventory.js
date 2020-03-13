@@ -10,6 +10,7 @@ import {
 import SearchBar from './SearchBar';
 import PublicCardList from './PublicCardList';
 import { GET_CARDS_BY_TITLE } from './api_resources';
+import { InventoryCard } from './utils/ScryfallCard';
 
 const initialState = {
     searchResults: [],
@@ -26,7 +27,9 @@ export default class PublicInventory extends React.Component {
                 params: { title: term }
             });
 
-            this.setState({ searchResults: data, searchTerm: term });
+            const modeledData = data.map(c => new InventoryCard(c));
+
+            this.setState({ searchResults: modeledData, searchTerm: term });
         } catch (err) {
             console.log(err);
         }
@@ -71,10 +74,7 @@ export default class PublicInventory extends React.Component {
                                 </Header>
                             </Segment>}
 
-                        <PublicCardList
-                            cards={searchResults}
-                            addToSaleList={this.addToSaleList}
-                        />
+                        <PublicCardList cards={searchResults} />
                     </Grid.Column>
                 </Grid >
             </React.Fragment >

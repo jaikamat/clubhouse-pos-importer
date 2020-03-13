@@ -5,9 +5,10 @@ import makeAuthHeader from './makeAuthHeader';
 import ScryfallCardList from './ScryfallCardList';
 import { Segment, Header, Icon, Divider } from 'semantic-ui-react'
 import { GET_CARD_QTY_FROM_INVENTORY, GET_SCRYFALL_BULK_BY_TITLE } from './api_resources';
+import { InventoryCard } from './utils/ScryfallCard';
 
 class Home extends React.Component {
-    state = { searchResults: [], inventoryQuantities: [], showImages: true };
+    state = { searchResults: [], inventoryQuantities: [] };
 
     handleSearchSelect = async term => {
         try {
@@ -28,17 +29,18 @@ class Home extends React.Component {
                 { headers: makeAuthHeader() }
             );
 
-            this.setState({
-                searchResults: data,
-                inventoryQuantities: inventoryRes.data
-            });
+            const modeledData = data.map(c => new InventoryCard(c));
+
+            // Attached the fetched QOH to the retreived cards
+            const modeledDataWithQoh = modeledData.map(card => {
+                card.qoh = inventoryRes.data[card.id];
+                return card;
+            })
+
+            this.setState({ searchResults: modeledDataWithQoh });
         } catch (e) {
             console.log(e);
         }
-    };
-
-    handleImageToggle = () => {
-        this.setState({ showImages: !this.state.showImages });
     };
 
     render() {
@@ -61,9 +63,8 @@ class Home extends React.Component {
 
 
                 <ScryfallCardList
-                    showImages={this.state.showImages}
                     cards={this.state.searchResults}
-                    quantities={this.state.inventoryQuantities}
+                // quantities={this.state.inventoryQuantities}
                 />
             </React.Fragment>
         );

@@ -1,13 +1,5 @@
-import React, { Component } from 'react';
-import {
-    Segment,
-    Input,
-    Button,
-    Form,
-    Select,
-    Label,
-    Item
-} from 'semantic-ui-react';
+import React, { useState } from 'react';
+import { Segment, Input, Button, Form, Select, Label, Item } from 'semantic-ui-react';
 import axios from 'axios';
 import QohLabels from './QohLabels';
 import createToast from './createToast';
@@ -16,6 +8,7 @@ import makeAuthHeader from './makeAuthHeader';
 import MarketPrice from './MarketPrice'
 import { ADD_CARD_TO_INVENTORY } from './api_resources';
 import $ from 'jquery';
+import { InventoryCard } from './utils/ScryfallCard';
 
 const finishes = [
     { key: 'NONFOIL', text: 'Nonfoil', value: 'NONFOIL' },
@@ -45,64 +38,47 @@ function checkCardFinish(nonfoilProp, foilProp) {
     }
 }
 
-export default class ScryfallCardListItem extends Component {
-    state = {
-        quantity: 0,
-        selectedFinish: checkCardFinish(this.props.nonfoil, this.props.foil)
-            .selectedFinish,
-        selectedCondition: 'NM',
-        finishDisabled: checkCardFinish(this.props.nonfoil, this.props.foil)
-            .finishDisabled,
-        submitDisable: false,
-        inventoryQty: this.props.inventoryQty,
-        submitLoading: false
-    };
+export default function ScryfallCardListItem({ qoh, foil, nonfoil, name, set_name, set, rarity, id, cachedOriginal, cardImage }) {
+    const [quantity, setQuantity] = useState(0);
+    const [selectedFinish, setSelectedFinish] = useState(checkCardFinish(nonfoil, foil).selectedFinish);
+    const [selectedCondition, setSelectedCondition] = useState('NM');
+    const [finishDisabled, setFinishDisabled] = useState(checkCardFinish(nonfoil, foil).finishDisabled);
+    const [submitDisable, setSubmitDisable] = useState(false);
+    const [inventoryQty, setInventoryQty] = useState(qoh);
+    const [submitLoading, setSubmitLoading] = useState(false);
 
-    handleFinishChange = (e, { value }) => {
-        this.setState({ selectedFinish: value }, () => {
-            console.log(this.state);
-        });
-    };
+    const handleFinishChange = (e, { value }) => setSelectedFinish(value);
 
-    handleConditionChange = (e, { value }) => {
-        this.setState({ selectedCondition: value }, () => {
-            console.log(this.state);
-        });
-    };
+    const handleConditionChange = (e, { value }) => setSelectedCondition(value);
 
-    handleQuantityChange = (e, { value }) => {
+    const handleQuantityChange = (e, { value }) => {
         const val = parseInt(value);
         const quantity = isNaN(val) ? '' : val; // Check for NaN
-        this.setState({ quantity: quantity });
+        setQuantity(quantity);
     };
 
     // Remove input placeholder when user tries to enter a number (to reduce user error)
-    handleFocus = () => {
-        if (this.state.quantity === 0) {
-            this.setState({ quantity: '' })
-        }
+    const handleFocus = () => {
+        if (quantity === 0) setQuantity('');
     }
 
     // Restore input placeholder when user blurs field
-    handleBlur = () => {
-        if (this.state.quantity === '') {
-            this.setState({ quantity: 0 })
-        }
+    const handleBlur = () => {
+        if (quantity === '') setQuantity(0);
     }
 
-    handleInventoryAdd = async (e, { value }) => {
-        const { quantity, selectedFinish, selectedCondition } = this.state;
-        const { name, nonfoil, foil } = this.props;
+    const handleInventoryAdd = async (e, { value }) => {
         // This is the identifier for quantities of different finishes/conditions in the db
         const type = `${selectedFinish}_${selectedCondition}`;
 
         try {
-            this.setState({ submitDisable: true, submitLoading: true });
+            setSubmitDisable(true);
+            setSubmitLoading(true);
 
             const { data } = await axios.post(ADD_CARD_TO_INVENTORY, {
                 quantity: quantity,
                 type: type,
-                cardInfo: { ...this.props },
+                cardInfo: { ...cachedOriginal }, // Persist the original data to maintain backwards compatibility
             }, { headers: makeAuthHeader() });
 
             createToast({
@@ -111,15 +87,13 @@ export default class ScryfallCardListItem extends Component {
                 duration: 2000
             });
 
-            this.setState({
-                quantity: 0,
-                selectedFinish: checkCardFinish(nonfoil, foil).selectedFinish,
-                selectedCondition: 'NM',
-                finishDisabled: checkCardFinish(nonfoil, foil).finishDisabled,
-                submitDisable: false,
-                inventoryQty: data.qoh,
-                submitLoading: false
-            });
+            setQuantity(0);
+            setSelectedFinish(checkCardFinish(nonfoil, foil).selectedFinish);
+            setSelectedCondition('NM');
+            setFinishDisabled(checkCardFinish(nonfoil, foil).finishDisabled);
+            setSubmitDisable(false);
+            setSubmitLoading(false);
+            setInventoryQty(new InventoryCard(data).qoh);
 
             // Highlight the input after successful card add
             $('#searchBar').focus().select();
@@ -128,99 +102,75 @@ export default class ScryfallCardListItem extends Component {
         }
     };
 
-    render() {
-        const {
-            selectedFinish,
-            selectedCondition,
-            finishDisabled,
-            quantity,
-            submitDisable,
-            inventoryQty,
-            submitLoading
-        } = this.state;
-        const {
-            image_uris,
-            name,
-            set_name,
-            set,
-            rarity,
-            card_faces,
-            id
-        } = this.props;
-
-        return (
-            <Segment>
-                <Item.Group divided>
-                    <Item>
-                        <Item.Image size="tiny">
-                            <CardImage
-                                image_uris={image_uris}
-                                card_faces={card_faces}
+    return (
+        <Segment>
+            <Item.Group divided>
+                <Item>
+                    <Item.Image size="tiny">
+                        <CardImage image={cardImage} />
+                    </Item.Image>
+                    <Item.Content>
+                        <Item.Header as='h3'>
+                            {name}
+                            {' '}
+                            <i
+                                className={`ss ss-fw ss-${set} ss-${rarity}`}
+                                style={{ fontSize: '30px' }}
                             />
-                        </Item.Image>
-                        <Item.Content>
-                            <Item.Header as='h3'>
-                                {name}
-                                {' '}
-                                <i
-                                    className={`ss ss-fw ss-${set} ss-${rarity}`}
-                                    style={{ fontSize: '30px' }}
-                                />
-                                <Label color="grey">
-                                    {set_name} ({String(set).toUpperCase()})
+                            <Label color="grey">
+                                {set_name} ({String(set).toUpperCase()})
                                 </Label>
-                                <QohLabels inventoryQty={inventoryQty} />
-                                {' '}
-                                <MarketPrice id={id} finish={selectedFinish} />
-                            </Item.Header>
-                            <Item.Description>
-                                <Form>
-                                    <Form.Group>
-                                        <Form.Field
-                                            control={Input}
-                                            type="number"
-                                            label="Quantity"
-                                            value={quantity}
-                                            onChange={this.handleQuantityChange}
-                                            onFocus={this.handleFocus}
-                                            onBlur={this.handleBlur}
-                                        />
-                                        <Form.Field
-                                            label="Finish"
-                                            control={Select}
-                                            value={selectedFinish}
-                                            options={finishes}
-                                            disabled={finishDisabled}
-                                            onChange={this.handleFinishChange}
-                                        />
-                                        <Form.Field
-                                            label="Condition"
-                                            control={Select}
-                                            value={selectedCondition}
-                                            options={cardConditions}
-                                            onChange={this.handleConditionChange}
-                                        />
-                                        <Form.Button
-                                            label="Add to Inventory?"
-                                            control={Button}
-                                            primary
-                                            disabled={
-                                                quantity === 0 ||
-                                                quantity === '' ||
-                                                submitDisable
-                                            }
-                                            onClick={this.handleInventoryAdd}
-                                            loading={submitLoading}
-                                        >
-                                            Submit
+                            <QohLabels inventoryQty={inventoryQty} />
+                            {' '}
+                            <MarketPrice id={id} finish={selectedFinish} />
+                        </Item.Header>
+                        <Item.Description>
+                            <Form>
+                                <Form.Group>
+                                    <Form.Field
+                                        control={Input}
+                                        type="number"
+                                        label="Quantity"
+                                        value={quantity}
+                                        onChange={handleQuantityChange}
+                                        onFocus={handleFocus}
+                                        onBlur={handleBlur}
+                                    />
+                                    <Form.Field
+                                        label="Finish"
+                                        control={Select}
+                                        value={selectedFinish}
+                                        options={finishes}
+                                        disabled={finishDisabled}
+                                        onChange={handleFinishChange}
+                                    />
+                                    <Form.Field
+                                        label="Condition"
+                                        control={Select}
+                                        value={selectedCondition}
+                                        options={cardConditions}
+                                        onChange={handleConditionChange}
+                                    />
+                                    <Form.Button
+                                        label="Add to Inventory?"
+                                        control={Button}
+                                        primary
+                                        disabled={
+                                            quantity === 0 ||
+                                            quantity === '' ||
+                                            submitDisable
+                                        }
+                                        onClick={handleInventoryAdd}
+                                        loading={submitLoading}
+                                    >
+                                        Submit
                                     </Form.Button>
-                                    </Form.Group>
-                                </Form>
-                            </Item.Description>
-                        </Item.Content>
-                    </Item>
-                </Item.Group>
-            </Segment>
-        );
-    }
+                                </Form.Group>
+                            </Form>
+                        </Item.Description>
+                    </Item.Content>
+                </Item>
+            </Item.Group>
+        </Segment>
+    );
 }

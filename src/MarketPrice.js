@@ -10,7 +10,8 @@ const foilStyle = {
     backgroundImage: 'linear-gradient(90deg, #ffcfdf 0%, #b0f3f1 74%)'
 }
 
-export default function MarketPrice({ id, finish }) {
+// publicView flags whether this component is on a view that faces customers. Employees should see the raw price
+export default function MarketPrice({ id, finish, publicView = false }) {
     const [price, setPrice] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -19,13 +20,22 @@ export default function MarketPrice({ id, finish }) {
             setLoading(true);
             const { data } = await axios.get(`${SCRYFALL_ID_SEARCH}${id}`, { headers: makeAuthHeader() });
             let finishStatus = 'usd';
+            let myPrice;
 
             if (finish === 'FOIL') finishStatus += '_foil';
 
-            setPrice(Number(data.prices[finishStatus]));
+            // Public-facing views should show the minimum price for any card as 50 cents
+            myPrice = Number(data.prices[finishStatus]);
+
+            if (publicView) {
+                setPrice(Math.max(0.5, myPrice))
+            } else {
+                setPrice(myPrice);
+            }
+
             setLoading(false);
         })();
-    }, [id, finish]);
+    }, [id, finish, publicView]);
 
     return (
         <Label tag style={finish === 'FOIL' ? foilStyle : null}>

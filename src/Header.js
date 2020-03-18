@@ -18,7 +18,7 @@ class Header extends React.Component {
                 {({ loggedIn }) => {
                     return (
                         <Menu inverted fixed="top" style={style}>
-                            <Menu.Item>
+                            <Menu.Item as={Link} replace to="/">
                                 <img src={ballLogo} style={{ marginRight: '7px' }} alt="logo" />
                                 <span><h3>Clubhouse Collection</h3></span>
                             </Menu.Item>

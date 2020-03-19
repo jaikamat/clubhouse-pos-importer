@@ -9,6 +9,7 @@ export default function BrowseCardList(props) {
             <BrowseCardItem
                 key={card.id}
                 {...card}
+                qoh={card.qoh}
                 addToSaleList={addToSaleList}
             />
         );

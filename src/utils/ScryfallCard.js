@@ -16,6 +16,8 @@ export class ScryfallCard {
         this.card_faces = card.card_faces ? card.card_faces : null;
         this.nonfoil = card.nonfoil;
         this.foil = card.foil;
+        this.colors = card.colors;
+        this.type_line = card.type_line;
     }
 
     get cardImage() {
@@ -40,6 +42,11 @@ export class InventoryCard extends ScryfallCard {
     constructor(card) {
         super(card);
         this._qoh = card.qoh ? card.qoh : {};
+        // `quantity` and `qtyToSell` are redundant transaction props, unify them down the line
+        this.quantity = card.quantity ? card.quantity : null;
+        this.qtyToSell = card.qtyToSell ? card.qtyToSell : null;
+        this.finishCondition = card.finishCondition ? card.finishCondition : null;
+        this.price = card.price ? card.price : null;
     }
 
     get qohParsed() {

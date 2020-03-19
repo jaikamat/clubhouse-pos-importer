@@ -1,5 +1,6 @@
 import sortSaleList from '../utils/sortSaleList';
 import mockData from './data/sorting_mockData';
+import { InventoryCard } from '../utils/ScryfallCard';
 
 /**
  * Shuffles an array
@@ -14,7 +15,7 @@ function randomizeArray(arr) {
         output.push(randomCard[0]);
     }
 
-    return output
+    return output.map(c => new InventoryCard(c));
 }
 
 describe('Sort function', () => {

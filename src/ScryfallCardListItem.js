@@ -69,7 +69,7 @@ export default function ScryfallCardListItem({ qoh, foil, nonfoil, name, set_nam
 
     const handleInventoryAdd = async (e, { value }) => {
         // This is the identifier for quantities of different finishes/conditions in the db
-        const type = `${selectedFinish}_${selectedCondition}`;
+        const finishCondition = `${selectedFinish}_${selectedCondition}`;
 
         try {
             setSubmitDisable(true);
@@ -77,7 +77,7 @@ export default function ScryfallCardListItem({ qoh, foil, nonfoil, name, set_nam
 
             const { data } = await axios.post(ADD_CARD_TO_INVENTORY, {
                 quantity: quantity,
-                type: type,
+                finishCondition: finishCondition,
                 cardInfo: { ...cachedOriginal }, // Persist the original data to maintain backwards compatibility
             }, { headers: makeAuthHeader() });
 

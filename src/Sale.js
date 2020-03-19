@@ -21,6 +21,7 @@ import createToast from './createToast';
 import sortSaleList from './utils/sortSaleList';
 import SuspendedSale from './SuspendedSale';
 import $ from 'jquery';
+import { InventoryCard } from './utils/ScryfallCard';
 
 const initialState = {
     searchResults: [],
@@ -47,7 +48,9 @@ export default class Sale extends React.Component {
                 headers: makeAuthHeader()
             });
 
-            this.setState({ searchResults: data, searchTerm: term });
+            const modeledData = data.map(c => new InventoryCard(c));
+
+            this.setState({ searchResults: modeledData, searchTerm: term });
 
             if (data.length === 0) { $('#searchBar').focus().select() }
         } catch (e) {
@@ -61,6 +64,7 @@ export default class Sale extends React.Component {
     addToSaleList = (card, finishCondition, qtyToSell, price) => {
         const newCard = { ...card, finishCondition, qtyToSell, price };
         const oldState = [...this.state.saleListCards];
+        const modeledCard = new InventoryCard(newCard);
 
         // Need to make sure same ID's with differing conditions are separate line-items
         const idx = oldState.findIndex(el => {
@@ -70,9 +74,9 @@ export default class Sale extends React.Component {
         });
 
         if (idx !== -1) {
-            oldState.splice(idx, 1, newCard);
+            oldState.splice(idx, 1, modeledCard);
         } else {
-            oldState.push(newCard);
+            oldState.push(modeledCard);
         }
 
         // Sorting the saleList cards here, on add
@@ -98,7 +102,11 @@ export default class Sale extends React.Component {
     restoreSale = async (id) => {
         try {
             const { data } = await axios.get(`${SUSPEND_SALE}/${id}`);
-            this.setState({ saleListCards: data.list, suspendedSale: data });
+            this.setState({
+                saleListCards: data.list.map(c => new InventoryCard(c)),
+                suspendedSale: data
+            });
+
             createToast({ color: 'green', header: `You are viewing ${data.name}'s sale` });
         } catch (e) {
             console.log(e.response);
@@ -156,7 +164,10 @@ export default class Sale extends React.Component {
             if (!!_id) await axios.delete(`${SUSPEND_SALE}/${_id}`);
 
             const { data } = await axios.post(FINISH_SALE, {
-                cards: this.state.saleListCards
+                cards: this.state.saleListCards.map(card => {
+                    const { cachedOriginal, qtyToSell, finishCondition, price } = card;
+                    return { ...cachedOriginal, qtyToSell, finishCondition, price };
+                })
             }, { headers: makeAuthHeader() });
 
             const saleID = data.sale_data.Sale.saleID;

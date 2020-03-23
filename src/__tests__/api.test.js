@@ -85,7 +85,7 @@ describe('Add and remove card workflow', () => {
         // Add the cards to inventory
         const addToInventoryRes = await axios.post(ADD_CARD_TO_INVENTORY, {
             quantity: quantityToAdd,
-            type: finishCondition,
+            finishCondition: finishCondition,
             cardInfo: { ...firstCard },
         }, { headers: { Authorization: `Bearer ${authToken}` } });
 
@@ -130,7 +130,7 @@ describe('Add and remove card workflow', () => {
         // Add the cards to inventory
         const addToInventoryRes = await axios.post(ADD_CARD_TO_INVENTORY, {
             quantity: -quantityToSubtract, // Negative qty
-            type: finishCondition,
+            finishCondition: finishCondition,
             cardInfo: { ...firstCard },
         }, { headers: { Authorization: `Bearer ${authToken}` } });
 
@@ -175,7 +175,7 @@ describe('Add and remove card workflow', () => {
         // Add the cards to inventory
         const addToInventoryRes = await axios.post(ADD_CARD_TO_INVENTORY, {
             quantity: -negativeQOH, // Try to remove more than what is on hand
-            type: finishCondition,
+            finishCondition: finishCondition,
             cardInfo: { ...firstCard },
         }, { headers: { Authorization: `Bearer ${authToken}` } });
 

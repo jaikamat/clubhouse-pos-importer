@@ -34,8 +34,8 @@ app.use((req, res, next) => {
     }
 })
 
-// `type` Refers to the configuration of Finishes and Conditions
-async function addCardToInventory(quantity, type, cardInfo) {
+// `finishCondition` Refers to the configuration of Finishes and Conditions ex. NONFOIL_NM or FOIL_LP
+async function addCardToInventory(quantity, finishCondition, cardInfo) {
     const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true
@@ -43,47 +43,36 @@ async function addCardToInventory(quantity, type, cardInfo) {
 
     try {
         await client.connect();
-        console.log('Successfully connected to mongo');
 
-        console.log(
-            `Update Info: QTY:${quantity}, ${type}, ${cardInfo.name}, ${cardInfo.id}`
-        );
+        console.log(`Update Info: QTY:${quantity}, ${finishCondition}, ${cardInfo.name}, ${cardInfo.id}`);
 
-        const db = client.db(DATABASE_NAME);
+        const db = client.db(DATABASE_NAME).collection('card_inventory');
 
         // Upsert the new quantity in the document
-        await db.collection('card_inventory').findOneAndUpdate(
+        await db.updateOne(
             { _id: cardInfo.id },
             {
                 $inc: {
-                    [`qoh.${type}`]: quantity
+                    [`qoh.${finishCondition}`]: quantity
                 },
                 $setOnInsert: cardInfo
             },
-            {
-                upsert: true,
-                projection: {
-                    _id: true,
-                    qoh: true,
-                    name: true,
-                    setName: true,
-                    set: true
-                },
-                returnOriginal: false
-            }
+            { upsert: true }
         );
 
         // Validate inventory quantites to never be negative numbers
-        await db.collection('card_inventory').updateOne(
+        await db.updateOne(
             {
                 _id: cardInfo.id,
-                [`qoh.${type}`]: { $lt: 0 }
+                [`qoh.${finishCondition}`]: { $lt: 0 }
             },
-            { $set: { [`qoh.${type}`]: 0 } }
+            {
+                $set: { [`qoh.${finishCondition}`]: 0 }
+            }
         );
 
         // Get the updated document for return
-        return await db.collection('card_inventory').findOne(
+        return await db.findOne(
             { _id: cardInfo.id },
             {
                 projection: {
@@ -97,17 +86,16 @@ async function addCardToInventory(quantity, type, cardInfo) {
         );
     } catch (err) {
         console.log(err);
-        return err;
+        throw err;
     } finally {
         await client.close();
-        console.log('Disconnected from mongo');
     }
 }
 
 app.post('/', async (req, res) => {
     try {
-        const { quantity, type, cardInfo } = req.body;
-        const message = await addCardToInventory(quantity, type, cardInfo);
+        const { quantity, finishCondition, cardInfo } = req.body;
+        const message = await addCardToInventory(quantity, finishCondition, cardInfo);
         res.status(200).send(message);
     } catch (err) {
         console.log(err);

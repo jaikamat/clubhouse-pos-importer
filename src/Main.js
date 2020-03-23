@@ -22,18 +22,12 @@ const CovidAlert = () => {
         <Header icon>
             <Icon name="exclamation circle" color="blue" />
             A notice to our customers regarding COVID19
-            </Header>
+        </Header>
         <span>
-            Effective immediately, we will be shutting down the entirety of our play space besides 24 seats at the 3 front tables of the store. This will be our maximum player capacity for the foreseeable future.
-            </span>
+            In compliance with the Governor's order, the Clubhouse will be closed as of 3/24. Watch our Facebook and Discord for re-opening celebration announcements once the closure is lifted!
+        </span>
         <br />
-        <span>
-            In addition to our play space restriction, we will also be implementing a policy in which our tables will be available for free play during business hours, excluding those taken by our scheduled events throughout the week. If we have players here for any scheduled event (Wednesday Legacy, FNM, etc.) and you are not here to play in the event, please expect us to ask you to give up your seat for players interested in participating. Your cooperation will be greatly appreciated by fellow players and by our staff.
-            </span>
-        <br />
-        <span>
-            Please don't hesitate to contact us with questions or concerns. We thank you all for your understanding.
-            </span>
+        <span>The Clubhouse and its staff wishes all of our friends well!</span>
     </Segment>
 }
 

@@ -46,11 +46,14 @@ class Header extends React.Component {
                                         <Dropdown.Item active={pathname === '/browse-sales'} as={Link} replace to="/browse-sales" >
                                             <Icon name="eye" color="blue" />Browse Sales
                                         </Dropdown.Item>
+                                        <Dropdown.Item active={pathname === '/reports'} as={Link} replace to="/reports" >
+                                            <Icon name="chart bar" color="blue" />Reporting (Beta)
+                                        </Dropdown.Item>
 
                                         <Dropdown.Divider />
 
                                         <Dropdown.Item active={pathname === '/logout'} as={Link} replace to="/logout" >
-                                            <Icon name="log out" color="blue" />Logout
+                                            <Icon name="log out" color="blue" />Log out
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>}

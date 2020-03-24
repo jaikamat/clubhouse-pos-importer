@@ -8,6 +8,7 @@ import DeckboxClone from './DeckboxClone';
 import Login from './Login';
 import Logout from './Logout';
 import Receiving from './Receiving/Receiving';
+import Reports from './Reports/Reports'
 import styled from 'styled-components';
 import { Segment, Icon, Header } from 'semantic-ui-react';
 
@@ -44,6 +45,7 @@ export default function Main() {
                 <Route exact path="/browse-inventory" component={DeckboxClone} />
                 <Route exact path="/public-inventory" component={PublicInventory} />
                 <Route exact path="/receiving" component={Receiving} />
+                <Route exact path="/reports" component={Reports} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/logout" component={Logout} />
             </Switch>

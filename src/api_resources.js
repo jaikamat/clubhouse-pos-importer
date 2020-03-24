@@ -30,7 +30,8 @@ const endpoints = {
         `https://us-central1-clubhouse-collection.cloudfunctions.net/suspendSale${env}`,
     LOGIN:
         `https://us-central1-clubhouse-collection.cloudfunctions.net/getJwt${env}`,
-
+    GET_ALL_SALES:
+        `https://us-central1-clubhouse-collection.cloudfunctions.net/getSales${env}/sales`,
     SCRYFALL_AUTOCOMPLETE: 'https://api.scryfall.com/cards/autocomplete',
     SCRYFALL_SEARCH: 'https://api.scryfall.com/cards/search',
     SCRYFALL_ID_SEARCH: 'https://api.scryfall.com/cards/'

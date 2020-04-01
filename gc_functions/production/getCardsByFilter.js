@@ -22,16 +22,15 @@ async function getDistinctSetNames() {
 
     try {
         await client.connect();
-        console.log('Successfully connected to mongo');
 
         const db = client.db(DATABASE_NAME);
 
         return await db.collection('card_inventory').distinct('set_name');
     } catch (err) {
         console.log(err);
+        throw err;
     } finally {
         await client.close();
-        console.log('Disconnected from mongo');
     }
 }
 
@@ -50,7 +49,7 @@ async function getDistinctSetNames() {
  * page - used to modify internal SKIP constant for pagination
  * colors - a sorted string, used to identify cards by one or more colors
  */
-async function getCardsByFilter({ title, setName, format, priceNum, priceFilter, finish, colors, colorIdentity, sortBy, sortByDirection, page }) {
+async function getCardsByFilter({ title, setName, format, priceNum, priceFilter, finish, colors, colorIdentity, sortBy, sortByDirection, page, type }) {
     const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true
@@ -58,7 +57,6 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
 
     try {
         await client.connect();
-        console.log('Successfully connected to mongo');
 
         const db = client.db(DATABASE_NAME);
         const SKIP = LIMIT * (Math.abs((Number(page)) || 1) - 1); // `page` starts at 1 for clarity
@@ -71,6 +69,8 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
 
         if (title) initialMatch.name = title; // TODO: This should search on substrings as well
         if (setName) initialMatch.set_name = setName;
+        // Types are Tribal, Instant, Sorcery, Creature, Enchantment, Land, Planeswalker, Artifact
+        if (type) initialMatch.type_line = { $regex: `${type}` };
 
         aggregation.push({ $match: initialMatch });
 
@@ -165,7 +165,8 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
                 image_uri: 1,
                 rarity: 1,
                 colors_string: 1,
-                format_legalities: 1
+                format_legalities: 1,
+                type_line: 1
             }
         });
 
@@ -225,10 +226,9 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
 
     } catch (err) {
         console.log(err);
-        return err;
+        throw err;
     } finally {
         await client.close();
-        console.log('Disconnected from mongo');
     }
 }
 
@@ -244,10 +244,36 @@ app.get('/set_names', async (req, res) => {
 
 app.get('/', async (req, res) => {
     try {
-        const { title, setName, format, priceNum, priceFilter, finish, colors, colorIdentity, sortBy, sortByDirection, page } = req.query;
+        const {
+            title,
+            setName,
+            format,
+            priceNum,
+            priceFilter,
+            finish,
+            colors,
+            colorIdentity,
+            sortBy,
+            sortByDirection,
+            page,
+            type
+        } = req.query;
+
         const message = await getCardsByFilter({
-            title, setName, format, priceNum, priceFilter, finish, colors, colorIdentity, sortBy, sortByDirection, page
+            title,
+            setName,
+            format,
+            priceNum,
+            priceFilter,
+            finish,
+            colors,
+            colorIdentity,
+            sortBy,
+            sortByDirection,
+            page,
+            type
         });
+
         res.status(200).send(message);
     } catch (err) {
         console.log(err);

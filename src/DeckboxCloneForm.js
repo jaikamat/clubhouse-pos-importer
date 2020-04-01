@@ -52,6 +52,18 @@ const sortByColorDropdownOptions = [
     { key: 'g', value: 'G', text: 'Green' }
 ];
 
+const typeLineOptions = [
+    { key: 'na', value: '', text: 'None' },
+    { key: 'artifact', value: 'Artifact', text: 'Artifact' },
+    { key: 'creature', value: 'Creature', text: 'Creature' },
+    { key: 'enchantment', value: 'Enchantment', text: 'Enchantment' },
+    { key: 'instant', value: 'Instant', text: 'Instant' },
+    { key: 'land', value: 'Land', text: 'Land' },
+    { key: 'planeswalker', value: 'Planeswalker', text: 'Planeswalker' },
+    { key: 'sorcery', value: 'Sorcery', text: 'Sorcery' },
+    { key: 'tribal', value: 'Tribal', text: 'Tribal' }
+];
+
 const initialState = {
     title: '',
     setName: '',
@@ -62,6 +74,7 @@ const initialState = {
     sortBy: 'price',
     colorsArray: [],
     sortByDirection: -1,
+    typeLine: '',
     setNames: []
 }
 
@@ -96,7 +109,8 @@ export default class DeckboxCloneForm extends React.Component {
             finish,
             sortBy,
             sortByDirection,
-            colorsArray
+            colorsArray,
+            typeLine
         } = this.state;
 
         // Sort the colors here and concat prior to sending to the backend
@@ -154,6 +168,14 @@ export default class DeckboxCloneForm extends React.Component {
                             onChange={this.handleDropdownChange}
                         />
 
+                        <Form.Field
+                            control={Select}
+                            label="Type Line"
+                            placeholder="Type Line"
+                            options={typeLineOptions}
+                            name="typeLine"
+                            onChange={this.handleDropdownChange} />
+
                         <Form.Field>
                             <label>Price Filter</label>
                             <Input
@@ -170,6 +192,11 @@ export default class DeckboxCloneForm extends React.Component {
                                 onChange={this.handleDropdownChange}
                             />
                         </Form.Field>
+                    </Form.Group>
+
+                    <h3>{"Sort \& Order"}</h3>
+
+                    <Form.Group>
                         <Form.Field
                             control={Select}
                             label="Sort By"
@@ -188,6 +215,7 @@ export default class DeckboxCloneForm extends React.Component {
                             onChange={this.handleDropdownChange}
                         />
                     </Form.Group>
+
                     <Form.Group>
                         <Form.Button primary onClick={() => this.props.handleSubmit({
                             title,
@@ -198,7 +226,8 @@ export default class DeckboxCloneForm extends React.Component {
                             finish,
                             sortBy,
                             sortByDirection,
-                            colors
+                            colors,
+                            type: typeLine
                         })}>Submit</Form.Button>
                     </Form.Group>
                 </Form>

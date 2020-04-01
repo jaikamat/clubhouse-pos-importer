@@ -213,7 +213,7 @@ export default function Reports() {
         <React.Fragment>
             <Segment secondary>
                 <Icon name="exclamation triangle" color="blue" />
-                This feature is currently in beta. Metrics may not be entirely accurate. Please contact your devlopment team if you have any feedback!
+                This feature is currently in beta. Metrics may not be entirely accurate. Please contact your development team if you have any feedback!
             </Segment>
             <Segment loading={loading}>
                 <div id="daily-sales" style={{ width: "100%", height: "400px" }} />

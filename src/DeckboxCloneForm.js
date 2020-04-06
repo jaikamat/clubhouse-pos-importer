@@ -194,7 +194,7 @@ export default class DeckboxCloneForm extends React.Component {
                         </Form.Field>
                     </Form.Group>
 
-                    <h3>{"Sort \& Order"}</h3>
+                    <h3>{"Sort & Order"}</h3>
 
                     <Form.Group>
                         <Form.Field

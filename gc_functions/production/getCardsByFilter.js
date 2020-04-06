@@ -48,8 +48,9 @@ async function getDistinctSetNames() {
  * sortByDirection - `1` or `-1`
  * page - used to modify internal SKIP constant for pagination
  * colors - a sorted string, used to identify cards by one or more colors
+ * type - the typeline search, like `Artifact` or `Creature`
  */
-async function getCardsByFilter({ title, setName, format, priceNum, priceFilter, finish, colors, colorIdentity, sortBy, sortByDirection, page, type }) {
+async function getCardsByFilter({ title, setName, format, priceNum, priceFilter, finish, colors, sortBy, sortByDirection, page, type }) {
     const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true
@@ -67,10 +68,10 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
         // Build the initialMatch
         const initialMatch = {};
 
-        if (title) initialMatch.name = title; // TODO: This should search on substrings as well
+        if (title) initialMatch.name = { $regex: `${title}`, $options: 'i' };
         if (setName) initialMatch.set_name = setName;
         // Types are Tribal, Instant, Sorcery, Creature, Enchantment, Land, Planeswalker, Artifact
-        if (type) initialMatch.type_line = { $regex: `${type}` };
+        if (type) initialMatch.type_line = { $regex: `${type}`, $options: 'i' };
 
         aggregation.push({ $match: initialMatch });
 

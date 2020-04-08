@@ -15,8 +15,9 @@ export default function Reports() {
             setLoading(true);
 
             const { data } = await axios.get(GET_ALL_SALES);
+            const { sales_data, format_legalities } = data;
 
-            const groupByDay = _.groupBy(data, d => moment(d.sale_data.timeStamp).startOf('day').format());
+            const groupByDay = _.groupBy(sales_data, d => moment(d.sale_data.timeStamp).startOf('day').format());
 
             const dailySalesTotals = {};
             const dailyAverageSales = {};
@@ -42,7 +43,7 @@ export default function Reports() {
 
             // Create range buckets for card prices
             const cards = [];
-            data.forEach(d => cards.push(...d.card_list));
+            sales_data.forEach(d => cards.push(...d.card_list));
             cards.forEach(c => {
                 if (c.price >= 0.5 && c.price < 1) rangeBuckets[0] += c.qtyToSell;
                 if (c.price >= 1 && c.price < 5) rangeBuckets[1] += c.qtyToSell;
@@ -61,6 +62,21 @@ export default function Reports() {
                 }
             });
 
+            // Create format legality data
+            const legalityCounts = { standard: 0, nonStandard: 0 };
+
+            format_legalities.forEach(c => {
+                const qtySold = c.qtyToSell;
+
+                if (!c.legalities) return; // Some cards may not link via mongo $lookup
+
+                if (c.legalities.standard === "legal") {
+                    legalityCounts.standard += qtySold;
+                } else {
+                    legalityCounts.nonStandard += qtySold;
+                }
+            });
+
             // Format data for consumption by Highcharts API
             const formattedDailySalesTotals = Object.entries(dailySalesTotals).map(el => [new Date(el[0]).getTime(), el[1]]);
 
@@ -69,6 +85,8 @@ export default function Reports() {
             const formattedRangeBuckets = Object.entries(rangeBuckets).map(d => d[1]);
 
             const formattedRarityCounts = Object.entries(rarityCounts).map(d => ({ name: d[0], y: d[1] }));
+
+            const formattedLegalities = Object.entries(legalityCounts).map(d => ({ name: d[0], y: d[1] }));
 
             setLoading(false);
 
@@ -206,6 +224,46 @@ export default function Reports() {
                     data: formattedRarityCounts
                 }]
             })
+
+            Highcharts.chart('format-legalities', {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: null,
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Standard vs Non-Standard Sales'
+                },
+                subtitle: {
+                    text: 'All-time'
+                },
+                plotOptions: {
+                    pie: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b><br>{point.percentage:.0f} %',
+                            distance: -50,
+                            filter: {
+                                property: 'percentage',
+                                operator: '>',
+                                value: 4
+                            }
+                        },
+                        colors: ['#7bb5ed', '#6798c8', '#4b769f', '#2d567c']
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: "Cards Sold",
+                    data: formattedLegalities
+                }]
+            })
         })();
     }, []);
 
@@ -227,6 +285,11 @@ export default function Reports() {
                 <Grid.Column>
                     <Segment loading={loading}>
                         <div id="rarity-sales" style={{ width: "100%", height: "400px" }} />
+                    </Segment>
+                </Grid.Column>
+                <Grid.Column>
+                    <Segment loading={loading}>
+                        <div id="format-legalities" style={{ width: "100%", height: "400px" }} />
                     </Segment>
                 </Grid.Column>
             </Grid>

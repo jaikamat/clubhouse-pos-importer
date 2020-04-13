@@ -37,6 +37,51 @@ app.use((req, res, next) => {
 })
 
 /**
+ * Sanitizes card array to ensure inputs are valid. Will throw errors and end sale if needed
+ */
+app.use((req, res, next) => {
+    const { cards } = req.body;
+
+    function sanitizeOne(card) {
+        const { price, qtyToSell, finishCondition, name, set_name, id } = card;
+        const finishes = [
+            'NONFOIL_NM',
+            'NONFOIL_LP',
+            'NONFOIL_MP',
+            'NONFOIL_HP',
+            'FOIL_NM',
+            'FOIL_LP',
+            'FOIL_MP',
+            'FOIL_HP'
+        ];
+
+        if (!id)
+            throw new Error(`Card property id missing`);
+        if (!name && !set_name)
+            throw new Error(`Card name or set_name missing for ${id}`);
+        if (typeof price !== 'number')
+            throw new Error(`Price not number for ${name}`);
+        if (price < 0)
+            throw new Error(`Price must not be negative for ${name}`);
+        if (typeof qtyToSell !== 'number' && qtyToSell % 2 !== 0)
+            throw new Error(`qtyToSell formatted incorrectly for ${name}`);
+        if (qtyToSell <= 0)
+            throw new Error(`qtyToSell must be greater than 0 for ${name}`);
+        if (finishes.indexOf(finishCondition) < 0)
+            throw new Error(`FinishCondition not a defined type for ${name}`);
+        return true;
+    }
+
+    try {
+        for (let card of cards) { sanitizeOne(card) };
+        return next();
+    } catch (err) {
+        console.log(err);
+        res.status(400).send(err.message);
+    }
+})
+
+/**
  * Helper fn used to create employee-readable note lines in the Lightspeed POS system
  * @param {Object} card - the card involved in the transaction
  */
@@ -60,7 +105,6 @@ async function updateCardInventory(card) {
 
     try {
         await client.connect();
-        console.log('Successfully connected to mongo');
 
         console.log(
             `Update: QTY: ${qtyToSell}, ${finishCondition}, ${name}, ${id}`
@@ -112,10 +156,9 @@ async function updateCardInventory(card) {
         );
     } catch (err) {
         console.log(err);
-        return err;
+        throw err;
     } finally {
         await client.close();
-        console.log('Disconnected from mongo');
     }
 }
 
@@ -158,7 +201,7 @@ async function createLightspeedSale(authToken, cards) {
         return await axios.post(url, bodyParameters, config);
     } catch (err) {
         console.log(err);
-        return err;
+        throw err;
     }
 }
 
@@ -176,7 +219,6 @@ async function createSale(saleData, cardList) {
 
     try {
         await client.connect();
-        console.log('Successfully connected to mongo');
         console.log(`Creating new sale`);
 
         const db = client.db(DATABASE_NAME);
@@ -187,10 +229,9 @@ async function createSale(saleData, cardList) {
         });
     } catch (err) {
         console.log(err);
-        return err;
+        throw err;
     } finally {
         await client.close();
-        console.log('Disconnected from mongo');
     }
 }
 
@@ -227,12 +268,12 @@ async function finishSale(cards) {
         };
     } catch (err) {
         console.log(err);
-        return err;
+        throw err;
     }
 }
 
 /**
- * Create root post route
+ * Create root POST route
  */
 app.post('/', async (req, res) => {
     try {
@@ -241,7 +282,7 @@ app.post('/', async (req, res) => {
         res.status(200).send(data);
     } catch (err) {
         console.log(err);
-        res.status(400).send(err);
+        res.status(500).send(err.message);
     }
 });
 

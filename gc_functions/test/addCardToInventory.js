@@ -34,6 +34,35 @@ app.use((req, res, next) => {
     }
 })
 
+/**
+ * Sanitizes card object properties so nothing funky is committed to the database
+ */
+app.use((req, res, next) => {
+    const { quantity, finishCondition, cardInfo } = req.body;
+    const { name, id } = cardInfo;
+    const finishes = [
+        'NONFOIL_NM',
+        'NONFOIL_LP',
+        'NONFOIL_MP',
+        'NONFOIL_HP',
+        'FOIL_NM',
+        'FOIL_LP',
+        'FOIL_MP',
+        'FOIL_HP'
+    ];
+
+    if (!id)
+        res.status(400).send(`Card id must be provided`);
+    if (!name)
+        res.status(400).send(`Card name must be provided for ${id}`);
+    if (typeof quantity !== 'number')
+        res.status(400).send(`Card quantity formatted incorrectly for ${name}`);
+    if (finishes.indexOf(finishCondition) < 0)
+        res.status(400).send(`FinishCondition not a defined type for ${name}`);
+
+    return next();
+})
+
 // `finishCondition` Refers to the configuration of Finishes and Conditions ex. NONFOIL_NM or FOIL_LP
 async function addCardToInventory(quantity, finishCondition, cardInfo) {
     const client = await new MongoClient(process.env.MONGO_URI, {

@@ -153,6 +153,7 @@ export default function Receiving() {
                 return await axios.post(ADD_CARD_TO_INVENTORY, {
                     quantity: 1,
                     type: c.finishCondition,
+                    finishCondition: c.finishCondition,
                     cardInfo: _.omit(c, 'finishCondition') // remove `finishCondition` finally
                 }, { headers: makeAuthHeader() });
             })

@@ -46,7 +46,7 @@ export class InventoryCard extends ScryfallCard {
         this.quantity = card.quantity ? card.quantity : null;
         this.qtyToSell = card.qtyToSell ? card.qtyToSell : null;
         this.finishCondition = card.finishCondition ? card.finishCondition : null;
-        this.price = card.price ? card.price : null;
+        this.price = card.price >= 0 ? card.price : null;
     }
 
     get qohParsed() {

@@ -25,10 +25,9 @@ const CovidAlert = () => {
             A notice to our customers regarding COVID19
         </Header>
         <span>
-            In compliance with the Governor's order, the Clubhouse will be closed as of 3/24. Watch our Facebook and Discord for re-opening celebration announcements once the closure is lifted!
-        </span>
-        <br />
-        <span>The Clubhouse and its staff wishes all of our friends well!</span>
+            The Clubhouse is open for curbside service every Wednesday and Sunday, from 12pm to 5pm. Simply reach us on <a href="https://discord.gg/2tMxhgw
+
+" target="_blank">Discord</a>, <a href="https://www.facebook.com/RGTClubhouse" target="_blank">Facebook</a>, or call us at (503) 268-1449 to set up an order. We look forward to serving you soon!</span>
     </Segment>
 }
 

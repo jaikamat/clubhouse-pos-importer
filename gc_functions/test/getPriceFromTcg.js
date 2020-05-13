@@ -41,15 +41,24 @@ async function parseTcgHtml(purchaseUrl) {
     try {
         const { data } = await axios.get(purchaseUrl); // `data` is the html
         const $ = cheerio.load(data);
-        const prices = {};
+        const marketPrices = {};
+        const medianPrices = {};
+
+        // Capture the Market Price table and loop over its rows to capture price data
+        $('.price-point--market tbody tr').each((i, el) => {
+            const finishTxt = $(el).find('th.price-point__name').text();
+            const priceTxt = $(el).find('td.price-point__data').text();
+            marketPrices[finishTxt.toLowerCase()] = convertPriceStr(priceTxt);
+        });
+
         // Capture the Median Price table and loop over its rows to capture price data
         $('.price-point--listed-median tbody tr').each((i, el) => {
             const finishTxt = $(el).find('th.price-point__name').text();
             const priceTxt = $(el).find('td.price-point__data').text();
-            prices[finishTxt.toLowerCase()] = convertPriceStr(priceTxt);
+            medianPrices[finishTxt.toLowerCase()] = convertPriceStr(priceTxt);
         });
 
-        return prices;
+        return { marketPrices, medianPrices };
     } catch (e) {
         throw e;
     }

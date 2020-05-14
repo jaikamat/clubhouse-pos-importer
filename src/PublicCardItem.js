@@ -40,14 +40,14 @@ export default function PublicCardItem({ card }) {
     const displayFoil = (
         <InventoryRow>
             <Label color='blue' image>Foil<Label.Detail>{foilQty}</Label.Detail></Label>
-            <MarketPrice id={id} publicView={true} finish="FOIL" />
+            <MarketPrice id={id} finish="FOIL" />
         </InventoryRow>
     );
 
     const displayNonfoil = (
         <InventoryRow>
             <Label color='blue' image>Nonfoil<Label.Detail>{nonfoilQty}</Label.Detail></Label>
-            <MarketPrice id={id} publicView={true} />
+            <MarketPrice id={id} />
         </InventoryRow>
     );
 

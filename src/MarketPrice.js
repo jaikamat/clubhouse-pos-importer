@@ -1,45 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Price from './Price';
-import makeAuthHeader from './makeAuthHeader';
-import { SCRYFALL_ID_SEARCH } from './api_resources';
+import { GET_LIVE_PRICE } from './api_resources';
 import { Label, Icon } from 'semantic-ui-react';
+import styled from 'styled-components';
 
-const foilStyle = {
-    backgroundColor: '#ffcfdf',
-    backgroundImage: 'linear-gradient(90deg, #ffcfdf 0%, #b0f3f1 74%)'
-}
+const LabelStyle = styled(Label)`
+    background-color: ${props => !!props.foil ? '#ffcfdf' : null} !important;
+    background-image: ${props => !!props.foil ? 'linear-gradient(90deg, #ffcfdf 0%, #b0f3f1 74%)' : null} !important;
+`;
 
-// publicView flags whether this component is on a view that faces customers. Employees should see the raw price
-export default function MarketPrice({ id, finish, publicView = false }) {
-    const [price, setPrice] = useState(null);
+export default function MarketPrice({ id, finish }) {
+    const [market, setMarket] = useState(null);
+    const [median, setMedian] = useState(null);
     const [loading, setLoading] = useState(false);
+    const isFoil = finish === 'FOIL';
 
     useEffect(() => {
         (async function fetchData() {
             setLoading(true);
-            const { data } = await axios.get(`${SCRYFALL_ID_SEARCH}${id}`, { headers: makeAuthHeader() });
-            let finishStatus = 'usd';
-            let myPrice;
 
-            if (finish === 'FOIL') finishStatus += '_foil';
+            const { data } = await axios.get(GET_LIVE_PRICE, {
+                params: { scryfallId: id }
+            });
+            const { marketPrices, medianPrices } = data;
+            const MIN_PRICE = 0.5; // Management-set lowest price for each single card
 
-            // Public-facing views should show the minimum price for any card as 50 cents
-            myPrice = Number(data.prices[finishStatus]);
-
-            if (publicView) {
-                setPrice(Math.max(0.5, myPrice))
+            if (isFoil) {
+                setMarket(Math.max(marketPrices.foil, MIN_PRICE));
+                setMedian(Math.max(medianPrices.foil, MIN_PRICE));
             } else {
-                setPrice(myPrice);
+                setMarket(Math.max(marketPrices.normal, MIN_PRICE));
+                setMedian(Math.max(medianPrices.normal, MIN_PRICE));
             }
 
             setLoading(false);
         })();
-    }, [id, finish, publicView]);
+    }, [id, finish]);
 
-    return (
-        <Label tag style={finish === 'FOIL' ? foilStyle : null}>
-            {loading ? <Icon loading name='spinner' /> : <span>Est. {price ? <Price num={price} /> : 'not found'}</span>}
-        </Label>
-    );
+    const loader = <span>Loading <Icon loading name='spinner' /></span>;
+    const displayPrice = price => !!price ? `$${price.toFixed(2)}` : 'N/A';
+
+    return <React.Fragment>
+        <LabelStyle foil={isFoil}>
+            {loading ? loader : <span>Mkt. {displayPrice(market)}</span>}
+        </LabelStyle>
+        <LabelStyle foil={isFoil}>
+            {loading ? loader : <span>Mid. {displayPrice(median)}</span>}
+        </LabelStyle>
+    </React.Fragment>
 }

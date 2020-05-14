@@ -34,7 +34,7 @@ const endpoints = {
         `https://us-central1-clubhouse-collection.cloudfunctions.net/getSales${env}/sales`,
     SCRYFALL_AUTOCOMPLETE: 'https://api.scryfall.com/cards/autocomplete',
     SCRYFALL_SEARCH: 'https://api.scryfall.com/cards/search',
-    SCRYFALL_ID_SEARCH: 'https://api.scryfall.com/cards/'
+    GET_LIVE_PRICE: `https://us-central1-clubhouse-collection.cloudfunctions.net/getPriceFromTcg${env}`
 };
 
 module.exports = endpoints;

@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import Home from './ManageInventory/Home';
 import Sale from './NewSale/Sale';
 import BrowseSales from './BrowseSales/BrowseSales';
-import PublicInventory from './PublicInventory';
+import PublicInventory from './PublicInventory/PublicInventory';
 import DeckboxClone from './DeckboxClone/DeckboxClone';
 import Login from './Login';
 import Logout from './Logout';

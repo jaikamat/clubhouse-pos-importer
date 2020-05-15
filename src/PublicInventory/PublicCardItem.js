@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, Label } from 'semantic-ui-react';
-import MarketPrice from './MarketPrice';
+import MarketPrice from '../MarketPrice';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`

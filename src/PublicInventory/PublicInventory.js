@@ -7,10 +7,10 @@ import {
     Icon,
     Divider,
 } from 'semantic-ui-react';
-import SearchBar from './SearchBar';
+import SearchBar from '../SearchBar';
 import PublicCardList from './PublicCardList';
-import { GET_CARDS_BY_TITLE } from './api_resources';
-import { InventoryCard } from './utils/ScryfallCard';
+import { GET_CARDS_BY_TITLE } from '../api_resources';
+import { InventoryCard } from '../utils/ScryfallCard';
 
 const initialState = {
     searchResults: [],

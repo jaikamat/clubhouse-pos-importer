@@ -1,5 +1,5 @@
 import React from 'react';
-import SaleLineItem from '../SaleLineItem';
+import SaleLineItem from './SaleLineItem';
 import { Table } from 'semantic-ui-react';
 
 const CustomerSaleList = ({ saleList, removeFromSaleList }) => {

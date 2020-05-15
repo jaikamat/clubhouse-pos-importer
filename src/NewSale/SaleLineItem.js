@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Label, Table } from 'semantic-ui-react';
-import Price from './Price';
+import Price from '../Price';
 
 export default function SaleLineItem(props) {
     const {

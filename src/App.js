@@ -1,6 +1,6 @@
 import React from 'react';
 import Main from './Main';
-import Header from './Header';
+import Header from './Header/Header';
 import AuthProvider from './AuthProvider';
 
 class App extends React.Component {

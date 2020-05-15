@@ -1,5 +1,5 @@
 import React from 'react';
-import SalesListItem from '../SalesListItem';
+import SalesListItem from './SalesListItem';
 import { Table } from 'semantic-ui-react';
 
 const SalesList = ({ list }) => {

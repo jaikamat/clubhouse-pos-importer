@@ -1,6 +1,6 @@
 import React from 'react';
 import SearchBar from '../SearchBar';
-import { GET_SET_NAMES } from '../api_resources';
+import { GET_SET_NAMES } from '../utils/api_resources';
 import axios from 'axios';
 import { Form, Input, Select, Dropdown, Segment } from 'semantic-ui-react';
 

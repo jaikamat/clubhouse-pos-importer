@@ -6,7 +6,7 @@ import createToast from '../createToast';
 import CardImage from '../CardImage';
 import makeAuthHeader from '../makeAuthHeader';
 import MarketPrice from '../MarketPrice'
-import { ADD_CARD_TO_INVENTORY } from '../api_resources';
+import { ADD_CARD_TO_INVENTORY } from '../utils/api_resources';
 import $ from 'jquery';
 import { InventoryCard } from '../utils/ScryfallCard';
 

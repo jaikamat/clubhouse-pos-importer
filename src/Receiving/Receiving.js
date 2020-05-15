@@ -4,7 +4,7 @@ import axios from 'axios';
 import makeAuthHeader from '../makeAuthHeader';
 import ReceivingSearchList from './ReceivingSearchList';
 import { Segment, Header, Icon, Grid, Divider, Table } from 'semantic-ui-react'
-import { ADD_CARD_TO_INVENTORY, GET_CARD_QTY_FROM_INVENTORY, GET_SCRYFALL_BULK_BY_TITLE } from '../api_resources';
+import { ADD_CARD_TO_INVENTORY, GET_CARD_QTY_FROM_INVENTORY, GET_SCRYFALL_BULK_BY_TITLE } from '../utils/api_resources';
 import ReceivingListItem from './ReceivingListItem';
 import ReceivingListTotals from './ReceivingListTotals';
 import createToast from '../createToast';

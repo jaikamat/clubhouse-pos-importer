@@ -3,7 +3,7 @@ import SearchBar from '../SearchBar';
 import SalesList from './SalesList';
 import axios from 'axios';
 import makeAuthHeader from '../makeAuthHeader';
-import { GET_SALES_BY_TITLE } from '../api_resources';
+import { GET_SALES_BY_TITLE } from '../utils/api_resources';
 import { Header, Divider } from 'semantic-ui-react';
 
 class BrowseSales extends Component {

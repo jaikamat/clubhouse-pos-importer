@@ -1,7 +1,7 @@
 import React from 'react';
 import Main from './Main';
 import Header from './Header/Header';
-import AuthProvider from './AuthProvider';
+import AuthProvider from './context/AuthProvider';
 
 class App extends React.Component {
     render() {

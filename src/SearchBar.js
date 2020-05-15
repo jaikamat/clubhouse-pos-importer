@@ -3,7 +3,7 @@ import { Search } from 'semantic-ui-react';
 import _ from 'lodash';
 import axios from 'axios';
 import makeAuthHeader from './makeAuthHeader';
-import { SCRYFALL_AUTOCOMPLETE } from './api_resources';
+import { SCRYFALL_AUTOCOMPLETE } from './utils/api_resources';
 import $ from 'jquery';
 
 export default function SearchBar(props) {

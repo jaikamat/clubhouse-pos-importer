@@ -1,5 +1,5 @@
 import React from 'react'
-import { GET_CARDS_BY_FILTER } from '../api_resources';
+import { GET_CARDS_BY_FILTER } from '../utils/api_resources';
 import DeckboxCloneForm from './DeckboxCloneForm';
 import DeckboxCloneRow from './DeckboxCloneRow';
 import axios from 'axios';

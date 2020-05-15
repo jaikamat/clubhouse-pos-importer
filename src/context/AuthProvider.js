@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import makeAuthHeader from './makeAuthHeader';
-import { LOGIN } from './api_resources';
+import makeAuthHeader from '../makeAuthHeader';
+import { LOGIN } from '../utils/api_resources';
 import axios from 'axios';
 
 export const AuthContext = React.createContext();

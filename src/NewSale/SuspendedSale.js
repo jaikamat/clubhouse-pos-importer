@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { SUSPEND_SALE } from '../api_resources';
+import { SUSPEND_SALE } from '../utils/api_resources';
 import { Modal, Button, Grid, Form, Message } from 'semantic-ui-react';
 import styled from 'styled-components';
 

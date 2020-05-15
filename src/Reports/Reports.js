@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { GET_ALL_SALES } from '../api_resources';
+import { GET_ALL_SALES } from '../utils/api_resources';
 import { Segment, Icon, Grid } from 'semantic-ui-react';
 import Highcharts from 'highcharts';
 import moment from 'moment';

@@ -2,7 +2,7 @@ import React from 'react';
 import ballLogo from './logos/magic-ball.png'
 import { Menu, Icon, Dropdown } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
-import { AuthContext } from '../AuthProvider';
+import { AuthContext } from '../context/AuthProvider';
 
 const style = {
     background: "linear-gradient(#2185d0, #206ac6)",

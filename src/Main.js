@@ -4,7 +4,7 @@ import Home from './Home';
 import Sale from './Sale';
 import BrowseSales from './BrowseSales';
 import PublicInventory from './PublicInventory';
-import DeckboxClone from './DeckboxClone';
+import DeckboxClone from './DeckboxClone/DeckboxClone';
 import Login from './Login';
 import Logout from './Logout';
 import Receiving from './Receiving/Receiving';

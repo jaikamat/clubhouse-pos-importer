@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table, Icon, Image } from 'semantic-ui-react';
-import Price from './Price';
+import Price from '../Price';
 
 const conditionMap = {
     NM: 'Near Mint',

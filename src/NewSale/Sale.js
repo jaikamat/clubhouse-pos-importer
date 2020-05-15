@@ -11,7 +11,7 @@ import CustomerSaleList from './CustomerSaleList';
 import PrintList from './PrintList';
 import makeAuthHeader from '../makeAuthHeader';
 import createToast from '../createToast';
-import SuspendedSale from '../SuspendedSale';
+import SuspendedSale from './SuspendedSale';
 import sortSaleList from '../utils/sortSaleList';
 import { InventoryCard } from '../utils/ScryfallCard';
 

@@ -1,8 +1,8 @@
 import React from 'react';
-import createToast from './createToast';
+import createToast from '../createToast';
 import { Form, Button } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
-import { AuthContext } from './AuthProvider';
+import { AuthContext } from '../AuthProvider';
 
 const initialState = { username: '', password: '', btnLoading: false };
 

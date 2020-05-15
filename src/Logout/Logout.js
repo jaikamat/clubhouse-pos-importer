@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { Button, Header, Container } from 'semantic-ui-react';
-import { AuthContext } from './AuthProvider';
+import { AuthContext } from '../AuthProvider';
 
 class Logout extends React.Component {
     render() {

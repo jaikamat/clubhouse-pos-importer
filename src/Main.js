@@ -5,8 +5,8 @@ import Sale from './NewSale/Sale';
 import BrowseSales from './BrowseSales/BrowseSales';
 import PublicInventory from './PublicInventory/PublicInventory';
 import DeckboxClone from './DeckboxClone/DeckboxClone';
-import Login from './Login';
-import Logout from './Logout';
+import Login from './Login/Login';
+import Logout from './Logout/Logout';
 import Receiving from './Receiving/Receiving';
 import Reports from './Reports/Reports'
 import styled from 'styled-components';

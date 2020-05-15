@@ -29,7 +29,12 @@ async function searchForCard(name) {
 
 describe('Testing login/logout', () => {
     beforeAll(async () => {
-        browser = await puppeteer.launch({ headless: false, slowMo: 50, args: [`--window-size=${WIDTH},${HEIGHT}`] });
+        browser = await puppeteer.launch({
+            headless: false,
+            defaultViewport: null, // Viewport should match window size when headless
+            slowMo: 50,
+            args: [`--window-size=${WIDTH},${HEIGHT}`]
+        });
         page = await browser.newPage();
     });
 
@@ -62,7 +67,12 @@ describe('Testing login/logout', () => {
 
 describe('Manage Inventory Workflow', () => {
     beforeAll(async () => {
-        browser = await puppeteer.launch({ headless: false, slowMo: 50, args: [`--window-size=${WIDTH},${HEIGHT}`] });
+        browser = await puppeteer.launch({
+            headless: false,
+            defaultViewport: null, // Viewport should match window size when headless
+            slowMo: 50,
+            args: [`--window-size=${WIDTH},${HEIGHT}`]
+        });
         page = await browser.newPage();
         await page.goto(HOMEPAGE);
         await page.$eval(ui.loginBtn, b => b.click());
@@ -127,7 +137,12 @@ describe('Manage Inventory Workflow', () => {
 
 describe('Suspend Sale workflow', () => {
     beforeAll(async () => {
-        browser = await puppeteer.launch({ headless: false, slowMo: 50, args: [`--window-size=${WIDTH},${HEIGHT}`] });
+        browser = await puppeteer.launch({
+            headless: false,
+            defaultViewport: null, // Viewport should match window size when headless
+            slowMo: 50,
+            args: [`--window-size=${WIDTH},${HEIGHT}`]
+        });
         page = await browser.newPage();
         await page.goto(HOMEPAGE);
         await page.$eval(ui.loginBtn, b => b.click());

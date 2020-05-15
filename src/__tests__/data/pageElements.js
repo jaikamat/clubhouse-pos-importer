@@ -1,8 +1,8 @@
 export default {
     loginBtn: '#root > div.ui.inverted.top.fixed.menu > div.right.menu > a:nth-child(2)',
-    usernameInput: '#root > div:nth-child(2) > form > div:nth-child(1) > div > div > input[type=text]',
-    passwordInput: '#root > div:nth-child(2) > form > div:nth-child(2) > div > div > input[type=password]',
-    loginFormBtn: '#root > div:nth-child(2) > form > button',
+    usernameInput: '.username-input input',
+    passwordInput: '.password-input input',
+    loginFormBtn: '.login-btn',
     hamburger: '#root > div.ui.inverted.top.fixed.menu > div.right.menu > div > i',
     searchBar: '#searchBar',
     manageInventory: '#root > div.ui.inverted.top.fixed.menu > div.right.menu > div > div.menu.transition.visible > a:nth-child(1)',

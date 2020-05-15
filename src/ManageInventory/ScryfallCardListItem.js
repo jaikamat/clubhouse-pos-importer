@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Segment, Input, Button, Form, Select, Label, Item } from 'semantic-ui-react';
 import axios from 'axios';
-import QohLabels from './QohLabels';
-import createToast from './createToast';
-import CardImage from './CardImage';
-import makeAuthHeader from './makeAuthHeader';
-import MarketPrice from './MarketPrice'
-import { ADD_CARD_TO_INVENTORY } from './api_resources';
+import QohLabels from '../QohLabels';
+import createToast from '../createToast';
+import CardImage from '../CardImage';
+import makeAuthHeader from '../makeAuthHeader';
+import MarketPrice from '../MarketPrice'
+import { ADD_CARD_TO_INVENTORY } from '../api_resources';
 import $ from 'jquery';
-import { InventoryCard } from './utils/ScryfallCard';
+import { InventoryCard } from '../utils/ScryfallCard';
 
 const finishes = [
     { key: 'NONFOIL', text: 'Nonfoil', value: 'NONFOIL' },

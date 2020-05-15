@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import SearchBar from './SearchBar';
+import SearchBar from '../SearchBar';
 import axios from 'axios';
-import makeAuthHeader from './makeAuthHeader';
+import makeAuthHeader from '../makeAuthHeader';
 import ScryfallCardList from './ScryfallCardList';
 import { Segment, Header, Icon, Divider } from 'semantic-ui-react'
-import { GET_CARD_QTY_FROM_INVENTORY, GET_SCRYFALL_BULK_BY_TITLE } from './api_resources';
-import { InventoryCard } from './utils/ScryfallCard';
+import { GET_CARD_QTY_FROM_INVENTORY, GET_SCRYFALL_BULK_BY_TITLE } from '../api_resources';
+import { InventoryCard } from '../utils/ScryfallCard';
 
 export default function Home() {
     const [searchResults, setSearchResults] = useState([]);

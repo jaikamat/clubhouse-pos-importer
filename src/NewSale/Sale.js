@@ -3,17 +3,17 @@ import axios from 'axios';
 import _ from 'lodash';
 import $ from 'jquery';
 import { Grid, Segment, Header, Button, Modal, Icon, Divider } from 'semantic-ui-react';
-import { GET_CARDS_BY_TITLE, FINISH_SALE, SUSPEND_SALE } from './api_resources';
-import SearchBar from './SearchBar';
+import { GET_CARDS_BY_TITLE, FINISH_SALE, SUSPEND_SALE } from '../api_resources';
+import SearchBar from '../SearchBar';
 import BrowseCardList from './BrowseCardList';
 import SalePriceTotal from './SalePriceTotal';
 import CustomerSaleList from './CustomerSaleList';
 import PrintList from './PrintList';
-import makeAuthHeader from './makeAuthHeader';
-import createToast from './createToast';
-import SuspendedSale from './SuspendedSale';
-import sortSaleList from './utils/sortSaleList';
-import { InventoryCard } from './utils/ScryfallCard';
+import makeAuthHeader from '../makeAuthHeader';
+import createToast from '../createToast';
+import SuspendedSale from '../SuspendedSale';
+import sortSaleList from '../utils/sortSaleList';
+import { InventoryCard } from '../utils/ScryfallCard';
 
 export default function Sale() {
     const [searchResults, setSearchResults] = useState([]);

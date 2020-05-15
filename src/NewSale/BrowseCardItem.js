@@ -8,9 +8,9 @@ import {
     Button,
     Item
 } from 'semantic-ui-react';
-import CardImage from './CardImage';
-import MarketPrice from './MarketPrice';
-import QohLabels from './QohLabels';
+import CardImage from '../CardImage';
+import MarketPrice from '../MarketPrice';
+import QohLabels from '../QohLabels';
 import $ from 'jquery';
 import _ from 'lodash';
 

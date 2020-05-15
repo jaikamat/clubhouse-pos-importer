@@ -1,87 +1,88 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import createToast from '../common/createToast';
-import { Form, Button } from 'semantic-ui-react';
+import { Form, Button, Segment } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
 import { AuthContext } from '../context/AuthProvider';
+import styled from 'styled-components';
 
-const initialState = { username: '', password: '', btnLoading: false };
+const LoginContainer = styled.div`
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+`;
 
-class Login extends React.Component {
-    state = initialState;
+const FormContainer = styled(Segment)`
+    width: 400px;
+    padding: 25px 25px 25px 25px !important;
+`;
 
-    handleInputChange = (e, { value }) => {
-        this.setState({ [e.target.name]: value });
+const initialState = { username: '', password: '', loading: false };
+
+export default function Login() {
+    const [state, setState] = useState(initialState);
+    const { loggedIn, handleLogin } = useContext(AuthContext);
+
+    const handleInputChange = (e, { value }) => setState({ ...state, [e.target.name]: value });
+
+    const login = async () => {
+        setState({ loading: true });
+
+        const { authed } = await handleLogin(state.username, state.password);
+
+        if (authed) {
+            // Do not set state here to mitigate React setState warning after component unmounted due to redirect
+            createToast({
+                color: 'green',
+                header: 'Success',
+                message: `Enjoy your time here!`,
+            });
+        } else {
+            setState(initialState);
+            createToast({
+                color: 'red',
+                header: 'Error',
+                message: `Username or password was incorrect`,
+            });
+        }
     };
 
-    render() {
-        const { username, password, btnLoading } = this.state;
+    if (loggedIn) return <Redirect to="/manage-inventory" />
 
-        return (
-            <AuthContext.Consumer>
-                {({ loggedIn, handleLogin }) => {
-                    const login = async () => {
-                        const { username, password } = this.state;
-
-                        this.setState({ btnLoading: true });
-
-                        const { authed } = await handleLogin(username, password);
-
-                        if (authed) {
-                            // Do not set state here to mitigate React setState warning after component unmounted due to redirect
-                            createToast({
-                                color: 'green',
-                                header: 'Success',
-                                message: `Enjoy your time here!`,
-                            });
-                        } else {
-                            this.setState(initialState);
-                            createToast({
-                                color: 'red',
-                                header: 'Error',
-                                message: `Username or password was incorrect`,
-                            });
-                        }
-                    };
-
-                    if (loggedIn) {
-                        return <Redirect to="/manage-inventory" />;
-                    }
-
-                    return (
-                        <Form>
-                            <Form.Field>
-                                <Form.Input
-                                    name="username"
-                                    placeholder="Username"
-                                    label="Username"
-                                    value={username}
-                                    onChange={this.handleInputChange}
-                                />
-                            </Form.Field>
-                            <Form.Field>
-                                <Form.Input
-                                    name="password"
-                                    placeholder="Password"
-                                    type="password"
-                                    label="Password"
-                                    value={password}
-                                    onChange={this.handleInputChange}
-                                />
-                            </Form.Field>
-                            <Button
-                                type="submit"
-                                onClick={() => login()}
-                                disabled={!username || !password}
-                                loading={btnLoading}
-                            >
-                                Submit
-                            </Button>
-                        </Form>
-                    );
-                }}
-            </AuthContext.Consumer>
-        )
-    }
+    return <LoginContainer>
+        <FormContainer raised loading={state.loading}>
+            <Form>
+                <Form.Field>
+                    <Form.Input
+                        className="username-input"
+                        name="username"
+                        placeholder="Username"
+                        label="Username"
+                        value={state.username || ''}
+                        onChange={handleInputChange}
+                    />
+                </Form.Field>
+                <Form.Field>
+                    <Form.Input
+                        className="password-input"
+                        name="password"
+                        placeholder="Password"
+                        type="password"
+                        label="Password"
+                        value={state.password || ''}
+                        onChange={handleInputChange}
+                    />
+                </Form.Field>
+                <Button
+                    primary
+                    fluid
+                    floated="right"
+                    type="submit"
+                    onClick={login}
+                    className="login-btn"
+                    disabled={!state.username || !state.password}>
+                    Submit
+            </Button>
+            </Form>
+        </FormContainer>
+    </LoginContainer>
 }
-
-export default Login;

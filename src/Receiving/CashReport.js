@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import Price from '../Price';
+import Price from '../common/Price';
 import { Table } from 'semantic-ui-react';
 
 // Am I crazy or is this logic really convoluted?

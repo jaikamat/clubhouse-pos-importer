@@ -1,5 +1,5 @@
 import React from 'react';
-import createToast from '../createToast';
+import createToast from '../common/createToast';
 import { Form, Button } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
 import { AuthContext } from '../context/AuthProvider';

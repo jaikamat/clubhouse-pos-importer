@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import makeAuthHeader from '../makeAuthHeader';
+import makeAuthHeader from '../utils/makeAuthHeader';
 import { LOGIN } from '../utils/api_resources';
 import axios from 'axios';
 

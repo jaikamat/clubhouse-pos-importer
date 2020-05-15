@@ -1,5 +1,5 @@
 import React from 'react';
-import Price from '../Price';
+import Price from '../common/Price';
 
 const SalePriceTotal = ({ saleList }) => {
     const total = saleList.length

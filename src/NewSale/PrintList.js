@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
-import Price from '../Price';
+import Price from '../common/Price';
 import './PrintList.css';
 import SalePriceTotal from './SalePriceTotal';
 

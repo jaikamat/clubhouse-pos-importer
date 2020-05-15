@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Segment, Statistic, Button, Modal, Header } from 'semantic-ui-react';
-import Price from '../Price';
+import Price from '../common/Price';
 import CashReport from './CashReport';
 import printCashReport from './printCashReport';
 

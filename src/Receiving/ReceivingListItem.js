@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Table, Button, Label, Icon } from 'semantic-ui-react';
-import Price from '../Price';
+import Price from '../common/Price';
 
 // Defines whether it uses cash or credit for trade types
 const TRADE_TYPE = { CASH: 'CASH', CREDIT: 'CREDIT' };

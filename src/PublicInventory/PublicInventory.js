@@ -7,7 +7,7 @@ import {
     Icon,
     Divider,
 } from 'semantic-ui-react';
-import SearchBar from '../SearchBar';
+import SearchBar from '../common/SearchBar';
 import PublicCardList from './PublicCardList';
 import { GET_CARDS_BY_TITLE } from '../utils/api_resources';
 import { InventoryCard } from '../utils/ScryfallCard';

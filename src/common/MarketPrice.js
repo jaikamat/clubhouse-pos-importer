@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { GET_LIVE_PRICE } from './utils/api_resources';
+import { GET_LIVE_PRICE } from '../utils/api_resources';
 import { Label, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 

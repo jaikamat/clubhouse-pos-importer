@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import SearchBar from '../SearchBar';
+import SearchBar from '../common/SearchBar';
 import SalesList from './SalesList';
 import axios from 'axios';
-import makeAuthHeader from '../makeAuthHeader';
+import makeAuthHeader from '../utils/makeAuthHeader';
 import { GET_SALES_BY_TITLE } from '../utils/api_resources';
 import { Header, Divider } from 'semantic-ui-react';
 

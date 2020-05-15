@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import SearchBar from '../SearchBar';
+import SearchBar from '../common/SearchBar';
 import axios from 'axios';
-import makeAuthHeader from '../makeAuthHeader';
+import makeAuthHeader from '../utils/makeAuthHeader';
 import ScryfallCardList from './ScryfallCardList';
 import { Segment, Header, Icon, Divider } from 'semantic-ui-react'
 import { GET_CARD_QTY_FROM_INVENTORY, GET_SCRYFALL_BULK_BY_TITLE } from '../utils/api_resources';

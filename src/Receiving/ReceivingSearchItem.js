@@ -8,11 +8,11 @@ import {
     Label,
     Item
 } from 'semantic-ui-react';
-import QohLabels from '../QohLabels';
-import CardImage from '../CardImage';
-import MarketPrice from '../MarketPrice'
+import QohLabels from '../common/QohLabels';
+import CardImage from '../common/CardImage';
+import MarketPrice from '../common/MarketPrice'
 import $ from 'jquery';
-import createToast from '../createToast';
+import createToast from '../common/createToast';
 
 const finishes = [
     { key: 'NONFOIL', text: 'Nonfoil', value: 'NONFOIL' },

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Label } from 'semantic-ui-react';
-import parseQoh from './utils/parseQoh';
+import parseQoh from '../utils/parseQoh';
 
 // This component parses the `qoh` object from mongo into something
 // more presentable

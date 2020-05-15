@@ -6,7 +6,7 @@ const {
     GET_SCRYFALL_BULK_BY_TITLE,
     GET_CARD_QTY_FROM_INVENTORY,
     LOGIN
-} = require('../api_resources');
+} = require('../utils/api_resources');
 
 const axios = require('axios');
 

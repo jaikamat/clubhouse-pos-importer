@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Home from './ManageInventory/Home';
 import Sale from './NewSale/Sale';
-import BrowseSales from './BrowseSales';
+import BrowseSales from './BrowseSales/BrowseSales';
 import PublicInventory from './PublicInventory';
 import DeckboxClone from './DeckboxClone/DeckboxClone';
 import Login from './Login';

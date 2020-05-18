@@ -1,0 +1,1 @@
+/usr/bin/node /home/jaipkamat/documents/clubhouse-pos-importer/gc_functions/updateScryfallPrices/index.js

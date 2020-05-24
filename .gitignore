@@ -13,6 +13,7 @@
 
 # misc
 .DS_Store
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -28,21 +29,12 @@ yarn-error.log*
 api
 
 /gc_functions/node_modules
-/gc_functions/production/.env
-/gc_functions/test/.env
-/gc_functions/.env
-/gc_functions/production/.env
-/gc_functions/test/.env
-/gc_functions/pricing_update_scripts/.env
 /gc_functions/prices.json
 
 /migration_scripts/csv_data
 /migration_scripts/output
 /migration_scripts/scryfall_data
 /migration_scripts/node_modules
-
-# Ignore test login credentials
-/src/__tests__/data/.env
 
 # Ignore bulk cards
 /gc_functions/db_scripts/scryfall_bulk.json

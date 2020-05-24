@@ -35,6 +35,7 @@ async function init() {
         await mongoBulkImport(filteredResults, username, password, database);
 
         console.timeEnd('updatePrices');
+        console.log(`Prices updated for database ${database} on ${new Date().toISOString}`);
     } catch (err) {
         throw err;
     }

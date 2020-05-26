@@ -18,16 +18,17 @@ const ContentContainer = styled.div`
     margin-right: 20px;
 `;
 
+const CenterSpan = styled.span`
+    text-align: center;
+`;
+
 const CovidAlert = () => {
     return <Segment placeholder>
         <Header icon>
             <Icon name="exclamation circle" color="blue" />
-            A notice to our customers regarding COVID19
+            The Clubhouse is open 🎉
         </Header>
-        <span>
-            The Clubhouse is open for curbside service every Wednesday and Sunday, from 12pm to 5pm. Simply reach us on <a href="https://discord.gg/2tMxhgw
-
-" target="_blank">Discord</a>, <a href="https://www.facebook.com/RGTClubhouse" target="_blank">Facebook</a>, or call us at (503) 268-1449 to set up an order. We look forward to serving you soon!</span>
+        <CenterSpan>It's official! We are now open 7 days a week. Until further notice, our hours are 12 pm to 6 pm - the play space is still closed however. We look forward to seeing you soon!</CenterSpan>
     </Segment>
 }
 

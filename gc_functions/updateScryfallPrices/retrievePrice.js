@@ -1,6 +1,19 @@
 const superagent = require('superagent');
 
 /**
+ * Models the data retrieved from Scryfall
+ */
+class CardInfo {
+    constructor({ id, name, set, set_name, prices }) {
+        this._id = id;
+        this.name = name;
+        this.set = set;
+        this.set_name = set_name;
+        this.prices = new CardPrice(prices)
+    }
+}
+
+/**
  * Helper class for formatting card price
  */
 class CardPrice {
@@ -20,13 +33,12 @@ module.exports = async function retrievePrice(cardID) {
     try {
         const { body } = await superagent.get(`https://api.scryfall.com/cards/${cardID}`);
         const { id, name, set, set_name, prices } = body;
-        const { usd, usd_foil, eur, tix } = prices;
 
-        const formattedPrice = new CardPrice({ usd, usd_foil, eur, tix });
+        const cardInfo = new CardInfo({ id, name, set, set_name, prices });
 
-        console.log(`${name} | ${set_name} (${set}) | ${JSON.stringify(formattedPrice)}`);
+        console.log(`${name} | ${set_name} (${set}) | ${JSON.stringify(cardInfo.prices)}`);
 
-        return { _id: id, name, set, set_name, prices: formattedPrice };
+        return cardInfo;
     } catch (err) {
         throw err;
     }

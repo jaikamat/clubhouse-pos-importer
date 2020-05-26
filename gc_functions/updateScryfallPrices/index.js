@@ -14,10 +14,8 @@ function filterSource(data) {
 }
 
 async function init() {
-    const { username, password, database } = argv;
+    const { database } = argv;
 
-    if (!username) throw new Error('Mongo username is required');
-    if (!password) throw new Error('Mongo password is required');
     if (!database) throw new Error('Mongo database name is required');
 
     try {
@@ -32,10 +30,10 @@ async function init() {
         // If some requests fail, their array values will be null and will block the mongo import - remove them
         const filteredResults = prices.filter(d => d !== null);
 
-        await mongoBulkImport(filteredResults, username, password, database);
+        await mongoBulkImport(filteredResults, database);
 
         console.timeEnd('updatePrices');
-        console.log(`Prices updated for database ${database} on ${new Date().toISOString}`);
+        console.log(`Prices updated for database ${database} on ${new Date().toISOString()}`);
     } catch (err) {
         throw err;
     }

@@ -3,7 +3,7 @@ import axios from 'axios';
 import _ from 'lodash';
 import $ from 'jquery';
 import { Grid, Segment, Header, Button, Modal, Icon, Divider } from 'semantic-ui-react';
-import { GET_CARDS_BY_TITLE, FINISH_SALE, SUSPEND_SALE } from '../utils/api_resources';
+import { GET_CARDS_WITH_INFO, FINISH_SALE, SUSPEND_SALE } from '../utils/api_resources';
 import SearchBar from '../common/SearchBar';
 import BrowseCardList from './BrowseCardList';
 import SalePriceTotal from './SalePriceTotal';
@@ -44,8 +44,8 @@ export default function Sale() {
 
     const handleResultSelect = async term => {
         try {
-            const { data } = await axios.get(GET_CARDS_BY_TITLE, {
-                params: { title: term },
+            const { data } = await axios.get(GET_CARDS_WITH_INFO, {
+                params: { title: term, matchInStock: true },
                 headers: makeAuthHeader()
             });
 

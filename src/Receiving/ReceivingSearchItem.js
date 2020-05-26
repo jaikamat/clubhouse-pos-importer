@@ -193,7 +193,7 @@ export default function ReceivingCardItem(props) {
                             <Label color="grey">
                                 {set_name} ({String(set).toUpperCase()})
                                 </Label>
-                            <QohLabels inventoryQty={props.inventoryQty} />
+                            <QohLabels inventoryQty={props.qoh} />
                             {' '}
                             <MarketPrice id={id} finish={selectedFinish} />
                         </Item.Header>

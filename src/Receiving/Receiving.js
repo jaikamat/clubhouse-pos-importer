@@ -4,7 +4,7 @@ import axios from 'axios';
 import makeAuthHeader from '../utils/makeAuthHeader';
 import ReceivingSearchList from './ReceivingSearchList';
 import { Segment, Header, Icon, Grid, Divider, Table } from 'semantic-ui-react'
-import { ADD_CARD_TO_INVENTORY, GET_CARD_QTY_FROM_INVENTORY, GET_SCRYFALL_BULK_BY_TITLE } from '../utils/api_resources';
+import { ADD_CARD_TO_INVENTORY, GET_CARDS_WITH_INFO } from '../utils/api_resources';
 import ReceivingListItem from './ReceivingListItem';
 import ReceivingListTotals from './ReceivingListTotals';
 import createToast from '../common/createToast';
@@ -40,28 +40,12 @@ export default function Receiving() {
      */
     const handleSearchSelect = async term => {
         try {
-            const { data } = await axios.get(
-                GET_SCRYFALL_BULK_BY_TITLE,
-                {
-                    params: { title: term },
-                    headers: makeAuthHeader()
-                }
-            );
-
-            const ids = data.map(el => el.id);
-
-            // Fetches only the in-stock qty of a card tied to an `id`
-            const inventoryRes = await axios.post(
-                GET_CARD_QTY_FROM_INVENTORY,
-                { scryfallIds: ids },
-                { headers: makeAuthHeader() }
-            );
-
-            const mergedData = data.map(d => {
-                return { ...d, inventoryQty: inventoryRes.data[d.id] } // inventoryQty will be `undefined` if no qty (prop not found)
+            const { data } = await axios.get(GET_CARDS_WITH_INFO, {
+                params: { title: term, matchInStock: false },
+                headers: makeAuthHeader()
             });
 
-            setSearchResults(mergedData);
+            setSearchResults(data);
         } catch (e) {
             console.log(e);
         }
@@ -131,30 +115,12 @@ export default function Receiving() {
      * Persists all passed cards to inventory via Promise.all() using the addCardToInventory backend method
      */
     const commitToInventory = async () => {
-        const stateWithUnremovedProps = [...receivingList];
-
-        // Need to remove all the props we've been adding to the card objects
-        // when passing them to other components for state management.
-        const removedProps = stateWithUnremovedProps.map(c => {
-            return _.omit(c, [
-                "cashPrice",
-                "creditPrice",
-                "marketPrice",
-                "inventoryQty",
-                "addToList",
-                "uuid_key",
-                "tradeType",
-                "activeTradeType"
-            ])
-        })
-
         try {
-            const promises = removedProps.map(async c => {
+            const promises = receivingList.map(async card => {
                 return await axios.post(ADD_CARD_TO_INVENTORY, {
                     quantity: 1,
-                    type: c.finishCondition,
-                    finishCondition: c.finishCondition,
-                    cardInfo: _.omit(c, 'finishCondition') // remove `finishCondition` finally
+                    finishCondition: card.finishCondition,
+                    cardInfo: card
                 }, { headers: makeAuthHeader() });
             })
 

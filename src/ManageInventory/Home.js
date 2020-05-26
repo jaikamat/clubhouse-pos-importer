@@ -4,7 +4,7 @@ import axios from 'axios';
 import makeAuthHeader from '../utils/makeAuthHeader';
 import ScryfallCardList from './ScryfallCardList';
 import { Segment, Header, Icon, Divider } from 'semantic-ui-react'
-import { GET_CARD_QTY_FROM_INVENTORY, GET_SCRYFALL_BULK_BY_TITLE } from '../utils/api_resources';
+import { GET_CARDS_WITH_INFO } from '../utils/api_resources';
 import { InventoryCard } from '../utils/ScryfallCard';
 
 export default function Home() {
@@ -13,29 +13,14 @@ export default function Home() {
     const handleSearchSelect = async term => {
         try {
             const { data } = await axios.get(
-                GET_SCRYFALL_BULK_BY_TITLE, {
-                params: { title: term },
+                GET_CARDS_WITH_INFO, {
+                params: { title: term, matchInStock: false },
                 headers: makeAuthHeader()
             });
 
-            const ids = data.map(el => el.id);
-
-            // Fetches only the in-stock qty of a card tied to an `id`
-            const inventoryRes = await axios.post(
-                GET_CARD_QTY_FROM_INVENTORY,
-                { scryfallIds: ids },
-                { headers: makeAuthHeader() }
-            );
-
             const modeledData = data.map(c => new InventoryCard(c));
 
-            // Attached the fetched QOH to the retreived cards
-            const modeledDataWithQoh = modeledData.map(card => {
-                card.qoh = inventoryRes.data[card.id];
-                return card;
-            })
-
-            setSearchResults(modeledDataWithQoh);
+            setSearchResults(modeledData);
         } catch (e) {
             console.log(e);
         }

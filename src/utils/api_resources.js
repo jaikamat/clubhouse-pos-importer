@@ -32,6 +32,8 @@ const endpoints = {
         `https://us-central1-clubhouse-collection.cloudfunctions.net/getJwt${env}`,
     GET_ALL_SALES:
         `https://us-central1-clubhouse-collection.cloudfunctions.net/getSales${env}/sales`,
+    GET_CARDS_WITH_INFO:
+        `https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsWithInfo${env}`,
     SCRYFALL_AUTOCOMPLETE: 'https://api.scryfall.com/cards/autocomplete',
     SCRYFALL_SEARCH: 'https://api.scryfall.com/cards/search',
     GET_LIVE_PRICE: `https://us-central1-clubhouse-collection.cloudfunctions.net/getPriceFromTcg${env}`

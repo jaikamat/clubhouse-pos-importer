@@ -9,7 +9,7 @@ import {
 } from 'semantic-ui-react';
 import SearchBar from '../common/SearchBar';
 import PublicCardList from './PublicCardList';
-import { GET_CARDS_BY_TITLE } from '../utils/api_resources';
+import { GET_CARDS_WITH_INFO } from '../utils/api_resources';
 import { InventoryCard } from '../utils/ScryfallCard';
 
 const initialState = {
@@ -23,8 +23,8 @@ export default class PublicInventory extends React.Component {
 
     handleResultSelect = async term => {
         try {
-            const { data } = await axios.get(GET_CARDS_BY_TITLE, {
-                params: { title: term }
+            const { data } = await axios.get(GET_CARDS_WITH_INFO, {
+                params: { title: term, matchInStock: true }
             });
 
             const modeledData = data.map(c => new InventoryCard(c));

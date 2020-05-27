@@ -8,10 +8,6 @@ const { REACT_APP_ENVIRONMENT } = process.env;
 const env = REACT_APP_ENVIRONMENT === 'development' ? '_test' : '';
 
 const endpoints = {
-    GET_CARDS_BY_TITLE:
-        `https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsByTitle${env}`,
-    GET_CARD_QTY_FROM_INVENTORY:
-        `https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsFromInventory${env}`,
     FINISH_SALE:
         `https://us-central1-clubhouse-collection.cloudfunctions.net/finishSale${env}`,
     ADD_CARD_TO_INVENTORY:

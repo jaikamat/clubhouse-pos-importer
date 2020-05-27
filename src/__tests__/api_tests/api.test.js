@@ -1,12 +1,10 @@
-// Must set dev enviroment so we don't hit production!
-process.env.REACT_APP_ENVIRONMENT = 'development';
+process.env.REACT_APP_ENVIRONMENT = 'development'; // Must set dev enviroment so we don't hit production!
 
 const {
     ADD_CARD_TO_INVENTORY,
-    GET_SCRYFALL_BULK_BY_TITLE,
-    GET_CARD_QTY_FROM_INVENTORY,
+    GET_CARDS_WITH_INFO,
     LOGIN
-} = require('../utils/api_resources');
+} = require('../../utils/api_resources');
 
 const axios = require('axios');
 
@@ -18,12 +16,8 @@ describe('Ensure development API is being hit', () => {
         expect(ADD_CARD_TO_INVENTORY).toEqual(`https://us-central1-clubhouse-collection.cloudfunctions.net/addCardToInventory_test`);
     }, TIMEOUT);
 
-    test('GET_SCRYFALL_BULK_BY_TITLE should be _test', () => {
-        expect(GET_SCRYFALL_BULK_BY_TITLE).toEqual(`https://us-central1-clubhouse-collection.cloudfunctions.net/getScryfallBulkCardsByTitle_test`);
-    }, TIMEOUT);
-
-    test('GET_CARD_QTY_FROM_INVENTORY should be _test', () => {
-        expect(GET_CARD_QTY_FROM_INVENTORY).toEqual(`https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsFromInventory_test`);
+    test('GET_CARDS_WITH_INFO should be _test', () => {
+        expect(GET_CARDS_WITH_INFO).toEqual(`https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsWithInfo_test`);
     }, TIMEOUT);
 
     test('LOGIN should be _test', () => {
@@ -50,8 +44,8 @@ describe('Add and remove card workflow', () => {
     test('Getting a card', async () => {
         const CARD_TITLE = 'Birds of Paradise';
 
-        const { data } = await axios.get(GET_SCRYFALL_BULK_BY_TITLE, {
-            params: { title: CARD_TITLE }
+        const { data } = await axios.get(GET_CARDS_WITH_INFO, {
+            params: { title: CARD_TITLE, matchInStock: false }
         });
 
         expect(data.length).toBeGreaterThan(20); // There are more than 20 printings of BoP in MTG
@@ -64,23 +58,14 @@ describe('Add and remove card workflow', () => {
         const CARD_TITLE = 'Catalog';
 
         // Get card data
-        const { data } = await axios.get(GET_SCRYFALL_BULK_BY_TITLE, {
-            params: { title: CARD_TITLE }
+        const { data } = await axios.get(GET_CARDS_WITH_INFO, {
+            params: { title: CARD_TITLE, matchInStock: false }
         });
 
         const firstCard = data[0]; // Use the first card's data
-        const firstCardID = firstCard.id; // Grab its ID
         const quantityToAdd = 4; // Choose a quantity to add
         const finishCondition = 'NONFOIL_NM'; // Select a finsh condition to use
-
-        // Get inventory quantites for the chosen cards
-        const inventoryRes = await axios.post(
-            GET_CARD_QTY_FROM_INVENTORY,
-            { scryfallIds: data.map(c => c.id) },
-            { headers: { Authorization: `Bearer ${authToken}` } }
-        );
-
-        const initialQOH = inventoryRes.data[firstCardID] // Store the initial quantity on hand
+        const initialQOH = firstCard.qoh;
 
         // Add the cards to inventory
         const addToInventoryRes = await axios.post(ADD_CARD_TO_INVENTORY, {
@@ -94,38 +79,27 @@ describe('Add and remove card workflow', () => {
         expect(newQOH[finishCondition]).toBe(initialQOH[finishCondition] + quantityToAdd);
 
         // Reach back out to API for the quantity to be sure
-        const confirmNewQoh = await axios.post(
-            GET_CARD_QTY_FROM_INVENTORY,
-            { scryfallIds: data.map(c => c.id) },
-            { headers: { Authorization: `Bearer ${authToken}` } }
-        );
+        const confirmNewQoh = await axios.get(GET_CARDS_WITH_INFO, {
+            params: { title: CARD_TITLE, matchInStock: false }
+        });
 
-        const confirmedQty = confirmNewQoh.data[firstCardID][finishCondition]; // Store the quantity
+        const confirmedQty = confirmNewQoh.data[0].qoh; // Store the quantity
 
-        expect(confirmedQty).toBe(initialQOH[finishCondition] + quantityToAdd);
+        expect(confirmedQty[finishCondition]).toBe(initialQOH[finishCondition] + quantityToAdd);
     }, TIMEOUT)
 
     test('Removing some cards', async () => {
         const CARD_TITLE = 'Catalog';
 
         // Get card data
-        const { data } = await axios.get(GET_SCRYFALL_BULK_BY_TITLE, {
-            params: { title: CARD_TITLE }
+        const { data } = await axios.get(GET_CARDS_WITH_INFO, {
+            params: { title: CARD_TITLE, matchInStock: false }
         });
 
         const firstCard = data[0]; // Use the first card's data
-        const firstCardID = firstCard.id; // Grab its ID
         const quantityToSubtract = 4; // Choose a quantity to remove
         const finishCondition = 'NONFOIL_NM'; // Select a finsh condition to use
-
-        // Get inventory quantites for the chosen cards
-        const inventoryRes = await axios.post(
-            GET_CARD_QTY_FROM_INVENTORY,
-            { scryfallIds: data.map(c => c.id) },
-            { headers: { Authorization: `Bearer ${authToken}` } }
-        );
-
-        const initialQOH = inventoryRes.data[firstCardID] // Store the initial quantity on hand
+        const initialQOH = firstCard.qoh;
 
         // Add the cards to inventory
         const addToInventoryRes = await axios.post(ADD_CARD_TO_INVENTORY, {
@@ -139,37 +113,26 @@ describe('Add and remove card workflow', () => {
         expect(newQOH[finishCondition]).toBe(initialQOH[finishCondition] - quantityToSubtract);
 
         // Reach back out to API for the quantity to be sure
-        const confirmNewQoh = await axios.post(
-            GET_CARD_QTY_FROM_INVENTORY,
-            { scryfallIds: data.map(c => c.id) },
-            { headers: { Authorization: `Bearer ${authToken}` } }
-        );
+        const confirmNewQoh = await axios.get(GET_CARDS_WITH_INFO, {
+            params: { title: CARD_TITLE, matchInStock: false }
+        });
 
-        const confirmedQty = confirmNewQoh.data[firstCardID][finishCondition]; // Store the quantity
+        const confirmedQty = confirmNewQoh.data[0].qoh; // Store the quantity
 
-        expect(confirmedQty).toBe(initialQOH[finishCondition] - quantityToSubtract);
+        expect(confirmedQty[finishCondition]).toBe(initialQOH[finishCondition] - quantityToSubtract);
     }, TIMEOUT)
 
     test('Ensure quantites not negative', async () => {
         const CARD_TITLE = 'Catalog';
 
         // Get card data
-        const { data } = await axios.get(GET_SCRYFALL_BULK_BY_TITLE, {
-            params: { title: CARD_TITLE }
+        const { data } = await axios.get(GET_CARDS_WITH_INFO, {
+            params: { title: CARD_TITLE, matchInStock: false }
         });
 
         const firstCard = data[0]; // Use the first card's data
-        const firstCardID = firstCard.id; // Grab its ID
         const finishCondition = 'NONFOIL_NM'; // Select a finsh condition to use
-
-        // Get inventory quantites for the chosen cards
-        const inventoryRes = await axios.post(
-            GET_CARD_QTY_FROM_INVENTORY,
-            { scryfallIds: data.map(c => c.id) },
-            { headers: { Authorization: `Bearer ${authToken}` } }
-        );
-
-        const initialQOH = inventoryRes.data[firstCardID] // Store the initial quantity on hand
+        const initialQOH = firstCard.qoh; // Store the initial quantity on hand
         const negativeQOH = initialQOH[finishCondition] + 1; // Make the desired quantity attempt forcing a negative
 
         // Add the cards to inventory

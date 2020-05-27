@@ -61,7 +61,7 @@ describe('Testing login/logout', () => {
         await page.type(ui.passwordInput, process.env.DUMMY_PASSWORD, { delay: DELAY });
         await page.$eval(ui.loginFormBtn, b => b.click());
         await page.waitFor(2000);
-        expect(page.url()).toBe('http://localhost:3000/#/manage-inventory');
+        await expect(page.url()).toBe('http://localhost:3000/#/manage-inventory');
     });
 });
 
@@ -186,7 +186,7 @@ describe('Suspend Sale workflow', () => {
         await searchForCard('birds of paradise');
         const quantity = await page.$eval(ui.firstSearchResultNonfoilQty, d => d.textContent);
         await page.waitFor(500);
-        expect(quantity).toBe("1");
+        expect(quantity).toBe("208");
     });
 
     test('Restore the sale', async () => {
@@ -248,7 +248,7 @@ describe('Suspend Sale workflow', () => {
     test('Confirm cards were restored to inventory', async () => {
         await searchForCard('birds of paradise');
         const quantity1 = await page.$eval(ui.firstSearchResultNonfoilQty, d => d.textContent);
-        expect(quantity1).toBe("3");
+        expect(quantity1).toBe("210");
         await searchForCard('Multani, Maro So');
         const quantity2 = await page.$eval(ui.firstSearchResultNonfoilQty, d => d.textContent);
         expect(quantity2).toBe("3");

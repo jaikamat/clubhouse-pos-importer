@@ -6,7 +6,6 @@
  */
 export class ScryfallCard {
     constructor(card) {
-        this.cachedOriginal = card.cachedOriginal ? card.cachedOriginal : card; // Preserve the original data
         this.id = card.id;
         this.name = card.name;
         this.set = card.set;

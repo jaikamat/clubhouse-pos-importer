@@ -38,7 +38,7 @@ function checkCardFinish(nonfoilProp, foilProp) {
     }
 }
 
-export default function ScryfallCardListItem({ qoh, foil, nonfoil, name, set_name, set, rarity, id, cachedOriginal, cardImage }) {
+export default function ScryfallCardListItem({ qoh, foil, nonfoil, name, set_name, set, rarity, id, cardImage }) {
     const [quantity, setQuantity] = useState(0);
     const [selectedFinish, setSelectedFinish] = useState(checkCardFinish(nonfoil, foil).selectedFinish);
     const [selectedCondition, setSelectedCondition] = useState('NM');
@@ -78,7 +78,7 @@ export default function ScryfallCardListItem({ qoh, foil, nonfoil, name, set_nam
             const { data } = await axios.post(ADD_CARD_TO_INVENTORY, {
                 quantity: quantity,
                 finishCondition: finishCondition,
-                cardInfo: { ...cachedOriginal }, // Persist the original data to maintain backwards compatibility
+                cardInfo: { id, name, set_name, set },
             }, { headers: makeAuthHeader() });
 
             createToast({

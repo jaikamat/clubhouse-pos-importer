@@ -166,13 +166,7 @@ export default function Sale() {
             // Must delete currently suspended sale to faithfully restore inventory prior to sale
             if (!!_id) await axios.delete(`${SUSPEND_SALE}/${_id}`);
 
-            const { data } = await axios.post(FINISH_SALE, {
-                cards: saleListCards.map(card => {
-                    // Reconstruct the original object received from Scryfall to preserve backwards-compatibility in mongo
-                    const { cachedOriginal, qtyToSell, finishCondition, price } = card;
-                    return { ...cachedOriginal, qtyToSell, finishCondition, price };
-                })
-            }, { headers: makeAuthHeader() });
+            const { data } = await axios.post(FINISH_SALE, { cards: saleListCards }, { headers: makeAuthHeader() });
 
             const saleID = data.sale_data.Sale.saleID;
 

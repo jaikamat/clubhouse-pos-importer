@@ -12,7 +12,7 @@ require('dotenv').config();
 const app = express();
 app.use(cors());
 
-async function getCardsWithInfo(title, matchInStock = false) {
+async function getCardsWithInfo(title, matchInStock = false) { // if matchInStock is false, we get all cards, even those with no stock
     const mongoConfig = { useNewUrlParser: true, useUnifiedTopology: true };
 
     try {

@@ -70,11 +70,10 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
 
         if (title) initialMatch.name = { $regex: `${title}`, $options: 'i' };
         if (setName) initialMatch.set_name = setName;
-        // Types are Tribal, Instant, Sorcery, Creature, Enchantment, Land, Planeswalker, Artifact
-        if (type) initialMatch.type_line = { $regex: `${type}`, $options: 'i' };
 
         aggregation.push({ $match: initialMatch });
 
+        // Attach card price information
         aggregation.push({
             $lookup: {
                 from: "scryfall_pricing_data",
@@ -84,16 +83,34 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
             }
         });
 
-        if (format) {
-            aggregation.push({
-                $lookup: {
-                    from: "scryfall_bulk_cards",
-                    localField: "_id",
-                    foreignField: "id",
-                    as: "format_legalities"
+        // Attach bulk card information to prices
+        aggregation.push({
+            $lookup: {
+                from: "scryfall_bulk_cards",
+                localField: "_id",
+                foreignField: "id",
+                as: "bulk_match"
+            }
+        });
+
+        // Merge the bulk and pricing collection properties
+        aggregation.push({
+            $replaceRoot: {
+                newRoot: {
+                    $mergeObjects: [
+                        { $arrayElemAt: ["$bulk_match", 0] },
+                        '$$ROOT'
+                    ]
                 }
-            });
-        }
+            }
+        })
+
+        const typeMatch = {};
+
+        // Types are Tribal, Instant, Sorcery, Creature, Enchantment, Land, Planeswalker, Artifact
+        if (type) typeMatch.type_line = { $regex: `${type}`, $options: 'i' };
+
+        aggregation.push({ $match: typeMatch });
 
         const addFields = {
             image_uri: {
@@ -134,10 +151,6 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
             inventory: { $objectToArray: "$qoh" }
         };
 
-        if (format) {
-            addFields.format_legalities = { $arrayElemAt: ["$format_legalities.legalities", 0] };
-        }
-
         aggregation.push({ $addFields: addFields });
 
         aggregation.push({ $unwind: '$inventory' });
@@ -166,8 +179,11 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
                 image_uri: 1,
                 rarity: 1,
                 colors_string: 1,
-                format_legalities: 1,
-                type_line: 1
+                legalities: 1,
+                type_line: 1,
+                prices: 1,
+                printed_name: 1,
+                flavor_name: 1
             }
         });
 
@@ -182,7 +198,7 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
         }
 
         // End match format legality logic
-        if (format) endMatch[`format_legalities.${format}`] = { $in: ['restricted', 'legal'] };
+        if (format) endMatch[`legalities.${format}`] = { $in: ['restricted', 'legal'] };
 
         // End match colors matching logic
         if (colors) endMatch.colors_string = colors;

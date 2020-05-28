@@ -64,27 +64,24 @@ app.use((req, res, next) => {
 })
 
 // `finishCondition` Refers to the configuration of Finishes and Conditions ex. NONFOIL_NM or FOIL_LP
-async function addCardToInventory(quantity, finishCondition, cardInfo) {
-    const client = await new MongoClient(process.env.MONGO_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    });
+async function addCardToInventory({ quantity, finishCondition, id, name, set_name, set }) {
+    const mongoConfig = { useNewUrlParser: true, useUnifiedTopology: true }
 
     try {
-        await client.connect();
+        var client = await new MongoClient(process.env.MONGO_URI, mongoConfig).connect();
 
-        console.log(`Update Info: QTY:${quantity}, ${finishCondition}, ${cardInfo.name}, ${cardInfo.id}`);
+        console.log(`Update Info: QTY:${quantity}, ${finishCondition}, ${name}, ${id}`);
 
-        const db = client.db(DATABASE_NAME).collection('card_inventory');
+        const db = client.db(DATABASE_NAME).collection(COLLECTION);
 
         // Upsert the new quantity in the document
         await db.updateOne(
-            { _id: cardInfo.id },
+            { _id: id },
             {
                 $inc: {
                     [`qoh.${finishCondition}`]: quantity
                 },
-                $setOnInsert: cardInfo
+                $setOnInsert: { name, set_name, set }
             },
             { upsert: true }
         );
@@ -92,7 +89,7 @@ async function addCardToInventory(quantity, finishCondition, cardInfo) {
         // Validate inventory quantites to never be negative numbers
         await db.updateOne(
             {
-                _id: cardInfo.id,
+                _id: id,
                 [`qoh.${finishCondition}`]: { $lt: 0 }
             },
             {
@@ -102,7 +99,7 @@ async function addCardToInventory(quantity, finishCondition, cardInfo) {
 
         // Get the updated document for return
         return await db.findOne(
-            { _id: cardInfo.id },
+            { _id: id },
             {
                 projection: {
                     _id: true,
@@ -124,7 +121,8 @@ async function addCardToInventory(quantity, finishCondition, cardInfo) {
 app.post('/', async (req, res) => {
     try {
         const { quantity, finishCondition, cardInfo } = req.body;
-        const message = await addCardToInventory(quantity, finishCondition, cardInfo);
+        const { id, name, set_name, set } = cardInfo;
+        const message = await addCardToInventory({ quantity, finishCondition, id, name, set_name, set });
         res.status(200).send(message);
     } catch (err) {
         console.log(err);

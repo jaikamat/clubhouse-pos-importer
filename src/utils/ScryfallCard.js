@@ -8,15 +8,34 @@ export class ScryfallCard {
     constructor(card) {
         this.id = card.id;
         this.name = card.name;
+        this.printed_name = card.printed_name || null;
         this.set = card.set;
         this.set_name = card.set_name;
         this.rarity = card.rarity;
-        this.image_uris = card.image_uris ? card.image_uris : null;
-        this.card_faces = card.card_faces ? card.card_faces : null;
+        this.image_uris = card.image_uris || null;
+        this.card_faces = card.card_faces || null;
         this.nonfoil = card.nonfoil;
         this.foil = card.foil;
         this.colors = card.colors;
         this.type_line = card.type_line;
+        this.frame_effects = card.frame_effects || [];
+    }
+
+    /**
+     * Used to display differing border treatments and alt-arts
+     */
+    get display_name() {
+        const { name, printed_name, frame_effects } = this;
+
+        if ((name !== printed_name) && printed_name) {
+            return `${name} (IP series)`;
+        } else if (frame_effects.includes('showcase')) {
+            return `${name} (Showcase)`;
+        } else if (frame_effects.includes('extendedart')) {
+            return `${name} (Extended art)`;
+        } else {
+            return name;
+        }
     }
 
     get cardImage() {
@@ -42,9 +61,9 @@ export class InventoryCard extends ScryfallCard {
         super(card);
         this._qoh = card.qoh ? card.qoh : {};
         // `quantity` and `qtyToSell` are redundant transaction props, unify them down the line
-        this.quantity = card.quantity ? card.quantity : null;
-        this.qtyToSell = card.qtyToSell ? card.qtyToSell : null;
-        this.finishCondition = card.finishCondition ? card.finishCondition : null;
+        this.quantity = card.quantity || null;
+        this.qtyToSell = card.qtyToSell || null;
+        this.finishCondition = card.finishCondition || null;
         this.price = card.price >= 0 ? card.price : null;
     }
 

@@ -4,9 +4,9 @@ import Price from '../common/Price';
 import './PrintList.css';
 import SalePriceTotal from './SalePriceTotal';
 
-const Row = ({ id, name, qtyToSell, finishCondition, set_name, price }) => {
+const Row = ({ id, display_name, qtyToSell, finishCondition, set_name, price }) => {
     return <li key={id}>
-        <b>{name} | x{qtyToSell} | {finishCondition} | {set_name} | <Price num={price} /></b>
+        <b>{display_name} | x{qtyToSell} | {finishCondition} | {set_name} | <Price num={price} /></b>
     </li>
 }
 

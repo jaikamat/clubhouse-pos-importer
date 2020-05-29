@@ -4,7 +4,7 @@ import Price from '../common/Price';
 
 export default function SaleLineItem(props) {
     const {
-        name,
+        displayName,
         set,
         finishCondition,
         qtyToSell,
@@ -18,7 +18,7 @@ export default function SaleLineItem(props) {
 
     return (
         <Table.Row>
-            <Table.Cell><h4>{name}</h4></Table.Cell>
+            <Table.Cell><h4>{displayName}</h4></Table.Cell>
             <Table.Cell singleLine>
                 <i
                     className={`ss ss-fw ss-${set} ss-${rarity}`}

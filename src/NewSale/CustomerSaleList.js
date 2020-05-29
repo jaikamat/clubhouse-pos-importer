@@ -7,6 +7,7 @@ const CustomerSaleList = ({ saleList, removeFromSaleList }) => {
         <Table.Body>
             {saleList.map(card => {
                 return <SaleLineItem
+                    displayName={card.display_name}
                     {...card}
                     key={`${card.id}${card.finishCondition}${card.qtyToSell}`}
                     deleteLineItem={removeFromSaleList}

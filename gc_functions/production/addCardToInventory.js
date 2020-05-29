@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const DATABASE_NAME = 'clubhouse_collection_production';
+const COLLECTION = 'card_inventory';
 require('dotenv').config();
 
 /**

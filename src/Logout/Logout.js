@@ -1,29 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Redirect } from 'react-router-dom';
-import { Button, Header, Container } from 'semantic-ui-react';
 import { AuthContext } from '../context/AuthProvider';
 
-class Logout extends React.Component {
-    render() {
-        return (
-            <AuthContext.Consumer>
-                {({ loggedIn, handleLogout }) => {
-                    if (!loggedIn) {
-                        return <Redirect to="/login" />;
-                    }
+function Logout() {
+    const { handleLogout } = useContext(AuthContext);
 
-                    return (
-                        <React.Fragment>
-                            <Container fluid>
-                                <Header as="h3" color="grey"><i>Until we meet again, friend...</i></Header>
-                                <Button onClick={async () => await handleLogout()}>Logout</Button>
-                            </Container>
-                        </React.Fragment>
-                    )
-                }}
-            </AuthContext.Consumer>
-        )
-    }
+    handleLogout();
+
+    return <Redirect to="/login" />
 };
 
 export default Logout;

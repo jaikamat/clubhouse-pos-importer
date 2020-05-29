@@ -22,7 +22,7 @@ const CenterSpan = styled.span`
     text-align: center;
 `;
 
-const CovidAlert = () => {
+const Alert = () => {
     return <Segment placeholder>
         <Header icon>
             <Icon name="exclamation circle" color="blue" />
@@ -38,7 +38,7 @@ export default function Main() {
             <br />
 
             <Switch>
-                <Route exact path="/" component={CovidAlert} />
+                <Route exact path="/" component={Alert} />
                 <Route exact path="/manage-inventory" component={Home} />
                 <Route exact path="/new-sale" component={Sale} />
                 <Route exact path="/browse-sales" component={BrowseSales} />

@@ -60,7 +60,7 @@ describe('Testing login/logout', () => {
         await page.type(ui.usernameInput, process.env.DUMMY_USERNAME, { delay: DELAY });
         await page.type(ui.passwordInput, process.env.DUMMY_PASSWORD, { delay: DELAY });
         await page.$eval(ui.loginFormBtn, b => b.click());
-        await page.waitFor(2000);
+        await page.waitFor(3000);
         await expect(page.url()).toBe('http://localhost:3000/#/manage-inventory');
     });
 });

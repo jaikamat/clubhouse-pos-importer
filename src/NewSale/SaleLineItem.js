@@ -1,20 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Button, Label, Table } from 'semantic-ui-react';
+import { SaleContext } from '../context/SaleContext';
 import Price from '../common/Price';
 
-export default function SaleLineItem(props) {
-    const {
-        displayName,
-        set,
-        finishCondition,
-        qtyToSell,
-        price,
-        rarity,
-        deleteLineItem,
-        id
-    } = props;
-
+export default function SaleLineItem({ displayName, set, finishCondition, qtyToSell, price, rarity, id }) {
     const [hovered, setHovered] = useState(false);
+
+    const { removeFromSaleList } = useContext(SaleContext);
 
     return (
         <Table.Row>
@@ -33,7 +25,7 @@ export default function SaleLineItem(props) {
                 <Button
                     icon="cancel"
                     circular
-                    onClick={() => deleteLineItem(id, finishCondition)}
+                    onClick={() => removeFromSaleList(id, finishCondition)}
                     onMouseOver={() => setHovered(true)}
                     onMouseOut={() => setHovered(false)}
                     color={hovered ? 'red' : null}

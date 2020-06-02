@@ -1,4 +1,4 @@
-process.env.REACT_APP_ENVIRONMENT = 'development'; // Must set dev enviroment so we don't hit production!
+require('dotenv').config({ path: './src/__tests__/api_tests/.env' }); // Relative pathname from the point of injection at runtime, not directory structure
 
 const {
     ADD_CARD_TO_INVENTORY,

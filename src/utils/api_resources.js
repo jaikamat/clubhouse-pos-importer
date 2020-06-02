@@ -12,6 +12,8 @@ const endpoints = {
         `https://us-central1-clubhouse-collection.cloudfunctions.net/finishSale${env}`,
     ADD_CARD_TO_INVENTORY:
         `https://us-central1-clubhouse-collection.cloudfunctions.net/addCardToInventory${env}`,
+    RECEIVE_CARDS:
+        `https://us-central1-clubhouse-collection.cloudfunctions.net/receiveCards${env}`,
     GET_INVENTORY_QUERY:
         `https://us-central1-clubhouse-collection.cloudfunctions.net/inventorySearchQuery${env}`,
     GET_SALES_BY_TITLE:

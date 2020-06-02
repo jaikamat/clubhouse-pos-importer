@@ -4,7 +4,7 @@ import axios from 'axios';
 import makeAuthHeader from '../utils/makeAuthHeader';
 import ReceivingSearchList from './ReceivingSearchList';
 import { Segment, Header, Icon, Grid, Divider, Table } from 'semantic-ui-react'
-import { ADD_CARD_TO_INVENTORY, GET_CARDS_WITH_INFO } from '../utils/api_resources';
+import { RECEIVE_CARDS, GET_CARDS_WITH_INFO } from '../utils/api_resources';
 import ReceivingListItem from './ReceivingListItem';
 import ReceivingListTotals from './ReceivingListTotals';
 import createToast from '../common/createToast';
@@ -116,15 +116,14 @@ export default function Receiving() {
      */
     const commitToInventory = async () => {
         try {
-            const promises = receivingList.map(async card => {
-                return await axios.post(ADD_CARD_TO_INVENTORY, {
-                    quantity: 1,
-                    finishCondition: card.finishCondition,
-                    cardInfo: card
-                }, { headers: makeAuthHeader() });
+            const cardsToCommit = receivingList.map(card => {
+                const { finishCondition, id, name, set_name, set } = card;
+                return { quantity: 1, finishCondition, id, name, set_name, set }; // Only committing one per line-item
             })
 
-            await Promise.all(promises);
+            const messages = await axios.post(RECEIVE_CARDS, { cards: cardsToCommit }, { headers: makeAuthHeader() });
+
+            console.log(messages);
 
             setSearchResults([]);
             setReceivingList([]);

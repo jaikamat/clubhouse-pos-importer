@@ -1,5 +1,5 @@
 export default {
-    loginBtn: '#root > div.ui.inverted.top.fixed.menu > div.right.menu > a:nth-child(2)',
+    loginBtn: '#login-btn',
     usernameInput: '.username-input input',
     passwordInput: '.password-input input',
     loginFormBtn: '.login-btn',
@@ -29,13 +29,14 @@ export default {
     deleteSaleBtn: 'body > div.ui.page.modals.dimmer.transition.visible.active > div > div.actions > button.ui.red.button',
     manageInventoryFirstItem: '#root > div:nth-child(2) > div.ui.segment > div > div > div.content > h3 > div.ui.blue.image.label > div',
     customerNameTextCount: 'body > div.ui.page.modals.dimmer.transition.visible.active > div > div.content > div > div:nth-child(1) > form > div:nth-child(2) > p',
-    manageInvFirstResultQuantity: '#root > div:nth-child(2) > div:nth-child(5) > div > div > div.content > div > form > div > div:nth-child(1) > div > input[type=number]',
-    manageInvFinishDropdown: '#root > div:nth-child(2) > div.ui.segment > div > div > div.content > div > form > div > div:nth-child(2) > div',
-    manageInvFinishDropdownFirst: '#root > div:nth-child(2) > div.ui.segment > div > div > div.content > div > form > div > div:nth-child(2) > div > div.visible.menu.transition > div:nth-child(1)',
-    manageInvFinishDropdownSecond: '#root > div:nth-child(2) > div.ui.segment > div > div > div.content > div > form > div > div:nth-child(2) > div > div.visible.menu.transition > div:nth-child(2)',
-    manageInvConditionDropdown: '#root > div:nth-child(2) > div.ui.segment > div > div > div.content > div > form > div > div:nth-child(3) > div',
-    manageInvConditionDropdownFirst: '#root > div:nth-child(2) > div.ui.segment > div > div > div.content > div > form > div > div:nth-child(3) > div > div.visible.menu.transition > div.active.selected.item',
-    manageInvSubmitBtn: '#root > div:nth-child(2) > div.ui.segment > div > div > div.content > div > form > div > div:nth-child(4) > button',
-    manageInvNonfoilLabel: '#root > div:nth-child(2) > div.ui.segment > div > div > div.content > h3 > div:nth-child(4) > div',
-    manageInvFoilLabel: '#root > div:nth-child(2) > div.ui.segment > div > div > div.content > h3 > div:nth-child(3) > div'
+    manageInvFirstResultQuantity: '#content-container > div.ui.segment > div > div > div.content > div > form > div > div:nth-child(1) > div > input[type=number]',
+    manageInvFinishDropdown: '#content-container > div.ui.segment > div > div > div.content > div > form > div > div:nth-child(2) > div',
+    manageInvFinishDropdownFirst: '#content-container > div.ui.segment > div > div > div.content > div > form > div > div:nth-child(2) > div > div.visible.menu.transition > div:nth-child(1)',
+    manageInvFinishDropdownSecond: '#content-container > div.ui.segment > div > div > div.content > div > form > div > div:nth-child(2) > div > div.visible.menu.transition > div:nth-child(2)',
+    manageInvConditionDropdown: '#content-container > div.ui.segment > div > div > div.content > div > form > div > div:nth-child(3) > div',
+    manageInvConditionDropdownFirst: '#content-container > div.ui.segment > div > div > div.content > div > form > div > div:nth-child(3) > div > div.visible.menu.transition > div:nth-child(1)',
+    manageInvSubmitBtn: '#content-container > div.ui.segment > div > div > div.content > div > form > div > div > button',
+    manageInvNonfoilLabel: '#content-container > div.ui.segment > div > div > div.content > h3 > div.ui.image.label.nonfoil-label > div',
+    manageInvFoilLabel: '#content-container > div.ui.segment > div > div > div.content > h3 > div.ui.image.label.foil-label > div'
 };
+

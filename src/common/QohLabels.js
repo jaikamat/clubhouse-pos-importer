@@ -28,13 +28,13 @@ export default function QohLabels({ inventoryQty }) {
 
     return (
         <React.Fragment>
-            <Label {...foilColor} image>
+            <Label {...foilColor} image className="foil-label">
                 Foil
-        <Label.Detail>{foilQty}</Label.Detail>
+        <Label.Detail className="foil-label-qty">{foilQty}</Label.Detail>
             </Label>
-            <Label {...nonfoilColor} image>
+            <Label {...nonfoilColor} image className="nonfoil-label">
                 Nonfoil
-        <Label.Detail>{nonfoilQty}</Label.Detail>
+        <Label.Detail className="nonfoil-label-qty">{nonfoilQty}</Label.Detail>
             </Label>
         </React.Fragment>
     );

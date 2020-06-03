@@ -53,9 +53,6 @@ function Header(props) {
                     </Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>}
-            {!loggedIn && <Menu.Item active={pathname === '/login'} position="right" as={Link} replace to="/login">
-                Log in
-                </Menu.Item>}
         </Menu.Menu>
     </Menu >
 }

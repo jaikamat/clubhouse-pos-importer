@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "497eaab244fa9f515735c365977746e7",
+    "revision": "1f1725f3054c990c123b8d3deaba3885",
     "url": "/index.html"
   },
   {
-    "revision": "51d2526045fa2ce4866d",
+    "revision": "7f556eb7a27230cb691c",
     "url": "/static/css/2.0be890e3.chunk.css"
   },
   {
-    "revision": "e13a20a25496f31a1b02",
+    "revision": "f6e27a754ef0d0265ba3",
     "url": "/static/css/main.e9fea6d6.chunk.css"
   },
   {
-    "revision": "51d2526045fa2ce4866d",
-    "url": "/static/js/2.32ad582e.chunk.js"
+    "revision": "7f556eb7a27230cb691c",
+    "url": "/static/js/2.2962118b.chunk.js"
   },
   {
-    "revision": "e13a20a25496f31a1b02",
-    "url": "/static/js/main.270e5336.chunk.js"
+    "revision": "f6e27a754ef0d0265ba3",
+    "url": "/static/js/main.c06789fa.chunk.js"
   },
   {
     "revision": "632f69a0b006e60feeb3",
@@ -44,6 +44,18 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/media/brand-icons.e8c322de.woff2"
   },
   {
+    "revision": "2a94c562b122256dd545f0d0a87f3fdc",
+    "url": "/static/media/clubhouse_products.2a94c562.png"
+  },
+  {
+    "revision": "36289244bf075ea90d045563f2f7fd23",
+    "url": "/static/media/core_2021_collector.36289244.jpg"
+  },
+  {
+    "revision": "dcb6da2f261557525f9c5b48ceeb301e",
+    "url": "/static/media/core_2021_draft_booster.dcb6da2f.png"
+  },
+  {
     "revision": "9c74e172f87984c48ddf5c8108cabe67",
     "url": "/static/media/flags.9c74e172.png"
   },
@@ -66,6 +78,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "faff92145777a3cbaf8e7367b4807987",
     "url": "/static/media/icons.faff9214.woff"
+  },
+  {
+    "revision": "027133efe716aff5e2678f12568e7628",
+    "url": "/static/media/ikoria_splash.027133ef.jpg"
   },
   {
     "revision": "c3fcddd698018974766b9cd3a44d413b",

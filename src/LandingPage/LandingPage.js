@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Icon, Label } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import Card from './Card';
 import clubhouse_products from './clubhouse_products.png';
 import ikoria_splash from './ikoria_splash.jpg';
 import core_2021_draft_booster from './core_2021_draft_booster.png';
@@ -76,12 +77,6 @@ const ImageMask2 = styled.div`
 const Divider = styled.div`
     display: flex;
     flex-direction: column;
-    min-height: 500px;
-`;
-
-const Divider2 = styled.div`
-    display: flex;
-    flex-direction: column;
     min-height: 400px;
 `;
 
@@ -89,6 +84,15 @@ const FlexRow = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
+`;
+
+const FlexRowResponsive = styled(FlexRow)`
+    justify-content: flex-start;
+
+    @media (max-width: 800px) {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
 `;
 
 const SpanStyle = styled.span`
@@ -107,6 +111,7 @@ const Slogan = styled.h1`
 
     @media (max-width: 800px) {
         font-size: 45px;
+        text-align: center;
     }
 `;
 
@@ -126,7 +131,8 @@ const Subheader = styled.p`
     color: ${(props) => props.color || 'black'};
 
     @media (max-width: 800px) {
-        font-size: 15px;
+        font-size: 18px;
+        text-align: center;
     }
 `;
 
@@ -147,27 +153,6 @@ const Button = styled.button`
     :hover {
         background-color: rgb(35, 139, 219);
         box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.4);
-    }
-`;
-
-const CardImage = styled.img`
-    width: 100%;
-`;
-
-const CardContent = styled.div`
-    padding: 2px 16px;
-`;
-
-const CardContainer = styled.div`
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    border-radius: 5px 5px 5px 5px;
-    width: 380px;
-    height: 700px;
-    margin: 10px 10px 10px 10px;
-    overflow: hidden; // This allows us to edit the borders on the card's border-flush images
-
-    @media (max-width: 800px) {
-        width: 320px;
     }
 `;
 
@@ -192,7 +177,7 @@ const FooterIcon = styled(Icon)`
 `;
 
 const BodyText = styled.p`
-    font-size: 16px;
+    font-size: ${props => props.size || '16px'};
     color: ${props => props.color || 'black'};
     text-align: ${props => props.align === 'center' ? 'center' : 'left'};
 `;
@@ -220,45 +205,24 @@ const SocialMedia = styled.div`
     right: 10px;
 `;
 
-const Hide = styled.div`
-    @media (max-width: 800px) {
-        display: none;
-    }
-`;
-
-const Card = ({ imageSrc, header, date, children }) => {
-    return <CardContainer>
-        <CardImage src={imageSrc} />
-        <CardContent>
-            <h3><b>{header}</b></h3>
-            <p><em>{date}</em></p>
-            <BodyText>{children}</BodyText>
-        </CardContent>
-    </CardContainer>
-}
-
 const ServiceCard = ({ icon = "users", header = "Header", content = "Content", align }) => {
-    return <div>
-        <FlexColumn>
-            <IconStyled circular name={icon} size="huge" />
-            <Subheader>{header}</Subheader>
-            <BodyText color="gray" align={align}>
-                {content}
-            </BodyText>
-        </FlexColumn>
-    </div>
+    return <FlexColumn>
+        <IconStyled circular name={icon} size="huge" />
+        <Subheader>{header}</Subheader>
+        <BodyText color="gray" align={align}>
+            {content}
+        </BodyText>
+    </FlexColumn>
 }
 
 const InfoCard = ({ icon = "users", header = "Header", content = "Content", align }) => {
-    return <div>
-        <FlexColumn>
-            <Icon name={icon} size="big" />
-            <Subheader>{header}</Subheader>
-            <BodyText color="gray" align={align}>
-                {content}
-            </BodyText>
-        </FlexColumn>
-    </div>
+    return <FlexColumn>
+        <Icon name={icon} size="big" />
+        <Subheader>{header}</Subheader>
+        <BodyText color="gray" align={align}>
+            {content}
+        </BodyText>
+    </FlexColumn>
 }
 
 export default function LandingPage() {
@@ -279,14 +243,14 @@ export default function LandingPage() {
                 <Divider>
                     <Slogan>The Clubhouse is open <span role="img" aria-label="confetti">🎉</span></Slogan>
                     <Subheader color="white">It's official! We are now open 7 days a week, from 2pm to 9pm. Play space is limited to 16 mask-wearing players.</Subheader>
-                    <div>
+                    <FlexRowResponsive>
                         {/* <Link to="/calendar">
                             <Button><b>Events calendar</b></Button>
                         </Link> */}
                         <Link to="/public-inventory">
                             <Button><b>Browse cards</b></Button>
                         </Link>
-                    </div>
+                    </FlexRowResponsive>
                     <ImageMask />
                     <Image />
                 </Divider>
@@ -317,14 +281,14 @@ export default function LandingPage() {
                             The Clubhouse play space re-opens TOMORROW! We are open 7 days a week from 2pm to 9 pm! There will be a 16 person capacity enforced on seating. MASKS are REQUIRED for play or any customer service.
                         </p>
                         <p>
-                            This means EVENTS are returning in a limited capacity. Tuesday and Saturday are FREE PLAY Commander! A pack of Ikoria will be given to the first pod that starts play on each free play day. Wednesday we will have an Ikoria booster draft for $15! First paper Ikoria draft! Then on Friday evening we will be holding a MYSTERY BOOSTER DRAFT for $35! Pack and a half of prize support per participant will be added to the prizes as well as free pizza, and giveaways during our Mystery Booster event!
+                            This means EVENTS are returning in a limited capacity. Tuesday and Saturday are FREE PLAY Commander! A pack of Ikoria will be given to the first pod that starts play on each free play day. Wednesday we will have an Ikoria booster draft for $15! Then on Friday evening we will be holding a MYSTERY BOOSTER DRAFT for $35! Pack and a half of prize support per participant will be added to the prizes as well as free pizza, and giveaways during our Mystery Booster event!
                         </p>
                     </Card>
                 </Grid>
 
                 <Spacer height="30" />
 
-                <Divider2>
+                <Divider>
                     <Spacer height="30" />
                     <FlexRow>
                         <Header>Our Services</Header>
@@ -354,7 +318,7 @@ export default function LandingPage() {
                     </Grid>
                     <ImageMask2 />
                     <Image2 />
-                </Divider2>
+                </Divider>
                 <Spacer height="30" />
                 <Grid>
                     <InfoCard
@@ -379,22 +343,13 @@ export default function LandingPage() {
             </ContentContainer>
         </BaseContent>
         <FooterStyle>
-            <FlexRow>
-                <SpanStyle>
-                    <Link to="/login" id="login-btn">
-                        <Label as='a' color="black">Staff login</Label>
-                    </Link>
-                </SpanStyle>
-                <SpanStyle><BodyText color="white">© 2020 The Clubhouse, LLC</BodyText></SpanStyle>
-            </FlexRow>
-            <Hide>
-                <a href="https://discord.gg/Wpej7dQ" target="_blank" rel="noopener noreferrer">
-                    <FooterIcon link name="discord" size="big"></FooterIcon>
-                </a>
-                <a href="https://www.facebook.com/RGTClubhouse/" target="_blank" rel="noopener noreferrer">
-                    <FooterIcon link name="facebook" size="big"></FooterIcon>
-                </a>
-            </Hide>
+            <SpanStyle>
+                <Link to="/login" id="login-btn">
+                    <Label as='a' color="black">Staff login</Label>
+                </Link>
+            </SpanStyle>
+            <SpanStyle><BodyText size="12px" color="white">© 2020 The Clubhouse</BodyText></SpanStyle>
+            <SpanStyle><BodyText size="12px" color="gray">Powered by Scryfall</BodyText></SpanStyle>
         </FooterStyle>
     </Wrapper>
 }

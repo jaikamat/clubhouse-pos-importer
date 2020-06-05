@@ -1,6 +1,6 @@
 const argv = require('yargs').argv;
-const sourceJSON = require('../../clubhouse_data/scryfall-default-cards.json');
-const fetchAllPrices = require('./fetchAllPrices');
+const CardInfo = require('./CardInfo');
+const saveScryfallBulk = require('./saveScryfallBulk');
 const mongoBulkImport = require('./mongoBulkImport');
 
 /**
@@ -9,8 +9,7 @@ const mongoBulkImport = require('./mongoBulkImport');
  * @param {Array} data
  */
 function filterSource(data) {
-    const paperOnly = data.filter(d => d.games.includes('paper'));
-    return paperOnly.map(c => c.id);
+    return paperOnly = data.filter(d => d.games.includes('paper'));
 }
 
 async function init() {
@@ -21,20 +20,15 @@ async function init() {
     try {
         console.time('updatePrices');
 
-        const cardIds = filterSource(sourceJSON);
+        await saveScryfallBulk();
 
-        console.log(`Preparing to fetch prices for ${cardIds.length} cards`);
+        const sourceJSON = require('./bulk_data/scryfall-default-cards.json');
+        const sourceCards = filterSource(sourceJSON);
 
-        while (cardIds.length > 0) {
-            try {
-                const batchIds = cardIds.splice(0, 100);
-                const prices = await fetchAllPrices(batchIds);
-                const filteredResults = prices.filter(d => d !== null);
-                await mongoBulkImport(filteredResults, database);
-            } catch (e) { // Squelch breaking the loop if a card errors
-                console.log(e)
-            }
-        }
+        console.log(`Preparing to fetch prices for ${sourceCards.length} cards`);
+
+        const prices = sourceCards.map(c => new CardInfo(c));
+        await mongoBulkImport(prices, database);
 
         console.timeEnd('updatePrices');
         console.log(`Prices updated for database ${database} on ${new Date().toISOString()}`);

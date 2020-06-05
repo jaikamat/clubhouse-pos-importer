@@ -38,3 +38,4 @@ api
 
 # Ignore bulk cards
 /gc_functions/db_scripts/scryfall_bulk.json
+scryfall-default-cards.json

@@ -73,17 +73,7 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
 
         aggregation.push({ $match: initialMatch });
 
-        // Attach card price information
-        aggregation.push({
-            $lookup: {
-                from: "scryfall_pricing_data",
-                localField: "_id",
-                foreignField: "_id",
-                as: "price_info"
-            }
-        });
-
-        // Attach bulk card information to prices
+        // Attach bulk card information
         aggregation.push({
             $lookup: {
                 from: "scryfall_bulk_cards",
@@ -147,7 +137,6 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
                     }
                 }]
             },
-            price_info: { $arrayElemAt: ["$price_info.prices", 0] },
             inventory: { $objectToArray: "$qoh" }
         };
 
@@ -165,14 +154,14 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
                 price: {
                     $switch: {
                         branches: [
-                            { case: { $eq: ["$inventory.k", "NONFOIL_NM"] }, then: "$price_info.usd" },
-                            { case: { $eq: ["$inventory.k", "NONFOIL_LP"] }, then: "$price_info.usd" },
-                            { case: { $eq: ["$inventory.k", "NONFOIL_MP"] }, then: "$price_info.usd" },
-                            { case: { $eq: ["$inventory.k", "NONFOIL_HP"] }, then: "$price_info.usd" },
-                            { case: { $eq: ["$inventory.k", "FOIL_NM"] }, then: "$price_info.usd_foil" },
-                            { case: { $eq: ["$inventory.k", "FOIL_LP"] }, then: "$price_info.usd_foil" },
-                            { case: { $eq: ["$inventory.k", "FOIL_MP"] }, then: "$price_info.usd_foil" },
-                            { case: { $eq: ["$inventory.k", "FOIL_HP"] }, then: "$price_info.usd_foil" }
+                            { case: { $eq: ["$inventory.k", "NONFOIL_NM"] }, then: "$prices.usd" },
+                            { case: { $eq: ["$inventory.k", "NONFOIL_LP"] }, then: "$prices.usd" },
+                            { case: { $eq: ["$inventory.k", "NONFOIL_MP"] }, then: "$prices.usd" },
+                            { case: { $eq: ["$inventory.k", "NONFOIL_HP"] }, then: "$prices.usd" },
+                            { case: { $eq: ["$inventory.k", "FOIL_NM"] }, then: "$prices.usd_foil" },
+                            { case: { $eq: ["$inventory.k", "FOIL_LP"] }, then: "$prices.usd_foil" },
+                            { case: { $eq: ["$inventory.k", "FOIL_MP"] }, then: "$prices.usd_foil" },
+                            { case: { $eq: ["$inventory.k", "FOIL_HP"] }, then: "$prices.usd_foil" }
                         ]
                     }
                 },
@@ -291,7 +280,7 @@ app.get('/', async (req, res) => {
             type
         });
 
-        res.status(200).send(message);
+        res.status(200).json(message);
     } catch (err) {
         console.log(err);
         res.status(500).send(err);

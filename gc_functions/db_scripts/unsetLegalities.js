@@ -29,7 +29,7 @@ async function unsetLegalities() {
                     updateOne: {
                         filter: { _id: d._id },
                         update: {
-                            $unset: { legalities: '' }
+                            $unset: { prices: '' }
                         }
                     }
                 }

@@ -1,0 +1,38 @@
+const argv = require('yargs').argv;
+const saveScryfallBulk = require('./saveScryfallBulk');
+const mongoBulkImport = require('./mongoBulkImport');
+
+/**
+ * Helper function to filters out cards from the Scryfall bulk that are not part of paper magic
+ * Returns an array of Scryfall card IDs
+ * @param {Array} data
+ */
+function filterSource(data) {
+    return paperOnly = data.filter(d => d.games.includes('paper'));
+}
+
+async function init() {
+    const { database } = argv;
+
+    if (!database) throw new Error('Mongo database name is required');
+
+    try {
+        console.time('bulkUpdate');
+
+        await saveScryfallBulk();
+
+        const sourceJSON = require('./bulk_data/scryfall-default-cards.json');
+        const sourceCards = filterSource(sourceJSON);
+
+        console.log(`Updating bulk for ${sourceCards.length} cards`);
+
+        await mongoBulkImport(sourceCards, database);
+
+        console.timeEnd('bulkUpdate');
+        console.log(`Bulk cards updated for database ${database} on ${new Date().toISOString()}`);
+    } catch (err) {
+        throw err;
+    }
+}
+
+init().catch(console.log);

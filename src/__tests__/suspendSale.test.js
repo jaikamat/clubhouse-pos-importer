@@ -186,7 +186,7 @@ describe('Suspend Sale workflow', () => {
         await searchForCard('birds of paradise');
         const quantity = await page.$eval(ui.firstSearchResultNonfoilQty, d => d.textContent);
         await page.waitFor(500);
-        expect(quantity).toBe("208");
+        expect(quantity).toBe("1");
     });
 
     test('Restore the sale', async () => {
@@ -248,7 +248,7 @@ describe('Suspend Sale workflow', () => {
     test('Confirm cards were restored to inventory', async () => {
         await searchForCard('birds of paradise');
         const quantity1 = await page.$eval(ui.firstSearchResultNonfoilQty, d => d.textContent);
-        expect(quantity1).toBe("210");
+        expect(quantity1).toBe("3");
         await searchForCard('Multani, Maro So');
         const quantity2 = await page.$eval(ui.firstSearchResultNonfoilQty, d => d.textContent);
         expect(quantity2).toBe("3");

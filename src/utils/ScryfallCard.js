@@ -1,3 +1,23 @@
+// Language codes from Scryfall. See https://scryfall.com/docs/api/languages for reference.
+const LANG_CODES = {
+    en: 'English',
+    es: 'Spanish',
+    fr: 'French',
+    de: 'German',
+    it: 'Italian',
+    pt: 'Portuguese',
+    ja: 'Japanese',
+    ko: 'Korean',
+    ru: 'Russian',
+    zhs: 'Simplified Chinese',
+    zht: 'Traditional Chinese',
+    he: 'Hebrew',
+    la: 'Latin',
+    grc: 'Ancient Greek',
+    ar: 'Arabic',
+    sa: 'Sanskrit',
+    px: 'Phyrexian'
+}
 
 /**
  * This class wraps the Scryfall API request data and models it to something we can control.
@@ -19,6 +39,7 @@ export class ScryfallCard {
         this.colors = card.colors;
         this.type_line = card.type_line;
         this.frame_effects = card.frame_effects || [];
+        this.language = card.lang ? LANG_CODES[card.lang] : '';
     }
 
     /**

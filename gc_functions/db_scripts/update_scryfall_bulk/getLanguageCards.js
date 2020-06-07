@@ -1,0 +1,35 @@
+const fs = require('fs');
+const JSONStream = require('JSONStream');
+
+/**
+ * Yields paper-only cards from the source bulk for a single language using JSON streams
+ * @param {String} bulkUri - location of the bulk-file to filter on
+ * @param {String} language - language code used by Scryfall. See https://scryfall.com/docs/api/languages
+ */
+function getLanguageCards(bulkUri, language) {
+    const lang = language || 'en';
+
+    return new Promise((resolve, reject) => {
+        const stream = fs.createReadStream(bulkUri, { encoding: 'utf8' });
+
+        const parser = JSONStream.parse('*');
+
+        stream.pipe(parser);
+
+        let cards = [];
+
+        parser.on('data', card => {
+            if (card.lang === lang && card.games.includes('paper')) cards.push(card);
+        });
+
+        parser.on('end', () => {
+            resolve(cards);
+        });
+
+        parser.on('error', err => {
+            reject(err);
+        });
+    })
+}
+
+module.exports = getLanguageCards;

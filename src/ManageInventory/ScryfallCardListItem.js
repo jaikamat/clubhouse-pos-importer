@@ -38,7 +38,7 @@ function checkCardFinish(nonfoilProp, foilProp) {
     }
 }
 
-export default function ScryfallCardListItem({ qoh, foil, nonfoil, name, set_name, set, rarity, id, cardImage }) {
+export default function ScryfallCardListItem({ qoh, foil, nonfoil, name, set_name, set, rarity, id, cardImage, language }) {
     const [quantity, setQuantity] = useState(0);
     const [selectedFinish, setSelectedFinish] = useState(checkCardFinish(nonfoil, foil).selectedFinish);
     const [selectedCondition, setSelectedCondition] = useState('NM');
@@ -123,6 +123,7 @@ export default function ScryfallCardListItem({ qoh, foil, nonfoil, name, set_nam
                             <QohLabels inventoryQty={inventoryQty} />
                             {' '}
                             <MarketPrice id={id} finish={selectedFinish} />
+                            <Label image color="grey">{language}</Label>
                         </Item.Header>
                         <Item.Description>
                             <Form>

@@ -2,14 +2,18 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 
-module.exports = async function saveScryfallBulk() {
+/**
+ * Retrieves and saves a Scryfall bulk file
+ * @param {String} bulkType - the type of bulk JSON used in Scryfall
+ */
+async function saveScryfallBulk(bulkType) {
     try {
         const bulkUri = 'https://api.scryfall.com/bulk-data';
 
         const { data } = await axios.get(bulkUri);
-        const defaultCardsUri = data.data.find(d => d.type === 'default_cards').download_uri;
+        const defaultCardsUri = data.data.find(d => d.type === bulkType).download_uri;
 
-        const myPath = path.resolve(__dirname, 'bulk_data', 'scryfall-default-cards.json');
+        const myPath = path.resolve(__dirname, 'bulk_data', `bulk_${bulkType}.json`);
         const writer = fs.createWriteStream(myPath);
 
         console.log('Fetching Scryfall bulk...');
@@ -34,3 +38,5 @@ module.exports = async function saveScryfallBulk() {
         throw err;
     }
 }
+
+module.exports = saveScryfallBulk;

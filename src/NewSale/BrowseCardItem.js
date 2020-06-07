@@ -136,6 +136,7 @@ export default function BrowseCardItem(props) {
                         <QohLabels inventoryQty={props.qoh} />
                         {' '}
                         <MarketPrice id={props.id} finish={selectedFinish} />
+                        <Label image color="grey">{props.language}</Label>
                     </Item.Header>
                     <Item.Description>
                         <Form>

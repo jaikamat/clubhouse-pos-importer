@@ -10,5 +10,5 @@ test('Get all cards, including those with zero stock', async () => {
         params: { title: CARD_TITLE, matchInStock: false }
     })
 
-    expect(firstInventory.data.length).toBe(2);
+    expect(firstInventory.data.length).toBe(3);
 })

@@ -168,7 +168,8 @@ export default function ReceivingCardItem(props) {
         set,
         rarity,
         card_faces,
-        id
+        id,
+        language
     } = props;
 
     return (
@@ -196,6 +197,7 @@ export default function ReceivingCardItem(props) {
                             <QohLabels inventoryQty={props.qoh} />
                             {' '}
                             <MarketPrice id={id} finish={selectedFinish} />
+                            <Label image color="grey">{language}</Label>
                         </Item.Header>
                         <Item.Description>
                             <Form>

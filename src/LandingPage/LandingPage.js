@@ -7,6 +7,7 @@ import clubhouse_products from './clubhouse_products.png';
 import ikoria_splash from './ikoria_splash.jpg';
 import core_2021_draft_booster from './core_2021_draft_booster.png';
 import core_2021_collector from './core_2021_collector.jpg';
+import double_masters from './double_masters.png';
 
 const Wrapper = styled.div`
     display: flex;
@@ -242,7 +243,7 @@ export default function LandingPage() {
                 <Spacer height="30" />
                 <Divider>
                     <Slogan>The Clubhouse is open <span role="img" aria-label="confetti">🎉</span></Slogan>
-                    <Subheader color="white">It's official! We are now open 7 days a week, from 2pm to 9pm. Play space is limited to 16 mask-wearing players.</Subheader>
+                    <Subheader color="white">It's official! We are now open 7 days a week. Play space is limited to 16 mask-wearing players.</Subheader>
                     <FlexRowResponsive>
                         {/* <Link to="/calendar">
                             <Button><b>Events calendar</b></Button>
@@ -260,6 +261,19 @@ export default function LandingPage() {
                 </FlexRow>
                 <Spacer height="30" />
                 <Grid>
+                    <Card imageSrc={double_masters}
+                        header="New product preorders!"
+                        date="06/08/2020">
+                        <p>
+                            The time has come! We have had loads of questions about all the upcoming products, and we are excited to start taking PRE ORDERS on a range of upcoming items:
+                        </p>
+                        <ul>
+                            <li>Jump Start $90 per box, Limit 2</li>
+                            <li>Double Masters $249 per box, Limit 2</li>
+                            <li>Double Masters VIP $369 per box, No Limit</li>
+                            <li>Double Master VIP $95 per pack, Limit 1</li>
+                        </ul>
+                    </Card>
                     <Card imageSrc={core_2021_collector}
                         header="Collector Booster preorders!"
                         date="06/02/2020">
@@ -324,7 +338,7 @@ export default function LandingPage() {
                     <InfoCard
                         icon="clock"
                         header="Hours"
-                        content="2PM to 9PM daily"
+                        content=" Mon - Thu 2pm to 9pm, Fri - Sun 12pm to 9pm"
                         align="center"
                     />
                     <InfoCard

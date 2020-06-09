@@ -17,6 +17,7 @@ export default function MarketPrice({ id, finish }) {
 
     useEffect(() => {
         (async function fetchData() {
+            let _isMounted = true;
             setLoading(true);
 
             const { data } = await axios.get(GET_LIVE_PRICE, {
@@ -25,15 +26,19 @@ export default function MarketPrice({ id, finish }) {
             const { marketPrices, medianPrices } = data;
             const MIN_PRICE = 0.5; // Management-set lowest price for each single card
 
-            if (isFoil) {
-                setMarket(Math.max(marketPrices.foil, MIN_PRICE));
-                setMedian(Math.max(medianPrices.foil, MIN_PRICE));
-            } else {
-                setMarket(Math.max(marketPrices.normal, MIN_PRICE));
-                setMedian(Math.max(medianPrices.normal, MIN_PRICE));
+            if (_isMounted) { // Checks to see if the component is not mounted to squelch memory leak warnings
+                if (isFoil) {
+                    setMarket(Math.max(marketPrices.foil, MIN_PRICE));
+                    setMedian(Math.max(medianPrices.foil, MIN_PRICE));
+                } else {
+                    setMarket(Math.max(marketPrices.normal, MIN_PRICE));
+                    setMedian(Math.max(medianPrices.normal, MIN_PRICE));
+                }
+
+                setLoading(false);
             }
 
-            setLoading(false);
+            return () => _isMounted = false;
         })();
     }, [id, finish]);
 

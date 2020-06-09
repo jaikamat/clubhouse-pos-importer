@@ -6,8 +6,7 @@ const DATABASE_NAME = 'clubhouse_collection_production';
 const COLLECTION = 'card_inventory';
 require('dotenv').config();
 
-function validateOne(card) {
-    const { quantity, finishCondition, name, id } = card;
+function validateOne({ id, quantity, finishCondition, name, set, set_name }) {
     const finishes = [
         'NONFOIL_NM',
         'NONFOIL_LP',
@@ -19,14 +18,13 @@ function validateOne(card) {
         'FOIL_HP'
     ];
 
-    if (!id)
-        res.status(400).send(`Card id must be provided`);
-    if (!name)
-        res.status(400).send(`Card name must be provided for ${id}`);
-    if (typeof quantity !== 'number')
-        res.status(400).send(`Card quantity formatted incorrectly for ${name}`);
-    if (finishes.indexOf(finishCondition) < 0)
-        res.status(400).send(`FinishCondition not a defined type for ${name}`);
+    if (!id) throw new Error(`Card id must be provided`)
+    if (!name) throw new Error(`Card name must be provided for ${id}`);
+    if (!set) throw new Error(`Card set abbreviation must be provided for ${id}`);
+    if (!set_name) throw new Error(`Card set name must be provided for ${id}`);
+    if (typeof quantity !== 'number') throw new Error(`Card quantity formatted incorrectly for ${name}`);
+    if (finishes.indexOf(finishCondition) < 0) throw new Error(`FinishCondition not a defined type for ${name}`);
+    return;
 }
 
 // `finishCondition` Refers to the configuration of Finishes and Conditions ex. NONFOIL_NM or FOIL_LP

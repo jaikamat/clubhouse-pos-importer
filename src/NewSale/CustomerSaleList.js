@@ -19,7 +19,6 @@ export default function CustomerSaleList({ saleList }) {
             <Table.Body>
                 {saleList.map(card => {
                     return <SaleLineItem
-                        displayName={card.display_name}
                         {...card}
                         key={`${card.id}${card.finishCondition}${card.qtyToSell}`}
                     />

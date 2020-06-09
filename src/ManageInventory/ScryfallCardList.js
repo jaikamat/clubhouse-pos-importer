@@ -6,7 +6,6 @@ export default function ScryfallCardList(props) {
         return <ScryfallCardListItem
             key={card.id}
             {...card}
-            cardImage={card.cardImage}
             qoh={card.qoh}
         />
     });

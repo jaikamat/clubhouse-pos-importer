@@ -48,6 +48,7 @@ export default function SuspendedSale({ restoreSale, deleteSuspendedSale, saleLi
     useEffect(() => { getSales(); }, [id]); // If the parent-level suspended-sale _id changes, we fetch again
 
     const modalTrigger = <Button
+        id="suspend-sale-btn"
         style={{ display: 'inline-block', float: 'right' }}
         onClick={() => setModalOpen(true)}
         icon="ellipsis horizontal" />
@@ -94,6 +95,7 @@ export default function SuspendedSale({ restoreSale, deleteSuspendedSale, saleLi
                             <Form>
                                 <ClearMargin>
                                     <Form.Input
+                                        id="suspend-sale-name"
                                         label="Customer Name"
                                         placeholder="Jace, the Mind Sculptor"
                                         value={customerName}
@@ -112,7 +114,13 @@ export default function SuspendedSale({ restoreSale, deleteSuspendedSale, saleLi
                                 <ClearMargin>
                                     <CharLimit>{notes.length}/150</CharLimit>
                                 </ClearMargin>
-                                <Form.Button primary disabled={disabled || !customerName} loading={loadingBtn.suspendBtn} onClick={submitSuspendSale}>Suspend Sale</Form.Button>
+                                <Form.Button
+                                    id="suspend-sale-submit"
+                                    primary disabled={disabled || !customerName}
+                                    loading={loadingBtn.suspendBtn}
+                                    onClick={submitSuspendSale}>
+                                    Suspend Sale
+                                </Form.Button>
                             </Form>
                         </Grid.Column>
                         <Grid.Column width="1"><Divider /></Grid.Column>

@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Table, Button, Label, Icon } from 'semantic-ui-react';
 import Price from '../common/Price';
+import { ReceivingContext } from '../context/ReceivingContext';
 
 // Defines whether it uses cash or credit for trade types
 const TRADE_TYPE = { CASH: 'CASH', CREDIT: 'CREDIT' };
 
-export default function ReceivingListItem({ name, set, rarity, cashPrice, creditPrice, finishCondition, uuid_key, removeFromList, tradeType, activeTradeType }) {
+export default function ReceivingListItem({ display_name, set, rarity, cashPrice, creditPrice, finishCondition, uuid_key, tradeType }) {
     const { CASH, CREDIT } = TRADE_TYPE;
     const [hovered, setHovered] = useState(false);
+    const { removeFromList, activeTradeType } = useContext(ReceivingContext);
 
     return (
         <Table.Row>
-            <Table.Cell><b>{name}</b></Table.Cell>
+            <Table.Cell><b>{display_name}</b></Table.Cell>
             <Table.Cell singleLine>
                 <i
                     className={`ss ss-fw ss-${set} ss-${rarity}`}

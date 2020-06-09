@@ -9,7 +9,7 @@ const SalePriceTotal = ({ saleList }) => {
         )
         : 0;
 
-    return <Price num={total} />;
+    return <div id="sale-price-total"><Price num={total} /></div>
 };
 
 export default SalePriceTotal;

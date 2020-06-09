@@ -1,19 +1,12 @@
 import React, { useState, useContext } from 'react';
-import {
-    Segment,
-    Label,
-    Form,
-    Input,
-    Dropdown,
-    Button,
-    Item
-} from 'semantic-ui-react';
+import { Segment, Label, Form, Input, Dropdown, Button, Item } from 'semantic-ui-react';
+import $ from 'jquery';
+import _ from 'lodash';
 import CardImage from '../common/CardImage';
 import MarketPrice from '../common/MarketPrice';
 import QohLabels from '../common/QohLabels';
+import Language from '../common/Language';
 import { SaleContext } from '../context/SaleContext';
-import $ from 'jquery';
-import _ from 'lodash';
 
 /**
  * Creates a list of conditions for the dropdown menu from the `qoh`
@@ -136,12 +129,13 @@ export default function BrowseCardItem(props) {
                         <QohLabels inventoryQty={props.qoh} />
                         {' '}
                         <MarketPrice id={props.id} finish={selectedFinish} />
-                        <Label image color="grey">{props.language}</Label>
+                        <Language languageCode={props.lang} />
                     </Item.Header>
                     <Item.Description>
                         <Form>
                             <Form.Group>
                                 <Form.Field
+                                    className="finish-condition"
                                     control={Dropdown}
                                     selection
                                     placeholder="Select inventory"
@@ -151,6 +145,7 @@ export default function BrowseCardItem(props) {
                                     onChange={handleSelectedFinishCondition}
                                 />
                                 <Form.Field
+                                    className="sale-qty"
                                     control={Input}
                                     type="number"
                                     label="Quantity to sell"
@@ -160,6 +155,7 @@ export default function BrowseCardItem(props) {
                                     onFocus={e => e.target.select()}
                                 />
                                 <Form.Field
+                                    className="sale-price"
                                     control={Input}
                                     type="number"
                                     label="Price"
@@ -170,6 +166,7 @@ export default function BrowseCardItem(props) {
                                     step={0.5}
                                 />
                                 <Form.Button
+                                    className="add-to-sale"
                                     label="Add to sale?"
                                     control={Button}
                                     primary

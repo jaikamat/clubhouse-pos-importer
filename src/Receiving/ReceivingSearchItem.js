@@ -1,18 +1,12 @@
-import React, { useState } from 'react';
-import {
-    Segment,
-    Input,
-    Button,
-    Form,
-    Select,
-    Label,
-    Item
-} from 'semantic-ui-react';
+import React, { useState, useContext } from 'react';
+import $ from 'jquery';
+import { Segment, Input, Button, Form, Select, Label, Item } from 'semantic-ui-react';
 import QohLabels from '../common/QohLabels';
 import CardImage from '../common/CardImage';
 import MarketPrice from '../common/MarketPrice'
-import $ from 'jquery';
 import createToast from '../common/createToast';
+import { ReceivingContext } from '../context/ReceivingContext';
+import Language from '../common/Language';
 
 const finishes = [
     { key: 'NONFOIL', text: 'Nonfoil', value: 'NONFOIL' },
@@ -42,7 +36,7 @@ function checkCardFinish(nonfoil, foil) {
     }
 }
 
-export default function ReceivingCardItem(props) {
+export default function ReceivingSearchItem(props) {
     const [quantity, setQuantity] = useState(1);
     const [cashPrice, setCashPrice] = useState(0);
     const [creditPrice, setCreditPrice] = useState(0);
@@ -54,6 +48,8 @@ export default function ReceivingCardItem(props) {
 
     // Determines whether the select finish dropdown is permanently disabled, seeded from props
     const finishDisabled = checkCardFinish(props.nonfoil, props.foil).finishDisabled;
+
+    const { addToList } = useContext(ReceivingContext);
 
     const handleFinishChange = (e, { value }) => setSelectedFinish(value);
 
@@ -86,47 +82,15 @@ export default function ReceivingCardItem(props) {
         setQuantity(val);
     };
 
-
-    const handleFocus = e => {
-        switch (e.target.name) {
-            case "cashInput":
-                if (cashPrice === 0) setCashPrice('');
-                break;
-            case "marketPriceInput":
-                if (marketPrice === 0) setMarketPrice('');
-                break;
-            case "creditInput":
-                if (creditPrice === 0) setCreditPrice('');
-                break;
-            default:
-                break;
-        }
-    }
-
-    const handleBlur = e => {
-        switch (e.target.name) {
-            case "cashInput":
-                if (cashPrice === '') setCashPrice(0);
-                break;
-            case "marketPriceInput":
-                if (marketPrice === '') setMarketPrice(0);
-                break;
-            case "creditInput":
-                if (creditPrice === '') setCreditPrice(0);
-                break;
-            default:
-                break;
-        }
-    }
+    const handleFocus = e => e.target.select();
 
     const handleInventoryAdd = () => {
-        props.addToList({
-            quantity,
+        addToList(quantity, {
+            ...props,
             cashPrice,
             marketPrice,
             creditPrice,
             finishCondition: `${selectedFinish}_${selectedCondition}`, // ex. NONFOIL_NM
-            cardInfo: { ...props }
         })
 
         setQuantity(1);
@@ -168,8 +132,8 @@ export default function ReceivingCardItem(props) {
         set,
         rarity,
         card_faces,
-        id
-        // language
+        id,
+        lang
     } = props;
 
     return (
@@ -197,7 +161,7 @@ export default function ReceivingCardItem(props) {
                             <QohLabels inventoryQty={props.qoh} />
                             {' '}
                             <MarketPrice id={id} finish={selectedFinish} />
-                            {/* <Label image color="grey">{language}</Label> */}
+                            <Language languageCode={lang} />
                         </Item.Header>
                         <Item.Description>
                             <Form>
@@ -209,6 +173,7 @@ export default function ReceivingCardItem(props) {
                                         value={quantity}
                                         onChange={handleQuantityChange}
                                         onFocus={e => e.target.select()}
+                                        className="receiving-quantity"
                                     />
                                     <Form.Field
                                         label="Credit Price"
@@ -218,8 +183,8 @@ export default function ReceivingCardItem(props) {
                                         value={creditPrice}
                                         onChange={handlePriceChange}
                                         onFocus={handleFocus}
-                                        onBlur={handleBlur}
                                         step="0.25"
+                                        className="receiving-credit"
                                     />
                                     <Form.Field
                                         label="Cash Price"
@@ -229,8 +194,8 @@ export default function ReceivingCardItem(props) {
                                         value={cashPrice}
                                         onChange={handlePriceChange}
                                         onFocus={handleFocus}
-                                        onBlur={handleBlur}
                                         step="0.25"
+                                        className="receiving-cash"
                                     />
                                     <Form.Field
                                         label="Market Price"
@@ -240,9 +205,9 @@ export default function ReceivingCardItem(props) {
                                         value={marketPrice}
                                         onChange={handlePriceChange}
                                         onFocus={handleFocus}
-                                        onBlur={handleBlur}
                                         step="0.25"
                                         disabled={cashPrice === 0 || cashPrice === ''}
+                                        className="receiving-market"
                                     />
                                 </Form.Group>
                                 <Form.Group widths="12">

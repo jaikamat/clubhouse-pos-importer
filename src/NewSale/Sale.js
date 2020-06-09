@@ -66,7 +66,7 @@ export default function Sale() {
 
                     </Grid.Column>
                     <Grid.Column width="5">
-                        <Header as="h2" style={{ display: 'inline-block' }}>
+                        <Header as="h2" style={{ display: 'inline-block' }} id="sale-header">
                             {suspendedSale.name === '' ? 'Sale Items' : `${suspendedSale.name}'s Items`}
                         </Header>
 

@@ -1,30 +1,41 @@
-// Language codes from Scryfall. See https://scryfall.com/docs/api/languages for reference.
-const LANG_CODES = {
-    en: 'English',
-    es: 'Spanish',
-    fr: 'French',
-    de: 'German',
-    it: 'Italian',
-    pt: 'Portuguese',
-    ja: 'Japanese',
-    ko: 'Korean',
-    ru: 'Russian',
-    zhs: 'Simplified Chinese',
-    zht: 'Traditional Chinese',
-    he: 'Hebrew',
-    la: 'Latin',
-    grc: 'Ancient Greek',
-    ar: 'Arabic',
-    sa: 'Sanskrit',
-    px: 'Phyrexian'
-}
-
 /**
  * This class wraps the Scryfall API request data and models it to something we can control.
  * Also acts as a safeguard for any future updates to Scryfall's API data model and makes
  * the code easier to maintain and debug.
  */
 export class ScryfallCard {
+    // Computes the proper displayName for a card, depending on its properties
+    _createDisplayName() {
+        const { name, printed_name, frame_effects, border_color, lang } = this;
+
+        if (lang !== 'en') return `${name} (${lang.toUpperCase()})`;
+
+        if ((name !== printed_name) && printed_name) { // Covers cards like Godzilla series
+            return `${name} (IP series)`;
+        } else if (frame_effects.length === 0 && border_color === 'borderless') { // Covers cards like comic-art Vivien, Monsters' Advocate
+            return `${name} (Borderless)`;
+        } else if (frame_effects.includes('showcase')) { // Covers showcase cards like comic-art Illuna, Apex of Wishes
+            return `${name} (Showcase)`;
+        } else if (frame_effects.includes('extendedart')) { // Covers cards with extended left and roght border art
+            return `${name} (Extended art)`;
+        } else {
+            return name;
+        }
+    }
+
+    _getCardImage() {
+        let myImage;
+
+        try {
+            // If normal prop doesn't exist, move to catch block for flip card faces
+            myImage = this.image_uris.normal;
+        } catch (e) {
+            myImage = this.card_faces[0].image_uris.normal;
+        }
+
+        return myImage;
+    }
+
     constructor(card) {
         this.id = card.id;
         this.name = card.name;
@@ -39,37 +50,10 @@ export class ScryfallCard {
         this.colors = card.colors;
         this.type_line = card.type_line;
         this.frame_effects = card.frame_effects || [];
-        this.language = card.lang ? LANG_CODES[card.lang] : '';
-    }
-
-    /**
-     * Used to display differing border treatments and alt-arts
-     */
-    get display_name() {
-        const { name, printed_name, frame_effects } = this;
-
-        if ((name !== printed_name) && printed_name) {
-            return `${name} (IP series)`;
-        } else if (frame_effects.includes('showcase')) {
-            return `${name} (Showcase)`;
-        } else if (frame_effects.includes('extendedart')) {
-            return `${name} (Extended art)`;
-        } else {
-            return name;
-        }
-    }
-
-    get cardImage() {
-        let myImage;
-
-        try {
-            // If normal prop doesn't exist, move to catch block for flip card faces
-            myImage = this.image_uris.normal;
-        } catch (e) {
-            myImage = this.card_faces[0].image_uris.normal;
-        }
-
-        return myImage;
+        this.lang = card.lang || '';
+        this.border_color = card.border_color;
+        this.display_name = this._createDisplayName();
+        this.cardImage = this._getCardImage();
     }
 }
 

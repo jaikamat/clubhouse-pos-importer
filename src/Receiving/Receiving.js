@@ -8,7 +8,7 @@ import { RECEIVE_CARDS, GET_CARDS_WITH_INFO } from '../utils/api_resources';
 import ReceivingListItem from './ReceivingListItem';
 import ReceivingListTotals from './ReceivingListTotals';
 import createToast from '../common/createToast';
-import { ScryfallCard } from '../utils/ScryfallCard';
+// import { InventoryCard } from '../utils/ScryfallCard';
 import _ from 'lodash';
 import uuid from 'uuid'; // Used to crete unique keys for the list
 
@@ -46,7 +46,7 @@ export default function Receiving() {
                 headers: makeAuthHeader()
             });
 
-            setSearchResults(data.map(d => new ScryfallCard(d)));
+            setSearchResults(data);
         } catch (e) {
             console.log(e);
         }

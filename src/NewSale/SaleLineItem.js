@@ -3,14 +3,14 @@ import { Button, Label, Table } from 'semantic-ui-react';
 import { SaleContext } from '../context/SaleContext';
 import Price from '../common/Price';
 
-export default function SaleLineItem({ displayName, set, finishCondition, qtyToSell, price, rarity, id }) {
+export default function SaleLineItem({ display_name, set, finishCondition, qtyToSell, price, rarity, id }) {
     const [hovered, setHovered] = useState(false);
 
     const { removeFromSaleList } = useContext(SaleContext);
 
     return (
         <Table.Row>
-            <Table.Cell><h4>{displayName}</h4></Table.Cell>
+            <Table.Cell><h4>{display_name}</h4></Table.Cell>
             <Table.Cell singleLine>
                 <i
                     className={`ss ss-fw ss-${set} ss-${rarity}`}

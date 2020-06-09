@@ -1,12 +1,15 @@
-import React from 'react';
-import ReceivingCardItem from './ReceivingSearchItem';
+import React, { useContext } from 'react';
+import ReceivingSearchItem from './ReceivingSearchItem';
+import { ReceivingContext } from '../context/ReceivingContext';
 
-export default function ReceivingCardList({ cards, addToList }) {
-    return cards.map(c => {
-        return <ReceivingCardItem
+export default function ReceivingCardList() {
+    const { searchResults } = useContext(ReceivingContext);
+
+    return searchResults.map(c => {
+        return <ReceivingSearchItem
             key={c.id}
             {...c}
-            addToList={addToList}
+            qoh={c.qoh}
         />
     });
 }

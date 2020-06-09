@@ -9,6 +9,7 @@ import MarketPrice from '../common/MarketPrice'
 import { ADD_CARD_TO_INVENTORY } from '../utils/api_resources';
 import $ from 'jquery';
 import { InventoryCard } from '../utils/ScryfallCard';
+import Language from '../common/Language';
 
 const finishes = [
     { key: 'NONFOIL', text: 'Nonfoil', value: 'NONFOIL' },
@@ -38,7 +39,7 @@ function checkCardFinish(nonfoilProp, foilProp) {
     }
 }
 
-export default function ScryfallCardListItem({ qoh, foil, nonfoil, name, set_name, set, rarity, id, cardImage, language }) {
+export default function ScryfallCardListItem({ qoh, foil, nonfoil, name, set_name, set, rarity, id, cardImage, lang }) {
     const [quantity, setQuantity] = useState(0);
     const [selectedFinish, setSelectedFinish] = useState(checkCardFinish(nonfoil, foil).selectedFinish);
     const [selectedCondition, setSelectedCondition] = useState('NM');
@@ -123,7 +124,7 @@ export default function ScryfallCardListItem({ qoh, foil, nonfoil, name, set_nam
                             <QohLabels inventoryQty={inventoryQty} />
                             {' '}
                             <MarketPrice id={id} finish={selectedFinish} />
-                            <Label image color="grey">{language}</Label>
+                            <Language languageCode={lang} />
                         </Item.Header>
                         <Item.Description>
                             <Form>

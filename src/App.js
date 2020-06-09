@@ -3,6 +3,7 @@ import Main from './Main';
 import Header from './Header/Header';
 import AuthProvider from './context/AuthProvider';
 import { SaleProvider } from './context/SaleContext';
+import { ReceivingProvider } from './context/ReceivingContext';
 
 class App extends React.Component {
     render() {
@@ -10,7 +11,9 @@ class App extends React.Component {
             <AuthProvider>
                 <Header />
                 <SaleProvider>
-                    <Main />
+                    <ReceivingProvider>
+                        <Main />
+                    </ReceivingProvider>
                 </SaleProvider>
             </AuthProvider>
         );

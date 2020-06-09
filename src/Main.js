@@ -18,19 +18,26 @@ const ContentContainer = styled.div`
     margin-right: 20px;
 `;
 
+const BackgroundColor = styled.div`
+    background-color: #f9fafb;
+    min-height: 100vh;
+`;
+
 export default function Main() {
     return <Switch>
         <Route exact path="/" component={LandingPage} />
-        <ContentContainer id="content-container">
-            <Route exact path="/manage-inventory" component={Home} />
-            <Route exact path="/new-sale" component={Sale} />
-            <Route exact path="/browse-sales" component={BrowseSales} />
-            <Route exact path="/browse-inventory" component={DeckboxClone} />
-            <Route exact path="/public-inventory" component={PublicInventory} />
-            <Route exact path="/receiving" component={Receiving} />
-            <Route exact path="/reports" component={Reports} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/logout" component={Logout} />
-        </ContentContainer>
+        <BackgroundColor>
+            <ContentContainer id="content-container">
+                <Route exact path="/manage-inventory" component={Home} />
+                <Route exact path="/new-sale" component={Sale} />
+                <Route exact path="/browse-sales" component={BrowseSales} />
+                <Route exact path="/browse-inventory" component={DeckboxClone} />
+                <Route exact path="/public-inventory" component={PublicInventory} />
+                <Route exact path="/receiving" component={Receiving} />
+                <Route exact path="/reports" component={Reports} />
+                <Route exact path="/login" component={Login} />
+                <Route exact path="/logout" component={Logout} />
+            </ContentContainer>
+        </BackgroundColor>
     </Switch>
 }

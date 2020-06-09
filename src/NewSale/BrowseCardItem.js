@@ -1,19 +1,12 @@
 import React, { useState, useContext } from 'react';
-import {
-    Segment,
-    Label,
-    Form,
-    Input,
-    Dropdown,
-    Button,
-    Item
-} from 'semantic-ui-react';
+import { Segment, Label, Form, Input, Dropdown, Button, Item } from 'semantic-ui-react';
+import $ from 'jquery';
+import _ from 'lodash';
 import CardImage from '../common/CardImage';
 import MarketPrice from '../common/MarketPrice';
 import QohLabels from '../common/QohLabels';
+import Language from '../common/Language';
 import { SaleContext } from '../context/SaleContext';
-import $ from 'jquery';
-import _ from 'lodash';
 
 /**
  * Creates a list of conditions for the dropdown menu from the `qoh`
@@ -136,7 +129,7 @@ export default function BrowseCardItem(props) {
                         <QohLabels inventoryQty={props.qoh} />
                         {' '}
                         <MarketPrice id={props.id} finish={selectedFinish} />
-                        <Label image color="grey">{props.language}</Label>
+                        <Language languageCode={props.lang} />
                     </Item.Header>
                     <Item.Description>
                         <Form>

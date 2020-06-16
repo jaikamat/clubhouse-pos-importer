@@ -1,19 +1,51 @@
 import React, { useState, useContext } from 'react';
 import { Table, Button, Label, Icon } from 'semantic-ui-react';
+import styled from 'styled-components';
 import Price from '../common/Price';
 import { ReceivingContext } from '../context/ReceivingContext';
+import TooltipImage from '../common/TooltipImage';
+
+const BoldHelp = styled.b`
+    cursor: help;
+`;
 
 // Defines whether it uses cash or credit for trade types
 const TRADE_TYPE = { CASH: 'CASH', CREDIT: 'CREDIT' };
 
-export default function ReceivingListItem({ display_name, set, rarity, cashPrice, creditPrice, finishCondition, uuid_key, tradeType }) {
+export default function ReceivingListItem({ display_name, set, rarity, cashPrice, creditPrice, finishCondition, uuid_key, tradeType, cardImage }) {
     const { CASH, CREDIT } = TRADE_TYPE;
     const [hovered, setHovered] = useState(false);
+    const [mouseInside, setMouseInside] = useState(false);
+    const [mousePos, setMousePos] = useState({});
     const { removeFromList, activeTradeType } = useContext(ReceivingContext);
+
+    const mouseEnter = e => {
+        const rect = e.target.getBoundingClientRect();
+        const X = Math.round(e.clientX - rect.x) + 30;
+        setMouseInside(true);
+        setMousePos({ X });
+    }
+
+    const mouseMove = e => {
+        const rect = e.target.getBoundingClientRect();
+        const X = Math.round(e.clientX - rect.x) + 30;
+        setMousePos({ X });
+    }
+
+    const mouseLeave = e => setMouseInside(false);
 
     return (
         <Table.Row>
-            <Table.Cell><b>{display_name}</b></Table.Cell>
+            <Table.Cell>
+                <BoldHelp
+                    onMouseEnter={mouseEnter}
+                    onMouseMove={mouseMove}
+                    onMouseLeave={mouseLeave}
+                >
+                    {display_name}
+                    {mouseInside && <TooltipImage image_uri={cardImage} posX={mousePos.X} />}
+                </BoldHelp>
+            </Table.Cell>
             <Table.Cell singleLine>
                 <i
                     className={`ss ss-fw ss-${set} ss-${rarity}`}

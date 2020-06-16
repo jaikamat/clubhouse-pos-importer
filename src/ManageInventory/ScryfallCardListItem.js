@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { Segment, Input, Button, Form, Select, Label, Item } from 'semantic-ui-react';
 import axios from 'axios';
+import $ from 'jquery';
 import QohLabels from '../common/QohLabels';
 import createToast from '../common/createToast';
 import CardImage from '../common/CardImage';
 import makeAuthHeader from '../utils/makeAuthHeader';
 import MarketPrice from '../common/MarketPrice'
 import { ADD_CARD_TO_INVENTORY } from '../utils/api_resources';
-import $ from 'jquery';
-import { InventoryCard } from '../utils/ScryfallCard';
 import Language from '../common/Language';
 
 const finishes = [

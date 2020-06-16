@@ -8,7 +8,7 @@ export default function ReceivingList({ cards }) {
         {cards.length > 0 && <Table compact size="small">
             <Table.Body className='receiving-list-table'>
                 {cards.map(card => {
-                    const { name, display_name, set, rarity, cashPrice, creditPrice, finishCondition, uuid_key, tradeType, qoh } = card;
+                    const { name, display_name, set, rarity, cashPrice, creditPrice, finishCondition, uuid_key, tradeType, qoh, cardImage } = card;
                     return <ReceivingListItem
                         name={name}
                         display_name={display_name}
@@ -21,6 +21,7 @@ export default function ReceivingList({ cards }) {
                         tradeType={tradeType}
                         qoh={qoh}
                         key={uuid_key}
+                        cardImage={cardImage}
                     />
                 })}
             </Table.Body>

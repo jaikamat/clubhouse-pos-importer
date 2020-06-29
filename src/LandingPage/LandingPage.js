@@ -287,6 +287,9 @@ export default function LandingPage() {
                         <p>
                             It's already time. Core 2021 is upon us. We are now taking Booster Box pre-orders! $100 per box, 2 boxes per person limit. Pre-release sign ups will begin on June 19th!
                         </p>
+                        <p>
+                            Note: Preorders for draft booster boxes have now ended. We currently have them for sale at $110 each. Collector Booster preorders will end on June 3rd.
+                        </p>
                     </Card>
                     <Card imageSrc={ikoria_splash}
                         header="Big announcement!"

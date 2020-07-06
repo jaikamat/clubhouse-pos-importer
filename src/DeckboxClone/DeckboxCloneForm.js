@@ -64,6 +64,13 @@ const typeLineOptions = [
     { key: 'tribal', value: 'Tribal', text: 'Tribal' }
 ];
 
+const frameOptions = [
+    { key: 'na', value: '', text: 'None' },
+    { key: 'borderless', value: 'borderless', text: 'Borderless' },
+    { key: 'extendedArt', value: 'extendedArt', text: 'Extended Art' },
+    { key: 'extendedArt', value: 'showcase', text: 'Showcase' }
+];
+
 const initialState = {
     title: '',
     setName: '',
@@ -75,7 +82,8 @@ const initialState = {
     colorsArray: [],
     sortByDirection: -1,
     typeLine: '',
-    setNames: []
+    setNames: [],
+    frame: ''
 }
 
 export default class DeckboxCloneForm extends React.Component {
@@ -110,7 +118,8 @@ export default class DeckboxCloneForm extends React.Component {
             sortBy,
             sortByDirection,
             colorsArray,
-            typeLine
+            typeLine,
+            frame
         } = this.state;
 
         // Sort the colors here and concat prior to sending to the backend
@@ -176,6 +185,14 @@ export default class DeckboxCloneForm extends React.Component {
                             name="typeLine"
                             onChange={this.handleDropdownChange} />
 
+                        <Form.Field
+                            control={Select}
+                            label="Frame Effects"
+                            placeholder="Effect"
+                            options={frameOptions}
+                            name="frame"
+                            onChange={this.handleDropdownChange} />
+
                         <Form.Field>
                             <label>Price Filter</label>
                             <Input
@@ -227,7 +244,8 @@ export default class DeckboxCloneForm extends React.Component {
                             sortBy,
                             sortByDirection,
                             colors,
-                            type: typeLine
+                            type: typeLine,
+                            frame
                         })}>Submit</Form.Button>
                     </Form.Group>
                 </Form>

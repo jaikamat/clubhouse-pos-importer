@@ -49,8 +49,9 @@ async function getDistinctSetNames() {
  * page - used to modify internal SKIP constant for pagination
  * colors - a sorted string, used to identify cards by one or more colors
  * type - the typeline search, like `Artifact` or `Creature`
+ * frame - the desired frame effect filter (borderless, extended-art, showcase, etc)
  */
-async function getCardsByFilter({ title, setName, format, priceNum, priceFilter, finish, colors, sortBy, sortByDirection, page, type }) {
+async function getCardsByFilter({ title, setName, format, priceNum, priceFilter, finish, colors, sortBy, sortByDirection, page, type, frame }) {
     const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true
@@ -101,6 +102,31 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
         if (type) typeMatch.type_line = { $regex: `${type}`, $options: 'i' };
 
         aggregation.push({ $match: typeMatch });
+
+        const borderMatch = {};
+        const showcaseMatch = {};
+        const extendedArtMatch = {};
+
+        // Matches borderless art only
+        borderMatch.border_color = 'borderless';
+
+        // Matches extended art cards
+        extendedArtMatch.frame_effects = 'extendedart';
+
+        // Matches showcase art cards
+        showcaseMatch.frame_effects = 'showcase';
+
+        if (frame === 'borderless') {
+            aggregation.push({ $match: borderMatch });
+        }
+
+        if (frame === 'extendedArt') {
+            aggregation.push({ $match: extendedArtMatch });
+        }
+
+        if (frame === 'showcase') {
+            aggregation.push({ $match: showcaseMatch });
+        }
 
         const addFields = {
             image_uri: {
@@ -172,7 +198,9 @@ async function getCardsByFilter({ title, setName, format, priceNum, priceFilter,
                 type_line: 1,
                 prices: 1,
                 printed_name: 1,
-                flavor_name: 1
+                flavor_name: 1,
+                border_color: 1,
+                frame_effects: 1
             }
         });
 
@@ -262,7 +290,8 @@ app.get('/', async (req, res) => {
             sortBy,
             sortByDirection,
             page,
-            type
+            type,
+            frame
         } = req.query;
 
         const message = await getCardsByFilter({
@@ -277,7 +306,8 @@ app.get('/', async (req, res) => {
             sortBy,
             sortByDirection,
             page,
-            type
+            type,
+            frame
         });
 
         res.status(200).json(message);

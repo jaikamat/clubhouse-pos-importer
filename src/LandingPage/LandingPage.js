@@ -243,7 +243,7 @@ export default function LandingPage() {
                 <Spacer height="30" />
                 <Divider>
                     <Slogan>The Clubhouse is open <span role="img" aria-label="confetti">🎉</span></Slogan>
-                    <Subheader color="white">It's official! We are now open 7 days a week. Play space is limited to 16 mask-wearing players.</Subheader>
+                    <Subheader color="white">We are open 7 days a week! Play space use and events are cancelled until further notice due to WPN's in-store play suspension.</Subheader>
                     <FlexRowResponsive>
                         {/* <Link to="/calendar">
                             <Button><b>Events calendar</b></Button>
@@ -289,16 +289,6 @@ export default function LandingPage() {
                         </p>
                         <p>
                             Note: Preorders for draft booster boxes have now ended. We currently have them for sale at $110 each. Collector Booster preorders will end on June 3rd.
-                        </p>
-                    </Card>
-                    <Card imageSrc={ikoria_splash}
-                        header="Big announcement!"
-                        date="05/31/2020">
-                        <p>
-                            The Clubhouse play space re-opens TOMORROW! We are open 7 days a week from 2pm to 9 pm! There will be a 16 person capacity enforced on seating. MASKS are REQUIRED for play or any customer service.
-                        </p>
-                        <p>
-                            This means EVENTS are returning in a limited capacity. Tuesday and Saturday are FREE PLAY Commander! A pack of Ikoria will be given to the first pod that starts play on each free play day. Wednesday we will have an Ikoria booster draft for $15! Then on Friday evening we will be holding a MYSTERY BOOSTER DRAFT for $35! Pack and a half of prize support per participant will be added to the prizes as well as free pizza, and giveaways during our Mystery Booster event!
                         </p>
                     </Card>
                 </Grid>

@@ -32,7 +32,7 @@ export default function SaleLineItem({ display_name, set, finishCondition, qtyTo
 
     return (
         <Table.Row>
-            <Table.Cell><h4 classname="line-item-title">
+            <Table.Cell><h4 className="line-item-title">
                 <BoldHelp
                     onMouseEnter={mouseEnter}
                     onMouseMove={mouseMove}

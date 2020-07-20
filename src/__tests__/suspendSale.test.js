@@ -200,7 +200,7 @@ describe('Suspend Sale workflow', () => {
         const cardPrice = await page.$eval(ui.firstSaleLineItemPrice, d => d.textContent);
         const saleTotal = await page.$eval(ui.saleTotal, d => d.textContent);
         await page.waitFor(500);
-        expect(headerText).toBe(`Arcum Dagsson's Items`);
+        expect(headerText).toBe(`Arcum Dagsson's Items2 cards`);
         expect(cardTitle).toBe('Birds of Paradise');
         expect(cardPrice).toBe('$7.77');
         expect(saleTotal).toBe('$15.54');
@@ -234,7 +234,7 @@ describe('Suspend Sale workflow', () => {
         await page.$eval(ui.restoreSaleMenuSubmitBtn, b => b.click());
         await page.waitFor(2000);
         const headerText = await page.$eval(ui.saleListHeader, h => h.textContent);
-        expect(headerText).toBe(`Arcum Dagsson v02's Items`);
+        expect(headerText).toBe(`Arcum Dagsson v02's Items3 cards`);
     });
 
     test('Delete the sale', async () => {

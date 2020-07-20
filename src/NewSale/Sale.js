@@ -11,6 +11,7 @@ import makeAuthHeader from '../utils/makeAuthHeader';
 import SuspendedSale from './SuspendedSale';
 import { InventoryCard } from '../utils/ScryfallCard';
 import { SaleContext } from '../context/SaleContext';
+import TotalCardsLabel, { findSaleCardsQty } from '../common/TotalCardsLabel';
 
 export default function Sale() {
     const {
@@ -68,6 +69,7 @@ export default function Sale() {
                     <Grid.Column width="5">
                         <Header as="h2" style={{ display: 'inline-block' }} id="sale-header">
                             {suspendedSale.name === '' ? 'Sale Items' : `${suspendedSale.name}'s Items`}
+                            <TotalCardsLabel listLength={findSaleCardsQty(saleListCards)} />
                         </Header>
 
                         <SuspendedSale
@@ -77,6 +79,7 @@ export default function Sale() {
                             deleteSuspendedSale={deleteSuspendedSale}
                             id={suspendedSale._id}
                         />
+
                         <PrintList saleListCards={saleListCards} />
 
                         <Divider />

@@ -3,8 +3,9 @@ import SearchBar from '../common/SearchBar';
 import ReceivingSearchList from './ReceivingSearchList';
 import { Header, Grid, Divider } from 'semantic-ui-react'
 import { ReceivingContext } from '../context/ReceivingContext';
-import DefaultPlaceholder from './DefaultPlaceholder'
-import ReceivingList from './ReceivingList'
+import DefaultPlaceholder from './DefaultPlaceholder';
+import ReceivingList from './ReceivingList';
+import TotalCardsLabel from '../common/TotalCardsLabel';
 
 export default function Receiving() {
     const {
@@ -36,10 +37,10 @@ export default function Receiving() {
                     <ReceivingSearchList />
                 </Grid.Column>
                 <Grid.Column width="6">
-                    <Header as="h2" style={{ display: "inline-block" }}>Buylist</Header>
-                    {receivingList.length > 0 &&
-                        <Header floated="right" style={{ display: "inline-block" }}>Total Cards: {receivingList.length}</Header>
-                    }
+                    <Header as="h2" style={{ display: "inline-block" }}>
+                        Buylist
+                        <TotalCardsLabel listLength={receivingList.length} />
+                    </Header>
 
                     <Divider />
 

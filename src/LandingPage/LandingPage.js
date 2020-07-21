@@ -331,7 +331,7 @@ export default function LandingPage() {
                     <InfoCard
                         icon="clock"
                         header="Hours"
-                        content=" Mon - Thu 2pm to 9pm, Fri - Sun 12pm to 9pm"
+                        content="Mon - Fri 2pm to 7pm, Sat - Sun 12pm to 7pm"
                         align="center"
                     />
                     <InfoCard

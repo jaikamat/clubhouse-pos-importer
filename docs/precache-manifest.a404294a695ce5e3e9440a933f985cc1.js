@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "5ce67d969e4583a228b33377de91df6c",
+    "revision": "0298a22159d9269ae1889c9602cf1a7d",
     "url": "/index.html"
   },
   {
-    "revision": "334db6e2e29d770498d2",
+    "revision": "904d06be6eb72143390d",
     "url": "/static/css/2.0be890e3.chunk.css"
   },
   {
-    "revision": "686822c8797c3b9008c1",
+    "revision": "c7ae85feb96a8e0dffc3",
     "url": "/static/css/main.e9fea6d6.chunk.css"
   },
   {
-    "revision": "334db6e2e29d770498d2",
-    "url": "/static/js/2.7412cb79.chunk.js"
+    "revision": "904d06be6eb72143390d",
+    "url": "/static/js/2.81a90d0a.chunk.js"
   },
   {
-    "revision": "686822c8797c3b9008c1",
-    "url": "/static/js/main.3de9f128.chunk.js"
+    "revision": "c7ae85feb96a8e0dffc3",
+    "url": "/static/js/main.4556dcca.chunk.js"
   },
   {
     "revision": "632f69a0b006e60feeb3",
@@ -82,10 +82,6 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "faff92145777a3cbaf8e7367b4807987",
     "url": "/static/media/icons.faff9214.woff"
-  },
-  {
-    "revision": "027133efe716aff5e2678f12568e7628",
-    "url": "/static/media/ikoria_splash.027133ef.jpg"
   },
   {
     "revision": "c3fcddd698018974766b9cd3a44d413b",

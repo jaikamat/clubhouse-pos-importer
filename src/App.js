@@ -32,70 +32,50 @@ class App extends React.Component {
         return (
             <AuthProvider>
                 <Header />
-                <SaleProvider>
-                    <ReceivingProvider>
-                        <Switch>
+                <Switch>
+                    <Route exact path="/" component={LandingPage} />
+                    <BackgroundColor>
+                        <ContentContainer id="content-container">
+                            <Route
+                                exact
+                                path="/manage-inventory"
+                                component={Home}
+                            />
+                            <SaleProvider>
+                                <Route
+                                    exact
+                                    path="/new-sale"
+                                    component={Sale}
+                                />
+                            </SaleProvider>
+                            <Route
+                                exact
+                                path="/browse-sales"
+                                component={BrowseSales}
+                            />
+                            <Route
+                                exact
+                                path="/browse-inventory"
+                                component={DeckboxClone}
+                            />
+                            <Route
+                                exact
+                                path="/public-inventory"
+                                component={PublicInventory}
+                            />
                             <ReceivingProvider>
-                                <SaleProvider>
-                                    <Route
-                                        exact
-                                        path="/"
-                                        component={LandingPage}
-                                    />
-                                    <BackgroundColor>
-                                        <ContentContainer id="content-container">
-                                            <Route
-                                                exact
-                                                path="/manage-inventory"
-                                                component={Home}
-                                            />
-                                            <Route
-                                                exact
-                                                path="/new-sale"
-                                                component={Sale}
-                                            />
-                                            <Route
-                                                exact
-                                                path="/browse-sales"
-                                                component={BrowseSales}
-                                            />
-                                            <Route
-                                                exact
-                                                path="/browse-inventory"
-                                                component={DeckboxClone}
-                                            />
-                                            <Route
-                                                exact
-                                                path="/public-inventory"
-                                                component={PublicInventory}
-                                            />
-                                            <Route
-                                                exact
-                                                path="/receiving"
-                                                component={Receiving}
-                                            />
-                                            <Route
-                                                exact
-                                                path="/reports"
-                                                component={Reports}
-                                            />
-                                            <Route
-                                                exact
-                                                path="/login"
-                                                component={Login}
-                                            />
-                                            <Route
-                                                exact
-                                                path="/logout"
-                                                component={Logout}
-                                            />
-                                        </ContentContainer>
-                                    </BackgroundColor>
-                                </SaleProvider>
+                                <Route
+                                    exact
+                                    path="/receiving"
+                                    component={Receiving}
+                                />
                             </ReceivingProvider>
-                        </Switch>
-                    </ReceivingProvider>
-                </SaleProvider>
+                            <Route exact path="/reports" component={Reports} />
+                            <Route exact path="/login" component={Login} />
+                            <Route exact path="/logout" component={Logout} />
+                        </ContentContainer>
+                    </BackgroundColor>
+                </Switch>
             </AuthProvider>
         );
     }

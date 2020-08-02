@@ -22,8 +22,7 @@
         "uuid": "^3.4.0"
     },
     "scripts": {
-        "start_dev": "REACT_APP_ENVIRONMENT=development react-scripts start",
-        "start": "react-scripts start",
+        "start": "REACT_APP_ENVIRONMENT=development react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject"

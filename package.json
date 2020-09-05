@@ -24,7 +24,7 @@
     "scripts": {
         "start": "REACT_APP_ENVIRONMENT=development react-scripts start",
         "build": "react-scripts build",
-        "test": "react-scripts test",
+        "test": "react-scripts test --env=jsdom-fourteen",
         "eject": "react-scripts eject"
     },
     "jest": {

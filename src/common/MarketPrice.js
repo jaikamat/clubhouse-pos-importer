@@ -16,8 +16,7 @@ const LabelStyle = styled(Label)`
 // Rounds the passed number to the nearest fifty cents
 const roundNearestStep = (num) => Math.ceil(num * 2) / 2;
 
-// Need to be able to turn tcgmarket and tcgmid off
-// Need to be able to turn round on and off
+const displayPrice = (price) => (!!price ? `$${price.toFixed(2)}` : 'N/A');
 
 export default function MarketPrice({ id, finish, round, showMid = true }) {
     const [market, setMarket] = useState(null);
@@ -57,12 +56,9 @@ export default function MarketPrice({ id, finish, round, showMid = true }) {
             Loading <Icon loading name="spinner" />
         </span>
     );
-    const displayPrice = (price) => {
-        return !!price ? `$${price.toFixed(2)}` : 'N/A';
-    };
 
     return (
-        <React.Fragment>
+        <>
             <LabelStyle foil={isFoil}>
                 {loading ? (
                     loader
@@ -84,6 +80,6 @@ export default function MarketPrice({ id, finish, round, showMid = true }) {
                     )}
                 </LabelStyle>
             )}
-        </React.Fragment>
+        </>
     );
 }

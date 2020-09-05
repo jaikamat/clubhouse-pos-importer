@@ -29,7 +29,13 @@ const ImageWrapper = styled.div`
     width: 300px;
     height: 418.3px;
     box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.25);
-    background: repeating-linear-gradient(45deg, #bfbfbf, #bfbfbf 10px, #b0b0b0 10px, #b0b0b0 20px);
+    background: repeating-linear-gradient(
+        45deg,
+        #bfbfbf,
+        #bfbfbf 10px,
+        #b0b0b0 10px,
+        #b0b0b0 20px
+    );
     border-radius: 15px;
 `;
 
@@ -39,27 +45,37 @@ export default function PublicCardItem({ card }) {
 
     const displayFoil = (
         <InventoryRow>
-            <Label color='blue' image>Foil<Label.Detail>{foilQty}</Label.Detail></Label>
-            <MarketPrice id={id} finish="FOIL" />
+            <Label color="blue" image>
+                Foil<Label.Detail>{foilQty}</Label.Detail>
+            </Label>
+            <MarketPrice id={id} finish="FOIL" round />
         </InventoryRow>
     );
 
     const displayNonfoil = (
         <InventoryRow>
-            <Label color='blue' image>Nonfoil<Label.Detail>{nonfoilQty}</Label.Detail></Label>
-            <MarketPrice id={id} />
+            <Label color="blue" image>
+                Nonfoil<Label.Detail>{nonfoilQty}</Label.Detail>
+            </Label>
+            <MarketPrice id={id} round />
         </InventoryRow>
     );
 
-    return <React.Fragment>
-        <Wrapper>
-            <ImageWrapper>
-                <Image src={cardImage} size="medium" style={{ borderRadius: '15px' }} />
-            </ImageWrapper>
-            <InventoryWrapper>
-                {foilQty > 0 ? displayFoil : null}
-                {nonfoilQty > 0 ? displayNonfoil : null}
-            </InventoryWrapper>
-        </Wrapper>
-    </React.Fragment>
+    return (
+        <React.Fragment>
+            <Wrapper>
+                <ImageWrapper>
+                    <Image
+                        src={cardImage}
+                        size="medium"
+                        style={{ borderRadius: '15px' }}
+                    />
+                </ImageWrapper>
+                <InventoryWrapper>
+                    {foilQty > 0 ? displayFoil : null}
+                    {nonfoilQty > 0 ? displayNonfoil : null}
+                </InventoryWrapper>
+            </Wrapper>
+        </React.Fragment>
+    );
 }

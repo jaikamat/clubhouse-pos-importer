@@ -5,11 +5,18 @@ import { Label, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 
 const LabelStyle = styled(Label)`
-    background-color: ${props => !!props.foil ? '#ffcfdf' : null} !important;
-    background-image: ${props => !!props.foil ? 'linear-gradient(90deg, #ffcfdf 0%, #b0f3f1 74%)' : null} !important;
+    background-color: ${(props) =>
+        !!props.foil ? '#ffcfdf' : null} !important;
+    background-image: ${(props) =>
+        !!props.foil
+            ? 'linear-gradient(90deg, #ffcfdf 0%, #b0f3f1 74%)'
+            : null} !important;
 `;
 
-export default function MarketPrice({ id, finish }) {
+// Rounds the passed number to the nearest fifty cents
+const roundNearestStep = (num) => Math.ceil(num * 2) / 2;
+
+export default function MarketPrice({ id, finish, round }) {
     const [market, setMarket] = useState(null);
     const [median, setMedian] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -21,36 +28,60 @@ export default function MarketPrice({ id, finish }) {
             setLoading(true);
 
             const { data } = await axios.get(GET_LIVE_PRICE, {
-                params: { scryfallId: id }
+                params: { scryfallId: id },
             });
             const { marketPrices, medianPrices } = data;
-            const MIN_PRICE = 0.5; // Management-set lowest price for each single card
 
-            if (_isMounted) { // Checks to see if the component is not mounted to squelch memory leak warnings
+            if (_isMounted) {
+                // Checks to see if the component is not mounted to squelch memory leak warnings
                 if (isFoil) {
-                    setMarket(Math.max(marketPrices.foil, MIN_PRICE));
-                    setMedian(Math.max(medianPrices.foil, MIN_PRICE));
+                    setMarket(Number(marketPrices.foil));
+                    setMedian(Number(medianPrices.foil));
                 } else {
-                    setMarket(Math.max(marketPrices.normal, MIN_PRICE));
-                    setMedian(Math.max(medianPrices.normal, MIN_PRICE));
+                    setMarket(Number(marketPrices.normal));
+                    setMedian(Number(medianPrices.normal));
                 }
 
                 setLoading(false);
             }
 
-            return () => _isMounted = false;
+            return () => (_isMounted = false);
         })();
     }, [id, finish]);
 
-    const loader = <span>Loading <Icon loading name='spinner' /></span>;
-    const displayPrice = price => !!price ? `$${price.toFixed(2)}` : 'N/A';
+    const loader = (
+        <span>
+            Loading <Icon loading name="spinner" />
+        </span>
+    );
+    const displayPrice = (price) => {
+        return !!price ? `$${price.toFixed(2)}` : 'N/A';
+    };
 
-    return <React.Fragment>
-        <LabelStyle foil={isFoil}>
-            {loading ? loader : <span>Mkt. {displayPrice(market)}</span>}
-        </LabelStyle>
-        <LabelStyle foil={isFoil}>
-            {loading ? loader : <span>Mid. {displayPrice(median)}</span>}
-        </LabelStyle>
-    </React.Fragment>
+    if (round) {
+        return (
+            <React.Fragment>
+                <LabelStyle foil={isFoil}>
+                    {loading ? (
+                        loader
+                    ) : (
+                        <span>
+                            Est. {displayPrice(roundNearestStep(market))}
+                        </span>
+                    )}
+                </LabelStyle>
+            </React.Fragment>
+        );
+    }
+
+    return (
+        <React.Fragment>
+            <LabelStyle foil={isFoil}>
+                {loading ? loader : <span>Mkt. {displayPrice(market)}</span>}
+            </LabelStyle>
+            <LabelStyle foil={isFoil}>
+                {loading ? loader : <span>Mid. {displayPrice(median)}</span>}
+            </LabelStyle>
+        </React.Fragment>
+    );
 }

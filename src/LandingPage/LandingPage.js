@@ -7,6 +7,7 @@ import clubhouse_products from './clubhouse_products.png';
 import core_2021_draft_booster from './core_2021_draft_booster.png';
 import core_2021_collector from './core_2021_collector.jpg';
 import double_masters from './double_masters.png';
+import zen_meme from './zen_meme.jpg';
 
 const Wrapper = styled.div`
     display: flex;
@@ -308,6 +309,29 @@ export default function LandingPage() {
                     </FlexRow>
                     <Spacer height="30" />
                     <Grid>
+                        <Card
+                            imageSrc={zen_meme}
+                            header="New product preorders!"
+                            date="09/05/2020"
+                        >
+                            <p>
+                                Hey everyone! We are excited to announce that we
+                                have begun our Zendikar Rising preorders! Come
+                                on down starting today and lock in your products
+                                of choice. We have the following available:
+                            </p>
+                            <ul>
+                                <li>Regular Booster Box - $100</li>
+                                <li>Collector Booster Box - $209</li>
+                                <li>Set Booster Box - $110</li>
+                                <li>Bundle - $39</li>
+                            </ul>
+
+                            <p>
+                                Hope you're all as excited for the return to the
+                                legendary Zendikar as we are!
+                            </p>
+                        </Card>
                         <Card
                             imageSrc={double_masters}
                             header="New product preorders!"

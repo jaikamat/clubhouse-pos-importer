@@ -48,7 +48,7 @@ export default function PublicCardItem({ card }) {
             <Label color="blue" image>
                 Foil<Label.Detail>{foilQty}</Label.Detail>
             </Label>
-            <MarketPrice id={id} finish="FOIL" round />
+            <MarketPrice id={id} finish="FOIL" round showMid={false} />
         </InventoryRow>
     );
 
@@ -57,7 +57,7 @@ export default function PublicCardItem({ card }) {
             <Label color="blue" image>
                 Nonfoil<Label.Detail>{nonfoilQty}</Label.Detail>
             </Label>
-            <MarketPrice id={id} round />
+            <MarketPrice id={id} round showMid={false} />
         </InventoryRow>
     );
 

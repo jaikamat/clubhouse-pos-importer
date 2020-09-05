@@ -1,5 +1,13 @@
 import React, { useState, useContext } from 'react';
-import { Segment, Label, Form, Input, Dropdown, Button, Item } from 'semantic-ui-react';
+import {
+    Segment,
+    Label,
+    Form,
+    Input,
+    Dropdown,
+    Button,
+    Item,
+} from 'semantic-ui-react';
 import $ from 'jquery';
 import _ from 'lodash';
 import CardImage from '../common/CardImage';
@@ -15,15 +23,15 @@ import { SaleContext } from '../context/SaleContext';
  * @param {String} id
  */
 function createConditionOptions(qoh, id) {
-    const removeZeroedQuantites = _.pickBy(qoh, p => p > 0); // Quantites of zero not included
+    const removeZeroedQuantites = _.pickBy(qoh, (p) => p > 0); // Quantites of zero not included
 
-    return Object.entries(removeZeroedQuantites).map(d => {
+    return Object.entries(removeZeroedQuantites).map((d) => {
         const [conditionFinish, qty] = d;
 
         return {
             text: `${conditionFinish.split('_').join(' | ')} | Qty: ${qty}`,
             value: conditionFinish,
-            key: `${id}${conditionFinish}`
+            key: `${id}${conditionFinish}`,
         };
     });
 }
@@ -34,20 +42,29 @@ function createConditionOptions(qoh, id) {
  * @param {Object} qoh
  */
 function createInitialSelectedFinish(qoh) {
-    const removeZeroedQuantites = _.pickBy(qoh, p => p > 0);
+    const removeZeroedQuantites = _.pickBy(qoh, (p) => p > 0);
     // Isolate only the FOIL or NONFOIL values with mapping
-    const keysMapped = _.keys(removeZeroedQuantites).map(k => k.split('_')[0]);
+    const keysMapped = _.keys(removeZeroedQuantites).map(
+        (k) => k.split('_')[0]
+    );
     const uniqueValues = _.uniq(keysMapped);
     return uniqueValues.indexOf('NONFOIL') > -1 ? 'NONFOIL' : 'FOIL';
 }
 
 export default function BrowseCardItem(props) {
     const [selectedFinishCondition, setSelectedFinishCondition] = useState('');
-    const [selectedFinishConditionQty, setSelectedFinishConditionQty] = useState(0);
+    const [
+        selectedFinishConditionQty,
+        setSelectedFinishConditionQty,
+    ] = useState(0);
     const [quantityToSell, setQuantityToSell] = useState(0);
     const [price, setPrice] = useState(0);
-    const [selectedFinish, setSelectedFinish] = useState(createInitialSelectedFinish(props.qoh));
-    const [conditionOptions, setConditionOptions] = useState(createConditionOptions(props.qoh, props.id));
+    const [selectedFinish, setSelectedFinish] = useState(
+        createInitialSelectedFinish(props.qoh)
+    );
+    const [conditionOptions, setConditionOptions] = useState(
+        createConditionOptions(props.qoh, props.id)
+    );
     const { addToSaleList } = useContext(SaleContext);
 
     const handleQuantityChange = (e, { value }) => {
@@ -58,9 +75,10 @@ export default function BrowseCardItem(props) {
 
         let numVal = parseInt(value);
 
-        if (numVal > selectedFinishConditionQty) numVal = selectedFinishConditionQty;
+        if (numVal > selectedFinishConditionQty)
+            numVal = selectedFinishConditionQty;
 
-        if (isNaN((numVal)) || numVal < 0) numVal = 0;
+        if (isNaN(numVal) || numVal < 0) numVal = 0;
 
         setQuantityToSell(numVal);
     };
@@ -80,7 +98,9 @@ export default function BrowseCardItem(props) {
 
         let numVal = Number(value);
 
-        if (isNaN((numVal)) || numVal < 0) { numVal = 0; }
+        if (isNaN(numVal) || numVal < 0) {
+            numVal = 0;
+        }
 
         setPrice(numVal);
     };
@@ -96,90 +116,96 @@ export default function BrowseCardItem(props) {
         );
 
         // Reset state
-        setSelectedFinishCondition('')
-        setSelectedFinishConditionQty(0)
-        setQuantityToSell(0)
-        setPrice(0)
-        setConditionOptions(createConditionOptions(qoh, id))
-        setSelectedFinish(createInitialSelectedFinish(qoh))
+        setSelectedFinishCondition('');
+        setSelectedFinishConditionQty(0);
+        setQuantityToSell(0);
+        setPrice(0);
+        setConditionOptions(createConditionOptions(qoh, id));
+        setSelectedFinish(createInitialSelectedFinish(qoh));
 
         // Highlight the input after successful card add
         $('#searchBar').focus().select();
     };
 
-    return <Segment>
-        <Item.Group divided>
-            <Item>
-                <Item.Image size="tiny">
-                    <CardImage
-                        image_uris={props.image_uris}
-                        card_faces={props.card_faces}
-                    />
-                </Item.Image>
-                <Item.Content>
-                    <Item.Header as="h3">
-                        {props.name}{' '}
-                        <i
-                            className={`ss ss-fw ss-${props.set} ss-${props.rarity}`}
-                            style={{ fontSize: '30px' }}
+    return (
+        <Segment>
+            <Item.Group divided>
+                <Item>
+                    <Item.Image size="tiny">
+                        <CardImage
+                            image_uris={props.image_uris}
+                            card_faces={props.card_faces}
                         />
-                        <Label color="grey">
-                            {props.set_name} ({String(props.set).toUpperCase()})
-                                </Label>
-                        <QohLabels inventoryQty={props.qoh} />
-                        {' '}
-                        <MarketPrice id={props.id} finish={selectedFinish} />
-                        <Language languageCode={props.lang} />
-                    </Item.Header>
-                    <Item.Description>
-                        <Form>
-                            <Form.Group>
-                                <Form.Field
-                                    className="finish-condition"
-                                    control={Dropdown}
-                                    selection
-                                    placeholder="Select inventory"
-                                    options={conditionOptions}
-                                    value={selectedFinishCondition}
-                                    label="Select finish/condition"
-                                    onChange={handleSelectedFinishCondition}
-                                />
-                                <Form.Field
-                                    className="sale-qty"
-                                    control={Input}
-                                    type="number"
-                                    label="Quantity to sell"
-                                    value={quantityToSell}
-                                    onChange={handleQuantityChange}
-                                    disabled={!selectedFinishConditionQty}
-                                    onFocus={e => e.target.select()}
-                                />
-                                <Form.Field
-                                    className="sale-price"
-                                    control={Input}
-                                    type="number"
-                                    label="Price"
-                                    value={price}
-                                    onChange={handlePriceChange}
-                                    disabled={!selectedFinishConditionQty}
-                                    onFocus={e => e.target.select()}
-                                    step={0.5}
-                                />
-                                <Form.Button
-                                    className="add-to-sale"
-                                    label="Add to sale?"
-                                    control={Button}
-                                    primary
-                                    onClick={handleAddToSale}
-                                    disabled={!quantityToSell}
-                                >
-                                    Sell
+                    </Item.Image>
+                    <Item.Content>
+                        <Item.Header as="h3">
+                            {props.name}{' '}
+                            <i
+                                className={`ss ss-fw ss-${props.set} ss-${props.rarity}`}
+                                style={{ fontSize: '30px' }}
+                            />
+                            <Label color="grey">
+                                {props.set_name} (
+                                {String(props.set).toUpperCase()})
+                            </Label>
+                            <QohLabels inventoryQty={props.qoh} />{' '}
+                            <MarketPrice
+                                id={props.id}
+                                finish={selectedFinish}
+                                round
+                            />
+                            <Language languageCode={props.lang} />
+                        </Item.Header>
+                        <Item.Description>
+                            <Form>
+                                <Form.Group>
+                                    <Form.Field
+                                        className="finish-condition"
+                                        control={Dropdown}
+                                        selection
+                                        placeholder="Select inventory"
+                                        options={conditionOptions}
+                                        value={selectedFinishCondition}
+                                        label="Select finish/condition"
+                                        onChange={handleSelectedFinishCondition}
+                                    />
+                                    <Form.Field
+                                        className="sale-qty"
+                                        control={Input}
+                                        type="number"
+                                        label="Quantity to sell"
+                                        value={quantityToSell}
+                                        onChange={handleQuantityChange}
+                                        disabled={!selectedFinishConditionQty}
+                                        onFocus={(e) => e.target.select()}
+                                    />
+                                    <Form.Field
+                                        className="sale-price"
+                                        control={Input}
+                                        type="number"
+                                        label="Price"
+                                        value={price}
+                                        onChange={handlePriceChange}
+                                        disabled={!selectedFinishConditionQty}
+                                        onFocus={(e) => e.target.select()}
+                                        step={0.5}
+                                    />
+                                    <Form.Button
+                                        className="add-to-sale"
+                                        label="Add to sale?"
+                                        control={Button}
+                                        primary
+                                        onClick={handleAddToSale}
+                                        disabled={!quantityToSell}
+                                    >
+                                        Sell
                                     </Form.Button>
-                            </Form.Group>
-                        </Form>
-                    </Item.Description>
-                </Item.Content>
-            </Item>
-        </Item.Group>
-    </Segment>
+                                </Form.Group>
+                            </Form>
+                        </Item.Description>
+                    </Item.Content>
+                </Item>
+            </Item.Group>
+        </Segment>
+    );
 }

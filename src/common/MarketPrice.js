@@ -16,7 +16,10 @@ const LabelStyle = styled(Label)`
 // Rounds the passed number to the nearest fifty cents
 const roundNearestStep = (num) => Math.ceil(num * 2) / 2;
 
-export default function MarketPrice({ id, finish, round }) {
+// Need to be able to turn tcgmarket and tcgmid off
+// Need to be able to turn round on and off
+
+export default function MarketPrice({ id, finish, round, showMid = true }) {
     const [market, setMarket] = useState(null);
     const [median, setMedian] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -58,30 +61,29 @@ export default function MarketPrice({ id, finish, round }) {
         return !!price ? `$${price.toFixed(2)}` : 'N/A';
     };
 
-    if (round) {
-        return (
-            <React.Fragment>
+    return (
+        <React.Fragment>
+            <LabelStyle foil={isFoil}>
+                {loading ? (
+                    loader
+                ) : (
+                    <span>
+                        Mkt.{' '}
+                        {round
+                            ? displayPrice(roundNearestStep(market))
+                            : displayPrice(market)}
+                    </span>
+                )}
+            </LabelStyle>
+            {showMid && (
                 <LabelStyle foil={isFoil}>
                     {loading ? (
                         loader
                     ) : (
-                        <span>
-                            Est. {displayPrice(roundNearestStep(market))}
-                        </span>
+                        <span>Mid. {displayPrice(median)}</span>
                     )}
                 </LabelStyle>
-            </React.Fragment>
-        );
-    }
-
-    return (
-        <React.Fragment>
-            <LabelStyle foil={isFoil}>
-                {loading ? loader : <span>Mkt. {displayPrice(market)}</span>}
-            </LabelStyle>
-            <LabelStyle foil={isFoil}>
-                {loading ? loader : <span>Mid. {displayPrice(median)}</span>}
-            </LabelStyle>
+            )}
         </React.Fragment>
     );
 }

@@ -127,7 +127,10 @@ export default function ReceivingSearchItem(props) {
      */
     const submitDisabled = () => {
         const validateQty = quantity === 0 || quantity === '';
-        const validateTradeTypes = !cashPrice && !creditPrice;
+        const validateTradeTypes =
+            !(cashPrice || creditPrice) ||
+            cashPrice === '' ||
+            creditPrice === '';
         const validateMarketPrice = marketPrice === 0 || marketPrice === '';
 
         if (cashPrice > 0) {

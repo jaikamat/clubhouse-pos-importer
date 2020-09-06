@@ -35,7 +35,6 @@ export default function MarketPrice({ id, finish, round, showMid = true }) {
             const { marketPrices, medianPrices } = data;
 
             if (_isMounted) {
-                // Checks to see if the component is not mounted to squelch memory leak warnings
                 if (isFoil) {
                     setMarket(Number(marketPrices.foil));
                     setMedian(Number(medianPrices.foil));

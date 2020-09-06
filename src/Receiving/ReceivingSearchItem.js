@@ -1,23 +1,31 @@
 import React, { useState, useContext } from 'react';
 import $ from 'jquery';
-import { Segment, Input, Button, Form, Select, Label, Item } from 'semantic-ui-react';
+import {
+    Segment,
+    Input,
+    Button,
+    Form,
+    Select,
+    Label,
+    Item,
+} from 'semantic-ui-react';
 import QohLabels from '../common/QohLabels';
 import CardImage from '../common/CardImage';
-import MarketPrice from '../common/MarketPrice'
+import MarketPrice from '../common/MarketPrice';
 import createToast from '../common/createToast';
 import { ReceivingContext } from '../context/ReceivingContext';
 import Language from '../common/Language';
 
 const finishes = [
     { key: 'NONFOIL', text: 'Nonfoil', value: 'NONFOIL' },
-    { key: 'FOIL', text: 'Foil', value: 'FOIL' }
+    { key: 'FOIL', text: 'Foil', value: 'FOIL' },
 ];
 
 const cardConditions = [
     { key: 'NM', text: 'Near Mint', value: 'NM' },
     { key: 'LP', text: 'Light Play', value: 'LP' },
     { key: 'MP', text: 'Moderate Play', value: 'MP' },
-    { key: 'HP', text: 'Heavy Play', value: 'HP' }
+    { key: 'HP', text: 'Heavy Play', value: 'HP' },
 ];
 
 /**
@@ -47,7 +55,8 @@ export default function ReceivingSearchItem(props) {
     );
 
     // Determines whether the select finish dropdown is permanently disabled, seeded from props
-    const finishDisabled = checkCardFinish(props.nonfoil, props.foil).finishDisabled;
+    const finishDisabled = checkCardFinish(props.nonfoil, props.foil)
+        .finishDisabled;
 
     const { addToList } = useContext(ReceivingContext);
 
@@ -59,30 +68,31 @@ export default function ReceivingSearchItem(props) {
     const handlePriceChange = (e, { value }) => {
         let val = Number(value) || 0;
         if (val < 0) val = 0;
+        if (value === '') val = '';
 
         switch (e.target.name) {
-            case "cashInput":
+            case 'cashInput':
                 setCashPrice(val);
                 break;
-            case "marketPriceInput":
+            case 'marketPriceInput':
                 setMarketPrice(val);
                 break;
-            case "creditInput":
+            case 'creditInput':
                 setCreditPrice(val);
                 break;
             default:
                 break;
         }
-    }
+    };
 
     const handleQuantityChange = (e, { value }) => {
         let val = parseInt(value, 10) || 0;
         if (val < 0) val = 0; // cannot receive less than 0
-        if (val > 50) val = 50 // set max to 50 cards per single transaction
+        if (val > 50) val = 50; // set max to 50 cards per single transaction
         setQuantity(val);
     };
 
-    const handleFocus = e => e.target.select();
+    const handleFocus = (e) => e.target.select();
 
     const handleInventoryAdd = () => {
         addToList(quantity, {
@@ -91,19 +101,21 @@ export default function ReceivingSearchItem(props) {
             marketPrice,
             creditPrice,
             finishCondition: `${selectedFinish}_${selectedCondition}`, // ex. NONFOIL_NM
-        })
+        });
 
         setQuantity(1);
         setCashPrice(0);
         setMarketPrice(0);
         setCreditPrice(0);
         setSelectedCondition('NM');
-        setSelectedFinish(checkCardFinish(props.nonfoil, props.foil).selectedFinish);
+        setSelectedFinish(
+            checkCardFinish(props.nonfoil, props.foil).selectedFinish
+        );
 
         createToast({
             color: 'green',
             header: `${quantity}x ${props.name} added to buylist!`,
-            duration: 2000
+            duration: 2000,
         });
 
         // Highlight the input after successful card add
@@ -123,7 +135,7 @@ export default function ReceivingSearchItem(props) {
         }
 
         return validateQty || validateTradeTypes;
-    }
+    };
 
     const {
         image_uris,
@@ -133,7 +145,7 @@ export default function ReceivingSearchItem(props) {
         rarity,
         card_faces,
         id,
-        lang
+        lang,
     } = props;
 
     return (
@@ -148,18 +160,16 @@ export default function ReceivingSearchItem(props) {
                         />
                     </Item.Image>
                     <Item.Content>
-                        <Item.Header as='h3'>
-                            {name}
-                            {' '}
+                        <Item.Header as="h3">
+                            {name}{' '}
                             <i
                                 className={`ss ss-fw ss-${set} ss-${rarity}`}
                                 style={{ fontSize: '30px' }}
                             />
                             <Label color="grey">
                                 {set_name} ({String(set).toUpperCase()})
-                                </Label>
-                            <QohLabels inventoryQty={props.qoh} />
-                            {' '}
+                            </Label>
+                            <QohLabels inventoryQty={props.qoh} />{' '}
                             <MarketPrice id={id} finish={selectedFinish} />
                             <Language languageCode={lang} />
                         </Item.Header>
@@ -172,7 +182,7 @@ export default function ReceivingSearchItem(props) {
                                         label="Quantity"
                                         value={quantity}
                                         onChange={handleQuantityChange}
-                                        onFocus={e => e.target.select()}
+                                        onFocus={(e) => e.target.select()}
                                         className="receiving-quantity"
                                     />
                                     <Form.Field
@@ -206,7 +216,9 @@ export default function ReceivingSearchItem(props) {
                                         onChange={handlePriceChange}
                                         onFocus={handleFocus}
                                         step="0.25"
-                                        disabled={cashPrice === 0 || cashPrice === ''}
+                                        disabled={
+                                            cashPrice === 0 || cashPrice === ''
+                                        }
                                         className="receiving-market"
                                     />
                                 </Form.Group>

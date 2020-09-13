@@ -50,6 +50,7 @@
     "devDependencies": {
         "@testing-library/react": "^11.0.2",
         "dotenv": "^8.2.0",
+        "jsdom": "^16.4.0",
         "puppeteer": "^2.1.1"
     }
 }

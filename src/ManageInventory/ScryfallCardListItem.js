@@ -1,26 +1,23 @@
 import React, { useState } from 'react';
-import { Segment, Input, Button, Form, Select, Label, Item } from 'semantic-ui-react';
+import {
+    Segment,
+    Input,
+    Button,
+    Form,
+    Select,
+    Label,
+    Item,
+} from 'semantic-ui-react';
 import axios from 'axios';
 import $ from 'jquery';
 import QohLabels from '../common/QohLabels';
 import createToast from '../common/createToast';
 import CardImage from '../common/CardImage';
 import makeAuthHeader from '../utils/makeAuthHeader';
-import MarketPrice from '../common/MarketPrice'
+import MarketPrice from '../common/MarketPrice';
 import { ADD_CARD_TO_INVENTORY } from '../utils/api_resources';
 import Language from '../common/Language';
-
-const finishes = [
-    { key: 'NONFOIL', text: 'Nonfoil', value: 'NONFOIL' },
-    { key: 'FOIL', text: 'Foil', value: 'FOIL' }
-];
-
-const cardConditions = [
-    { key: 'NM', text: 'Near Mint', value: 'NM' },
-    { key: 'LP', text: 'Light Play', value: 'LP' },
-    { key: 'MP', text: 'Moderate Play', value: 'MP' },
-    { key: 'HP', text: 'Heavy Play', value: 'HP' }
-];
+import { finishes, cardConditions } from '../common/dropdownOptions';
 
 /**
  * Seeds state from props. Used to determine if cards have only foil, nonfoil, or both printings
@@ -38,11 +35,26 @@ function checkCardFinish(nonfoilProp, foilProp) {
     }
 }
 
-export default function ScryfallCardListItem({ qoh, foil, nonfoil, name, set_name, set, rarity, id, cardImage, lang }) {
+export default function ScryfallCardListItem({
+    qoh,
+    foil,
+    nonfoil,
+    name,
+    set_name,
+    set,
+    rarity,
+    id,
+    cardImage,
+    lang,
+}) {
     const [quantity, setQuantity] = useState(0);
-    const [selectedFinish, setSelectedFinish] = useState(checkCardFinish(nonfoil, foil).selectedFinish);
+    const [selectedFinish, setSelectedFinish] = useState(
+        checkCardFinish(nonfoil, foil).selectedFinish
+    );
     const [selectedCondition, setSelectedCondition] = useState('NM');
-    const [finishDisabled, setFinishDisabled] = useState(checkCardFinish(nonfoil, foil).finishDisabled);
+    const [finishDisabled, setFinishDisabled] = useState(
+        checkCardFinish(nonfoil, foil).finishDisabled
+    );
     const [submitDisable, setSubmitDisable] = useState(false);
     const [inventoryQty, setInventoryQty] = useState(qoh);
     const [submitLoading, setSubmitLoading] = useState(false);
@@ -60,12 +72,12 @@ export default function ScryfallCardListItem({ qoh, foil, nonfoil, name, set_nam
     // Remove input placeholder when user tries to enter a number (to reduce user error)
     const handleFocus = () => {
         if (quantity === 0) setQuantity('');
-    }
+    };
 
     // Restore input placeholder when user blurs field
     const handleBlur = () => {
         if (quantity === '') setQuantity(0);
-    }
+    };
 
     const handleInventoryAdd = async (e, { value }) => {
         // This is the identifier for quantities of different finishes/conditions in the db
@@ -75,16 +87,22 @@ export default function ScryfallCardListItem({ qoh, foil, nonfoil, name, set_nam
             setSubmitDisable(true);
             setSubmitLoading(true);
 
-            const { data } = await axios.post(ADD_CARD_TO_INVENTORY, {
-                quantity: quantity,
-                finishCondition: finishCondition,
-                cardInfo: { id, name, set_name, set },
-            }, { headers: makeAuthHeader() });
+            const { data } = await axios.post(
+                ADD_CARD_TO_INVENTORY,
+                {
+                    quantity: quantity,
+                    finishCondition: finishCondition,
+                    cardInfo: { id, name, set_name, set },
+                },
+                { headers: makeAuthHeader() }
+            );
 
             createToast({
                 color: 'green',
-                header: `${quantity}x ${name} ${quantity > 0 ? 'added' : 'removed'}!`,
-                duration: 2000
+                header: `${quantity}x ${name} ${
+                    quantity > 0 ? 'added' : 'removed'
+                }!`,
+                duration: 2000,
             });
 
             setQuantity(0);
@@ -110,18 +128,16 @@ export default function ScryfallCardListItem({ qoh, foil, nonfoil, name, set_nam
                         <CardImage image={cardImage} />
                     </Item.Image>
                     <Item.Content>
-                        <Item.Header as='h3'>
-                            {name}
-                            {' '}
+                        <Item.Header as="h3">
+                            {name}{' '}
                             <i
                                 className={`ss ss-fw ss-${set} ss-${rarity}`}
                                 style={{ fontSize: '30px' }}
                             />
                             <Label color="grey">
                                 {set_name} ({String(set).toUpperCase()})
-                                </Label>
-                            <QohLabels inventoryQty={inventoryQty} />
-                            {' '}
+                            </Label>
+                            <QohLabels inventoryQty={inventoryQty} />{' '}
                             <MarketPrice id={id} finish={selectedFinish} />
                             <Language languageCode={lang} />
                         </Item.Header>

@@ -51,6 +51,7 @@
         "@testing-library/jest-dom": "^5.11.4",
         "@testing-library/react": "^11.0.2",
         "dotenv": "^8.2.0",
+        "prettier": "2.1.1",
         "puppeteer": "^2.1.1"
     }
 }

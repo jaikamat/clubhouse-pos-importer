@@ -1,12 +1,5 @@
 import React from 'react';
-import MarketPrice from '../../common/MarketPrice';
-import {
-    render,
-    screen,
-    waitFor,
-    waitForElementToBeRemoved,
-    fireEvent,
-} from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import mockData from '../data/mockData';
 import ReceivingSearchItem from '../../Receiving/ReceivingSearchItem';

@@ -1,5 +1,5 @@
 import sortSaleList from '../utils/sortSaleList';
-import mockData from './data/sorting_mockData';
+import mockData from './data/mockData';
 import { InventoryCard } from '../utils/ScryfallCard';
 
 /**
@@ -11,11 +11,14 @@ function randomizeArray(arr) {
 
     // Picks a random index from the source array, splices and them pushes it to output
     while (arr.length) {
-        const randomCard = arr.splice(Math.floor(Math.random() * arr.length), 1);
+        const randomCard = arr.splice(
+            Math.floor(Math.random() * arr.length),
+            1
+        );
         output.push(randomCard[0]);
     }
 
-    return output.map(c => new InventoryCard(c));
+    return output.map((c) => new InventoryCard(c));
 }
 
 describe('Sort function', () => {
@@ -30,6 +33,6 @@ describe('Sort function', () => {
         expect(sorted[4].name).toBe('Colossal Dreadmaw');
         expect(sorted[5].name).toBe('Sigarda, Host of Herons');
         expect(sorted[6].name).toBe('Emrakul, the Aeons Torn');
-        expect(sorted[7].name).toBe('Gaea\'s Cradle');
-    })
-})
+        expect(sorted[7].name).toBe("Gaea's Cradle");
+    });
+});

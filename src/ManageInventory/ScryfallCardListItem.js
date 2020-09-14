@@ -143,6 +143,16 @@ export default function ScryfallCardListItem({
                                                         value
                                                     )
                                                 }
+                                                onFocus={() => {
+                                                    if (
+                                                        +values.quantity === 0
+                                                    ) {
+                                                        setFieldValue(
+                                                            'quantity',
+                                                            ''
+                                                        );
+                                                    }
+                                                }}
                                             />
                                             <Form.Field
                                                 label="Finish"

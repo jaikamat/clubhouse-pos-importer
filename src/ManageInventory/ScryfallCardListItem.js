@@ -18,6 +18,7 @@ import MarketPrice from '../common/MarketPrice';
 import { ADD_CARD_TO_INVENTORY } from '../utils/api_resources';
 import Language from '../common/Language';
 import { finishes, cardConditions } from '../common/dropdownOptions';
+import { Formik } from 'formik';
 
 /**
  * Seeds state from props. Used to determine if cards have only foil, nonfoil, or both printings
@@ -47,55 +48,45 @@ export default function ScryfallCardListItem({
     cardImage,
     lang,
 }) {
-    const [quantity, setQuantity] = useState(0);
     const [selectedFinish, setSelectedFinish] = useState(
         checkCardFinish(nonfoil, foil).selectedFinish
     );
-    const [selectedCondition, setSelectedCondition] = useState('NM');
-    const [finishDisabled, setFinishDisabled] = useState(
-        checkCardFinish(nonfoil, foil).finishDisabled
-    );
-    const [submitDisable, setSubmitDisable] = useState(false);
+
     const [inventoryQty, setInventoryQty] = useState(qoh);
-    const [submitLoading, setSubmitLoading] = useState(false);
 
-    const handleFinishChange = (e, { value }) => setSelectedFinish(value);
+    const validate = ({ quantity }) => {
+        const errors = {};
 
-    const handleConditionChange = (e, { value }) => setSelectedCondition(value);
+        if (
+            !Number(quantity) ||
+            !Number.isInteger(+quantity) ||
+            +quantity > 100
+        )
+            errors.quantity = 'error';
 
-    const handleQuantityChange = (e, { value }) => {
-        const val = parseInt(value);
-        const quantity = isNaN(val) ? '' : val; // Check for NaN
-        setQuantity(quantity);
+        return errors;
     };
 
-    // Remove input placeholder when user tries to enter a number (to reduce user error)
-    const handleFocus = () => {
-        if (quantity === 0) setQuantity('');
-    };
-
-    // Restore input placeholder when user blurs field
-    const handleBlur = () => {
-        if (quantity === '') setQuantity(0);
-    };
-
-    const handleInventoryAdd = async (e, { value }) => {
-        // This is the identifier for quantities of different finishes/conditions in the db
-        const finishCondition = `${selectedFinish}_${selectedCondition}`;
-
+    const onSubmit = async (
+        { quantity, selectedFinish, selectedCondition },
+        { resetForm }
+    ) => {
         try {
-            setSubmitDisable(true);
-            setSubmitLoading(true);
-
             const { data } = await axios.post(
                 ADD_CARD_TO_INVENTORY,
                 {
-                    quantity: quantity,
-                    finishCondition: finishCondition,
+                    quantity: parseInt(quantity, 10),
+                    finishCondition: `${selectedFinish}_${selectedCondition}`,
                     cardInfo: { id, name, set_name, set },
                 },
                 { headers: makeAuthHeader() }
             );
+
+            // Imperatively reset the form using Formik actions
+            resetForm();
+
+            // Update the new quantity
+            setInventoryQty(data.qoh);
 
             createToast({
                 color: 'green',
@@ -104,14 +95,6 @@ export default function ScryfallCardListItem({
                 }!`,
                 duration: 2000,
             });
-
-            setQuantity(0);
-            setSelectedFinish(checkCardFinish(nonfoil, foil).selectedFinish);
-            setSelectedCondition('NM');
-            setFinishDisabled(checkCardFinish(nonfoil, foil).finishDisabled);
-            setSubmitDisable(false);
-            setSubmitLoading(false);
-            setInventoryQty(data.qoh);
 
             // Highlight the input after successful card add
             $('#searchBar').focus().select();
@@ -142,48 +125,87 @@ export default function ScryfallCardListItem({
                             <Language languageCode={lang} />
                         </Item.Header>
                         <Item.Description>
-                            <Form>
-                                <Form.Group>
-                                    <Form.Field
-                                        control={Input}
-                                        type="number"
-                                        label="Quantity"
-                                        value={quantity}
-                                        onChange={handleQuantityChange}
-                                        onFocus={handleFocus}
-                                        onBlur={handleBlur}
-                                    />
-                                    <Form.Field
-                                        label="Finish"
-                                        control={Select}
-                                        value={selectedFinish}
-                                        options={finishes}
-                                        disabled={finishDisabled}
-                                        onChange={handleFinishChange}
-                                    />
-                                    <Form.Field
-                                        label="Condition"
-                                        control={Select}
-                                        value={selectedCondition}
-                                        options={cardConditions}
-                                        onChange={handleConditionChange}
-                                    />
-                                    <Form.Button
-                                        label="Add to Inventory?"
-                                        control={Button}
-                                        primary
-                                        disabled={
-                                            quantity === 0 ||
-                                            quantity === '' ||
-                                            submitDisable
-                                        }
-                                        onClick={handleInventoryAdd}
-                                        loading={submitLoading}
-                                    >
-                                        Submit
-                                    </Form.Button>
-                                </Form.Group>
-                            </Form>
+                            <Formik
+                                initialValues={{
+                                    selectedFinish: checkCardFinish(
+                                        nonfoil,
+                                        foil
+                                    ).selectedFinish,
+                                    selectedCondition: 'NM',
+                                    quantity: 0,
+                                }}
+                                validate={validate}
+                                onSubmit={onSubmit}
+                                initialErrors={{ quantity: 'error' }}
+                            >
+                                {({
+                                    values,
+                                    handleSubmit,
+                                    setFieldValue,
+                                    isSubmitting,
+                                    isValid,
+                                }) => (
+                                    <Form>
+                                        <Form.Group>
+                                            <Form.Field
+                                                control={Input}
+                                                type="number"
+                                                label="Quantity"
+                                                value={values.quantity}
+                                                onChange={(_, { value }) =>
+                                                    setFieldValue(
+                                                        'quantity',
+                                                        value
+                                                    )
+                                                }
+                                            />
+                                            <Form.Field
+                                                label="Finish"
+                                                control={Select}
+                                                value={values.selectedFinish}
+                                                options={finishes}
+                                                disabled={
+                                                    checkCardFinish(
+                                                        nonfoil,
+                                                        foil
+                                                    ).finishDisabled
+                                                }
+                                                onChange={(_, { value }) => {
+                                                    setSelectedFinish(value);
+                                                    setFieldValue(
+                                                        'selectedFinish',
+                                                        value
+                                                    );
+                                                }}
+                                            />
+                                            <Form.Field
+                                                label="Condition"
+                                                control={Select}
+                                                value={values.selectedCondition}
+                                                options={cardConditions}
+                                                onChange={(_, { value }) =>
+                                                    setFieldValue(
+                                                        'selectedCondition',
+                                                        value
+                                                    )
+                                                }
+                                            />
+                                            <Form.Button
+                                                label="Add to Inventory?"
+                                                control={Button}
+                                                primary
+                                                disabled={
+                                                    !isValid || isSubmitting
+                                                }
+                                                onClick={handleSubmit}
+                                                loading={isSubmitting}
+                                            >
+                                                Submit
+                                            </Form.Button>
+                                        </Form.Group>
+                                    </Form>
+                                )}
+                            </Formik>
                         </Item.Description>
                     </Item.Content>
                 </Item>

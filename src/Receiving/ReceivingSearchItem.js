@@ -15,23 +15,8 @@ import MarketPrice from '../common/MarketPrice';
 import createToast from '../common/createToast';
 import { ReceivingContext } from '../context/ReceivingContext';
 import Language from '../common/Language';
-import { finishes, cardConditions } from '../common/dropdownOptions';
-
-/**
- * Seeds state from props. Used to determine if cards have only foil, nonfoil, or both printings
- * from their `foil` and `nonfoil`
- * @param {Boolean} nonfoilProp
- * @param {Boolean} foilProp
- */
-function checkCardFinish(nonfoil, foil) {
-    if (!nonfoil && foil) {
-        return { selectedFinish: 'FOIL', finishDisabled: true };
-    } else if (nonfoil && !foil) {
-        return { selectedFinish: 'NONFOIL', finishDisabled: true };
-    } else if (nonfoil && foil) {
-        return { selectedFinish: 'NONFOIL', finishDisabled: false };
-    }
-}
+import { finishes, cardConditions } from '../utils/dropdownOptions';
+import checkCardFinish from '../utils/checkCardFinish';
 
 export default function ReceivingSearchItem(props) {
     const [quantity, setQuantity] = useState(1);

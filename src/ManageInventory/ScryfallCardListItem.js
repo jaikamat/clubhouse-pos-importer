@@ -10,6 +10,7 @@ import {
 } from 'semantic-ui-react';
 import axios from 'axios';
 import $ from 'jquery';
+import { Formik } from 'formik';
 import QohLabels from '../common/QohLabels';
 import createToast from '../common/createToast';
 import CardImage from '../common/CardImage';
@@ -17,24 +18,8 @@ import makeAuthHeader from '../utils/makeAuthHeader';
 import MarketPrice from '../common/MarketPrice';
 import { ADD_CARD_TO_INVENTORY } from '../utils/api_resources';
 import Language from '../common/Language';
-import { finishes, cardConditions } from '../common/dropdownOptions';
-import { Formik } from 'formik';
-
-/**
- * Seeds state from props. Used to determine if cards have only foil, nonfoil, or both printings
- * from their `foil` and `nonfoil`
- * @param {Boolean} nonfoilProp
- * @param {Boolean} foilProp
- */
-function checkCardFinish(nonfoilProp, foilProp) {
-    if (!nonfoilProp && foilProp) {
-        return { selectedFinish: 'FOIL', finishDisabled: true };
-    } else if (nonfoilProp && !foilProp) {
-        return { selectedFinish: 'NONFOIL', finishDisabled: true };
-    } else if (nonfoilProp && foilProp) {
-        return { selectedFinish: 'NONFOIL', finishDisabled: false };
-    }
-}
+import { finishes, cardConditions } from '../utils/dropdownOptions';
+import checkCardFinish from '../utils/checkCardFinish';
 
 export default function ScryfallCardListItem({
     qoh,

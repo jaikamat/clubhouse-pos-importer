@@ -14,7 +14,9 @@ const endpoints = {
     ADD_CARD_TO_INVENTORY: isTest
         ? `https://clubhouse-collection.appspot.com/auth/addCardToInventory`
         : `https://us-central1-clubhouse-collection.cloudfunctions.net/addCardToInventory${env}`,
-    RECEIVE_CARDS: `https://us-central1-clubhouse-collection.cloudfunctions.net/receiveCards${env}`,
+    RECEIVE_CARDS: isTest
+        ? `https://clubhouse-collection.appspot.com/auth/receiveCards`
+        : `https://us-central1-clubhouse-collection.cloudfunctions.net/receiveCards${env}`,
     GET_CARDS_BY_FILTER: isTest
         ? `https://clubhouse-collection.appspot.com/auth/getCardsByFilter`
         : `https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsByFilter${env}`,
@@ -26,10 +28,10 @@ const endpoints = {
         ? `https://clubhouse-collection.appspot.com/jwt`
         : `https://us-central1-clubhouse-collection.cloudfunctions.net/getJwt${env}`,
     GET_SALES_BY_TITLE: isTest
-        ? `https://clubhouse-collection.appspot.com/getSaleByTitle`
+        ? `https://clubhouse-collection.appspot.com/auth/getSaleByTitle`
         : `https://us-central1-clubhouse-collection.cloudfunctions.net/getSales${env}`,
     GET_ALL_SALES: isTest
-        ? `https://clubhouse-collection.appspot.com/allSales`
+        ? `https://clubhouse-collection.appspot.com/auth/allSales`
         : `https://us-central1-clubhouse-collection.cloudfunctions.net/getSales${env}/sales`,
     GET_CARDS_WITH_INFO: isTest
         ? `https://clubhouse-collection.appspot.com/getCardsWithInfo`

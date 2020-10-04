@@ -618,4 +618,111 @@ router.get('/getSaleByTitle', async (req, res) => {
     }
 });
 
+function validateOne({ id, quantity, finishCondition, name, set, set_name }) {
+    const finishes = [
+        'NONFOIL_NM',
+        'NONFOIL_LP',
+        'NONFOIL_MP',
+        'NONFOIL_HP',
+        'FOIL_NM',
+        'FOIL_LP',
+        'FOIL_MP',
+        'FOIL_HP',
+    ];
+
+    if (!id) throw new Error(`Card id must be provided`);
+    if (!name) throw new Error(`Card name must be provided for ${id}`);
+    if (!set)
+        throw new Error(`Card set abbreviation must be provided for ${id}`);
+    if (!set_name) throw new Error(`Card set name must be provided for ${id}`);
+    if (typeof quantity !== 'number')
+        throw new Error(`Card quantity formatted incorrectly for ${name}`);
+    if (finishes.indexOf(finishCondition) < 0)
+        throw new Error(`FinishCondition not a defined type for ${name}`);
+    return;
+}
+
+// Wraps the database connection and exposes addCardToInventoryReceiving to the db connection
+async function wrapConnectToDb(cards) {
+    const mongoConfig = { useNewUrlParser: true, useUnifiedTopology: true };
+
+    try {
+        var client = await new MongoClient(
+            process.env.MONGO_URI,
+            mongoConfig
+        ).connect();
+
+        console.log('Connected to MongoDB');
+
+        const db = client.db(DATABASE_NAME).collection('card_inventory');
+
+        const promises = cards.map(async (c) =>
+            addCardToInventoryReceiving(c, db)
+        );
+
+        const messages = await Promise.all(promises);
+
+        return messages;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    } finally {
+        console.log('Disconnected from MongoDB');
+        await client.close();
+    }
+}
+
+// `finishCondition` Refers to the configuration of Finishes and Conditions ex. NONFOIL_NM or FOIL_LP
+async function addCardToInventoryReceiving(
+    { quantity, finishCondition, id, name, set_name, set },
+    database
+) {
+    try {
+        console.log(
+            `Receiving Info: QTY:${quantity}, ${finishCondition}, ${name}, ${id}`
+        );
+
+        // Upsert the new quantity in the document
+        return await database.updateOne(
+            { _id: id },
+            {
+                $inc: {
+                    [`qoh.${finishCondition}`]: quantity,
+                },
+                $setOnInsert: { name, set_name, set },
+            },
+            { upsert: true }
+        );
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+/**
+ * Sanitizes card object properties so nothing funky is committed to the database
+ */
+router.post('/receiveCards', (req, res, next) => {
+    const { cards } = req.body;
+
+    try {
+        for (let card of cards) validateOne(card);
+        return next();
+    } catch (err) {
+        res.status(400).send(err.message);
+    }
+});
+
+router.post('/receiveCards', async (req, res) => {
+    try {
+        const { cards } = req.body;
+        const messages = await wrapConnectToDb(cards);
+
+        res.status(200).send(messages);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+});
+
 module.exports = router;

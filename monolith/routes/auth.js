@@ -3,7 +3,6 @@ var router = express.Router();
 const request = require('request-promise-native');
 const axios = require('axios');
 const MongoClient = require('mongodb').MongoClient;
-const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const DATABASE_NAME = 'test';
 const COLLECTION = 'card_inventory';

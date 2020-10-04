@@ -13,11 +13,6 @@ const mongoOptions = {
     useUnifiedTopology: true,
 };
 
-/* GET users listing. */
-router.get('/', function (req, res, next) {
-    res.send('respond with a resource');
-});
-
 /**
  * Middleware to check for Bearer token by validating JWT
  */

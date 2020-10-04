@@ -10,11 +10,6 @@ router.get('/', function (req, res, next) {
     res.render('index', { title: 'Express' });
 });
 
-/**
- * Initialize express app and use CORS middleware
- */
-const app = express();
-
 async function getJwt(username, submittedPass) {
     const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,

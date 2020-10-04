@@ -10,7 +10,9 @@ const env = REACT_APP_ENVIRONMENT === 'development' ? '_test' : '';
 const isTest = REACT_APP_ENVIRONMENT === 'development';
 
 const endpoints = {
-    FINISH_SALE: `https://us-central1-clubhouse-collection.cloudfunctions.net/finishSale${env}`,
+    FINISH_SALE: isTest
+        ? `https://clubhouse-collection.appspot.com/auth/finishSale`
+        : `https://us-central1-clubhouse-collection.cloudfunctions.net/finishSale${env}`,
     ADD_CARD_TO_INVENTORY: isTest
         ? `https://clubhouse-collection.appspot.com/auth/addCardToInventory`
         : `https://us-central1-clubhouse-collection.cloudfunctions.net/addCardToInventory${env}`,
@@ -23,7 +25,9 @@ const endpoints = {
     GET_SET_NAMES: isTest
         ? `https://clubhouse-collection.appspot.com/auth/getDistinctSetNames`
         : `https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsByFilter${env}/set_names`,
-    SUSPEND_SALE: `https://us-central1-clubhouse-collection.cloudfunctions.net/suspendSale${env}`,
+    SUSPEND_SALE: isTest
+        ? `https://clubhouse-collection.appspot.com/auth/suspenedSale`
+        : `https://us-central1-clubhouse-collection.cloudfunctions.net/suspendSale${env}`,
     LOGIN: isTest
         ? `https://clubhouse-collection.appspot.com/jwt`
         : `https://us-central1-clubhouse-collection.cloudfunctions.net/getJwt${env}`,

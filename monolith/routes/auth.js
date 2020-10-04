@@ -372,12 +372,18 @@ async function createSale(saleData, cardList) {
  */
 async function finishSale(cards) {
     try {
-        const token = await request.get({
-            url: process.env.REFRESH_LIGHTSPEED_AUTH_TOKEN,
+        const res = await request.post({
+            url: 'https://cloud.lightspeedapp.com/oauth/access_token.php',
+            form: {
+                grant_type: process.env.GRANT_TYPE,
+                client_id: process.env.CLIENT_ID,
+                client_secret: process.env.CLIENT_SECRET,
+                refresh_token: process.env.REFRESH_TOKEN,
+            },
         });
 
         // Grab the Lightspeed access token from response
-        const { access_token } = JSON.parse(token);
+        const { access_token } = JSON.parse(res);
 
         // Create the Lightspeed sale
         const { data } = await createLightspeedSale(access_token, cards);

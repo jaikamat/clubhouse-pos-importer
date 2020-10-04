@@ -12,7 +12,7 @@ const isTest = REACT_APP_ENVIRONMENT === 'development';
 const endpoints = {
     FINISH_SALE: `https://us-central1-clubhouse-collection.cloudfunctions.net/finishSale${env}`,
     ADD_CARD_TO_INVENTORY: isTest
-        ? `clubhouse-collection.appspot.com/addCardsToInventory`
+        ? `https://clubhouse-collection.appspot.com/auth/addCardToInventory`
         : `https://us-central1-clubhouse-collection.cloudfunctions.net/addCardToInventory${env}`,
     RECEIVE_CARDS: `https://us-central1-clubhouse-collection.cloudfunctions.net/receiveCards${env}`,
     GET_SALES_BY_TITLE: `https://us-central1-clubhouse-collection.cloudfunctions.net/getSales${env}`,
@@ -21,11 +21,11 @@ const endpoints = {
     GET_SET_NAMES: `https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsByFilter${env}/set_names`,
     SUSPEND_SALE: `https://us-central1-clubhouse-collection.cloudfunctions.net/suspendSale${env}`,
     LOGIN: isTest
-        ? `clubhouse-collection.appspot.com/jwt`
+        ? `https://clubhouse-collection.appspot.com/jwt`
         : `https://us-central1-clubhouse-collection.cloudfunctions.net/getJwt${env}`,
     GET_ALL_SALES: `https://us-central1-clubhouse-collection.cloudfunctions.net/getSales${env}/sales`,
     GET_CARDS_WITH_INFO: isTest
-        ? `clubhouse-collection.appspot.com/getCardsWithInfo`
+        ? `https://clubhouse-collection.appspot.com/getCardsWithInfo`
         : `https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsWithInfo${env}`,
     SCRYFALL_AUTOCOMPLETE: 'https://api.scryfall.com/cards/autocomplete',
     SCRYFALL_SEARCH: 'https://api.scryfall.com/cards/search',

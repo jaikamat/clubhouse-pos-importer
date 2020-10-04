@@ -50,7 +50,7 @@ async function getJwt(username, submittedPass) {
     }
 }
 
-router.post('/', async (req, res) => {
+router.post('/jwt', async (req, res) => {
     try {
         const { username, password } = req.body;
         const token = await getJwt(username, password);

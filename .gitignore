@@ -21,6 +21,9 @@ node_modules
 
 .prettierrc.json
 
+# Ignore app yaml (has env vars)
+app.yaml
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

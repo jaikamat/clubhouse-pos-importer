@@ -6,11 +6,6 @@ const jwt = require('jsonwebtoken');
 const DATABASE_NAME = 'test';
 const LIMIT = 100;
 
-/* GET home page. */
-router.get('/', function (req, res, next) {
-    res.render('index', { title: 'Express' });
-});
-
 async function getJwt(username, submittedPass) {
     const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,

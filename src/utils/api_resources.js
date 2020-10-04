@@ -15,8 +15,6 @@ const endpoints = {
         ? `https://clubhouse-collection.appspot.com/auth/addCardToInventory`
         : `https://us-central1-clubhouse-collection.cloudfunctions.net/addCardToInventory${env}`,
     RECEIVE_CARDS: `https://us-central1-clubhouse-collection.cloudfunctions.net/receiveCards${env}`,
-    GET_SALES_BY_TITLE: `https://us-central1-clubhouse-collection.cloudfunctions.net/getSales${env}`,
-    GET_SCRYFALL_BULK_BY_TITLE: `https://us-central1-clubhouse-collection.cloudfunctions.net/getScryfallBulkCardsByTitle${env}`,
     GET_CARDS_BY_FILTER: isTest
         ? `https://clubhouse-collection.appspot.com/auth/getCardsByFilter`
         : `https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsByFilter${env}`,
@@ -27,7 +25,12 @@ const endpoints = {
     LOGIN: isTest
         ? `https://clubhouse-collection.appspot.com/jwt`
         : `https://us-central1-clubhouse-collection.cloudfunctions.net/getJwt${env}`,
-    GET_ALL_SALES: `https://us-central1-clubhouse-collection.cloudfunctions.net/getSales${env}/sales`,
+    GET_SALES_BY_TITLE: isTest
+        ? `https://clubhouse-collection.appspot.com/getSaleByTitle`
+        : `https://us-central1-clubhouse-collection.cloudfunctions.net/getSales${env}`,
+    GET_ALL_SALES: isTest
+        ? `https://clubhouse-collection.appspot.com/allSales`
+        : `https://us-central1-clubhouse-collection.cloudfunctions.net/getSales${env}/sales`,
     GET_CARDS_WITH_INFO: isTest
         ? `https://clubhouse-collection.appspot.com/getCardsWithInfo`
         : `https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsWithInfo${env}`,

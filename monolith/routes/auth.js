@@ -77,12 +77,10 @@ async function addCardToInventory({
     set_name,
     set,
 }) {
-    const mongoConfig = { useNewUrlParser: true, useUnifiedTopology: true };
-
     try {
         var client = await new MongoClient(
             process.env.MONGO_URI,
-            mongoConfig
+            mongoOptions
         ).connect();
 
         console.log(
@@ -214,10 +212,7 @@ function createSaleLine(card) {
  * Exposes the DB and passes it down to child queries; wraps the promises
  */
 async function updateInventoryCards(cards) {
-    const client = await new MongoClient(process.env.MONGO_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
+    const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
 
     try {
         await client.connect();
@@ -348,10 +343,7 @@ async function createLightspeedSale(authToken, cards) {
  * @param cardList - an array of cards that were involved in the sale
  */
 async function createSale(saleData, cardList) {
-    const client = await new MongoClient(process.env.MONGO_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
+    const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
 
     try {
         await client.connect();
@@ -424,10 +416,7 @@ router.post('/finishSale', async (req, res) => {
 });
 
 async function getSales(cardName) {
-    const client = await new MongoClient(process.env.MONGO_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
+    const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
 
     try {
         await client.connect();
@@ -464,10 +453,7 @@ async function getSales(cardName) {
 }
 
 async function getAllSales() {
-    const client = await new MongoClient(process.env.MONGO_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
+    const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
 
     try {
         await client.connect();
@@ -514,10 +500,7 @@ async function getAllSales() {
 }
 
 async function getFormatLegalities() {
-    const client = await new MongoClient(process.env.MONGO_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
+    const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
 
     try {
         await client.connect();
@@ -649,12 +632,10 @@ function validateOne({ id, quantity, finishCondition, name, set, set_name }) {
 
 // Wraps the database connection and exposes addCardToInventoryReceiving to the db connection
 async function wrapConnectToDb(cards) {
-    const mongoConfig = { useNewUrlParser: true, useUnifiedTopology: true };
-
     try {
         var client = await new MongoClient(
             process.env.MONGO_URI,
-            mongoConfig
+            mongoOptions
         ).connect();
 
         console.log('Connected to MongoDB');

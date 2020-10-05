@@ -26,7 +26,7 @@ const endpoints = {
         ? `https://clubhouse-collection.appspot.com/auth/getDistinctSetNames`
         : `https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsByFilter${env}/set_names`,
     SUSPEND_SALE: isTest
-        ? `https://clubhouse-collection.appspot.com/auth/suspenedSale`
+        ? `https://clubhouse-collection.appspot.com/auth/suspendSale`
         : `https://us-central1-clubhouse-collection.cloudfunctions.net/suspendSale${env}`,
     LOGIN: isTest
         ? `https://clubhouse-collection.appspot.com/jwt`

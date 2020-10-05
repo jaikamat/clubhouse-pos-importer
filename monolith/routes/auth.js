@@ -911,7 +911,7 @@ async function updateCardInventory(card, CHANGE_FLAG) {
     }
 }
 
-router.get('/suspenedSale', async (req, res) => {
+router.get('/suspendSale', async (req, res) => {
     try {
         const message = await getSuspendedSales();
         res.status(200).send(message);
@@ -921,7 +921,7 @@ router.get('/suspenedSale', async (req, res) => {
     }
 });
 
-router.get('/suspenedSale/:id', async (req, res) => {
+router.get('/suspendSale/:id', async (req, res) => {
     const { id } = req.params;
 
     try {
@@ -933,7 +933,7 @@ router.get('/suspenedSale/:id', async (req, res) => {
     }
 });
 
-router.post('/suspendedSale', async (req, res) => {
+router.post('/suspendSale', async (req, res) => {
     const { customerName = '', notes = '', saleList = [] } = req.body;
 
     try {
@@ -953,7 +953,7 @@ router.post('/suspendedSale', async (req, res) => {
     }
 });
 
-router.delete('/suspenedSale/:id', async (req, res) => {
+router.delete('/suspendSale/:id', async (req, res) => {
     const { id } = req.params;
 
     try {

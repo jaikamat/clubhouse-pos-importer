@@ -1,6 +1,6 @@
 import React, { useState, createContext } from 'react';
 import axios from 'axios';
-import _ from 'lodash'
+import _ from 'lodash';
 import { SUSPEND_SALE, FINISH_SALE } from '../utils/api_resources';
 import { InventoryCard } from '../utils/ScryfallCard';
 import sortSaleList from '../utils/sortSaleList';
@@ -9,13 +9,13 @@ import makeAuthHeader from '../utils/makeAuthHeader';
 
 export const SaleContext = createContext();
 
-export const SaleProvider = props => {
+export const SaleProvider = (props) => {
     const [saleListCards, setSaleListCards] = useState([]);
     const [suspendedSale, setSuspendedSale] = useState({
         _id: '',
         name: '',
         notes: '',
-        list: []
+        list: [],
     });
 
     /**
@@ -27,7 +27,7 @@ export const SaleProvider = props => {
         const modeledCard = new InventoryCard(newCard);
 
         // Need to make sure same ID's with differing conditions are separate line-items
-        const idx = oldState.findIndex(el => {
+        const idx = oldState.findIndex((el) => {
             return (
                 el.id === newCard.id && el.finishCondition === finishCondition
             );
@@ -49,7 +49,7 @@ export const SaleProvider = props => {
      * Removes product from the sale list
      */
     const removeFromSaleList = (id, finishCondition) => {
-        const newState = _.reject([...saleListCards], el => {
+        const newState = _.reject([...saleListCards], (el) => {
             return el.id === id && el.finishCondition === finishCondition;
         });
 
@@ -59,20 +59,25 @@ export const SaleProvider = props => {
     /**
      * Restores a sale (assigns a saleList to state) from a suspended sale from the db
      */
-    const restoreSale = async id => {
+    const restoreSale = async (id) => {
         try {
-            const { data } = await axios.get(`${SUSPEND_SALE}/${id}`);
-            const modeledData = data.list.map(c => new InventoryCard(c));
+            const { data } = await axios.get(`${SUSPEND_SALE}/${id}`, {
+                headers: makeAuthHeader(),
+            });
+            const modeledData = data.list.map((c) => new InventoryCard(c));
 
             setSaleListCards(modeledData);
             setSuspendedSale(data);
 
-            createToast({ color: 'green', header: `You are viewing ${data.name}'s sale` });
+            createToast({
+                color: 'green',
+                header: `You are viewing ${data.name}'s sale`,
+            });
         } catch (e) {
             console.log(e.response);
             createToast({ color: 'red', header: `Error` });
         }
-    }
+    };
 
     /**
      * Suspends a sale (persists it to mongo) via the SuspendedSale component and API
@@ -81,36 +86,55 @@ export const SaleProvider = props => {
         const { _id } = suspendedSale;
 
         try {
-            if (!!_id) await axios.delete(`${SUSPEND_SALE}/${_id}`); // If we're suspended, delete the previous to replace
+            if (!!_id)
+                await axios.delete(`${SUSPEND_SALE}/${_id}`, {
+                    headers: makeAuthHeader(),
+                }); // If we're suspended, delete the previous to replace
 
-            const { data } = await axios.post(SUSPEND_SALE, {
-                customerName: customerName,
-                notes: notes,
-                saleList: saleListCards
-            })
+            const { data } = await axios.post(
+                SUSPEND_SALE,
+                {
+                    customerName: customerName,
+                    notes: notes,
+                    saleList: saleListCards,
+                },
+                { headers: makeAuthHeader() }
+            );
 
             resetSaleState();
 
-            createToast({ color: 'green', header: `${data.ops[0].name}'s sale was suspended` });
+            createToast({
+                color: 'green',
+                header: `${data.ops[0].name}'s sale was suspended`,
+            });
         } catch (e) {
             console.log(e.response);
-            createToast({ color: 'red', header: `Error`, message: `${e.response.data}` });
+            createToast({
+                color: 'red',
+                header: `Error`,
+                message: `${e.response.data}`,
+            });
         }
-    }
+    };
 
     const deleteSuspendedSale = async () => {
         try {
             const { _id, name } = suspendedSale;
-            await axios.delete(`${SUSPEND_SALE}/${_id}`);
+            await axios.delete(`${SUSPEND_SALE}/${_id}`, {
+                headers: makeAuthHeader(),
+            });
 
             resetSaleState();
 
-            createToast({ color: 'green', header: `${name}'s sale was deleted` });
+            createToast({
+                color: 'green',
+                header: `${name}'s sale was deleted`,
+            });
         } catch (e) {
             console.log(e.response);
             createToast({ color: 'red', header: `Error` });
         }
-    }
+    };
 
     /**
      * Extracts the saleList state and uses it to complete sale
@@ -120,9 +144,16 @@ export const SaleProvider = props => {
 
         try {
             // Must delete currently suspended sale to faithfully restore inventory prior to sale
-            if (!!_id) await axios.delete(`${SUSPEND_SALE}/${_id}`);
+            if (!!_id)
+                await axios.delete(`${SUSPEND_SALE}/${_id}`, {
+                    headers: makeAuthHeader(),
+                });
 
-            const { data } = await axios.post(FINISH_SALE, { cards: saleListCards }, { headers: makeAuthHeader() });
+            const { data } = await axios.post(
+                FINISH_SALE,
+                { cards: saleListCards },
+                { headers: makeAuthHeader() }
+            );
 
             const saleID = data.sale_data.Sale.saleID;
 
@@ -151,21 +182,25 @@ export const SaleProvider = props => {
             _id: '',
             name: '',
             notes: '',
-            list: []
-        })
+            list: [],
+        });
     };
 
-    return <SaleContext.Provider value={{
-        saleListCards,
-        suspendedSale,
-        addToSaleList,
-        removeFromSaleList,
-        restoreSale,
-        suspendSale,
-        deleteSuspendedSale,
-        finalizeSale,
-        resetSaleState
-    }}>
-        {props.children}
-    </SaleContext.Provider>
-}
+    return (
+        <SaleContext.Provider
+            value={{
+                saleListCards,
+                suspendedSale,
+                addToSaleList,
+                removeFromSaleList,
+                restoreSale,
+                suspendSale,
+                deleteSuspendedSale,
+                finalizeSale,
+                resetSaleState,
+            }}
+        >
+            {props.children}
+        </SaleContext.Provider>
+    );
+};

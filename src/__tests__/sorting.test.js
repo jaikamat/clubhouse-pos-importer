@@ -31,8 +31,9 @@ describe('Sort function', () => {
         expect(sorted[2].name).toBe('Necropotence');
         expect(sorted[3].name).toBe('Wheel of Fortune');
         expect(sorted[4].name).toBe('Colossal Dreadmaw');
-        expect(sorted[5].name).toBe('Sigarda, Host of Herons');
-        expect(sorted[6].name).toBe('Emrakul, the Aeons Torn');
-        expect(sorted[7].name).toBe("Gaea's Cradle");
+        expect(sorted[5].name).toBe('World Breaker');
+        expect(sorted[6].name).toBe('Sigarda, Host of Herons');
+        expect(sorted[7].name).toBe('Emrakul, the Aeons Torn');
+        expect(sorted[8].name).toBe("Gaea's Cradle");
     });
 });

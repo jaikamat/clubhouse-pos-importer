@@ -16,7 +16,7 @@ describe('Ensure development API is being hit', () => {
         'ADD_CARD_TO_INVENTORY should be app engine',
         () => {
             expect(ADD_CARD_TO_INVENTORY).toEqual(
-                `https://clubhouse-collection.appspot.com/auth/addCardToInventory`
+                `http://localhost:7331/auth/addCardToInventory`
             );
         },
         TIMEOUT
@@ -26,7 +26,7 @@ describe('Ensure development API is being hit', () => {
         'GET_CARDS_WITH_INFO should be app engine',
         () => {
             expect(GET_CARDS_WITH_INFO).toEqual(
-                `https://clubhouse-collection.appspot.com/getCardsWithInfo`
+                `http://localhost:7331/getCardsWithInfo`
             );
         },
         TIMEOUT
@@ -35,9 +35,7 @@ describe('Ensure development API is being hit', () => {
     test(
         'LOGIN should be app engine',
         () => {
-            expect(LOGIN).toEqual(
-                `https://clubhouse-collection.appspot.com/jwt`
-            );
+            expect(LOGIN).toEqual(`http://localhost:7331/jwt`);
         },
         TIMEOUT
     );

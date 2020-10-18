@@ -7,39 +7,26 @@ const { REACT_APP_ENVIRONMENT } = process.env;
  */
 const env = REACT_APP_ENVIRONMENT === 'development' ? '_test' : '';
 
-const isTest = REACT_APP_ENVIRONMENT === 'development';
+/**
+ * Asserts the development env and returns the proper path prefix for resources
+ */
+const getPrefix = () => {
+    return REACT_APP_ENVIRONMENT === 'development'
+        ? 'http://localhost:7331'
+        : 'https://clubhouse-collection.appspot.com';
+};
 
 const endpoints = {
-    FINISH_SALE: isTest
-        ? `https://clubhouse-collection.appspot.com/auth/finishSale`
-        : `https://us-central1-clubhouse-collection.cloudfunctions.net/finishSale${env}`,
-    ADD_CARD_TO_INVENTORY: isTest
-        ? `https://clubhouse-collection.appspot.com/auth/addCardToInventory`
-        : `https://us-central1-clubhouse-collection.cloudfunctions.net/addCardToInventory${env}`,
-    RECEIVE_CARDS: isTest
-        ? `https://clubhouse-collection.appspot.com/auth/receiveCards`
-        : `https://us-central1-clubhouse-collection.cloudfunctions.net/receiveCards${env}`,
-    GET_CARDS_BY_FILTER: isTest
-        ? `https://clubhouse-collection.appspot.com/auth/getCardsByFilter`
-        : `https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsByFilter${env}`,
-    GET_SET_NAMES: isTest
-        ? `https://clubhouse-collection.appspot.com/auth/getDistinctSetNames`
-        : `https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsByFilter${env}/set_names`,
-    SUSPEND_SALE: isTest
-        ? `https://clubhouse-collection.appspot.com/auth/suspendSale`
-        : `https://us-central1-clubhouse-collection.cloudfunctions.net/suspendSale${env}`,
-    LOGIN: isTest
-        ? `https://clubhouse-collection.appspot.com/jwt`
-        : `https://us-central1-clubhouse-collection.cloudfunctions.net/getJwt${env}`,
-    GET_SALES_BY_TITLE: isTest
-        ? `https://clubhouse-collection.appspot.com/auth/getSaleByTitle`
-        : `https://us-central1-clubhouse-collection.cloudfunctions.net/getSales${env}`,
-    GET_ALL_SALES: isTest
-        ? `https://clubhouse-collection.appspot.com/auth/allSales`
-        : `https://us-central1-clubhouse-collection.cloudfunctions.net/getSales${env}/sales`,
-    GET_CARDS_WITH_INFO: isTest
-        ? `https://clubhouse-collection.appspot.com/getCardsWithInfo`
-        : `https://us-central1-clubhouse-collection.cloudfunctions.net/getCardsWithInfo${env}`,
+    FINISH_SALE: `${getPrefix()}/auth/finishSale`,
+    ADD_CARD_TO_INVENTORY: `${getPrefix()}/auth/addCardToInventory`,
+    RECEIVE_CARDS: `${getPrefix()}/auth/receiveCards`,
+    GET_CARDS_BY_FILTER: `${getPrefix()}/auth/getCardsByFilter`,
+    GET_SET_NAMES: `${getPrefix()}/auth/getDistinctSetNames`,
+    SUSPEND_SALE: `${getPrefix()}/auth/suspendSale`,
+    LOGIN: `${getPrefix()}/jwt`,
+    GET_SALES_BY_TITLE: `${getPrefix()}/auth/getSaleByTitle`,
+    GET_ALL_SALES: `${getPrefix()}/auth/allSales`,
+    GET_CARDS_WITH_INFO: `${getPrefix()}/getCardsWithInfo`,
     SCRYFALL_AUTOCOMPLETE: 'https://api.scryfall.com/cards/autocomplete',
     SCRYFALL_SEARCH: 'https://api.scryfall.com/cards/search',
     GET_LIVE_PRICE: `https://us-central1-clubhouse-collection.cloudfunctions.net/getPriceFromTcg${env}`,

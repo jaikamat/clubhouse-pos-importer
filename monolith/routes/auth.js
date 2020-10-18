@@ -5,7 +5,8 @@ const axios = require('axios');
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 const jwt = require('jsonwebtoken');
-const DATABASE_NAME = 'test';
+const fetchDbName = require('../lib/fetchDbName');
+const DATABASE_NAME = fetchDbName();
 require('dotenv').config();
 
 const mongoOptions = {

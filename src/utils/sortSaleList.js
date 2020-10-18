@@ -41,13 +41,23 @@ export default function sortSaleList(cards) {
 
         // Drill into colorless cards, if they are lands or not
         if (arrayConst === 'COLORLESS') {
+            if (cardFace.color_identity) {
+                if (cardFace.color_identity.length === 1) {
+                    arrayConst = cardFace.color_identity[0];
+                }
+                if (cardFace.color_identity.length > 1) {
+                    arrayConst = 'MULTI';
+                }
+            }
             if (cardFace.type_line.includes('Land')) {
                 arrayConst = 'LAND';
             }
         }
 
         // Final check to guard against a null arrayConst
-        if (!arrayConst) { arrayConst = 'LAND' }
+        if (!arrayConst) {
+            arrayConst = 'LAND';
+        }
 
         return arrayConst;
     }

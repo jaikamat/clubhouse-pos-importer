@@ -10,13 +10,20 @@ export class ScryfallCard {
 
         if (lang !== 'en') return `${name} (${lang.toUpperCase()})`;
 
-        if ((name !== printed_name) && printed_name) { // Covers cards like Godzilla series
+        if (name !== printed_name && printed_name) {
+            // Covers cards like Godzilla series
             return `${name} (IP series)`;
-        } else if (frame_effects.length === 0 && border_color === 'borderless') { // Covers cards like comic-art Vivien, Monsters' Advocate
+        } else if (
+            frame_effects.length === 0 &&
+            border_color === 'borderless'
+        ) {
+            // Covers cards like comic-art Vivien, Monsters' Advocate
             return `${name} (Borderless)`;
-        } else if (frame_effects.includes('showcase')) { // Covers showcase cards like comic-art Illuna, Apex of Wishes
+        } else if (frame_effects.includes('showcase')) {
+            // Covers showcase cards like comic-art Illuna, Apex of Wishes
             return `${name} (Showcase)`;
-        } else if (frame_effects.includes('extendedart')) { // Covers cards with extended left and roght border art
+        } else if (frame_effects.includes('extendedart')) {
+            // Covers cards with extended left and roght border art
             return `${name} (Extended art)`;
         } else {
             return name;
@@ -54,6 +61,7 @@ export class ScryfallCard {
         this.border_color = card.border_color;
         this.display_name = this._createDisplayName();
         this.cardImage = this._getCardImage();
+        this.color_identity = card.color_identity || null;
     }
 }
 

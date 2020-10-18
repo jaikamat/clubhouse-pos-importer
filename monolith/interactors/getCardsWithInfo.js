@@ -1,5 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
-const DATABASE_NAME = 'test';
+const fetchDbName = require('../lib/fetchDbName');
+const DATABASE_NAME = fetchDbName();
 
 async function getCardsWithInfo(title, matchInStock = false) {
     // if matchInStock is false, we get all cards, even those with no stock

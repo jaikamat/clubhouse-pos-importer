@@ -1,7 +1,8 @@
 const MongoClient = require('mongodb').MongoClient;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const DATABASE_NAME = 'test';
+const fetchDbName = require('../lib/fetchDbName');
+const DATABASE_NAME = fetchDbName();
 
 async function getJwt(username, submittedPass) {
     const client = await new MongoClient(process.env.MONGO_URI, {

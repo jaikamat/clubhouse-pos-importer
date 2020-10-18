@@ -1,5 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
-const DATABASE_NAME = 'test';
+const fetchDbName = require('../lib/fetchDbName');
+const DATABASE_NAME = fetchDbName();
 
 /**
  * Gets a list of all set names, for use in the Deckbox frontend dropdown selection

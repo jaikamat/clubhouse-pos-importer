@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "start": "PORT=7331 ENVIRONMENT=development node ./bin/www",
-        "start-production": "PORT=8080 node ./bin/www"
+        "start-production": "node ./bin/www"
     },
     "dependencies": {
         "axios": "^0.20.0",

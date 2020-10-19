@@ -783,7 +783,7 @@ async function createSuspendedSale(customerName, notes, saleList) {
 
         // Removes the passed cards from inventory prior to creating
         const dbInserts = saleList.map(
-            async (card) => await updateCardInventory(card, 'DEC')
+            async (card) => await updateCardInventoryWithFlag(card, 'DEC')
         );
         await Promise.all(dbInserts);
 
@@ -818,7 +818,7 @@ async function deleteSuspendedSale(id) {
 
         // Adds the passed cards back to inventory prior to deleting
         const dbInserts = list.map(
-            async (card) => await updateCardInventory(card, 'INC')
+            async (card) => await updateCardInventoryWithFlag(card, 'INC')
         );
         await Promise.all(dbInserts);
 
@@ -865,7 +865,7 @@ async function validateInventory({ qtyToSell, finishCondition, name, id }) {
  * @param {Object} card - the card involved in the transaction
  * @param {String} CHANGE_FLAG = `INC` or `DEC`, determines whether to increase or decrease quantity, used for reserving inventory in suspension
  */
-async function updateCardInventory(card, CHANGE_FLAG) {
+async function updateCardInventoryWithFlag(card, CHANGE_FLAG) {
     const { qtyToSell, finishCondition, id, name } = card;
     let quantityChange;
 

@@ -8,7 +8,7 @@
         "formik": "^2.1.5",
         "highcharts": "^8.0.4",
         "jquery": "^3.4.1",
-        "lodash": "^4.17.15",
+        "lodash": "^4.17.19",
         "moment": "^2.24.0",
         "query-string": "^6.8.3",
         "react": "^16.11.0",

@@ -38,7 +38,7 @@ test('Renders the Receiving search item', async () => {
             <div
               aria-atomic="true"
               aria-live="polite"
-              class="text"
+              class="divider text"
               role="alert"
             >
               Nonfoil
@@ -87,7 +87,7 @@ test('Renders the Receiving search item', async () => {
             <div
               aria-atomic="true"
               aria-live="polite"
-              class="text"
+              class="divider text"
               role="alert"
             >
               Near Mint

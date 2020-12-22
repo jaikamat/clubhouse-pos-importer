@@ -37,8 +37,6 @@ export default class DeckboxClone extends React.Component {
                 params: { ...filters, page },
             });
 
-            console.log(filters);
-
             const numPages = Math.ceil(data.total / LIMIT);
             const pages = _.range(1, numPages + 1);
             let showPages;

@@ -30,6 +30,7 @@ async function getCardsByFilter({
     colors,
     sortBy,
     sortByDirection,
+    colorSpecificity,
     page,
     type,
     frame,

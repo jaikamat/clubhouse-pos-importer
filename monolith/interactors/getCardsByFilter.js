@@ -30,6 +30,7 @@ async function getCardsByFilter({
     colors,
     sortBy,
     sortByDirection,
+    colorSpecificity,
     page,
     type,
     frame,
@@ -210,6 +211,7 @@ async function getCardsByFilter({
                 image_uri: 1,
                 rarity: 1,
                 colors_string: 1,
+                colors_string_length: { $strLenCP: '$colors_string' },
                 legalities: 1,
                 type_line: 1,
                 prices: 1,
@@ -240,6 +242,16 @@ async function getCardsByFilter({
 
         // End match colors matching logic
         if (colors) endMatch.colors_string = colors;
+
+        // Match mono or multi colors
+        if (colorSpecificity) {
+            if (colorSpecificity === 'mono') {
+                endMatch.colors_string_length = { $eq: 1 };
+            }
+            if (colorSpecificity === 'multi') {
+                endMatch.colors_string_length = { $gt: 1 };
+            }
+        }
 
         // Always ensure results are in stock
         endMatch[`inventory.v`] = { $gt: 0 };

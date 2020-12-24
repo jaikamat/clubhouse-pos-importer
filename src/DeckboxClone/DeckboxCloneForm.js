@@ -54,6 +54,7 @@ const sortByColorDropdownOptions = [
 
 const colorSpecificityDropdownOptions = [
     { key: 'all', value: '', text: 'None' },
+    { key: 'colorless', value: 'colorless', text: 'Colorless only' },
     { key: 'mono', value: 'mono', text: 'Monocolor only' },
     { key: 'multi', value: 'multi', text: 'Multicolor only' },
 ];

@@ -20,7 +20,7 @@ const endpoints = {
     FINISH_SALE: `${getPrefix()}/auth/finishSale`,
     ADD_CARD_TO_INVENTORY: `${getPrefix()}/auth/addCardToInventory`,
     RECEIVE_CARDS: `${getPrefix()}/auth/receiveCards`,
-    GET_CARDS_BY_FILTER: `${getPrefix()}/getCardsByFilter`,
+    GET_CARDS_BY_FILTER: `${getPrefix()}/auth/getCardsByFilter`,
     GET_SET_NAMES: `${getPrefix()}/getDistinctSetNames`,
     SUSPEND_SALE: `${getPrefix()}/auth/suspendSale`,
     LOGIN: `${getPrefix()}/jwt`,

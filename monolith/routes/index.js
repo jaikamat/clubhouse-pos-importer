@@ -51,47 +51,4 @@ router.get('/getDistinctSetNames', async (req, res) => {
     }
 });
 
-router.get('/getCardsByFilter', async (req, res) => {
-    try {
-        const {
-            title,
-            setName,
-            format,
-            priceNum,
-            priceFilter,
-            finish,
-            colors,
-            colorIdentity,
-            sortBy,
-            sortByDirection,
-            colorSpecificity,
-            page,
-            type,
-            frame,
-        } = req.query;
-
-        const message = await getCardsByFilter({
-            title,
-            setName,
-            format,
-            priceNum,
-            priceFilter,
-            finish,
-            colors,
-            colorIdentity,
-            colorSpecificity,
-            sortBy,
-            sortByDirection,
-            page,
-            type,
-            frame,
-        });
-
-        res.status(200).json(message);
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
-    }
-});
-
 module.exports = router;

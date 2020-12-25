@@ -243,8 +243,11 @@ async function getCardsByFilter({
         // End match colors matching logic
         if (colors) endMatch.colors_string = colors;
 
-        // Match mono or multi colors
+        // Match monocolor, multicolor, or colorless
         if (colorSpecificity) {
+            if (colorSpecificity === 'colorless') {
+                endMatch.colors_string_length = { $eq: 0 };
+            }
             if (colorSpecificity === 'mono') {
                 endMatch.colors_string_length = { $eq: 1 };
             }

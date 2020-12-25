@@ -70,7 +70,6 @@ class App extends React.Component {
                                     component={Receiving}
                                 />
                             </ReceivingProvider>
-                            <Route exact path="/reports" component={Reports} />
                             <Route exact path="/login" component={Login} />
                             <Route exact path="/logout" component={Logout} />
                         </ContentContainer>

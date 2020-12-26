@@ -5,7 +5,7 @@ import axios from 'axios';
 import { MongoClient, ObjectID } from 'mongodb';
 import jwt from 'jsonwebtoken';
 import fetchDbName from '../lib/fetchDbName';
-import getCardsByFilter from '../interactors/getCardsByFilter';
+import getCardsByFilter, { Arguments } from '../interactors/getCardsByFilter';
 const DATABASE_NAME = fetchDbName();
 require('dotenv').config();
 
@@ -13,6 +13,17 @@ const mongoOptions = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 };
+
+const finishes = [
+    'NONFOIL_NM',
+    'NONFOIL_LP',
+    'NONFOIL_MP',
+    'NONFOIL_HP',
+    'FOIL_NM',
+    'FOIL_LP',
+    'FOIL_MP',
+    'FOIL_HP',
+] as const;
 
 /**
  * Middleware to check for Bearer token by validating JWT
@@ -43,16 +54,6 @@ router.use((req, res, next) => {
 router.post('/addCardToInventory', (req, res, next) => {
     const { quantity, finishCondition, cardInfo } = req.body;
     const { name, id } = cardInfo;
-    const finishes = [
-        'NONFOIL_NM',
-        'NONFOIL_LP',
-        'NONFOIL_MP',
-        'NONFOIL_HP',
-        'FOIL_NM',
-        'FOIL_LP',
-        'FOIL_MP',
-        'FOIL_HP',
-    ];
 
     if (!id) res.status(400).send(`Card id must be provided`);
     if (!name) res.status(400).send(`Card name must be provided for ${id}`);
@@ -156,16 +157,6 @@ router.post('/finishSale', (req, res, next) => {
 
     function sanitizeOne(card) {
         const { price, qtyToSell, finishCondition, name, set_name, id } = card;
-        const finishes = [
-            'NONFOIL_NM',
-            'NONFOIL_LP',
-            'NONFOIL_MP',
-            'NONFOIL_HP',
-            'FOIL_NM',
-            'FOIL_LP',
-            'FOIL_MP',
-            'FOIL_HP',
-        ];
 
         if (!id) throw new Error(`Card property id missing`);
         if (!name && !set_name)
@@ -603,17 +594,6 @@ router.get('/getSaleByTitle', async (req, res) => {
 });
 
 function validateOne({ id, quantity, finishCondition, name, set, set_name }) {
-    const finishes = [
-        'NONFOIL_NM',
-        'NONFOIL_LP',
-        'NONFOIL_MP',
-        'NONFOIL_HP',
-        'FOIL_NM',
-        'FOIL_LP',
-        'FOIL_MP',
-        'FOIL_HP',
-    ];
-
     if (!id) throw new Error(`Card id must be provided`);
     if (!name) throw new Error(`Card name must be provided for ${id}`);
     if (!set)
@@ -982,7 +962,7 @@ router.get('/getCardsByFilter', async (req, res) => {
             page,
             type,
             frame,
-        } = req.query;
+        }: Partial<Arguments> = req.query;
 
         const message = await getCardsByFilter({
             title,

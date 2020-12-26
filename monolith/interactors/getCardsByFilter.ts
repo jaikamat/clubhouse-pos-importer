@@ -3,6 +3,22 @@ import fetchDbName from '../lib/fetchDbName';
 const DATABASE_NAME = fetchDbName();
 const LIMIT = 100;
 
+export interface Arguments {
+    title: string;
+    setName: string;
+    format: string;
+    priceNum: string;
+    priceFilter: string;
+    finish: string;
+    colors: string;
+    sortBy: string;
+    sortByDirection: string;
+    colorSpecificity: string;
+    page: string;
+    type: string;
+    frame: string;
+}
+
 /**
  * Uses the Mongo Aggregation Pipeline to gather relevant cards in an itemized list
  *
@@ -34,7 +50,7 @@ const getCardsByFilter = async ({
     page,
     type,
     frame,
-}) => {
+}: Arguments) => {
     const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,

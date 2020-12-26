@@ -1,11 +1,11 @@
-import {MongoClient} from 'mongodb';
+import { MongoClient } from 'mongodb';
 import fetchDbName from '../lib/fetchDbName';
 const DATABASE_NAME = fetchDbName();
 
 /**
  * Gets a list of all set names, for use in the Deckbox frontend dropdown selection
  */
-async function getDistinctSetNames() {
+async function getDistinctSetNames(): Promise<string[]> {
     const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,

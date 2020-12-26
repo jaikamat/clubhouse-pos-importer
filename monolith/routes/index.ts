@@ -32,8 +32,12 @@ router.get('/getCardsWithInfo', async (req, res) => {
         const { title, matchInStock } = req.query;
         const myMatch = matchInStock === 'true';
 
-        const message = await getCardsWithInfo(title, myMatch);
-        res.status(200).send(message);
+        if (typeof title === 'string') {
+            const message = await getCardsWithInfo(title, myMatch);
+            res.status(200).send(message);
+        } else {
+            throw new Error('title should be a string');
+        }
     } catch (err) {
         console.log(err);
         res.status(500).send(err);

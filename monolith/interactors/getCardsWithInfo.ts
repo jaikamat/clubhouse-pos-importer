@@ -1,8 +1,8 @@
-import {MongoClient} from 'mongodb';
+import { MongoClient } from 'mongodb';
 import fetchDbName from '../lib/fetchDbName';
 const DATABASE_NAME = fetchDbName();
 
-async function getCardsWithInfo(title, matchInStock = false) {
+async function getCardsWithInfo(title: string, matchInStock: boolean = false) {
     // if matchInStock is false, we get all cards, even those with no stock
     const mongoConfig = { useNewUrlParser: true, useUnifiedTopology: true };
 

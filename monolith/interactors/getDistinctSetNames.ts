@@ -1,5 +1,5 @@
-const MongoClient = require('mongodb').MongoClient;
-const fetchDbName = require('../lib/fetchDbName');
+import {MongoClient} from 'mongodb';
+import fetchDbName from '../lib/fetchDbName';
 const DATABASE_NAME = fetchDbName();
 
 /**

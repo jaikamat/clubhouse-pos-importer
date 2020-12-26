@@ -1,10 +1,9 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const getJwt = require('../interactors/getJwt');
-const getCardQuantitiesFromInventory = require('../interactors/getCardQuantitiesFromInventory');
-const getCardsWithInfo = require('../interactors/getCardsWithInfo');
-const getDistinctSetNames = require('../interactors/getDistinctSetNames');
-const getCardsByFilter = require('../interactors/getCardsByFilter');
+import getJwt from '../interactors/getJwt';
+import getCardQuantitiesFromInventory from '../interactors/getCardQuantitiesFromInventory';
+import getCardsWithInfo from '../interactors/getCardsWithInfo';
+import getDistinctSetNames from '../interactors/getDistinctSetNames';
 
 router.post('/jwt', async (req, res) => {
     try {

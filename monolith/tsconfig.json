@@ -3,8 +3,8 @@
       "outDir": "./built",
       "allowJs": true,
       "target": "es5",
-      "types": ["node"]
+      "types": ["node"],
+      "esModuleInterop": true
     },
     "include": ["./**/*"],
-    "exclude": ["./node_modeules", ".env", ".gcloudignore", ".prettierrc.json", "app.yaml"]
   }

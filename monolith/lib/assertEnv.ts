@@ -8,4 +8,4 @@ const isDev = () => {
     return false;
 };
 
-module.exports = isDev;
+export default isDev;

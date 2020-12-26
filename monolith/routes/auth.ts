@@ -1,12 +1,11 @@
-var express = require('express');
-var router = express.Router();
-const request = require('request-promise-native');
-const axios = require('axios');
-const MongoClient = require('mongodb').MongoClient;
-const ObjectID = require('mongodb').ObjectID;
-const jwt = require('jsonwebtoken');
-const fetchDbName = require('../lib/fetchDbName');
-const getCardsByFilter = require('../interactors/getCardsByFilter');
+import express from 'express';
+const router = express.Router();
+import request from 'request-promise-native';
+import axios from 'axios';
+import {MongoClient, ObjectID} from 'mongodb';
+import jwt from 'jsonwebtoken';
+import fetchDbName from '../lib/fetchDbName';
+import getCardsByFilter from '../interactors/getCardsByFilter';
 const DATABASE_NAME = fetchDbName();
 require('dotenv').config();
 

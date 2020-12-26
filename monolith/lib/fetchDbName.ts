@@ -1,4 +1,4 @@
-const isDev = require('./assertEnv');
+import isDev from './assertEnv';
 
 const TEST_NAME: string = 'test';
 const PRODUCTION_NAME: string = 'clubhouse_collection_production';

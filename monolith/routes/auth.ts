@@ -749,7 +749,7 @@ async function getSuspendedSale(id) {
         await client.connect();
 
         const db = client.db(DATABASE_NAME).collection('suspended_sales');
-        const doc = await db.findOne({ _id: ObjectID(id) });
+        const doc = await db.findOne({ _id: new ObjectID(id) });
 
         return doc;
     } catch (e) {
@@ -814,7 +814,7 @@ async function deleteSuspendedSale(id) {
 
         console.log(`Deleting suspended sale _id: ${id}`);
 
-        const { list } = await db.findOne({ _id: ObjectID(id) });
+        const { list } = await db.findOne({ _id: new ObjectID(id) });
 
         // Adds the passed cards back to inventory prior to deleting
         const dbInserts = list.map(
@@ -822,7 +822,7 @@ async function deleteSuspendedSale(id) {
         );
         await Promise.all(dbInserts);
 
-        return await db.deleteOne({ _id: ObjectID(id) });
+        return await db.deleteOne({ _id: new ObjectID(id) });
     } catch (e) {
         throw e;
     } finally {

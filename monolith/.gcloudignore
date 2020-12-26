@@ -13,5 +13,8 @@
 .git
 .gitignore
 
+# TSC build
+built/
+
 # Node.js dependencies:
 node_modules/

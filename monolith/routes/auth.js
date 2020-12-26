@@ -6,6 +6,7 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 const jwt = require('jsonwebtoken');
 const fetchDbName = require('../lib/fetchDbName');
+const getCardsByFilter = require('../interactors/getCardsByFilter');
 const DATABASE_NAME = fetchDbName();
 require('dotenv').config();
 
@@ -963,6 +964,49 @@ router.delete('/suspendSale/:id', async (req, res) => {
     } catch (err) {
         console.error(new Error(err));
         res.status(500).send(err.message);
+    }
+});
+
+router.get('/getCardsByFilter', async (req, res) => {
+    try {
+        const {
+            title,
+            setName,
+            format,
+            priceNum,
+            priceFilter,
+            finish,
+            colors,
+            colorIdentity,
+            sortBy,
+            sortByDirection,
+            colorSpecificity,
+            page,
+            type,
+            frame,
+        } = req.query;
+
+        const message = await getCardsByFilter({
+            title,
+            setName,
+            format,
+            priceNum,
+            priceFilter,
+            finish,
+            colors,
+            colorIdentity,
+            colorSpecificity,
+            sortBy,
+            sortByDirection,
+            page,
+            type,
+            frame,
+        });
+
+        res.status(200).json(message);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
     }
 });
 

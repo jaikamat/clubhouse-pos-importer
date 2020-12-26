@@ -78,4 +78,4 @@ async function getCardsWithInfo(title, matchInStock = false) {
     }
 }
 
-module.exports = getCardsWithInfo;
+export default getCardsWithInfo;

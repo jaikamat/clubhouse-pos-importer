@@ -44,4 +44,4 @@ async function getJwt(username, submittedPass) {
     }
 }
 
-module.exports = getJwt;
+export default getJwt;

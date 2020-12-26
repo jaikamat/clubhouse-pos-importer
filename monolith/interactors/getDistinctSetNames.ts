@@ -25,4 +25,4 @@ async function getDistinctSetNames() {
     }
 }
 
-module.exports = getDistinctSetNames;
+export default getDistinctSetNames;

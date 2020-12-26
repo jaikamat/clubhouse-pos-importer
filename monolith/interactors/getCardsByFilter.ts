@@ -1,5 +1,5 @@
-const MongoClient = require('mongodb').MongoClient;
-const fetchDbName = require('../lib/fetchDbName');
+import {MongoClient} from 'mongodb';
+import fetchDbName from '../lib/fetchDbName';
 const DATABASE_NAME = fetchDbName();
 const LIMIT = 100;
 
@@ -20,7 +20,7 @@ const LIMIT = 100;
  * type - the typeline search, like `Artifact` or `Creature`
  * frame - the desired frame effect filter (borderless, extended-art, showcase, etc)
  */
-async function getCardsByFilter({
+const getCardsByFilter = async ({
     title,
     setName,
     format,
@@ -34,7 +34,7 @@ async function getCardsByFilter({
     page,
     type,
     frame,
-}) {
+}) => {
     const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -299,4 +299,4 @@ async function getCardsByFilter({
     }
 }
 
-module.exports = getCardsByFilter;
+export default getCardsByFilter;

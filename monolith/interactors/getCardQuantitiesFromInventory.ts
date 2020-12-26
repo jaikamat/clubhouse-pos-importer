@@ -2,7 +2,7 @@ const MongoClient = require('mongodb').MongoClient;
 const fetchDbName = require('../lib/fetchDbName');
 const DATABASE_NAME = fetchDbName();
 
-async function getCardQuantitiesFromInventory(scryfallIds) {
+async function getCardQuantitiesFromInventory(scryfallIds: string[]) {
     const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -42,4 +42,4 @@ async function getCardQuantitiesFromInventory(scryfallIds) {
     }
 }
 
-module.exports = getCardQuantitiesFromInventory;
+export default getCardQuantitiesFromInventory;

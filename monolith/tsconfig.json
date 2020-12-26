@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+      "outDir": "./built",
+      "allowJs": true,
+      "target": "es5",
+      "types": ["node"]
+    },
+    "include": ["./**/*"],
+    "exclude": ["./node_modeules", ".env", ".gcloudignore", ".prettierrc.json", "app.yaml"]
+  }

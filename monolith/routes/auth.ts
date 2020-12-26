@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 import request from 'request-promise-native';
 import axios from 'axios';
-import {MongoClient, ObjectID} from 'mongodb';
+import { MongoClient, ObjectID } from 'mongodb';
 import jwt from 'jsonwebtoken';
 import fetchDbName from '../lib/fetchDbName';
 import getCardsByFilter from '../interactors/getCardsByFilter';
@@ -976,7 +976,6 @@ router.get('/getCardsByFilter', async (req, res) => {
             priceFilter,
             finish,
             colors,
-            colorIdentity,
             sortBy,
             sortByDirection,
             colorSpecificity,
@@ -993,7 +992,6 @@ router.get('/getCardsByFilter', async (req, res) => {
             priceFilter,
             finish,
             colors,
-            colorIdentity,
             colorSpecificity,
             sortBy,
             sortByDirection,

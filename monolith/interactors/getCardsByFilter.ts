@@ -1,4 +1,4 @@
-import {MongoClient} from 'mongodb';
+import { MongoClient } from 'mongodb';
 import fetchDbName from '../lib/fetchDbName';
 const DATABASE_NAME = fetchDbName();
 const LIMIT = 100;
@@ -50,7 +50,7 @@ const getCardsByFilter = async ({
         const aggregation = [];
 
         // Build the initialMatch
-        const initialMatch = {};
+        const initialMatch: { name?: any; set_name?: string } = {};
 
         if (title) initialMatch.name = { $regex: `${title}`, $options: 'i' };
         if (setName) initialMatch.set_name = setName;
@@ -79,16 +79,16 @@ const getCardsByFilter = async ({
             },
         });
 
-        const typeMatch = {};
+        const typeMatch: { type_line?: any } = {};
 
         // Types are Tribal, Instant, Sorcery, Creature, Enchantment, Land, Planeswalker, Artifact
         if (type) typeMatch.type_line = { $regex: `${type}`, $options: 'i' };
 
         aggregation.push({ $match: typeMatch });
 
-        const borderMatch = {};
-        const showcaseMatch = {};
-        const extendedArtMatch = {};
+        const borderMatch: { border_color?: string } = {};
+        const showcaseMatch: { frame_effects?: string } = {};
+        const extendedArtMatch: { frame_effects?: string } = {};
 
         // Matches borderless art only
         borderMatch.border_color = 'borderless';
@@ -223,7 +223,11 @@ const getCardsByFilter = async ({
         });
 
         // Building the end match
-        const endMatch = {};
+        const endMatch: {
+            colors_string_length?: any;
+            colors_string?: string;
+            price?: any;
+        } = {};
 
         // End match foiling logic
         if (finish === 'FOIL') {
@@ -285,7 +289,10 @@ const getCardsByFilter = async ({
             .aggregate(aggregation)
             .toArray();
 
-        const output = {};
+        const output: {
+            cards?: any;
+            total?: any;
+        } = {};
 
         output.cards = docs[0].cards ? docs[0].cards : [];
         output.total = docs[0].total_count[0] ? docs[0].total_count[0].num : 0;
@@ -297,6 +304,6 @@ const getCardsByFilter = async ({
     } finally {
         await client.close();
     }
-}
+};
 
 export default getCardsByFilter;

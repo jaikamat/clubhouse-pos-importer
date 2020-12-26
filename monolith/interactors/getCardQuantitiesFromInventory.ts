@@ -1,4 +1,4 @@
-import {MongoClient} from 'mongodb';
+import { MongoClient } from 'mongodb';
 import fetchDbName from '../lib/fetchDbName';
 const DATABASE_NAME = fetchDbName();
 

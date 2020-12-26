@@ -1,12 +1,11 @@
-var express = require('express');
-var router = express.Router();
-const request = require('request-promise-native');
-const axios = require('axios');
-const MongoClient = require('mongodb').MongoClient;
-const ObjectID = require('mongodb').ObjectID;
-const jwt = require('jsonwebtoken');
-const fetchDbName = require('../lib/fetchDbName');
-const getCardsByFilter = require('../interactors/getCardsByFilter');
+import express from 'express';
+const router = express.Router();
+import request from 'request-promise-native';
+import axios from 'axios';
+import { MongoClient, ObjectID } from 'mongodb';
+import jwt from 'jsonwebtoken';
+import fetchDbName from '../lib/fetchDbName';
+import getCardsByFilter from '../interactors/getCardsByFilter';
 const DATABASE_NAME = fetchDbName();
 require('dotenv').config();
 
@@ -750,7 +749,7 @@ async function getSuspendedSale(id) {
         await client.connect();
 
         const db = client.db(DATABASE_NAME).collection('suspended_sales');
-        const doc = await db.findOne({ _id: ObjectID(id) });
+        const doc = await db.findOne({ _id: new ObjectID(id) });
 
         return doc;
     } catch (e) {
@@ -815,7 +814,7 @@ async function deleteSuspendedSale(id) {
 
         console.log(`Deleting suspended sale _id: ${id}`);
 
-        const { list } = await db.findOne({ _id: ObjectID(id) });
+        const { list } = await db.findOne({ _id: new ObjectID(id) });
 
         // Adds the passed cards back to inventory prior to deleting
         const dbInserts = list.map(
@@ -823,7 +822,7 @@ async function deleteSuspendedSale(id) {
         );
         await Promise.all(dbInserts);
 
-        return await db.deleteOne({ _id: ObjectID(id) });
+        return await db.deleteOne({ _id: new ObjectID(id) });
     } catch (e) {
         throw e;
     } finally {
@@ -977,7 +976,6 @@ router.get('/getCardsByFilter', async (req, res) => {
             priceFilter,
             finish,
             colors,
-            colorIdentity,
             sortBy,
             sortByDirection,
             colorSpecificity,
@@ -994,7 +992,6 @@ router.get('/getCardsByFilter', async (req, res) => {
             priceFilter,
             finish,
             colors,
-            colorIdentity,
             colorSpecificity,
             sortBy,
             sortByDirection,
@@ -1010,4 +1007,4 @@ router.get('/getCardsByFilter', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

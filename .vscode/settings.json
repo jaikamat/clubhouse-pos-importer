@@ -1,0 +1,4 @@
+{
+    "workbench.editor.enablePreview": false,
+    "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+}

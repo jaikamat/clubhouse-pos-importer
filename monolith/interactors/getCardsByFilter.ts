@@ -1,5 +1,5 @@
-const MongoClient = require('mongodb').MongoClient;
-const fetchDbName = require('../lib/fetchDbName');
+import { MongoClient } from 'mongodb';
+import fetchDbName from '../lib/fetchDbName';
 const DATABASE_NAME = fetchDbName();
 const LIMIT = 100;
 
@@ -20,7 +20,7 @@ const LIMIT = 100;
  * type - the typeline search, like `Artifact` or `Creature`
  * frame - the desired frame effect filter (borderless, extended-art, showcase, etc)
  */
-async function getCardsByFilter({
+const getCardsByFilter = async ({
     title,
     setName,
     format,
@@ -34,7 +34,7 @@ async function getCardsByFilter({
     page,
     type,
     frame,
-}) {
+}) => {
     const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -50,7 +50,7 @@ async function getCardsByFilter({
         const aggregation = [];
 
         // Build the initialMatch
-        const initialMatch = {};
+        const initialMatch: { name?: any; set_name?: string } = {};
 
         if (title) initialMatch.name = { $regex: `${title}`, $options: 'i' };
         if (setName) initialMatch.set_name = setName;
@@ -79,16 +79,16 @@ async function getCardsByFilter({
             },
         });
 
-        const typeMatch = {};
+        const typeMatch: { type_line?: any } = {};
 
         // Types are Tribal, Instant, Sorcery, Creature, Enchantment, Land, Planeswalker, Artifact
         if (type) typeMatch.type_line = { $regex: `${type}`, $options: 'i' };
 
         aggregation.push({ $match: typeMatch });
 
-        const borderMatch = {};
-        const showcaseMatch = {};
-        const extendedArtMatch = {};
+        const borderMatch: { border_color?: string } = {};
+        const showcaseMatch: { frame_effects?: string } = {};
+        const extendedArtMatch: { frame_effects?: string } = {};
 
         // Matches borderless art only
         borderMatch.border_color = 'borderless';
@@ -223,7 +223,11 @@ async function getCardsByFilter({
         });
 
         // Building the end match
-        const endMatch = {};
+        const endMatch: {
+            colors_string_length?: any;
+            colors_string?: string;
+            price?: any;
+        } = {};
 
         // End match foiling logic
         if (finish === 'FOIL') {
@@ -285,7 +289,10 @@ async function getCardsByFilter({
             .aggregate(aggregation)
             .toArray();
 
-        const output = {};
+        const output: {
+            cards?: any;
+            total?: any;
+        } = {};
 
         output.cards = docs[0].cards ? docs[0].cards : [];
         output.total = docs[0].total_count[0] ? docs[0].total_count[0].num : 0;
@@ -297,6 +304,6 @@ async function getCardsByFilter({
     } finally {
         await client.close();
     }
-}
+};
 
-module.exports = getCardsByFilter;
+export default getCardsByFilter;

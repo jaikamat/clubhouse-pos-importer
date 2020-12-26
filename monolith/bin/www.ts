@@ -4,9 +4,10 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('monolith:server');
-var http = require('http');
+import app from '../app';
+import debugImport from 'debug';
+const debug = debugImport('monolith:server');
+import http from 'http';
 require('dotenv').config(); // load local env vars
 
 /**

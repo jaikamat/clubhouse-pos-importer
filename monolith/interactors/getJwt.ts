@@ -4,7 +4,10 @@ const jwt = require('jsonwebtoken');
 import fetchDbName from '../lib/fetchDbName';
 const DATABASE_NAME = fetchDbName();
 
-async function getJwt(username, submittedPass) {
+async function getJwt(
+    username: string,
+    submittedPass: string
+): Promise<{ token: string } | string> {
     const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,

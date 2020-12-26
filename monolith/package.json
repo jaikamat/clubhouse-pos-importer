@@ -4,6 +4,7 @@
     "private": true,
     "scripts": {
         "start": "node ./built/bin/www",
+        "gcp-build": "tsc -p .",
         "start-dev": "PORT=7331 ENVIRONMENT=development node ./built/bin/www",
         "deploy": "gcloud app deploy app.yaml --stop-previous-version"
     },

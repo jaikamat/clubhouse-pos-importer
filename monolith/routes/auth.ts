@@ -8,6 +8,17 @@ import fetchDbName from '../lib/fetchDbName';
 import getCardsByFilter, { Arguments } from '../interactors/getCardsByFilter';
 const DATABASE_NAME = fetchDbName();
 require('dotenv').config();
+import { Request } from 'express';
+
+interface RequestWithUserInfo extends Request {
+    locations: string[];
+    isAdmin: boolean;
+}
+
+type DecodedToken = {
+    locations: string[];
+    username: string;
+};
 
 const mongoOptions = {
     useNewUrlParser: true,
@@ -28,7 +39,7 @@ const finishes = [
 /**
  * Middleware to check for Bearer token by validating JWT
  */
-router.use((req, res, next) => {
+router.use((req: RequestWithUserInfo, res, next) => {
     let token = req.headers['authorization']; // Express headers converted to lowercase
 
     if (token.startsWith('Bearer ')) {
@@ -38,7 +49,15 @@ router.use((req, res, next) => {
     if (token) {
         try {
             // Will throw error if validation fails
-            jwt.verify(token, process.env.PRIVATE_KEY);
+            const { username, locations } = jwt.verify(
+                token,
+                process.env.PRIVATE_KEY
+            ) as DecodedToken;
+
+            // Attach location information to the req and flag admins
+            req.locations = locations;
+            req.isAdmin = locations.length === 2;
+
             return next();
         } catch (err) {
             res.status(401).send('Invalid token');
@@ -51,7 +70,7 @@ router.use((req, res, next) => {
 /**
  * Middleware that sanitizes card object properties so nothing funky is committed to the database
  */
-router.post('/addCardToInventory', (req, res, next) => {
+router.post('/addCardToInventory', (req: RequestWithUserInfo, res, next) => {
     const { quantity, finishCondition, cardInfo } = req.body;
     const { name, id } = cardInfo;
 
@@ -130,7 +149,7 @@ async function addCardToInventory({
     }
 }
 
-router.post('/addCardToInventory', async (req, res) => {
+router.post('/addCardToInventory', async (req: RequestWithUserInfo, res) => {
     try {
         const { quantity, finishCondition, cardInfo } = req.body;
         const { id, name, set_name, set } = cardInfo;
@@ -152,7 +171,7 @@ router.post('/addCardToInventory', async (req, res) => {
 /**
  * Sale middleware that sanitizes card array to ensure inputs are valid. Will throw errors and end sale if needed
  */
-router.post('/finishSale', (req, res, next) => {
+router.post('/finishSale', (req: RequestWithUserInfo, res, next) => {
     const { cards } = req.body;
 
     function sanitizeOne(card) {
@@ -391,7 +410,7 @@ async function finishSale(cards) {
 /**
  * Create root POST route
  */
-router.post('/finishSale', async (req, res) => {
+router.post('/finishSale', async (req: RequestWithUserInfo, res) => {
     try {
         const { cards } = req.body;
         const data = await finishSale(cards);
@@ -571,7 +590,7 @@ async function getFormatLegalities() {
     }
 }
 
-router.get('/allSales', async (req, res) => {
+router.get('/allSales', async (req: RequestWithUserInfo, res) => {
     try {
         const sales_data = await getAllSales();
         const format_legalities = await getFormatLegalities();
@@ -582,7 +601,7 @@ router.get('/allSales', async (req, res) => {
     }
 });
 
-router.get('/getSaleByTitle', async (req, res) => {
+router.get('/getSaleByTitle', async (req: RequestWithUserInfo, res) => {
     try {
         const { cardName } = req.query;
         const message = await getSales(cardName);
@@ -664,7 +683,7 @@ async function addCardToInventoryReceiving(
 /**
  * Sanitizes card object properties so nothing funky is committed to the database
  */
-router.post('/receiveCards', (req, res, next) => {
+router.post('/receiveCards', (req: RequestWithUserInfo, res, next) => {
     const { cards } = req.body;
 
     try {
@@ -675,7 +694,7 @@ router.post('/receiveCards', (req, res, next) => {
     }
 });
 
-router.post('/receiveCards', async (req, res) => {
+router.post('/receiveCards', async (req: RequestWithUserInfo, res) => {
     try {
         const { cards } = req.body;
         const messages = await wrapConnectToDb(cards);
@@ -892,7 +911,7 @@ async function updateCardInventoryWithFlag(card, CHANGE_FLAG) {
     }
 }
 
-router.get('/suspendSale', async (req, res) => {
+router.get('/suspendSale', async (req: RequestWithUserInfo, res) => {
     try {
         const message = await getSuspendedSales();
         res.status(200).send(message);
@@ -902,7 +921,7 @@ router.get('/suspendSale', async (req, res) => {
     }
 });
 
-router.get('/suspendSale/:id', async (req, res) => {
+router.get('/suspendSale/:id', async (req: RequestWithUserInfo, res) => {
     const { id } = req.params;
 
     try {
@@ -914,7 +933,7 @@ router.get('/suspendSale/:id', async (req, res) => {
     }
 });
 
-router.post('/suspendSale', async (req, res) => {
+router.post('/suspendSale', async (req: RequestWithUserInfo, res) => {
     const { customerName = '', notes = '', saleList = [] } = req.body;
 
     try {
@@ -934,7 +953,7 @@ router.post('/suspendSale', async (req, res) => {
     }
 });
 
-router.delete('/suspendSale/:id', async (req, res) => {
+router.delete('/suspendSale/:id', async (req: RequestWithUserInfo, res) => {
     const { id } = req.params;
 
     try {
@@ -946,7 +965,7 @@ router.delete('/suspendSale/:id', async (req, res) => {
     }
 });
 
-router.get('/getCardsByFilter', async (req, res) => {
+router.get('/getCardsByFilter', async (req: RequestWithUserInfo, res) => {
     try {
         const {
             title,

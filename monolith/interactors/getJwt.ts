@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 import fetchDbName from '../lib/fetchDbName';
 const DATABASE_NAME = fetchDbName();
 
-type User = {
+export type User = {
     password: string;
     username: symbol;
     locations?: string[];

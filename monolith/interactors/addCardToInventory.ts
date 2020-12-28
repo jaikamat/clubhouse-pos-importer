@@ -1,4 +1,5 @@
 import { MongoClient } from 'mongodb';
+import collectionFromLocation from '../lib/collectionFromLocation';
 import fetchDbName from '../lib/fetchDbName';
 const DATABASE_NAME = fetchDbName();
 
@@ -15,6 +16,7 @@ export default async function addCardToInventory({
     name,
     set_name,
     set,
+    location,
 }) {
     try {
         var client = await new MongoClient(
@@ -26,7 +28,9 @@ export default async function addCardToInventory({
             `Update Info: QTY:${quantity}, ${finishCondition}, ${name}, ${id}`
         );
 
-        const db = client.db(DATABASE_NAME).collection('card_inventory');
+        const db = client
+            .db(DATABASE_NAME)
+            .collection(collectionFromLocation(location).cardInventory);
 
         // Upsert the new quantity in the document
         await db.updateOne(

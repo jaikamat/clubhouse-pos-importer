@@ -92,6 +92,7 @@ router.post('/addCardToInventory', (req: RequestWithUserInfo, res, next) => {
 router.post('/addCardToInventory', async (req: RequestWithUserInfo, res) => {
     try {
         const { quantity, finishCondition, cardInfo } = req.body;
+        const { currentLocation: location } = req;
         const { id, name, set_name, set } = cardInfo;
         const message = await addCardToInventory({
             quantity,
@@ -100,6 +101,7 @@ router.post('/addCardToInventory', async (req: RequestWithUserInfo, res) => {
             name,
             set_name,
             set,
+            location,
         });
         res.status(200).send(message);
     } catch (err) {
@@ -907,6 +909,7 @@ router.delete('/suspendSale/:id', async (req: RequestWithUserInfo, res) => {
 
 router.get('/getCardsByFilter', async (req: RequestWithUserInfo, res) => {
     try {
+        const { currentLocation: location } = req;
         const {
             title,
             setName,
@@ -937,6 +940,7 @@ router.get('/getCardsByFilter', async (req: RequestWithUserInfo, res) => {
             page,
             type,
             frame,
+            location,
         });
 
         res.status(200).json(message);

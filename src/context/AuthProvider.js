@@ -6,18 +6,25 @@ import axios from 'axios';
 export const AuthContext = React.createContext();
 
 export default function AuthProvider(props) {
-    const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem('clubhouse_JWT'));
+    const [loggedIn, setLoggedIn] = useState(
+        !!localStorage.getItem('clubhouse_JWT')
+    );
 
-    const handleLogin = async (username, password) => {
+    const handleLogin = async (username, password, currentLocation) => {
         try {
-            const { data } = await axios.post(LOGIN, {
-                username: username.toLowerCase(),
-                password: password
-            }, { headers: makeAuthHeader() });
+            const { data } = await axios.post(
+                LOGIN,
+                {
+                    username: username.toLowerCase(),
+                    password,
+                    currentLocation,
+                },
+                { headers: makeAuthHeader() }
+            );
 
             if (data.token) {
                 localStorage.setItem('clubhouse_JWT', data.token);
-                setLoggedIn(!!localStorage.getItem('clubhouse_JWT'))
+                setLoggedIn(!!localStorage.getItem('clubhouse_JWT'));
 
                 return { authed: true };
             } else {
@@ -26,7 +33,7 @@ export default function AuthProvider(props) {
         } catch (err) {
             console.log(err);
         }
-    }
+    };
 
     const handleLogout = async () => {
         try {
@@ -37,9 +44,11 @@ export default function AuthProvider(props) {
         } catch (err) {
             console.log(err);
         }
-    }
+    };
 
-    return <AuthContext.Provider value={{ loggedIn, handleLogin, handleLogout }}>
-        {props.children}
-    </AuthContext.Provider>
+    return (
+        <AuthContext.Provider value={{ loggedIn, handleLogin, handleLogout }}>
+            {props.children}
+        </AuthContext.Provider>
+    );
 }

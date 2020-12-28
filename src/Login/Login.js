@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import createToast from '../common/createToast';
-import { Form, Button, Segment } from 'semantic-ui-react';
+import { Form, Button, Segment, Select } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
 import { AuthContext } from '../context/AuthProvider';
 import styled from 'styled-components';
@@ -20,8 +20,8 @@ const FormContainer = styled(Segment)`
 export default function Login() {
     const { loggedIn, handleLogin } = useContext(AuthContext);
 
-    const onSubmit = async ({ username, password }) => {
-        const { authed } = await handleLogin(username, password);
+    const onSubmit = async ({ username, password, location }) => {
+        const { authed } = await handleLogin(username, password, location);
 
         if (authed) {
             createToast({
@@ -46,6 +46,7 @@ export default function Login() {
                 initialValues={{
                     username: '',
                     password: '',
+                    location: '',
                 }}
                 onSubmit={onSubmit}
             >
@@ -75,6 +76,27 @@ export default function Login() {
                                     }
                                 />
                             </Form.Field>
+                            <Form.Field
+                                label="Location"
+                                control={Select}
+                                value={values.location}
+                                placeholder="Select location"
+                                options={[
+                                    {
+                                        key: 'alpha',
+                                        text: 'Clubhouse OG',
+                                        value: 'ch1',
+                                    },
+                                    {
+                                        key: 'beta',
+                                        text: 'Cluhouse Prime',
+                                        value: 'ch2',
+                                    },
+                                ]}
+                                onChange={(_, { value }) => {
+                                    setFieldValue('location', value);
+                                }}
+                            />
                             <Button
                                 primary
                                 fluid
@@ -82,7 +104,11 @@ export default function Login() {
                                 type="submit"
                                 onClick={handleSubmit}
                                 className="login-btn"
-                                disabled={!values.username || !values.password}
+                                disabled={
+                                    !values.username ||
+                                    !values.password ||
+                                    !values.location
+                                }
                             >
                                 Submit
                             </Button>

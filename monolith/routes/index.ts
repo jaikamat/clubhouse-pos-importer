@@ -44,14 +44,4 @@ router.get('/getCardsWithInfo', async (req, res) => {
     }
 });
 
-router.get('/getDistinctSetNames', async (req, res) => {
-    try {
-        const names = await getDistinctSetNames();
-        res.status(200).send(names);
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
-    }
-});
-
 export default router;

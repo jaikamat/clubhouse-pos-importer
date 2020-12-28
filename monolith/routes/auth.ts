@@ -11,6 +11,7 @@ const DATABASE_NAME = fetchDbName();
 require('dotenv').config();
 import { Request } from 'express';
 import { ClubhouseLocation } from '../interactors/getJwt';
+import getDistinctSetNames from '../interactors/getDistinctSetNames';
 
 interface RequestWithUserInfo extends Request {
     locations: string[];
@@ -944,6 +945,16 @@ router.get('/getCardsByFilter', async (req: RequestWithUserInfo, res) => {
         });
 
         res.status(200).json(message);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+});
+
+router.get('/getDistinctSetNames', async (req: RequestWithUserInfo, res) => {
+    try {
+        const names = await getDistinctSetNames(req.currentLocation);
+        res.status(200).send(names);
     } catch (err) {
         console.log(err);
         res.status(500).send(err);

@@ -4,6 +4,12 @@ const jwt = require('jsonwebtoken');
 import fetchDbName from '../lib/fetchDbName';
 const DATABASE_NAME = fetchDbName();
 
+type User = {
+    password: string;
+    username: symbol;
+    locations?: string[];
+};
+
 async function getJwt(
     username: string,
     submittedPass: string
@@ -19,18 +25,25 @@ async function getJwt(
 
         const db = client.db(DATABASE_NAME);
 
-        const user = await db.collection('users').findOne({
+        const user: User = await db.collection('users').findOne({
             username: username,
         });
 
         if (!user) return 'Not authorized';
+
+        // Retrieve the Clubhouse location permissions for the user
+        const { locations } = user;
 
         // Determine if the fetched user is authorized
         const match = await bcrypt.compareSync(submittedPass, user.password);
 
         if (match) {
             const token = jwt.sign(
-                { username: username, admin: true },
+                {
+                    username,
+                    admin: true,
+                    locations: locations ? locations : [],
+                },
                 process.env.PRIVATE_KEY
             );
 

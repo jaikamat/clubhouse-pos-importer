@@ -7,8 +7,8 @@ import getDistinctSetNames from '../interactors/getDistinctSetNames';
 
 router.post('/jwt', async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const token = await getJwt(username, password);
+        const { username, password, currentLocation } = req.body;
+        const token = await getJwt(username, password, currentLocation);
         res.status(200).send(token);
     } catch (err) {
         console.log(err);

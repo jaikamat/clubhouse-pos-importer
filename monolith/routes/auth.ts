@@ -12,6 +12,7 @@ require('dotenv').config();
 import { Request } from 'express';
 import { ClubhouseLocation } from '../interactors/getJwt';
 import getDistinctSetNames from '../interactors/getDistinctSetNames';
+import collectionFromLocation from '../lib/collectionFromLocation';
 
 interface RequestWithUserInfo extends Request {
     locations: string[];
@@ -652,13 +653,15 @@ router.post('/receiveCards', async (req: RequestWithUserInfo, res) => {
 /**
  * Returns all suspended sales' ids, customer names, and notes (omitting card lists)
  */
-async function getSuspendedSales() {
+async function getSuspendedSales(location: 'ch1' | 'ch2') {
     const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
 
     try {
         await client.connect();
 
-        const db = client.db(DATABASE_NAME).collection('suspended_sales');
+        const db = client
+            .db(DATABASE_NAME)
+            .collection(collectionFromLocation(location).suspendedSales);
 
         const docs = await db.find(
             {},
@@ -684,13 +687,15 @@ async function getSuspendedSales() {
  * Retrieves one suspended sale
  * @param {string} id
  */
-async function getSuspendedSale(id) {
+async function getSuspendedSale(id, location) {
     const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
 
     try {
         await client.connect();
 
-        const db = client.db(DATABASE_NAME).collection('suspended_sales');
+        const db = client
+            .db(DATABASE_NAME)
+            .collection(collectionFromLocation(location).suspendedSales);
         const doc = await db.findOne({ _id: new ObjectID(id) });
 
         return doc;
@@ -707,13 +712,15 @@ async function getSuspendedSale(id) {
  * @param {string} notes - Optional notes
  * @param {array} saleList - The array of card objects used on the frontend - translated directly from React state
  */
-async function createSuspendedSale(customerName, notes, saleList) {
+async function createSuspendedSale(customerName, notes, saleList, location) {
     const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
 
     try {
         await client.connect();
 
-        const db = client.db(DATABASE_NAME).collection('suspended_sales');
+        const db = client
+            .db(DATABASE_NAME)
+            .collection(collectionFromLocation(location).suspendedSales);
 
         console.log('Creating new suspended sale');
 
@@ -746,13 +753,15 @@ async function createSuspendedSale(customerName, notes, saleList) {
  * Deletes a single suspended sale
  * @param {string} id
  */
-async function deleteSuspendedSale(id) {
+async function deleteSuspendedSale(id, location) {
     const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
 
     try {
         await client.connect();
 
-        const db = client.db(DATABASE_NAME).collection('suspended_sales');
+        const db = client
+            .db(DATABASE_NAME)
+            .collection(collectionFromLocation(location).suspendedSales);
 
         console.log(`Deleting suspended sale _id: ${id}`);
 
@@ -856,7 +865,7 @@ async function updateCardInventoryWithFlag(card, CHANGE_FLAG) {
 
 router.get('/suspendSale', async (req: RequestWithUserInfo, res) => {
     try {
-        const message = await getSuspendedSales();
+        const message = await getSuspendedSales(req.currentLocation);
         res.status(200).send(message);
     } catch (err) {
         console.error(new Error(err));
@@ -868,7 +877,7 @@ router.get('/suspendSale/:id', async (req: RequestWithUserInfo, res) => {
     const { id } = req.params;
 
     try {
-        const message = await getSuspendedSale(id);
+        const message = await getSuspendedSale(id, req.currentLocation);
         res.status(200).send(message);
     } catch (err) {
         console.error(new Error(err));
@@ -884,7 +893,8 @@ router.post('/suspendSale', async (req: RequestWithUserInfo, res) => {
             const message = await createSuspendedSale(
                 customerName,
                 notes,
-                saleList
+                saleList,
+                req.currentLocation
             );
             res.status(200).send(message);
         } else {
@@ -900,7 +910,7 @@ router.delete('/suspendSale/:id', async (req: RequestWithUserInfo, res) => {
     const { id } = req.params;
 
     try {
-        const message = await deleteSuspendedSale(id);
+        const message = await deleteSuspendedSale(id, req.currentLocation);
         res.status(200).send(message);
     } catch (err) {
         console.error(new Error(err));

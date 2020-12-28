@@ -6,6 +6,7 @@ import { MongoClient, ObjectID } from 'mongodb';
 import jwt from 'jsonwebtoken';
 import fetchDbName from '../lib/fetchDbName';
 import getCardsByFilter, { Arguments } from '../interactors/getCardsByFilter';
+import addCardToInventory from '../interactors/addCardToInventory';
 const DATABASE_NAME = fetchDbName();
 require('dotenv').config();
 import { Request } from 'express';
@@ -87,71 +88,6 @@ router.post('/addCardToInventory', (req: RequestWithUserInfo, res, next) => {
 
     return next();
 });
-
-// `finishCondition` Refers to the configuration of Finishes and Conditions ex. NONFOIL_NM or FOIL_LP
-async function addCardToInventory({
-    quantity,
-    finishCondition,
-    id,
-    name,
-    set_name,
-    set,
-}) {
-    try {
-        var client = await new MongoClient(
-            process.env.MONGO_URI,
-            mongoOptions
-        ).connect();
-
-        console.log(
-            `Update Info: QTY:${quantity}, ${finishCondition}, ${name}, ${id}`
-        );
-
-        const db = client.db(DATABASE_NAME).collection('card_inventory');
-
-        // Upsert the new quantity in the document
-        await db.updateOne(
-            { _id: id },
-            {
-                $inc: {
-                    [`qoh.${finishCondition}`]: quantity,
-                },
-                $setOnInsert: { name, set_name, set },
-            },
-            { upsert: true }
-        );
-
-        // Validate inventory quantites to never be negative numbers
-        await db.updateOne(
-            {
-                _id: id,
-                [`qoh.${finishCondition}`]: { $lt: 0 },
-            },
-            {
-                $set: { [`qoh.${finishCondition}`]: 0 },
-            }
-        );
-
-        // Get the updated document for return
-        return await db.findOne(
-            { _id: id },
-            {
-                projection: {
-                    _id: true,
-                    qoh: true,
-                    name: true,
-                    setName: true,
-                    set: true,
-                },
-            }
-        );
-    } catch (err) {
-        console.log(err);
-        throw err;
-    } finally {
-        await client.close();
-    }
-}
 
 router.post('/addCardToInventory', async (req: RequestWithUserInfo, res) => {
     try {

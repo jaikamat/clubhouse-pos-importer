@@ -38,10 +38,9 @@ async function getJwt(
         const match = await bcrypt.compareSync(submittedPass, user.password);
 
         if (match) {
-            const token = jwt.sign(
+            const token: string = jwt.sign(
                 {
                     username,
-                    admin: true,
                     locations: locations ? locations : [],
                 },
                 process.env.PRIVATE_KEY

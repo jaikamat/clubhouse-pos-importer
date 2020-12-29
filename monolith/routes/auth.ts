@@ -13,6 +13,7 @@ import getDistinctSetNames from '../interactors/getDistinctSetNames';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
 import finishSale from '../interactors/updateInventoryCards';
+import getSalesFromCardname from '../interactors/getSalesFromCardname';
 
 interface RequestWithUserInfo extends Request {
     locations: string[];
@@ -161,45 +162,6 @@ router.post('/finishSale', async (req: RequestWithUserInfo, res) => {
         res.status(500).send(err.message);
     }
 });
-
-async function getSales(cardName, location: ClubhouseLocation) {
-    const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
-
-    try {
-        await client.connect();
-        console.log('Successfully connected to mongo');
-
-        const db = client.db(DATABASE_NAME);
-
-        // Returns only the relevant queried cards from the card_list array of cards involved in the sale
-        // Refer to https://blog.fullstacktraining.com/retrieve-only-queried-element-in-an-object-array-in-mongodb-collection/
-        const data = await db
-            .collection(collectionFromLocation(location).salesData)
-            .aggregate([
-                { $match: { 'card_list.name': cardName } },
-                {
-                    $project: {
-                        card_list: {
-                            $filter: {
-                                input: '$card_list',
-                                as: 'card_list',
-                                cond: { $eq: ['$$card_list.name', cardName] },
-                            },
-                        },
-                        sale_data: 1,
-                    },
-                },
-            ]);
-
-        return await data.toArray();
-    } catch (err) {
-        console.log(err);
-        throw err;
-    } finally {
-        await client.close();
-        console.log('Disconnected from mongo');
-    }
-}
 
 async function getAllSales(location: ClubhouseLocation) {
     const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
@@ -355,7 +317,10 @@ router.get('/allSales', async (req: RequestWithUserInfo, res) => {
 router.get('/getSaleByTitle', async (req: RequestWithUserInfo, res) => {
     try {
         const { cardName } = req.query;
-        const message = await getSales(cardName, req.currentLocation);
+        const message = await getSalesFromCardname(
+            cardName,
+            req.currentLocation
+        );
         res.status(200).send(message);
     } catch (err) {
         console.log(err);

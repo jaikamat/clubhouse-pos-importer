@@ -13,6 +13,7 @@ import { Request } from 'express';
 import { ClubhouseLocation } from '../interactors/getJwt';
 import getDistinctSetNames from '../interactors/getDistinctSetNames';
 import collectionFromLocation from '../lib/collectionFromLocation';
+import getCardsWithInfo from '../interactors/getCardsWithInfo';
 
 interface RequestWithUserInfo extends Request {
     locations: string[];
@@ -1010,6 +1011,27 @@ router.get('/getDistinctSetNames', async (req: RequestWithUserInfo, res) => {
     try {
         const names = await getDistinctSetNames(req.currentLocation);
         res.status(200).send(names);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+});
+
+router.get('/getCardsWithInfo', async (req: RequestWithUserInfo, res) => {
+    try {
+        const { title, matchInStock } = req.query;
+        const myMatch = matchInStock === 'true';
+
+        if (typeof title === 'string') {
+            const message = await getCardsWithInfo(
+                title,
+                myMatch,
+                req.currentLocation
+            );
+            res.status(200).send(message);
+        } else {
+            throw new Error('title should be a string');
+        }
     } catch (err) {
         console.log(err);
         res.status(500).send(err);

@@ -19,7 +19,11 @@ router.post('/jwt', async (req, res) => {
 router.post('/getCardQuantitiesFromInventory', async (req, res) => {
     try {
         const { scryfallIds } = req.body;
-        const message = await getCardQuantitiesFromInventory(scryfallIds);
+        // TODO: intake dynamic location
+        const message = await getCardQuantitiesFromInventory(
+            scryfallIds,
+            'ch1'
+        );
         res.status(200).send(message);
     } catch (err) {
         console.log(err);
@@ -33,7 +37,8 @@ router.get('/getCardsWithInfo', async (req, res) => {
         const myMatch = matchInStock === 'true';
 
         if (typeof title === 'string') {
-            const message = await getCardsWithInfo(title, myMatch);
+            // TODO: intake dynamic location
+            const message = await getCardsWithInfo(title, myMatch, 'ch1');
             res.status(200).send(message);
         } else {
             throw new Error('title should be a string');

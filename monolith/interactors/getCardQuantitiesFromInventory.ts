@@ -1,8 +1,13 @@
 import { MongoClient } from 'mongodb';
+import collectionFromLocation from '../lib/collectionFromLocation';
 import fetchDbName from '../lib/fetchDbName';
+import { ClubhouseLocation } from './getJwt';
 const DATABASE_NAME = fetchDbName();
 
-async function getCardQuantitiesFromInventory(scryfallIds: string[]) {
+async function getCardQuantitiesFromInventory(
+    scryfallIds: string[],
+    location: ClubhouseLocation
+) {
     const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -14,17 +19,19 @@ async function getCardQuantitiesFromInventory(scryfallIds: string[]) {
 
         const db = client.db(DATABASE_NAME);
 
-        const data = await db.collection('card_inventory').find(
-            {
-                _id: { $in: scryfallIds },
-            },
-            {
-                projection: {
-                    _id: true,
-                    qoh: true,
+        const data = await db
+            .collection(collectionFromLocation(location).cardInventory)
+            .find(
+                {
+                    _id: { $in: scryfallIds },
                 },
-            }
-        );
+                {
+                    projection: {
+                        _id: true,
+                        qoh: true,
+                    },
+                }
+            );
 
         const documents = await data.toArray();
 

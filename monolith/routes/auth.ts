@@ -161,14 +161,16 @@ function createSaleLine(card) {
 /**
  * Exposes the DB and passes it down to child queries; wraps the promises
  */
-async function updateInventoryCards(cards) {
+async function updateInventoryCards(cards, location: ClubhouseLocation) {
     const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
 
     try {
         await client.connect();
 
         const db = client.db(DATABASE_NAME);
-        const dbInserts = cards.map((card) => updateCardInventory(db, card));
+        const dbInserts = cards.map((card) =>
+            updateCardInventory(db, card, location)
+        );
 
         return await Promise.all(dbInserts); // Persist the inventory changes
     } catch (err) {
@@ -183,7 +185,11 @@ async function updateInventoryCards(cards) {
  * Updates the Mongo inventory based on the card's passed properties (qtyToSell, finishCondition, id, name)
  * @param {Object} card - the card involved in the transaction
  */
-async function updateCardInventory(database, card) {
+async function updateCardInventory(
+    database,
+    card,
+    location: ClubhouseLocation
+) {
     const { qtyToSell, finishCondition, id, name } = card;
 
     try {
@@ -192,47 +198,53 @@ async function updateCardInventory(database, card) {
         );
 
         // Upsert the new qtyToSell in the document
-        await database.collection('card_inventory').findOneAndUpdate(
-            { _id: id },
-            {
-                $inc: {
-                    [`qoh.${finishCondition}`]: -Math.abs(qtyToSell),
+        await database
+            .collection(collectionFromLocation(location).cardInventory)
+            .findOneAndUpdate(
+                { _id: id },
+                {
+                    $inc: {
+                        [`qoh.${finishCondition}`]: -Math.abs(qtyToSell),
+                    },
                 },
-            },
-            {
-                projection: {
-                    _id: true,
-                    qoh: true,
-                    name: true,
-                    setName: true,
-                    set: true,
-                },
-                returnOriginal: false,
-            }
-        );
+                {
+                    projection: {
+                        _id: true,
+                        qoh: true,
+                        name: true,
+                        setName: true,
+                        set: true,
+                    },
+                    returnOriginal: false,
+                }
+            );
 
         // Validate inventory quantites to never be negative numbers
-        await database.collection('card_inventory').updateOne(
-            {
-                _id: id,
-                [`qoh.${finishCondition}`]: { $lt: 0 },
-            },
-            { $set: { [`qoh.${finishCondition}`]: 0 } }
-        );
+        await database
+            .collection(collectionFromLocation(location).cardInventory)
+            .updateOne(
+                {
+                    _id: id,
+                    [`qoh.${finishCondition}`]: { $lt: 0 },
+                },
+                { $set: { [`qoh.${finishCondition}`]: 0 } }
+            );
 
         // Get the updated document for return
-        return await database.collection('card_inventory').findOne(
-            { _id: id },
-            {
-                projection: {
-                    _id: true,
-                    qoh: true,
-                    name: true,
-                    setName: true,
-                    set: true,
-                },
-            }
-        );
+        return await database
+            .collection(collectionFromLocation(location).cardInventory)
+            .findOne(
+                { _id: id },
+                {
+                    projection: {
+                        _id: true,
+                        qoh: true,
+                        name: true,
+                        setName: true,
+                        set: true,
+                    },
+                }
+            );
     } catch (err) {
         console.log(err);
         throw err;
@@ -246,6 +258,7 @@ async function updateCardInventory(database, card) {
  * @param {Array} cards - array of cards involved in the sale
  */
 async function createLightspeedSale(authToken, cards) {
+    // TODO: need to intake location here to determine register id or other location-specific info
     const SHOP_ID = 1; // Retro is the shop; Lance separates by register
     const REGISTER_ID = 2; // Designates The Clubhouse
     const EMPLOYEE_ID = 1;
@@ -338,7 +351,7 @@ async function finishSale(cards, location: ClubhouseLocation) {
         const { data } = await createLightspeedSale(access_token, cards);
 
         // Map updated inserts after successful Lightspeed sale creation
-        const dbRes = await updateInventoryCards(cards);
+        const dbRes = await updateInventoryCards(cards, location);
 
         // Create and persist sale data
         await createSale(data.Sale, cards, location);
@@ -582,7 +595,7 @@ function validateOne({ id, quantity, finishCondition, name, set, set_name }) {
 }
 
 // Wraps the database connection and exposes addCardToInventoryReceiving to the db connection
-async function wrapConnectToDb(cards) {
+async function wrapConnectToDb(cards, location: ClubhouseLocation) {
     try {
         var client = await new MongoClient(
             process.env.MONGO_URI,
@@ -591,7 +604,9 @@ async function wrapConnectToDb(cards) {
 
         console.log('Connected to MongoDB');
 
-        const db = client.db(DATABASE_NAME).collection('card_inventory');
+        const db = client
+            .db(DATABASE_NAME)
+            .collection(collectionFromLocation(location).cardInventory);
 
         const promises = cards.map(async (c) =>
             addCardToInventoryReceiving(c, db)
@@ -653,7 +668,7 @@ router.post('/receiveCards', (req: RequestWithUserInfo, res, next) => {
 router.post('/receiveCards', async (req: RequestWithUserInfo, res) => {
     try {
         const { cards } = req.body;
-        const messages = await wrapConnectToDb(cards);
+        const messages = await wrapConnectToDb(cards, req.currentLocation);
 
         res.status(200).send(messages);
     } catch (err) {
@@ -724,7 +739,12 @@ async function getSuspendedSale(id, location) {
  * @param {string} notes - Optional notes
  * @param {array} saleList - The array of card objects used on the frontend - translated directly from React state
  */
-async function createSuspendedSale(customerName, notes, saleList, location) {
+async function createSuspendedSale(
+    customerName,
+    notes,
+    saleList,
+    location: ClubhouseLocation
+) {
     const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
 
     try {
@@ -738,13 +758,14 @@ async function createSuspendedSale(customerName, notes, saleList, location) {
 
         // Validate inventory prior to transacting
         const validations = saleList.map(
-            async (card) => await validateInventory(card)
+            async (card) => await validateInventory(card, location)
         );
         await Promise.all(validations);
 
         // Removes the passed cards from inventory prior to creating
         const dbInserts = saleList.map(
-            async (card) => await updateCardInventoryWithFlag(card, 'DEC')
+            async (card) =>
+                await updateCardInventoryWithFlag(card, 'DEC', location)
         );
         await Promise.all(dbInserts);
 
@@ -781,7 +802,8 @@ async function deleteSuspendedSale(id, location) {
 
         // Adds the passed cards back to inventory prior to deleting
         const dbInserts = list.map(
-            async (card) => await updateCardInventoryWithFlag(card, 'INC')
+            async (card) =>
+                await updateCardInventoryWithFlag(card, 'INC', location)
         );
         await Promise.all(dbInserts);
 
@@ -797,13 +819,18 @@ async function deleteSuspendedSale(id, location) {
  * Validates a card's quantity-to-sell against available inventory
  * @param {object} saleListCard properties - the card sent from the frontend with relevant qtyToSell, finishCondition, and id properties attached
  */
-async function validateInventory({ qtyToSell, finishCondition, name, id }) {
+async function validateInventory(
+    { qtyToSell, finishCondition, name, id },
+    location: ClubhouseLocation
+) {
     const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
 
     try {
         await client.connect();
 
-        const db = client.db(DATABASE_NAME).collection('card_inventory');
+        const db = client
+            .db(DATABASE_NAME)
+            .collection(collectionFromLocation(location).cardInventory);
 
         const doc = await db.findOne({ _id: id });
 
@@ -828,7 +855,11 @@ async function validateInventory({ qtyToSell, finishCondition, name, id }) {
  * @param {Object} card - the card involved in the transaction
  * @param {String} CHANGE_FLAG = `INC` or `DEC`, determines whether to increase or decrease quantity, used for reserving inventory in suspension
  */
-async function updateCardInventoryWithFlag(card, CHANGE_FLAG) {
+async function updateCardInventoryWithFlag(
+    card,
+    CHANGE_FLAG,
+    location: ClubhouseLocation
+) {
     const { qtyToSell, finishCondition, id, name } = card;
     let quantityChange;
 
@@ -849,7 +880,9 @@ async function updateCardInventoryWithFlag(card, CHANGE_FLAG) {
             `Suspend sale, ${CHANGE_FLAG}: QTY: ${qtyToSell}, ${finishCondition}, ${name}, ${id}`
         );
 
-        const db = client.db(DATABASE_NAME).collection('card_inventory');
+        const db = client
+            .db(DATABASE_NAME)
+            .collection(collectionFromLocation(location).cardInventory);
 
         await db.updateOne(
             { _id: id },

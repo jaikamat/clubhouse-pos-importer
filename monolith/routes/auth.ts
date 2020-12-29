@@ -41,7 +41,7 @@ const finishes = [
     'FOIL_LP',
     'FOIL_MP',
     'FOIL_HP',
-];
+] as const;
 
 /**
  * Middleware to check for Bearer token by validating JWT

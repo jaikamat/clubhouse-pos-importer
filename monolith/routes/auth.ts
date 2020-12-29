@@ -18,6 +18,7 @@ import getAllSales from '../interactors/getAllSales';
 import getFormatLegalities from '../interactors/getFormatLegalities';
 import addCardToInventoryReceiving from '../interactors/addCardToInventoryReceiving';
 import getSuspendedSales from '../interactors/getSuspendedSales';
+import getSuspendedSale from '../interactors/getSuspendedSale';
 
 interface RequestWithUserInfo extends Request {
     locations: string[];
@@ -235,29 +236,6 @@ router.post('/receiveCards', async (req: RequestWithUserInfo, res) => {
         res.status(500).send(err);
     }
 });
-
-/**
- * Retrieves one suspended sale
- * @param {string} id
- */
-async function getSuspendedSale(id, location) {
-    const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
-
-    try {
-        await client.connect();
-
-        const db = client
-            .db(DATABASE_NAME)
-            .collection(collectionFromLocation(location).suspendedSales);
-        const doc = await db.findOne({ _id: new ObjectID(id) });
-
-        return doc;
-    } catch (e) {
-        throw e;
-    } finally {
-        await client.close();
-    }
-}
 
 /**
  * Creates a suspended sale. Note that the DB has a TTL index on `createdAt` that wipes documents more than one week old

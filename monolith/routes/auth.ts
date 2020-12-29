@@ -16,6 +16,7 @@ import finishSale from '../interactors/updateInventoryCards';
 import getSalesFromCardname from '../interactors/getSalesFromCardname';
 import getAllSales from '../interactors/getAllSales';
 import getFormatLegalities from '../interactors/getFormatLegalities';
+import addCardToInventoryReceiving from '../interactors/addCardToInventoryReceiving';
 
 interface RequestWithUserInfo extends Request {
     locations: string[];
@@ -205,63 +206,6 @@ function validateOne({ id, quantity, finishCondition, name, set, set_name }) {
     return;
 }
 
-// Wraps the database connection and exposes addCardToInventoryReceiving to the db connection
-async function wrapConnectToDb(cards, location: ClubhouseLocation) {
-    try {
-        var client = await new MongoClient(
-            process.env.MONGO_URI,
-            mongoOptions
-        ).connect();
-
-        console.log('Connected to MongoDB');
-
-        const db = client
-            .db(DATABASE_NAME)
-            .collection(collectionFromLocation(location).cardInventory);
-
-        const promises = cards.map(async (c) =>
-            addCardToInventoryReceiving(c, db)
-        );
-
-        const messages = await Promise.all(promises);
-
-        return messages;
-    } catch (err) {
-        console.log(err);
-        throw err;
-    } finally {
-        console.log('Disconnected from MongoDB');
-        await client.close();
-    }
-}
-
-// `finishCondition` Refers to the configuration of Finishes and Conditions ex. NONFOIL_NM or FOIL_LP
-async function addCardToInventoryReceiving(
-    { quantity, finishCondition, id, name, set_name, set },
-    database
-) {
-    try {
-        console.log(
-            `Receiving Info: QTY:${quantity}, ${finishCondition}, ${name}, ${id}`
-        );
-
-        // Upsert the new quantity in the document
-        return await database.updateOne(
-            { _id: id },
-            {
-                $inc: {
-                    [`qoh.${finishCondition}`]: quantity,
-                },
-                $setOnInsert: { name, set_name, set },
-            },
-            { upsert: true }
-        );
-    } catch (err) {
-        console.log(err);
-        throw err;
-    }
-}
-
 /**
  * Sanitizes card object properties so nothing funky is committed to the database
  */
@@ -279,7 +223,10 @@ router.post('/receiveCards', (req: RequestWithUserInfo, res, next) => {
 router.post('/receiveCards', async (req: RequestWithUserInfo, res) => {
     try {
         const { cards } = req.body;
-        const messages = await wrapConnectToDb(cards, req.currentLocation);
+        const messages = await addCardToInventoryReceiving(
+            cards,
+            req.currentLocation
+        );
 
         res.status(200).send(messages);
     } catch (err) {

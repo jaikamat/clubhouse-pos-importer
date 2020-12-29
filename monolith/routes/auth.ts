@@ -20,6 +20,7 @@ import addCardToInventoryReceiving from '../interactors/addCardToInventoryReceiv
 import getSuspendedSales from '../interactors/getSuspendedSales';
 import getSuspendedSale from '../interactors/getSuspendedSale';
 import updateCardInventoryWithFlag from '../interactors/updateCardInventoryWithFlag';
+import createSuspendedSale from '../interactors/createSuspendedSale';
 
 interface RequestWithUserInfo extends Request {
     locations: string[];
@@ -239,55 +240,6 @@ router.post('/receiveCards', async (req: RequestWithUserInfo, res) => {
 });
 
 /**
- * Creates a suspended sale. Note that the DB has a TTL index on `createdAt` that wipes documents more than one week old
- * @param {string} customerName - Name of the customer
- * @param {string} notes - Optional notes
- * @param {array} saleList - The array of card objects used on the frontend - translated directly from React state
- */
-async function createSuspendedSale(
-    customerName,
-    notes,
-    saleList,
-    location: ClubhouseLocation
-) {
-    const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
-
-    try {
-        await client.connect();
-
-        const db = client
-            .db(DATABASE_NAME)
-            .collection(collectionFromLocation(location).suspendedSales);
-
-        console.log('Creating new suspended sale');
-
-        // Validate inventory prior to transacting
-        const validations = saleList.map(
-            async (card) => await validateInventory(card, location)
-        );
-        await Promise.all(validations);
-
-        // Removes the passed cards from inventory prior to creating
-        const dbInserts = saleList.map(
-            async (card) =>
-                await updateCardInventoryWithFlag(card, 'DEC', location)
-        );
-        await Promise.all(dbInserts);
-
-        return await db.insertOne({
-            createdAt: new Date(),
-            name: customerName,
-            notes: notes,
-            list: saleList,
-        });
-    } catch (e) {
-        throw e;
-    } finally {
-        await client.close();
-    }
-}
-
-/**
  * Deletes a single suspended sale
  * @param {string} id
  */
@@ -313,41 +265,6 @@ async function deleteSuspendedSale(id, location) {
         await Promise.all(dbInserts);
 
         return await db.deleteOne({ _id: new ObjectID(id) });
-    } catch (e) {
-        throw e;
-    } finally {
-        await client.close();
-    }
-}
-
-/**
- * Validates a card's quantity-to-sell against available inventory
- * @param {object} saleListCard properties - the card sent from the frontend with relevant qtyToSell, finishCondition, and id properties attached
- */
-async function validateInventory(
-    { qtyToSell, finishCondition, name, id },
-    location: ClubhouseLocation
-) {
-    const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
-
-    try {
-        await client.connect();
-
-        const db = client
-            .db(DATABASE_NAME)
-            .collection(collectionFromLocation(location).cardInventory);
-
-        const doc = await db.findOne({ _id: id });
-
-        const quantityOnHand = doc.qoh[finishCondition];
-
-        if (parseInt(qtyToSell) > parseInt(quantityOnHand)) {
-            throw new Error(
-                `${name}'s QOH of ${qtyToSell} exceeds inventory of ${quantityOnHand}`
-            );
-        }
-
-        return true;
     } catch (e) {
         throw e;
     } finally {

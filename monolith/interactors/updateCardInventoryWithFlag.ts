@@ -32,7 +32,7 @@ async function updateCardInventoryWithFlag(
         await client.connect();
 
         console.log(
-            `Suspend sale, ${CHANGE_FLAG}: QTY: ${qtyToSell}, ${finishCondition}, ${name}, ${id}`
+            `Suspend sale, ${CHANGE_FLAG}: QTY: ${qtyToSell}, ${finishCondition}, ${name}, ${id}, LOCATION: ${location}`
         );
 
         const db = client

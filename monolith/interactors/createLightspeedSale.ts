@@ -78,6 +78,8 @@ async function createLightspeedSale(
             },
         };
 
+        console.log(`Creating Lightspeed sale at ${location}`);
+
         return await axios.post(url, bodyParameters, config);
     } catch (err) {
         console.log(err);

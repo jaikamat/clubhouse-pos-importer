@@ -10,7 +10,6 @@ async function getSalesFromCardname(cardName, location: ClubhouseLocation) {
 
     try {
         await client.connect();
-        console.log('Successfully connected to mongo');
 
         const db = client.db(DATABASE_NAME);
 
@@ -40,7 +39,6 @@ async function getSalesFromCardname(cardName, location: ClubhouseLocation) {
         throw err;
     } finally {
         await client.close();
-        console.log('Disconnected from mongo');
     }
 }
 

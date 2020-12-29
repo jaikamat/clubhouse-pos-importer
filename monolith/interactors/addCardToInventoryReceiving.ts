@@ -5,9 +5,18 @@ import collectionFromLocation from '../lib/collectionFromLocation';
 import mongoOptions from '../lib/mongoOptions';
 const DATABASE_NAME = getDatabaseName();
 
+type Card = {
+    quantity: number;
+    finishCondition: string;
+    id: string;
+    name: string;
+    set_name: string;
+    set: string;
+};
+
 // `finishCondition` Refers to the configuration of Finishes and Conditions ex. NONFOIL_NM or FOIL_LP
 async function addCardToInventoryReceiving(
-    { quantity, finishCondition, id, name, set_name, set },
+    { quantity, finishCondition, id, name, set_name, set }: Card,
     database
 ) {
     try {
@@ -34,7 +43,7 @@ async function addCardToInventoryReceiving(
 
 // Wraps the database connection and exposes addCardToInventoryReceiving to the db connection
 async function wrapAddCardToInventoryReceiving(
-    cards,
+    cards: Card[],
     location: ClubhouseLocation
 ) {
     try {
@@ -42,8 +51,6 @@ async function wrapAddCardToInventoryReceiving(
             process.env.MONGO_URI,
             mongoOptions
         ).connect();
-
-        console.log('Connected to MongoDB');
 
         const db = client
             .db(DATABASE_NAME)
@@ -55,12 +62,13 @@ async function wrapAddCardToInventoryReceiving(
 
         const messages = await Promise.all(promises);
 
+        console.log(`Receiving cards at ${location}`);
+
         return messages;
     } catch (err) {
         console.log(err);
         throw err;
     } finally {
-        console.log('Disconnected from MongoDB');
         await client.close();
     }
 }

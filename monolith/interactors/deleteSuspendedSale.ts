@@ -19,7 +19,7 @@ async function deleteSuspendedSale(id, location) {
             .db(DATABASE_NAME)
             .collection(collectionFromLocation(location).suspendedSales);
 
-        console.log(`Deleting suspended sale _id: ${id}`);
+        console.log(`Deleting suspended sale _id: ${id} at ${location}`);
 
         const { list } = await db.findOne({ _id: new ObjectID(id) });
 

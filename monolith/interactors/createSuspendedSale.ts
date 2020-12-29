@@ -62,7 +62,7 @@ async function createSuspendedSale(
             .db(DATABASE_NAME)
             .collection(collectionFromLocation(location).suspendedSales);
 
-        console.log('Creating new suspended sale');
+        console.log(`Creating new suspended sale at ${location}`);
 
         // Validate inventory prior to transacting
         const validations = saleList.map(

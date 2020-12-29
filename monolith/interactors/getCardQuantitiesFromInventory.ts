@@ -15,7 +15,6 @@ async function getCardQuantitiesFromInventory(
 
     try {
         await client.connect();
-        console.log('Successfully connected to mongo');
 
         const db = client.db(DATABASE_NAME);
 
@@ -42,10 +41,9 @@ async function getCardQuantitiesFromInventory(
         return res;
     } catch (err) {
         console.log(err);
-        return err;
+        throw err;
     } finally {
         await client.close();
-        console.log('Disconnected from mongo');
     }
 }
 

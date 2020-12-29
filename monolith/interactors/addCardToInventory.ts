@@ -2,7 +2,18 @@ import { MongoClient } from 'mongodb';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import getDatabaseName from '../lib/getDatabaseName';
 import mongoOptions from '../lib/mongoOptions';
+import { ClubhouseLocation } from './getJwt';
 const DATABASE_NAME = getDatabaseName();
+
+type Card = {
+    quantity: number;
+    finishCondition: string;
+    id: string;
+    name: string;
+    set_name: string;
+    set: string;
+    location: ClubhouseLocation;
+};
 
 // `finishCondition` Refers to the configuration of Finishes and Conditions ex. NONFOIL_NM or FOIL_LP
 export default async function addCardToInventory({
@@ -13,7 +24,7 @@ export default async function addCardToInventory({
     set_name,
     set,
     location,
-}) {
+}: Card) {
     try {
         var client = await new MongoClient(
             process.env.MONGO_URI,
@@ -21,7 +32,7 @@ export default async function addCardToInventory({
         ).connect();
 
         console.log(
-            `Update Info: QTY:${quantity}, ${finishCondition}, ${name}, ${id}`
+            `Update Info: QTY:${quantity}, ${finishCondition}, ${name}, ${id}, LOCATION: ${location}`
         );
 
         const db = client

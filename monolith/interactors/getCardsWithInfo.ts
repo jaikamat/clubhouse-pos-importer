@@ -17,7 +17,6 @@ async function getCardsWithInfo(
             process.env.MONGO_URI,
             mongoConfig
         ).connect();
-        console.log('Successfully connected to mongo');
 
         const db = client.db(DATABASE_NAME);
 
@@ -77,10 +76,9 @@ async function getCardsWithInfo(
             .toArray();
     } catch (err) {
         console.log(err);
-        return err;
+        throw err;
     } finally {
         await client.close();
-        console.log('Disconnected from mongo');
     }
 }
 

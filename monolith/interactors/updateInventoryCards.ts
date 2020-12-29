@@ -21,7 +21,7 @@ async function updateCardInventory(
 
     try {
         console.log(
-            `Update: QTY: ${qtyToSell}, ${finishCondition}, ${name}, ${id}`
+            `Update: QTY: ${qtyToSell}, ${finishCondition}, ${name}, ${id}, LOCATION: ${location}`
         );
 
         // Upsert the new qtyToSell in the document
@@ -112,7 +112,6 @@ async function createSale(saleData, cardList, location: ClubhouseLocation) {
 
     try {
         await client.connect();
-        console.log(`Creating new sale`);
 
         const db = client.db(DATABASE_NAME);
 

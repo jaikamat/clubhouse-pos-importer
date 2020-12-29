@@ -25,7 +25,6 @@ async function getJwt(
 
     try {
         await client.connect();
-        console.log('Successfully connected to mongo');
 
         const db = client.db(DATABASE_NAME);
 
@@ -62,10 +61,9 @@ async function getJwt(
         }
     } catch (err) {
         console.log(err);
-        return err;
+        throw err;
     } finally {
         await client.close();
-        console.log('Disconnected from Mongo');
     }
 }
 

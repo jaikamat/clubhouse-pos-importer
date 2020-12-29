@@ -63,6 +63,10 @@ router.use((req: RequestWithUserInfo, res, next) => {
             req.currentLocation = currentLocation;
             req.isAdmin = locations.length === 2;
 
+            console.log(
+                `Operation started by ${username} at location ${currentLocation}`
+            );
+
             return next();
         } catch (err) {
             res.status(401).send('Invalid token');

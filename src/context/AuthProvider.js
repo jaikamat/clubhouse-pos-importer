@@ -32,11 +32,9 @@ export default function AuthProvider(props) {
 
                 localStorage.setItem('currentLocation', currentLocation);
                 setCurrentLocation(currentLocation);
-
-                return { authed: true };
-            } else {
-                return { authed: false };
             }
+
+            return data;
         } catch (err) {
             console.log(err);
         }
@@ -49,8 +47,6 @@ export default function AuthProvider(props) {
 
             localStorage.removeItem('currentLocation', currentLocation);
             setCurrentLocation(null);
-
-            return { authed: false };
         } catch (err) {
             console.log(err);
         }

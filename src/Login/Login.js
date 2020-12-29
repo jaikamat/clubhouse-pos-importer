@@ -21,9 +21,9 @@ export default function Login() {
     const { loggedIn, handleLogin } = useContext(AuthContext);
 
     const onSubmit = async ({ username, password, location }) => {
-        const { authed } = await handleLogin(username, password, location);
+        const data = await handleLogin(username, password, location);
 
-        if (authed) {
+        if (data.token) {
             createToast({
                 color: 'green',
                 header: 'Success',
@@ -33,7 +33,7 @@ export default function Login() {
             createToast({
                 color: 'red',
                 header: 'Error',
-                message: `Username or password was incorrect`,
+                message: data,
             });
         }
     };

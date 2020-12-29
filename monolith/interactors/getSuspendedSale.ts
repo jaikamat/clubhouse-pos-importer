@@ -1,12 +1,8 @@
 import { MongoClient, ObjectID } from 'mongodb';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import fetchDbName from '../lib/fetchDbName';
+import mongoOptions from '../lib/mongoOptions';
 const DATABASE_NAME = fetchDbName();
-
-const mongoOptions = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-};
 
 /**
  * Retrieves one suspended sale

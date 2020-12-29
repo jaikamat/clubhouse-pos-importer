@@ -1,14 +1,10 @@
 import { MongoClient } from 'mongodb';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import fetchDbName from '../lib/fetchDbName';
+import mongoOptions from '../lib/mongoOptions';
 import { ClubhouseLocation } from './getJwt';
 import updateCardInventoryWithFlag from './updateCardInventoryWithFlag';
 const DATABASE_NAME = fetchDbName();
-
-const mongoOptions = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-};
 
 /**
  * Validates a card's quantity-to-sell against available inventory

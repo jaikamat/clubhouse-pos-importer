@@ -4,12 +4,8 @@ import fetchDbName from '../lib/fetchDbName';
 import { ClubhouseLocation } from './getJwt';
 import request from 'request-promise-native';
 import createLightspeedSale from './createLightspeedSale';
+import mongoOptions from '../lib/mongoOptions';
 const DATABASE_NAME = fetchDbName();
-
-const mongoOptions = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-};
 
 /**
  * Updates a single card's QOH based on qtyToSell, finishCondition, id, name

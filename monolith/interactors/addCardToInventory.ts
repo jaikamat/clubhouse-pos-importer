@@ -1,12 +1,8 @@
 import { MongoClient } from 'mongodb';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import fetchDbName from '../lib/fetchDbName';
+import mongoOptions from '../lib/mongoOptions';
 const DATABASE_NAME = fetchDbName();
-
-const mongoOptions = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-};
 
 // `finishCondition` Refers to the configuration of Finishes and Conditions ex. NONFOIL_NM or FOIL_LP
 export default async function addCardToInventory({

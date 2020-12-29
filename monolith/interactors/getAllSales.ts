@@ -1,13 +1,9 @@
 import { MongoClient } from 'mongodb';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import fetchDbName from '../lib/fetchDbName';
+import mongoOptions from '../lib/mongoOptions';
 const DATABASE_NAME = fetchDbName();
 import { ClubhouseLocation } from './getJwt';
-
-const mongoOptions = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-};
 
 async function getAllSales(location: ClubhouseLocation) {
     const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);

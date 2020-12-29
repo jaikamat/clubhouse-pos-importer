@@ -1,13 +1,9 @@
 import { MongoClient, ObjectID } from 'mongodb';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import fetchDbName from '../lib/fetchDbName';
+import mongoOptions from '../lib/mongoOptions';
 import updateCardInventoryWithFlag from './updateCardInventoryWithFlag';
 const DATABASE_NAME = fetchDbName();
-
-const mongoOptions = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-};
 
 /**
  * Deletes a single suspended sale

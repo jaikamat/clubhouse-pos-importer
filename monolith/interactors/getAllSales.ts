@@ -1,8 +1,8 @@
 import { MongoClient } from 'mongodb';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import fetchDbName from '../lib/fetchDbName';
+import getDatabaseName from '../lib/getDatabaseName';
 import mongoOptions from '../lib/mongoOptions';
-const DATABASE_NAME = fetchDbName();
+const DATABASE_NAME = getDatabaseName();
 import { ClubhouseLocation } from './getJwt';
 
 async function getAllSales(location: ClubhouseLocation) {

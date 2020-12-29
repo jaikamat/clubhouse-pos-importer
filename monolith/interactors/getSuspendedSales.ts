@@ -1,9 +1,9 @@
 import { MongoClient } from 'mongodb';
 import { ClubhouseLocation } from './getJwt';
-import fetchDbName from '../lib/fetchDbName';
+import getDatabaseName from '../lib/getDatabaseName';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import mongoOptions from '../lib/mongoOptions';
-const DATABASE_NAME = fetchDbName();
+const DATABASE_NAME = getDatabaseName();
 
 /**
  * Returns all suspended sales' ids, customer names, and notes (omitting card lists)

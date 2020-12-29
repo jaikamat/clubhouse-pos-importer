@@ -1,8 +1,8 @@
 const MongoClient = require('mongodb').MongoClient;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-import fetchDbName from '../lib/fetchDbName';
-const DATABASE_NAME = fetchDbName();
+import getDatabaseName from '../lib/getDatabaseName';
+const DATABASE_NAME = getDatabaseName();
 
 export type ClubhouseLocation = 'ch1' | 'ch2';
 

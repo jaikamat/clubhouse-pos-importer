@@ -1,9 +1,9 @@
 import { ClubhouseLocation } from './getJwt';
-import fetchDbName from '../lib/fetchDbName';
+import getDatabaseName from '../lib/getDatabaseName';
 import { MongoClient } from 'mongodb';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import mongoOptions from '../lib/mongoOptions';
-const DATABASE_NAME = fetchDbName();
+const DATABASE_NAME = getDatabaseName();
 
 async function getFormatLegalities(location: ClubhouseLocation) {
     const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);

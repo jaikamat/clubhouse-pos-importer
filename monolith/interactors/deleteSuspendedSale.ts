@@ -1,9 +1,9 @@
 import { MongoClient, ObjectID } from 'mongodb';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import fetchDbName from '../lib/fetchDbName';
+import getDatabaseName from '../lib/getDatabaseName';
 import mongoOptions from '../lib/mongoOptions';
 import updateCardInventoryWithFlag from './updateCardInventoryWithFlag';
-const DATABASE_NAME = fetchDbName();
+const DATABASE_NAME = getDatabaseName();
 
 /**
  * Deletes a single suspended sale

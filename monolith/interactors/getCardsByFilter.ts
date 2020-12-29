@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import fetchDbName from '../lib/fetchDbName';
-const DATABASE_NAME = fetchDbName();
+import getDatabaseName from '../lib/getDatabaseName';
+const DATABASE_NAME = getDatabaseName();
 const LIMIT = 100;
 
 export interface Arguments {

@@ -1,8 +1,8 @@
 import { MongoClient } from 'mongodb';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import fetchDbName from '../lib/fetchDbName';
+import getDatabaseName from '../lib/getDatabaseName';
 import { ClubhouseLocation } from './getJwt';
-const DATABASE_NAME = fetchDbName();
+const DATABASE_NAME = getDatabaseName();
 
 async function getCardsWithInfo(
     title: string,

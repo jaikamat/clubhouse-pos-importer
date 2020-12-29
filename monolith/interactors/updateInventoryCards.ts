@@ -1,11 +1,11 @@
 import { MongoClient } from 'mongodb';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import fetchDbName from '../lib/fetchDbName';
+import getDatabaseName from '../lib/getDatabaseName';
 import { ClubhouseLocation } from './getJwt';
 import request from 'request-promise-native';
 import createLightspeedSale from './createLightspeedSale';
 import mongoOptions from '../lib/mongoOptions';
-const DATABASE_NAME = fetchDbName();
+const DATABASE_NAME = getDatabaseName();
 
 /**
  * Updates a single card's QOH based on qtyToSell, finishCondition, id, name

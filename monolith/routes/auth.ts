@@ -253,16 +253,42 @@ async function updateCardInventory(
 }
 
 /**
+ * Yields location-specific LightSpeed API values for making sales
+ *
+ * Retro is the shop; Lance separates by register
+ * Register ID designates The Clubhouse
+ */
+function registerInfoFromLocation(location: ClubhouseLocation) {
+    if (location === 'ch1') {
+        return {
+            shopId: 1,
+            registerId: 2,
+            employeeId: 1,
+        };
+    }
+    if (location === 'ch2') {
+        return {
+            shopId: 16,
+            registerId: 19,
+            employeeId: 1,
+        };
+    }
+}
+
+/**
  * Creates a sale via the Lightspeed API
  *
  * @param {String} authToken - the store's OAuth access token
  * @param {Array} cards - array of cards involved in the sale
  */
-async function createLightspeedSale(authToken, cards) {
-    // TODO: need to intake location here to determine register id or other location-specific info
-    const SHOP_ID = 1; // Retro is the shop; Lance separates by register
-    const REGISTER_ID = 2; // Designates The Clubhouse
-    const EMPLOYEE_ID = 1;
+async function createLightspeedSale(
+    authToken,
+    cards,
+    location: ClubhouseLocation
+) {
+    const { shopId, registerId, employeeId } = registerInfoFromLocation(
+        location
+    );
 
     try {
         const url = `https://api.lightspeedapp.com/API/Account/${process.env.LIGHTSPEED_ACCT_ID}/Sale.json`;
@@ -285,9 +311,9 @@ async function createLightspeedSale(authToken, cards) {
         const bodyParameters = {
             completed: false,
             taxCategoryID: 0,
-            employeeID: EMPLOYEE_ID,
-            shopID: SHOP_ID,
-            registerID: REGISTER_ID,
+            employeeID: employeeId,
+            shopID: shopId,
+            registerID: registerId,
             SaleLines: {
                 SaleLine: saleLines,
             },
@@ -349,7 +375,11 @@ async function finishSale(cards, location: ClubhouseLocation) {
         const { access_token } = JSON.parse(res);
 
         // Create the Lightspeed sale
-        const { data } = await createLightspeedSale(access_token, cards);
+        const { data } = await createLightspeedSale(
+            access_token,
+            cards,
+            location
+        );
 
         // Map updated inserts after successful Lightspeed sale creation
         const dbRes = await updateInventoryCards(cards, location);

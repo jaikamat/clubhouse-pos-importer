@@ -292,7 +292,7 @@ async function createLightspeedSale(authToken, cards) {
  * @param saleData - the data returned by Lightspeed when creating a sale
  * @param cardList - an array of cards that were involved in the sale
  */
-async function createSale(saleData, cardList) {
+async function createSale(saleData, cardList, location: ClubhouseLocation) {
     const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
 
     try {
@@ -301,10 +301,12 @@ async function createSale(saleData, cardList) {
 
         const db = client.db(DATABASE_NAME);
 
-        return await db.collection('sales_data').insertOne({
-            sale_data: saleData,
-            card_list: cardList,
-        });
+        return await db
+            .collection(collectionFromLocation(location).salesData)
+            .insertOne({
+                sale_data: saleData,
+                card_list: cardList,
+            });
     } catch (err) {
         console.log(err);
         throw err;
@@ -317,7 +319,7 @@ async function createSale(saleData, cardList) {
  * Main function that wraps the execution
  * @param {Array} cards - the cards involved in the transaction
  */
-async function finishSale(cards) {
+async function finishSale(cards, location: ClubhouseLocation) {
     try {
         const res = await request.post({
             url: 'https://cloud.lightspeedapp.com/oauth/access_token.php',
@@ -339,7 +341,7 @@ async function finishSale(cards) {
         const dbRes = await updateInventoryCards(cards);
 
         // Create and persist sale data
-        await createSale(data.Sale, cards);
+        await createSale(data.Sale, cards, location);
 
         return {
             cards_upserted: dbRes,
@@ -357,7 +359,7 @@ async function finishSale(cards) {
 router.post('/finishSale', async (req: RequestWithUserInfo, res) => {
     try {
         const { cards } = req.body;
-        const data = await finishSale(cards);
+        const data = await finishSale(cards, req.currentLocation);
         res.status(200).send(data);
     } catch (err) {
         console.log(err);
@@ -365,7 +367,7 @@ router.post('/finishSale', async (req: RequestWithUserInfo, res) => {
     }
 });
 
-async function getSales(cardName) {
+async function getSales(cardName, location: ClubhouseLocation) {
     const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
 
     try {
@@ -376,21 +378,23 @@ async function getSales(cardName) {
 
         // Returns only the relevant queried cards from the card_list array of cards involved in the sale
         // Refer to https://blog.fullstacktraining.com/retrieve-only-queried-element-in-an-object-array-in-mongodb-collection/
-        const data = await db.collection('sales_data').aggregate([
-            { $match: { 'card_list.name': cardName } },
-            {
-                $project: {
-                    card_list: {
-                        $filter: {
-                            input: '$card_list',
-                            as: 'card_list',
-                            cond: { $eq: ['$$card_list.name', cardName] },
+        const data = await db
+            .collection(collectionFromLocation(location).salesData)
+            .aggregate([
+                { $match: { 'card_list.name': cardName } },
+                {
+                    $project: {
+                        card_list: {
+                            $filter: {
+                                input: '$card_list',
+                                as: 'card_list',
+                                cond: { $eq: ['$$card_list.name', cardName] },
+                            },
                         },
+                        sale_data: 1,
                     },
-                    sale_data: 1,
                 },
-            },
-        ]);
+            ]);
 
         return await data.toArray();
     } catch (err) {
@@ -402,32 +406,35 @@ async function getSales(cardName) {
     }
 }
 
-async function getAllSales() {
+async function getAllSales(location: ClubhouseLocation) {
     const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
 
     try {
         await client.connect();
         const db = client.db(DATABASE_NAME);
 
-        const data = await db.collection('sales_data').find({}).project({
-            sale_data: 1,
-            'sale_data.total': 1,
-            'sale_data.saleID': 1,
-            'sale_data.timeStamp': 1,
-            card_list: 1,
-            'card_list.foil': 1,
-            'card_list.nonfoil': 1,
-            'card_list.id': 1,
-            'card_list.name': 1,
-            'card_list.set': 1,
-            'card_list.set_name': 1,
-            'card_list.rarity': 1,
-            'card_list.price': 1,
-            'card_list.finishCondition': 1,
-            'card_list.reserved': 1,
-            'card_list.qtyToSell': 1,
-            'card_list.card_faces': 1,
-        });
+        const data = await db
+            .collection(collectionFromLocation(location).salesData)
+            .find({})
+            .project({
+                sale_data: 1,
+                'sale_data.total': 1,
+                'sale_data.saleID': 1,
+                'sale_data.timeStamp': 1,
+                card_list: 1,
+                'card_list.foil': 1,
+                'card_list.nonfoil': 1,
+                'card_list.id': 1,
+                'card_list.name': 1,
+                'card_list.set': 1,
+                'card_list.set_name': 1,
+                'card_list.rarity': 1,
+                'card_list.price': 1,
+                'card_list.finishCondition': 1,
+                'card_list.reserved': 1,
+                'card_list.qtyToSell': 1,
+                'card_list.card_faces': 1,
+            });
 
         const docs = await data.toArray();
 
@@ -449,7 +456,7 @@ async function getAllSales() {
     }
 }
 
-async function getFormatLegalities() {
+async function getFormatLegalities(location: ClubhouseLocation) {
     const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
 
     try {
@@ -519,7 +526,10 @@ async function getFormatLegalities() {
             },
         });
 
-        const data = await db.collection('sales_data').aggregate(agg).toArray();
+        const data = await db
+            .collection(collectionFromLocation(location).salesData)
+            .aggregate(agg)
+            .toArray();
 
         data.forEach((el) => {
             el.qtyToSell = parseInt(el.qtyToSell);
@@ -536,8 +546,10 @@ async function getFormatLegalities() {
 
 router.get('/allSales', async (req: RequestWithUserInfo, res) => {
     try {
-        const sales_data = await getAllSales();
-        const format_legalities = await getFormatLegalities();
+        const sales_data = await getAllSales(req.currentLocation);
+        const format_legalities = await getFormatLegalities(
+            req.currentLocation
+        );
         res.status(200).send({ sales_data, format_legalities });
     } catch (err) {
         console.log(err);
@@ -548,7 +560,7 @@ router.get('/allSales', async (req: RequestWithUserInfo, res) => {
 router.get('/getSaleByTitle', async (req: RequestWithUserInfo, res) => {
     try {
         const { cardName } = req.query;
-        const message = await getSales(cardName);
+        const message = await getSales(cardName, req.currentLocation);
         res.status(200).send(message);
     } catch (err) {
         console.log(err);
@@ -653,7 +665,7 @@ router.post('/receiveCards', async (req: RequestWithUserInfo, res) => {
 /**
  * Returns all suspended sales' ids, customer names, and notes (omitting card lists)
  */
-async function getSuspendedSales(location: 'ch1' | 'ch2') {
+async function getSuspendedSales(location: ClubhouseLocation) {
     const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
 
     try {

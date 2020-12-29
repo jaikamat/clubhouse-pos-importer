@@ -3,7 +3,6 @@ const router = express.Router();
 import getJwt from '../interactors/getJwt';
 import getCardQuantitiesFromInventory from '../interactors/getCardQuantitiesFromInventory';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
-import getDistinctSetNames from '../interactors/getDistinctSetNames';
 
 router.post('/jwt', async (req, res) => {
     try {

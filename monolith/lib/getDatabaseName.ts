@@ -1,10 +1,10 @@
-import isDev from './assertEnv';
+import getEnv from './getEnv';
 
 const TEST_NAME: string = 'test';
 const PRODUCTION_NAME: string = 'clubhouse_collection_production';
 
 const getDatabaseName = (): string => {
-    if (isDev()) return TEST_NAME;
+    if (getEnv()) return TEST_NAME;
     return PRODUCTION_NAME;
 };
 

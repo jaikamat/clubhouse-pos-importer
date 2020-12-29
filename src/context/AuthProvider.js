@@ -10,6 +10,10 @@ export default function AuthProvider(props) {
         !!localStorage.getItem('clubhouse_JWT')
     );
 
+    const [currentLocation, setCurrentLocation] = useState(
+        localStorage.getItem('currentLocation')
+    );
+
     const handleLogin = async (username, password, currentLocation) => {
         try {
             const { data } = await axios.post(
@@ -26,6 +30,9 @@ export default function AuthProvider(props) {
                 localStorage.setItem('clubhouse_JWT', data.token);
                 setLoggedIn(!!localStorage.getItem('clubhouse_JWT'));
 
+                localStorage.setItem('currentLocation', currentLocation);
+                setCurrentLocation(currentLocation);
+
                 return { authed: true };
             } else {
                 return { authed: false };
@@ -40,6 +47,9 @@ export default function AuthProvider(props) {
             localStorage.removeItem('clubhouse_JWT');
             setLoggedIn(!!localStorage.getItem('clubhouse_JWT'));
 
+            localStorage.removeItem('currentLocation', currentLocation);
+            setCurrentLocation(null);
+
             return { authed: false };
         } catch (err) {
             console.log(err);
@@ -47,7 +57,9 @@ export default function AuthProvider(props) {
     };
 
     return (
-        <AuthContext.Provider value={{ loggedIn, handleLogin, handleLogout }}>
+        <AuthContext.Provider
+            value={{ loggedIn, handleLogin, handleLogout, currentLocation }}
+        >
             {props.children}
         </AuthContext.Provider>
     );

@@ -83,13 +83,13 @@ export default function Login() {
                                 placeholder="Select location"
                                 options={[
                                     {
-                                        key: 'alpha',
-                                        text: 'Clubhouse OG',
+                                        key: 'beaverton',
+                                        text: 'Beaverton (The OG)',
                                         value: 'ch1',
                                     },
                                     {
-                                        key: 'beta',
-                                        text: 'Cluhouse Prime',
+                                        key: 'hillsboro',
+                                        text: 'Hillsboro',
                                         value: 'ch2',
                                     },
                                 ]}

@@ -1,12 +1,15 @@
 import { MongoClient } from 'mongodb';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import fetchDbName from '../lib/fetchDbName';
+import { ClubhouseLocation } from './getJwt';
 const DATABASE_NAME = fetchDbName();
 
 /**
  * Gets a list of all set names, for use in the Deckbox frontend dropdown selection
  */
-async function getDistinctSetNames(location: 'ch1' | 'ch2'): Promise<string[]> {
+async function getDistinctSetNames(
+    location: ClubhouseLocation
+): Promise<string[]> {
     const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,

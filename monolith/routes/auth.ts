@@ -1,16 +1,11 @@
-import express from 'express';
+import express, { Request } from 'express';
 const router = express.Router();
-import { MongoClient, ObjectID } from 'mongodb';
+require('dotenv').config();
 import jwt from 'jsonwebtoken';
-import fetchDbName from '../lib/fetchDbName';
-const DATABASE_NAME = fetchDbName();
 import getCardsByFilter, { Arguments } from '../interactors/getCardsByFilter';
 import addCardToInventory from '../interactors/addCardToInventory';
-require('dotenv').config();
-import { Request } from 'express';
 import { ClubhouseLocation } from '../interactors/getJwt';
 import getDistinctSetNames from '../interactors/getDistinctSetNames';
-import collectionFromLocation from '../lib/collectionFromLocation';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
 import finishSale from '../interactors/updateInventoryCards';
 import getSalesFromCardname from '../interactors/getSalesFromCardname';
@@ -19,8 +14,8 @@ import getFormatLegalities from '../interactors/getFormatLegalities';
 import addCardToInventoryReceiving from '../interactors/addCardToInventoryReceiving';
 import getSuspendedSales from '../interactors/getSuspendedSales';
 import getSuspendedSale from '../interactors/getSuspendedSale';
-import updateCardInventoryWithFlag from '../interactors/updateCardInventoryWithFlag';
 import createSuspendedSale from '../interactors/createSuspendedSale';
+import deleteSuspendedSale from '../interactors/deleteSuspendedSale';
 
 interface RequestWithUserInfo extends Request {
     locations: string[];
@@ -32,11 +27,6 @@ type DecodedToken = {
     locations: string[];
     currentLocation: ClubhouseLocation;
     username: string;
-};
-
-const mongoOptions = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
 };
 
 const finishes = [
@@ -238,39 +228,6 @@ router.post('/receiveCards', async (req: RequestWithUserInfo, res) => {
         res.status(500).send(err);
     }
 });
-
-/**
- * Deletes a single suspended sale
- * @param {string} id
- */
-async function deleteSuspendedSale(id, location) {
-    const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
-
-    try {
-        await client.connect();
-
-        const db = client
-            .db(DATABASE_NAME)
-            .collection(collectionFromLocation(location).suspendedSales);
-
-        console.log(`Deleting suspended sale _id: ${id}`);
-
-        const { list } = await db.findOne({ _id: new ObjectID(id) });
-
-        // Adds the passed cards back to inventory prior to deleting
-        const dbInserts = list.map(
-            async (card) =>
-                await updateCardInventoryWithFlag(card, 'INC', location)
-        );
-        await Promise.all(dbInserts);
-
-        return await db.deleteOne({ _id: new ObjectID(id) });
-    } catch (e) {
-        throw e;
-    } finally {
-        await client.close();
-    }
-}
 
 router.get('/suspendSale', async (req: RequestWithUserInfo, res) => {
     try {

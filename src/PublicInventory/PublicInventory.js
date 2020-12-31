@@ -1,6 +1,14 @@
 import React from 'react';
 import axios from 'axios';
-import { Grid, Segment, Header, Icon, Divider } from 'semantic-ui-react';
+import {
+    Grid,
+    Segment,
+    Header,
+    Icon,
+    Divider,
+    Form,
+    Select,
+} from 'semantic-ui-react';
 import SearchBar from '../common/SearchBar';
 import PublicCardList from './PublicCardList';
 import { GET_CARDS_WITH_INFO_PUBLIC } from '../utils/api_resources';
@@ -10,7 +18,13 @@ const initialState = {
     searchResults: [],
     saleListCards: [],
     searchTerm: '',
+    selectedLocation: 'ch1',
 };
+
+const locationOptions = [
+    { key: 'beaverton', text: 'CH Beaverton', value: 'ch1' },
+    { key: 'hillsboro', text: 'CH Hillsboro', value: 'ch2' },
+];
 
 export default class PublicInventory extends React.Component {
     state = initialState;
@@ -18,7 +32,11 @@ export default class PublicInventory extends React.Component {
     handleResultSelect = async (term) => {
         try {
             const { data } = await axios.get(GET_CARDS_WITH_INFO_PUBLIC, {
-                params: { title: term, matchInStock: true },
+                params: {
+                    title: term,
+                    matchInStock: true,
+                    location: this.state.selectedLocation,
+                },
             });
 
             const modeledData = data.map((c) => new InventoryCard(c));
@@ -30,7 +48,7 @@ export default class PublicInventory extends React.Component {
     };
 
     render() {
-        const { searchResults, searchTerm } = this.state;
+        const { searchResults, searchTerm, selectedLocation } = this.state;
 
         // Creates text to notify the user of zero-result searches
         const searchNotification = () => {
@@ -49,6 +67,15 @@ export default class PublicInventory extends React.Component {
             <React.Fragment>
                 <Grid.Row style={{ display: 'flex', alignItems: 'center' }}>
                     <SearchBar handleSearchSelect={this.handleResultSelect} />
+                    <Form.Field
+                        label=""
+                        control={Select}
+                        value={selectedLocation}
+                        options={locationOptions}
+                        onChange={(_, { value }) =>
+                            this.setState({ selectedLocation: value })
+                        }
+                    />
                 </Grid.Row>
                 <br />
                 <Grid stackable={true}>

@@ -16,12 +16,14 @@ router.post('/jwt', async (req, res) => {
 
 router.get('/getCardsWithInfo', async (req, res) => {
     try {
-        const { title, matchInStock } = req.query;
+        const { title, matchInStock, location } = req.query;
         const myMatch = matchInStock === 'true';
 
-        if (typeof title === 'string') {
-            // TODO: intake dynamic location
-            const message = await getCardsWithInfo(title, myMatch, 'ch1');
+        if (
+            typeof title === 'string' &&
+            (location === 'ch1' || location === 'ch2')
+        ) {
+            const message = await getCardsWithInfo(title, myMatch, location);
             res.status(200).send(message);
         } else {
             throw new Error('title should be a string');

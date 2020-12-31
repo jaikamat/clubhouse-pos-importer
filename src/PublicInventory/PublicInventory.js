@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import {
     Grid,
@@ -26,85 +26,88 @@ const locationOptions = [
     { key: 'hillsboro', text: 'CH Hillsboro', value: 'ch2' },
 ];
 
-export default class PublicInventory extends React.Component {
-    state = initialState;
+function PublicInventory() {
+    const [state, setState] = useState(initialState);
 
-    handleResultSelect = async (term) => {
+    const handleResultSelect = async (term) => {
         try {
             const { data } = await axios.get(GET_CARDS_WITH_INFO_PUBLIC, {
                 params: {
                     title: term,
                     matchInStock: true,
-                    location: this.state.selectedLocation,
+                    location: state.selectedLocation,
                 },
             });
 
             const modeledData = data.map((c) => new InventoryCard(c));
 
-            this.setState({ searchResults: modeledData, searchTerm: term });
+            setState({
+                ...state,
+                searchResults: modeledData,
+                searchTerm: term,
+            });
         } catch (err) {
             console.log(err);
         }
     };
 
-    render() {
-        const { searchResults, searchTerm, selectedLocation } = this.state;
+    const { searchResults, searchTerm, selectedLocation } = state;
 
-        // Creates text to notify the user of zero-result searches
-        const searchNotification = () => {
-            if (searchTerm && !searchResults.length) {
-                // Check to make sure the user has searched and no results
-                return (
-                    <p>
-                        <em>{searchTerm}</em> is out of stock
-                    </p>
-                );
-            }
-            return <p>Search for a card</p>; // Default text before search
-        };
+    const searchNotification = () => {
+        if (searchTerm && !searchResults.length) {
+            // Check to make sure the user has searched and no results
+            return (
+                <p>
+                    <em>{searchTerm}</em> is out of stock
+                </p>
+            );
+        }
+        return <p>Search for a card</p>; // Default text before search
+    };
 
-        return (
-            <React.Fragment>
-                <Grid.Row style={{ display: 'flex', alignItems: 'center' }}>
-                    <SearchBar handleSearchSelect={this.handleResultSelect} />
-                    <Form.Field
-                        label=""
-                        control={Select}
-                        value={selectedLocation}
-                        options={locationOptions}
-                        onChange={(_, { value }) =>
-                            this.setState({ selectedLocation: value })
-                        }
-                    />
-                </Grid.Row>
-                <br />
-                <Grid stackable={true}>
-                    <Grid.Column>
-                        <Header as="h2">
-                            Inventory Search
-                            <Header.Subheader>
-                                <em>
-                                    Card prices subject to change. Consult a
-                                    Clubhouse employee for final estimates
-                                </em>
-                            </Header.Subheader>
-                        </Header>
+    return (
+        <React.Fragment>
+            <Grid.Row style={{ display: 'flex', alignItems: 'center' }}>
+                <SearchBar handleSearchSelect={handleResultSelect} />
+                <Form.Field
+                    label=""
+                    control={Select}
+                    value={selectedLocation}
+                    options={locationOptions}
+                    onChange={(_, { value }) =>
+                        setState({ ...state, selectedLocation: value })
+                    }
+                />
+            </Grid.Row>
+            <br />
+            <Grid stackable={true}>
+                <Grid.Column>
+                    <Header as="h2">
+                        Inventory Search
+                        <Header.Subheader>
+                            <em>
+                                Card prices subject to change. Consult a
+                                Clubhouse employee for final estimates
+                            </em>
+                        </Header.Subheader>
+                    </Header>
 
-                        <Divider />
+                    <Divider />
 
-                        {!searchResults.length && (
-                            <Segment placeholder>
-                                <Header icon>
-                                    <Icon name="search" />
-                                    <span>{searchNotification()}</span>
-                                </Header>
-                            </Segment>
-                        )}
+                    {!searchResults.length && (
+                        <Segment placeholder>
+                            <Header icon>
+                                <Icon name="search" />
+                                <span>{searchNotification()}</span>
+                            </Header>
+                        </Segment>
+                    )}
 
-                        <PublicCardList cards={searchResults} />
-                    </Grid.Column>
-                </Grid>
-            </React.Fragment>
-        );
-    }
+                    <PublicCardList cards={searchResults} />
+                </Grid.Column>
+            </Grid>
+        </React.Fragment>
+    );
 }
+
+export default PublicInventory;

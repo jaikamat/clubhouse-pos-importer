@@ -23,11 +23,12 @@ export default function SearchBar(props) {
         setIsLoading(true);
 
         setTimeout(async () => {
-            const {
-                data,
-            } = await axios.get(`${SCRYFALL_AUTOCOMPLETE}?q=${value}`, {
-                headers: makeAuthHeader(),
-            });
+            const { data } = await axios.get(
+                `${SCRYFALL_AUTOCOMPLETE}?q=${value}`,
+                {
+                    headers: makeAuthHeader(),
+                }
+            );
 
             const formattedResults = data.data
                 .map((el) => ({ title: el }))

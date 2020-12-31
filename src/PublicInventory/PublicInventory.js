@@ -17,7 +17,7 @@ import { InventoryCard } from '../utils/ScryfallCard';
 import { Formik } from 'formik';
 
 const initialState = {
-    searchResults: [],
+    searchResults: null,
     searchTerm: '',
     selectedLocation: 'ch1',
 };
@@ -51,36 +51,22 @@ function PublicInventory() {
         }
     };
 
-    const { searchResults, searchTerm } = state;
-
-    // TODO: This must display if no results
-    const searchNotification = () => {
-        if (searchTerm && !searchResults.length) {
-            // Check to make sure the user has searched and no results
-            return (
-                <p>
-                    <em>{searchTerm}</em> is out of stock
-                </p>
-            );
-        }
-        return <p>Search for a card</p>; // Default text before search
-    };
-
     return (
-        <Formik
-            onSubmit={({ searchTerm, selectedLocation }) =>
-                fetchCards({
-                    title: searchTerm,
-                    location: selectedLocation,
-                })
-            }
-            initialValues={{
-                searchTerm: '',
-                selectedLocation: 'ch1',
-            }}
-        >
-            {({ values, handleSubmit, setFieldValue, isSubmitting }) => (
-                <>
+        <>
+            <Formik
+                onSubmit={({ searchTerm, selectedLocation }) =>
+                    fetchCards({
+                        title: searchTerm,
+                        location: selectedLocation,
+                    })
+                }
+                initialValues={{
+                    searchTerm: '',
+                    selectedLocation: 'ch1',
+                    isSubmitted: false,
+                }}
+            >
+                {({ values, handleSubmit, setFieldValue, isSubmitting }) => (
                     <Form>
                         <Form.Group>
                             <Form.Field>
@@ -114,35 +100,47 @@ function PublicInventory() {
                             </Form.Field>
                         </Form.Group>
                     </Form>
-                    <Grid stackable={true}>
-                        <Grid.Column>
-                            <Header as="h2">
-                                Inventory Search
-                                <Header.Subheader>
-                                    <em>
-                                        Card prices subject to change. Consult a
-                                        Clubhouse employee for final estimates
-                                    </em>
-                                </Header.Subheader>
+                )}
+            </Formik>
+            <Grid stackable={true}>
+                <Grid.Column>
+                    <Header as="h2">
+                        Inventory Search
+                        <Header.Subheader>
+                            <em>
+                                Card prices subject to change. Consult a
+                                Clubhouse employee for final estimates
+                            </em>
+                        </Header.Subheader>
+                    </Header>
+
+                    <Divider />
+
+                    {state.searchResults === null && (
+                        <Segment placeholder>
+                            <Header icon>
+                                <Icon name="search" />
+                                <span>Search for a card</span>
                             </Header>
+                        </Segment>
+                    )}
 
-                            <Divider />
-
-                            {!searchResults.length && (
-                                <Segment placeholder>
-                                    <Header icon>
-                                        <Icon name="search" />
-                                        <span>{searchNotification()}</span>
-                                    </Header>
-                                </Segment>
-                            )}
-
-                            <PublicCardList cards={searchResults} />
-                        </Grid.Column>
-                    </Grid>
-                </>
-            )}
-        </Formik>
+                    {state.searchResults !== null &&
+                        (state.searchResults.length === 0 ? (
+                            <Segment placeholder>
+                                <Header icon>
+                                    <Icon name="search" />
+                                    <span>No cards found in stock</span>
+                                </Header>
+                            </Segment>
+                        ) : (
+                            state.searchResults.length > 0 && (
+                                <PublicCardList cards={state.searchResults} />
+                            )
+                        ))}
+                </Grid.Column>
+            </Grid>
+        </>
     );
 }
 

@@ -1,7 +1,6 @@
 import express from 'express';
 const router = express.Router();
 import getJwt from '../interactors/getJwt';
-import getCardQuantitiesFromInventory from '../interactors/getCardQuantitiesFromInventory';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
 
 router.post('/jwt', async (req, res) => {
@@ -9,21 +8,6 @@ router.post('/jwt', async (req, res) => {
         const { username, password, currentLocation } = req.body;
         const token = await getJwt(username, password, currentLocation);
         res.status(200).send(token);
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
-    }
-});
-
-router.post('/getCardQuantitiesFromInventory', async (req, res) => {
-    try {
-        const { scryfallIds } = req.body;
-        // TODO: intake dynamic location
-        const message = await getCardQuantitiesFromInventory(
-            scryfallIds,
-            'ch1'
-        );
-        res.status(200).send(message);
     } catch (err) {
         console.log(err);
         res.status(500).send(err);

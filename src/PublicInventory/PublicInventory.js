@@ -66,20 +66,24 @@ function PublicInventory() {
     };
 
     return (
-        <React.Fragment>
-            <Grid.Row style={{ display: 'flex', alignItems: 'center' }}>
-                <SearchBar handleSearchSelect={handleResultSelect} />
-                <Form.Field
-                    label=""
-                    control={Select}
-                    value={selectedLocation}
-                    options={locationOptions}
-                    onChange={(_, { value }) =>
-                        setState({ ...state, selectedLocation: value })
-                    }
-                />
-            </Grid.Row>
-            <br />
+        <>
+            <Form>
+                <Form.Group>
+                    <Form.Field>
+                        <label>Card search</label>
+                        <SearchBar handleSearchSelect={handleResultSelect} />
+                    </Form.Field>
+                    <Form.Field
+                        label="Store location"
+                        control={Select}
+                        value={selectedLocation}
+                        options={locationOptions}
+                        onChange={(_, { value }) =>
+                            setState({ ...state, selectedLocation: value })
+                        }
+                    />
+                </Form.Group>
+            </Form>
             <Grid stackable={true}>
                 <Grid.Column>
                     <Header as="h2">
@@ -106,7 +110,7 @@ function PublicInventory() {
                     <PublicCardList cards={searchResults} />
                 </Grid.Column>
             </Grid>
-        </React.Fragment>
+        </>
     );
 }
 

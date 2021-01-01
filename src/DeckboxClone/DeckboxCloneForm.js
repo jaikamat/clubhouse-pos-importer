@@ -3,6 +3,7 @@ import SearchBar from '../common/SearchBar';
 import { GET_SET_NAMES } from '../utils/api_resources';
 import axios from 'axios';
 import { Form, Input, Select, Dropdown, Segment } from 'semantic-ui-react';
+import makeAuthHeader from '../utils/makeAuthHeader';
 
 const formatDropdownOptions = [
     { key: 'qw', value: '', text: 'None' },
@@ -108,7 +109,9 @@ export default class DeckboxCloneForm extends React.Component {
         this.setState({ [data.name]: data.value });
 
     async componentDidMount() {
-        const { data } = await axios.get(GET_SET_NAMES);
+        const { data } = await axios.get(GET_SET_NAMES, {
+            headers: makeAuthHeader(),
+        });
         const setNameOptions = data.map((d, idx) => {
             return { key: `set${idx}`, value: d, text: d };
         });

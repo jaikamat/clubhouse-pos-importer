@@ -1,8 +1,14 @@
 import { MongoClient } from 'mongodb';
-import fetchDbName from '../lib/fetchDbName';
-const DATABASE_NAME = fetchDbName();
+import collectionFromLocation from '../lib/collectionFromLocation';
+import getDatabaseName from '../lib/getDatabaseName';
+import { ClubhouseLocation } from './getJwt';
+const DATABASE_NAME = getDatabaseName();
 
-async function getCardsWithInfo(title: string, matchInStock: boolean = false) {
+async function getCardsWithInfo(
+    title: string,
+    matchInStock: boolean = false,
+    location: ClubhouseLocation
+) {
     // if matchInStock is false, we get all cards, even those with no stock
     const mongoConfig = { useNewUrlParser: true, useUnifiedTopology: true };
 
@@ -11,7 +17,6 @@ async function getCardsWithInfo(title: string, matchInStock: boolean = false) {
             process.env.MONGO_URI,
             mongoConfig
         ).connect();
-        console.log('Successfully connected to mongo');
 
         const db = client.db(DATABASE_NAME);
 
@@ -30,7 +35,7 @@ async function getCardsWithInfo(title: string, matchInStock: boolean = false) {
         // Zip up bulk with qoh
         const lookup = {
             $lookup: {
-                from: 'card_inventory',
+                from: collectionFromLocation(location).cardInventory,
                 localField: 'id',
                 foreignField: '_id',
                 as: 'qoh',
@@ -71,10 +76,9 @@ async function getCardsWithInfo(title: string, matchInStock: boolean = false) {
             .toArray();
     } catch (err) {
         console.log(err);
-        return err;
+        throw err;
     } finally {
         await client.close();
-        console.log('Disconnected from mongo');
     }
 }
 

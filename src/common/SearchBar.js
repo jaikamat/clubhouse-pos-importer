@@ -10,7 +10,8 @@ export default function SearchBar(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [results, setResults] = useState([]);
 
-    const handleSearchChange = (e, { value }) => { // `value` is the search input string
+    const handleSearchChange = (e, { value }) => {
+        // `value` is the search input string
         if (value.length < 1) {
             setIsLoading(false);
             setResults([]);
@@ -24,10 +25,14 @@ export default function SearchBar(props) {
         setTimeout(async () => {
             const { data } = await axios.get(
                 `${SCRYFALL_AUTOCOMPLETE}?q=${value}`,
-                { headers: makeAuthHeader() }
+                {
+                    headers: makeAuthHeader(),
+                }
             );
 
-            const formattedResults = data.data.map(el => ({ title: el })).slice(0, 7);
+            const formattedResults = data.data
+                .map((el) => ({ title: el }))
+                .slice(0, 7);
 
             setResults(formattedResults);
             setIsLoading(false);
@@ -50,14 +55,17 @@ export default function SearchBar(props) {
 
     return (
         <Search
-            onSearchChange={_.debounce(handleSearchChange, 500, { leading: false, trailing: true })}
+            onSearchChange={_.debounce(handleSearchChange, 500, {
+                leading: false,
+                trailing: true,
+            })}
             onResultSelect={handleResultSelect}
             loading={isLoading}
             results={results}
-            placeholder="Search for a card"
+            placeholder="Enter a card title"
             selectFirstResult={true}
             id="searchBar"
-            onFocus={e => e.target.select()}
+            onFocus={(e) => e.target.select()}
             onBlur={props.onBlur} // Used to clear state in the Browse Inventory feature
         />
     );

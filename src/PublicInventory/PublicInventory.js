@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import {
     Grid,
@@ -6,78 +6,142 @@ import {
     Header,
     Icon,
     Divider,
+    Form,
+    Select,
+    Button,
 } from 'semantic-ui-react';
 import SearchBar from '../common/SearchBar';
 import PublicCardList from './PublicCardList';
-import { GET_CARDS_WITH_INFO } from '../utils/api_resources';
+import { GET_CARDS_WITH_INFO_PUBLIC } from '../utils/api_resources';
 import { InventoryCard } from '../utils/ScryfallCard';
+import { Formik } from 'formik';
 
 const initialState = {
-    searchResults: [],
-    saleListCards: [],
-    searchTerm: ''
+    searchResults: null,
+    searchTerm: '',
+    selectedLocation: 'ch1',
 };
 
-export default class PublicInventory extends React.Component {
-    state = initialState;
+const locationOptions = [
+    { key: 'beaverton', text: 'CH Beaverton', value: 'ch1' },
+    { key: 'hillsboro', text: 'CH Hillsboro', value: 'ch2' },
+];
 
-    handleResultSelect = async term => {
+function PublicInventory() {
+    const [state, setState] = useState(initialState);
+
+    const fetchCards = async ({ title, location }) => {
         try {
-            const { data } = await axios.get(GET_CARDS_WITH_INFO, {
-                params: { title: term, matchInStock: true }
+            const { data } = await axios.get(GET_CARDS_WITH_INFO_PUBLIC, {
+                params: {
+                    title,
+                    location,
+                    matchInStock: true,
+                },
             });
 
-            const modeledData = data.map(c => new InventoryCard(c));
+            const modeledData = data.map((c) => new InventoryCard(c));
 
-            this.setState({ searchResults: modeledData, searchTerm: term });
+            setState({
+                ...state,
+                searchResults: modeledData,
+            });
         } catch (err) {
             console.log(err);
         }
     };
 
-    render() {
-        const {
-            searchResults,
-            searchTerm
-        } = this.state;
+    return (
+        <>
+            <Formik
+                onSubmit={({ searchTerm, selectedLocation }) =>
+                    fetchCards({
+                        title: searchTerm,
+                        location: selectedLocation,
+                    })
+                }
+                initialValues={{
+                    searchTerm: '',
+                    selectedLocation: 'ch1',
+                    isSubmitted: false,
+                }}
+            >
+                {({ values, handleSubmit, setFieldValue, isSubmitting }) => (
+                    <Form>
+                        <Form.Group>
+                            <Form.Field>
+                                <label>Card search</label>
+                                <SearchBar
+                                    handleSearchSelect={(value) =>
+                                        setFieldValue('searchTerm', value)
+                                    }
+                                />
+                            </Form.Field>
+                            <Form.Field
+                                label="Store location"
+                                control={Select}
+                                value={values.selectedLocation}
+                                options={locationOptions}
+                                onChange={(_, { value }) =>
+                                    setFieldValue('selectedLocation', value)
+                                }
+                            />
+                            <Form.Field>
+                                <div style={{ paddingTop: 25 }}>
+                                    <Button
+                                        primary
+                                        disabled={!values.searchTerm}
+                                        loading={isSubmitting}
+                                        onClick={handleSubmit}
+                                    >
+                                        Search
+                                    </Button>
+                                </div>
+                            </Form.Field>
+                        </Form.Group>
+                    </Form>
+                )}
+            </Formik>
+            <Grid stackable={true}>
+                <Grid.Column>
+                    <Header as="h2">
+                        Inventory Search
+                        <Header.Subheader>
+                            <em>
+                                Card prices subject to change. Consult a
+                                Clubhouse employee for final estimates
+                            </em>
+                        </Header.Subheader>
+                    </Header>
 
-        // Creates text to notify the user of zero-result searches
-        const searchNotification = () => {
-            if (searchTerm && !searchResults.length) { // Check to make sure the user has searched and no results
-                return <p><em>{searchTerm}</em> is out of stock</p>
-            }
-            return <p>Search for a card</p>; // Default text before search
-        }
+                    <Divider />
 
-        return (
-            <React.Fragment>
-                <Grid.Row style={{ display: 'flex', alignItems: 'center' }}>
-                    <SearchBar handleSearchSelect={this.handleResultSelect} />
-                </Grid.Row>
-                <br />
-                <Grid stackable={true}>
-                    <Grid.Column>
-                        <Header as="h2">
-                            Inventory Search
-                            <Header.Subheader>
-                                <em>Card prices subject to change. Consult a Clubhouse employee for final estimates</em>
-                            </Header.Subheader>
-                        </Header>
+                    {state.searchResults === null && (
+                        <Segment placeholder>
+                            <Header icon>
+                                <Icon name="search" />
+                                <span>Search for a card</span>
+                            </Header>
+                        </Segment>
+                    )}
 
-                        <Divider />
-
-                        {!searchResults.length &&
+                    {state.searchResults !== null &&
+                        (state.searchResults.length === 0 ? (
                             <Segment placeholder>
                                 <Header icon>
                                     <Icon name="search" />
-                                    <span>{searchNotification()}</span>
+                                    <span>No cards found in stock</span>
                                 </Header>
-                            </Segment>}
-
-                        <PublicCardList cards={searchResults} />
-                    </Grid.Column>
-                </Grid >
-            </React.Fragment >
-        );
-    }
+                            </Segment>
+                        ) : (
+                            state.searchResults.length > 0 && (
+                                <PublicCardList cards={state.searchResults} />
+                            )
+                        ))}
+                </Grid.Column>
+            </Grid>
+        </>
+    );
 }
+
+export default PublicInventory;

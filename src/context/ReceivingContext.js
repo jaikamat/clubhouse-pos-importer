@@ -21,7 +21,8 @@ class LineItem extends InventoryCard {
         this.creditPrice = creditPrice;
         this.uuid_key = uuid();
 
-        if (creditPrice === 0) this.tradeType = TRADE_TYPES.CASH; // Set to cash if customer doesn't want credit
+        if (creditPrice === 0) this.tradeType = TRADE_TYPES.CASH;
+        // Set to cash if customer doesn't want credit
         else this.tradeType = TRADE_TYPES.CREDIT; // Otherwise, default to credit
     }
 }
@@ -35,17 +36,17 @@ export function ReceivingProvider(props) {
     /**
      * Fetches cards from the DB by title when a user selects a title after querying.
      * This function merges the data (inventory quantity and card objects) from two endpoints into one array.
-     * 
+     *
      * @param {String} term - the search term
      */
-    const handleSearchSelect = async term => {
+    const handleSearchSelect = async (term) => {
         try {
             const { data } = await axios.get(GET_CARDS_WITH_INFO, {
                 params: { title: term, matchInStock: false },
-                headers: makeAuthHeader()
+                headers: makeAuthHeader(),
             });
 
-            setSearchResults(data.map(d => new InventoryCard(d)));
+            setSearchResults(data.map((d) => new InventoryCard(d)));
         } catch (e) {
             console.log(e);
         }
@@ -58,19 +59,21 @@ export function ReceivingProvider(props) {
         const previousState = [...receivingList];
 
         // Each line-item represents one card. Use _.times() to repeat
-        const newState = previousState.concat(_.times(quantity, () => new LineItem(cardProps)));
+        const newState = previousState.concat(
+            _.times(quantity, () => new LineItem(cardProps))
+        );
 
         setReceivingList(_.sortBy(newState, 'name'));
-    }
+    };
 
     /**
      * Removes a card from the receiving list using the uuid
      */
-    const removeFromList = uuid_key => {
+    const removeFromList = (uuid_key) => {
         const copiedState = [...receivingList];
-        _.remove(copiedState, e => e.uuid_key === uuid_key); // Mutates array
+        _.remove(copiedState, (e) => e.uuid_key === uuid_key); // Mutates array
         setReceivingList(copiedState);
-    }
+    };
 
     /**
      * Determines whether line-items use cash or credit. Changes the tradeType by reference in the receivingList array
@@ -78,17 +81,17 @@ export function ReceivingProvider(props) {
      */
     const activeTradeType = (uuid_key, tradeType) => {
         const previousState = [...receivingList];
-        const card = previousState.find(e => e.uuid_key === uuid_key);
+        const card = previousState.find((e) => e.uuid_key === uuid_key);
         card.tradeType = TRADE_TYPES[tradeType];
         setReceivingList(previousState);
-    }
+    };
 
     /**
-    * Sets all items to a tradeType, if possible
-    * 
-    * @param {String} selectType - `CASH` or `CREDIT`
-    */
-    const selectAll = selectType => {
+     * Sets all items to a tradeType, if possible
+     *
+     * @param {String} selectType - `CASH` or `CREDIT`
+     */
+    const selectAll = (selectType) => {
         const oldState = [...receivingList];
         const { CASH, CREDIT } = TRADE_TYPES;
 
@@ -99,22 +102,33 @@ export function ReceivingProvider(props) {
             else if (selectType === CREDIT) selectedPrice = card.creditPrice;
 
             if (selectedPrice > 0) arr[idx].tradeType = selectType;
-        })
+        });
 
         setReceivingList(oldState);
-    }
+    };
 
     /**
      * Persists all passed cards to inventory
      */
     const commitToInventory = async () => {
         try {
-            const cardsToCommit = receivingList.map(card => {
+            const cardsToCommit = receivingList.map((card) => {
                 const { finishCondition, id, name, set_name, set } = card;
-                return { quantity: 1, finishCondition, id, name, set_name, set }; // Only committing one per line-item
-            })
+                return {
+                    quantity: 1,
+                    finishCondition,
+                    id,
+                    name,
+                    set_name,
+                    set,
+                }; // Only committing one per line-item
+            });
 
-            await axios.post(RECEIVE_CARDS, { cards: cardsToCommit }, { headers: makeAuthHeader() });
+            await axios.post(
+                RECEIVE_CARDS,
+                { cards: cardsToCommit },
+                { headers: makeAuthHeader() }
+            );
 
             setSearchResults([]);
             setReceivingList([]);
@@ -122,32 +136,35 @@ export function ReceivingProvider(props) {
             createToast({
                 color: 'green',
                 header: `${receivingList.length} cards were added to inventory!`,
-                duration: 2000
+                duration: 2000,
             });
         } catch (e) {
             console.log(e);
             createToast({
                 color: 'red',
                 header: `Something went wrong...`,
-                duration: 2000
+                duration: 2000,
             });
         }
-    }
+    };
 
     const resetSearchResults = () => setSearchResults([]);
 
-    return <ReceivingContext.Provider
-        value={{
-            searchResults,
-            receivingList,
-            handleSearchSelect,
-            addToList,
-            removeFromList,
-            activeTradeType,
-            selectAll,
-            commitToInventory,
-            resetSearchResults
-        }}>
-        {props.children}
-    </ReceivingContext.Provider>
+    return (
+        <ReceivingContext.Provider
+            value={{
+                searchResults,
+                receivingList,
+                handleSearchSelect,
+                addToList,
+                removeFromList,
+                activeTradeType,
+                selectAll,
+                commitToInventory,
+                resetSearchResults,
+            }}
+        >
+            {props.children}
+        </ReceivingContext.Provider>
+    );
 }

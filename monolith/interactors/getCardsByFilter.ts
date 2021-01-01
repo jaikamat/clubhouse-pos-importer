@@ -1,6 +1,7 @@
 import { MongoClient } from 'mongodb';
-import fetchDbName from '../lib/fetchDbName';
-const DATABASE_NAME = fetchDbName();
+import collectionFromLocation from '../lib/collectionFromLocation';
+import getDatabaseName from '../lib/getDatabaseName';
+const DATABASE_NAME = getDatabaseName();
 const LIMIT = 100;
 
 export interface Arguments {
@@ -17,6 +18,7 @@ export interface Arguments {
     page: string;
     type: string;
     frame: string;
+    location: 'ch1' | 'ch2';
 }
 
 /**
@@ -50,6 +52,7 @@ const getCardsByFilter = async ({
     page,
     type,
     frame,
+    location,
 }: Arguments) => {
     const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,
@@ -301,7 +304,7 @@ const getCardsByFilter = async ({
         });
 
         const docs = await db
-            .collection('card_inventory')
+            .collection(collectionFromLocation(location).cardInventory)
             .aggregate(aggregation)
             .toArray();
 

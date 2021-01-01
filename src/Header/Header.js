@@ -9,8 +9,14 @@ const style = {
     boxShadow: '0 3px 5px 0 rgba(0,0,0,.25)',
 };
 
+const getClubhouseLocationName = (location) => {
+    if (location === 'ch1') return 'Beaverton';
+    if (location === 'ch2') return 'Hillsboro';
+    return '';
+};
+
 function Header(props) {
-    const { loggedIn } = useContext(AuthContext);
+    const { loggedIn, currentLocation } = useContext(AuthContext);
     const { pathname } = props.location;
 
     return (
@@ -18,7 +24,10 @@ function Header(props) {
             <Menu.Item as={Link} replace to="/">
                 <img src={ballLogo} style={{ marginRight: '7px' }} alt="logo" />
                 <span>
-                    <h3>Clubhouse Collection</h3>
+                    <h3>
+                        Clubhouse Collection{' '}
+                        {getClubhouseLocationName(currentLocation)}
+                    </h3>
                 </span>
             </Menu.Item>
             <Menu.Menu position="right">

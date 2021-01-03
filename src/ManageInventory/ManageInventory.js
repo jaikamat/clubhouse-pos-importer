@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import SearchBar from '../common/SearchBar';
 import axios from 'axios';
 import makeAuthHeader from '../utils/makeAuthHeader';
-import ScryfallCardList from './ScryfallCardList';
+import ManageInventoryList from './ManageInventoryList';
 import { Segment, Header, Icon, Divider } from 'semantic-ui-react';
 import { GET_CARDS_WITH_INFO } from '../utils/api_resources';
 import { InventoryCard } from '../utils/ScryfallCard';
@@ -60,7 +60,7 @@ export default function ManageInventory() {
                 </Segment>
             )}
 
-            <ScryfallCardList cards={searchResults} />
+            <ManageInventoryList cards={searchResults} />
         </>
     );
 }

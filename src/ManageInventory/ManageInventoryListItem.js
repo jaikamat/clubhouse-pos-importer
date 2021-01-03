@@ -22,7 +22,7 @@ import { finishes, cardConditions } from '../utils/dropdownOptions';
 import checkCardFinish from '../utils/checkCardFinish';
 import { InventoryContext } from '../context/InventoryContext';
 
-export default function ScryfallCardListItem({
+export default function ManageInventoryListItem({
     qoh,
     foil,
     nonfoil,

@@ -57,16 +57,6 @@ const showInventory = (inventoryQty, matchStrings) => {
 export default function QohLabels({ inventoryQty }) {
     const [foilQty, nonfoilQty] = parseQoh(inventoryQty);
 
-    const foilColor = {};
-    if (foilQty > 0) {
-        foilColor.color = 'blue';
-    }
-
-    const nonfoilColor = {};
-    if (nonfoilQty > 0) {
-        nonfoilColor.color = 'blue';
-    }
-
     return (
         <>
             <Popup
@@ -81,7 +71,11 @@ export default function QohLabels({ inventoryQty }) {
                         : 'None in stock'
                 }
                 trigger={
-                    <Label {...foilColor} image className="foil-label">
+                    <Label
+                        color={foilQty > 0 ? 'blue' : 'transparent'}
+                        image
+                        className="foil-label"
+                    >
                         Foil
                         <Label.Detail className="foil-label-qty">
                             {foilQty}
@@ -101,7 +95,11 @@ export default function QohLabels({ inventoryQty }) {
                         : 'None in stock'
                 }
                 trigger={
-                    <Label {...nonfoilColor} image className="nonfoil-label">
+                    <Label
+                        color={nonfoilQty > 0 ? 'blue' : 'transparent'}
+                        image
+                        className="nonfoil-label"
+                    >
                         Nonfoil
                         <Label.Detail className="nonfoil-label-qty">
                             {nonfoilQty}

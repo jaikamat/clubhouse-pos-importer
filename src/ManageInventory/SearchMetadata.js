@@ -9,9 +9,6 @@ export default function SearchMetadata({ searchResults }) {
         .map((c) => c.qohParsed[1])
         .reduce((acc, c) => acc + c, 0);
 
-    console.log('foilQuantity', foilQuantity);
-    console.log('nonfoilQuantity', nonfoilQuantity);
-
     return (
         <div>
             Totals on hand: {''}

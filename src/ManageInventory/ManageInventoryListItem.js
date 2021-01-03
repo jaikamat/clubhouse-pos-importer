@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     Segment,
     Input,
@@ -20,8 +20,9 @@ import { ADD_CARD_TO_INVENTORY } from '../utils/api_resources';
 import Language from '../common/Language';
 import { finishes, cardConditions } from '../utils/dropdownOptions';
 import checkCardFinish from '../utils/checkCardFinish';
+import { InventoryContext } from '../context/InventoryContext';
 
-export default function ScryfallCardListItem({
+export default function ManageInventoryListItem({
     qoh,
     foil,
     nonfoil,
@@ -37,7 +38,7 @@ export default function ScryfallCardListItem({
         checkCardFinish(nonfoil, foil).selectedFinish
     );
 
-    const [inventoryQty, setInventoryQty] = useState(qoh);
+    const { changeCardQuantity } = useContext(InventoryContext);
 
     const validate = ({ quantity }) => {
         const errors = {};
@@ -70,8 +71,7 @@ export default function ScryfallCardListItem({
             // Imperatively reset the form using Formik actions
             resetForm();
 
-            // Update the new quantity
-            setInventoryQty(data.qoh);
+            changeCardQuantity(id, data.qoh);
 
             createToast({
                 color: 'green',
@@ -105,7 +105,7 @@ export default function ScryfallCardListItem({
                             <Label color="grey">
                                 {set_name} ({String(set).toUpperCase()})
                             </Label>
-                            <QohLabels inventoryQty={inventoryQty} />{' '}
+                            <QohLabels inventoryQty={qoh} />{' '}
                             <MarketPrice id={id} finish={selectedFinish} />
                             <Language languageCode={lang} />
                         </Item.Header>

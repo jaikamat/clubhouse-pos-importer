@@ -20,38 +20,33 @@ export default function Sale() {
         restoreSale,
         deleteSuspendedSale,
         suspendSale,
-        resetSaleState
     } = useContext(SaleContext);
 
     const [searchResults, setSearchResults] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
 
-    const resetState = () => {
-        setSearchResults([]);
-        setSearchTerm('');
-        resetSaleState();
-    };
-
-    const handleResultSelect = async term => {
+    const handleResultSelect = async (term) => {
         try {
             const { data } = await axios.get(GET_CARDS_WITH_INFO, {
                 params: { title: term, matchInStock: true },
-                headers: makeAuthHeader()
+                headers: makeAuthHeader(),
             });
 
-            const modeledData = data.map(c => new InventoryCard(c));
+            const modeledData = data.map((c) => new InventoryCard(c));
 
             setSearchResults(modeledData);
             setSearchTerm(term);
 
-            if (data.length === 0) { $('#searchBar').focus().select() }
+            if (data.length === 0) {
+                $('#searchBar').focus().select();
+            }
         } catch (e) {
             console.log(e.response);
         }
     };
 
     return (
-        <React.Fragment>
+        <>
             <Grid.Row style={{ display: 'flex', alignItems: 'center' }}>
                 <SearchBar handleSearchSelect={handleResultSelect} />
             </Grid.Row>
@@ -59,17 +54,29 @@ export default function Sale() {
             <Grid stackable={true}>
                 <Grid.Row>
                     <Grid.Column width="11">
-                        <Header as="h2" style={{ display: "inline-block" }}>Inventory</Header>
+                        <Header as="h2" style={{ display: 'inline-block' }}>
+                            Inventory
+                        </Header>
 
                         <Divider />
 
-                        <BrowseCardList term={searchTerm} cards={searchResults} />
-
+                        <BrowseCardList
+                            term={searchTerm}
+                            cards={searchResults}
+                        />
                     </Grid.Column>
                     <Grid.Column width="5">
-                        <Header as="h2" style={{ display: 'inline-block' }} id="sale-header">
-                            {suspendedSale.name === '' ? 'Sale Items' : `${suspendedSale.name}'s Items`}
-                            <TotalCardsLabel listLength={findSaleCardsQty(saleListCards)} />
+                        <Header
+                            as="h2"
+                            style={{ display: 'inline-block' }}
+                            id="sale-header"
+                        >
+                            {suspendedSale.name === ''
+                                ? 'Sale Items'
+                                : `${suspendedSale.name}'s Items`}
+                            <TotalCardsLabel
+                                listLength={findSaleCardsQty(saleListCards)}
+                            />
                         </Header>
 
                         <SuspendedSale
@@ -86,8 +93,8 @@ export default function Sale() {
 
                         <CustomerSaleList saleList={saleListCards} />
                     </Grid.Column>
-                </Grid.Row >
-            </Grid >
-        </React.Fragment >
+                </Grid.Row>
+            </Grid>
+        </>
     );
 }

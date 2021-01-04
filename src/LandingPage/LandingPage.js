@@ -283,8 +283,7 @@ export default function LandingPage() {
                             </span>
                         </Slogan>
                         <Subheader color="white">
-                            We are open Tuesday through Sunday for all your CCG
-                            needs!{' '}
+                            We are open all week for your CCG needs!{' '}
                             <em>
                                 (Play space use and events are cancelled until
                                 further notice due to WPN's in-store play

@@ -8,6 +8,7 @@ import core_2021_draft_booster from './core_2021_draft_booster.png';
 import core_2021_collector from './core_2021_collector.jpg';
 import double_masters from './double_masters.png';
 import zen_meme from './zen_meme.jpg';
+import kaldheim from './kaldheim.png';
 
 const Wrapper = styled.div`
     display: flex;
@@ -291,9 +292,6 @@ export default function LandingPage() {
                             </em>
                         </Subheader>
                         <FlexRowResponsive>
-                            {/* <Link to="/calendar">
-                            <Button><b>Events calendar</b></Button>
-                        </Link> */}
                             <Link to="/public-inventory">
                                 <Button>
                                     <b>Browse cards</b>
@@ -309,6 +307,24 @@ export default function LandingPage() {
                     </FlexRow>
                     <Spacer height="30" />
                     <Grid>
+                        <Card
+                            imageSrc={kaldheim}
+                            header="New product preorders!"
+                            date="01/03/2021"
+                        >
+                            <p>
+                                Hello everyone, we officially have Kaldheim
+                                preorders up! We have 5 products on the lineup
+                                starting with Draft Boxes at $100, Set Boxes at
+                                $110, Collector Boxes at $219, Bundles at $39,
+                                and the Commander Decks at $19. Hope to see you
+                                all soon!
+                            </p>
+                            <p>
+                                Note: We are limiting each product to 1 per
+                                person.
+                            </p>
+                        </Card>
                         <Card
                             imageSrc={zen_meme}
                             header="New product preorders!"
@@ -430,7 +446,7 @@ export default function LandingPage() {
                         <InfoCard
                             icon="clock"
                             header="Hours"
-                            content="Tues - Fri 2pm to 7pm, Sat - Sun 12pm to 7pm"
+                            content="Mon - Fri 12pm to 7pm, Sat - Sun 11am to 7pm"
                             align="center"
                         />
                         <InfoCard

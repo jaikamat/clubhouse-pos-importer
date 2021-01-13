@@ -12,14 +12,11 @@ const DATABASE_NAME = getDatabaseName();
  */
 async function validateInventory(
     { qtyToSell, finishCondition, name, id },
-    location: ClubhouseLocation
+    location: ClubhouseLocation,
+    databaseClient: MongoClient
 ) {
-    const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
-
     try {
-        await client.connect();
-
-        const db = client
+        const db = databaseClient
             .db(DATABASE_NAME)
             .collection(collectionFromLocation(location).cardInventory);
 
@@ -36,8 +33,6 @@ async function validateInventory(
         return true;
     } catch (e) {
         throw e;
-    } finally {
-        await client.close();
     }
 }
 
@@ -66,7 +61,7 @@ async function createSuspendedSale(
 
         // Validate inventory prior to transacting
         const validations = saleList.map(
-            async (card) => await validateInventory(card, location)
+            async (card) => await validateInventory(card, location, client)
         );
         await Promise.all(validations);
 

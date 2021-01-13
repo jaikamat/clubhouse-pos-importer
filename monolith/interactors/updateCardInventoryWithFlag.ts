@@ -13,7 +13,8 @@ const DATABASE_NAME = getDatabaseName();
 async function updateCardInventoryWithFlag(
     card,
     CHANGE_FLAG,
-    location: ClubhouseLocation
+    location: ClubhouseLocation,
+    databaseClient: MongoClient
 ) {
     const { qtyToSell, finishCondition, id, name } = card;
     let quantityChange;
@@ -26,16 +27,12 @@ async function updateCardInventoryWithFlag(
         throw new Error('CHANGE_FLAG was not provided');
     }
 
-    const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
-
     try {
-        await client.connect();
-
         console.log(
             `Suspend sale, ${CHANGE_FLAG}: QTY: ${qtyToSell}, ${finishCondition}, ${name}, ${id}, LOCATION: ${location}`
         );
 
-        const db = client
+        const db = databaseClient
             .db(DATABASE_NAME)
             .collection(collectionFromLocation(location).cardInventory);
 
@@ -58,8 +55,6 @@ async function updateCardInventoryWithFlag(
         );
     } catch (e) {
         throw e;
-    } finally {
-        await client.close();
     }
 }
 

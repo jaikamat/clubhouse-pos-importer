@@ -26,7 +26,7 @@ async function deleteSuspendedSale(id, location) {
         // Adds the passed cards back to inventory prior to deleting
         const dbInserts = list.map(
             async (card) =>
-                await updateCardInventoryWithFlag(card, 'INC', location)
+                await updateCardInventoryWithFlag(card, 'INC', location, client)
         );
         await Promise.all(dbInserts);
 

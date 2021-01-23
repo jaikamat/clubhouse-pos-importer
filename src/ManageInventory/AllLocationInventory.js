@@ -41,7 +41,7 @@ export default function AllLocationInventory({ title }) {
             } catch (err) {
                 console.log(err);
             }
-        })().catch(console.log);
+        })();
     }, [title]);
 
     return loading ? (

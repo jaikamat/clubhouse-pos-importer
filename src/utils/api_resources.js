@@ -18,6 +18,7 @@ const getPrefix = () => {
 
 const endpoints = {
     FINISH_SALE: `${getPrefix()}/auth/finishSale`,
+    GET_CARD_FROM_ALL_LOCATIONS: `${getPrefix()}/getCardFromAllLocations`,
     ADD_CARD_TO_INVENTORY: `${getPrefix()}/auth/addCardToInventory`,
     RECEIVE_CARDS: `${getPrefix()}/auth/receiveCards`,
     GET_CARDS_BY_FILTER: `${getPrefix()}/auth/getCardsByFilter`,

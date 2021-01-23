@@ -19,9 +19,7 @@ export default function ManageInventory() {
             <SearchBar handleSearchSelect={handleSearchSelect} />
             <br />
             <HeaderContainer>
-                <div>
-                    <Header as="h2">Manage Inventory</Header>
-                </div>
+                <Header as="h2">Manage Inventory</Header>
                 {searchResults.length > 0 && (
                     <div>
                         <AllLocationInventory
@@ -43,7 +41,6 @@ export default function ManageInventory() {
                     </Header>
                 </Segment>
             )}
-
             <ManageInventoryList cards={searchResults} />
         </>
     );

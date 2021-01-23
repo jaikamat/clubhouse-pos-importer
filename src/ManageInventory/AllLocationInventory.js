@@ -45,9 +45,9 @@ export default function AllLocationInventory({ title }) {
     }, [title]);
 
     return loading ? (
-        <>
+        <FlexContainer>
             Loading totals for all locations... <Loader active inline />
-        </>
+        </FlexContainer>
     ) : (
         <FlexContainer>
             <div>

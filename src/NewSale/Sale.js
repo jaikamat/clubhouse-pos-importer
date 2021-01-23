@@ -12,6 +12,13 @@ import SuspendedSale from './SuspendedSale';
 import { InventoryCard } from '../utils/ScryfallCard';
 import { SaleContext } from '../context/SaleContext';
 import TotalCardsLabel, { findSaleCardsQty } from '../common/TotalCardsLabel';
+import AllLocationInventory from '../ManageInventory/AllLocationInventory';
+import styled from 'styled-components';
+
+const HeaderContainer = styled('div')({
+    display: 'flex',
+    justifyContent: 'space-between',
+});
 
 export default function Sale() {
     const {
@@ -47,16 +54,20 @@ export default function Sale() {
 
     return (
         <>
-            <Grid.Row style={{ display: 'flex', alignItems: 'center' }}>
-                <SearchBar handleSearchSelect={handleResultSelect} />
-            </Grid.Row>
+            <SearchBar handleSearchSelect={handleResultSelect} />
             <br />
             <Grid stackable={true}>
                 <Grid.Row>
                     <Grid.Column width="11">
-                        <Header as="h2" style={{ display: 'inline-block' }}>
-                            Inventory
-                        </Header>
+                        <HeaderContainer>
+                            <Header as="h2">Inventory</Header>
+                            {searchResults.length > 0 && (
+                                <AllLocationInventory
+                                    resultSet={searchResults}
+                                    title={searchResults[0].name}
+                                />
+                            )}
+                        </HeaderContainer>
 
                         <Divider />
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Label } from 'semantic-ui-react';
+import { Label, Loader } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { GET_CARD_FROM_ALL_LOCATIONS } from '../utils/api_resources';
 
@@ -8,30 +8,36 @@ const StyledContainer = styled('div')({
     display: 'inline-flex',
 });
 
-export default function SearchMetadata({ title }) {
+// TODO: refetch on result set change
+export default function AllLocationInventory({ title }) {
     const [quantities, setQuantities] = useState({
         ch1: { foilQty: 0, nonfoilQty: 0 },
         ch2: { foilQty: 0, nonfoilQty: 0 },
     });
 
-    const fetchCardQuantities = async () => {
-        try {
-            const { data } = await axios.get(GET_CARD_FROM_ALL_LOCATIONS, {
-                params: { title: 'Birds of Paradise' },
-            });
-
-            setQuantities(data);
-            console.log(data);
-        } catch (err) {
-            console.log(err);
-        }
-    };
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        fetchCardQuantities().catch((err) => console.log);
-    }, []);
+        (async () => {
+            try {
+                setLoading(true);
+                const { data } = await axios.get(GET_CARD_FROM_ALL_LOCATIONS, {
+                    params: { title },
+                });
 
-    return (
+                setQuantities(data);
+                setLoading(false);
+            } catch (err) {
+                console.log(err);
+            }
+        })().catch(console.log);
+    }, [title]);
+
+    return loading ? (
+        <div>
+            Loading totals for all locations... <Loader active inline />
+        </div>
+    ) : (
         <>
             <StyledContainer>
                 Beaverton totals: {''}

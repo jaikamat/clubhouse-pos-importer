@@ -7,7 +7,7 @@ import { Segment, Header, Icon, Divider } from 'semantic-ui-react';
 import { GET_CARDS_WITH_INFO } from '../utils/api_resources';
 import { InventoryCard } from '../utils/ScryfallCard';
 import styled from 'styled-components';
-import SearchMetadata from './SearchMetadata';
+import AllLocationInventory from './AllLocationInventory';
 import { InventoryContext } from '../context/InventoryContext';
 
 const HeaderContainer = styled('div')({
@@ -43,7 +43,10 @@ export default function ManageInventory() {
                 </div>
                 {searchResults.length > 0 && (
                     <div>
-                        <SearchMetadata searchResults={searchResults} />
+                        <AllLocationInventory
+                            resultSet={searchResults}
+                            title={searchResults[0].name}
+                        />
                     </div>
                 )}
             </HeaderContainer>

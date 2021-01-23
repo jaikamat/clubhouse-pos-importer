@@ -1,6 +1,7 @@
 import { Db, MongoClient } from 'mongodb';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import getDatabaseName from '../lib/getDatabaseName';
+import parseQoh from '../lib/parseQoh';
 import { ClubhouseLocation } from './getJwt';
 const DATABASE_NAME = getDatabaseName();
 
@@ -54,10 +55,18 @@ async function getSingleLocationCard(
         },
     };
 
+    const project = {
+        $project: {
+            qoh: 1,
+            name: 1,
+        },
+    };
+
     pipeline.push(match);
     pipeline.push(lookup);
     pipeline.push(addFields);
     pipeline.push(inventoryMatch);
+    pipeline.push(project);
 
     return await db
         .collection('scryfall_bulk_cards')
@@ -80,9 +89,32 @@ async function getCardFromAllLocations(title: string) {
         const ch1 = await getSingleLocationCard(title, db, 'ch1');
         const ch2 = await getSingleLocationCard(title, db, 'ch2');
 
+        // Add up the [foil, nonfoil] quantities of each card's QOH
+        const ch1Combined = ch1.reduce(
+            (acc, c) => {
+                const { foilQty, nonfoilQty } = parseQoh(c.qoh);
+                return {
+                    foilQty: acc.foilQty + foilQty,
+                    nonfoilQty: acc.nonfoilQty + nonfoilQty,
+                };
+            },
+            { foilQty: 0, nonfoilQty: 0 }
+        );
+
+        const ch2Combined = ch2.reduce(
+            (acc, c) => {
+                const { foilQty, nonfoilQty } = parseQoh(c.qoh);
+                return {
+                    foilQty: acc.foilQty + foilQty,
+                    nonfoilQty: acc.nonfoilQty + nonfoilQty,
+                };
+            },
+            { foilQty: 0, nonfoilQty: 0 }
+        );
+
         return {
-            ch1,
-            ch2,
+            ch1: ch1Combined,
+            ch2: ch2Combined,
         };
     } catch (err) {
         console.log(err);

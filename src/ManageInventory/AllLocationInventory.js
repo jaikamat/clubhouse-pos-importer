@@ -10,6 +10,10 @@ const StyledContainer = styled('div')({
 
 const FlexContainer = styled('div')({
     display: 'flex',
+    alignItems: 'center',
+    '& > *': {
+        marginLeft: '10px',
+    },
 });
 
 const QohLabel = ({ label, value }) => (
@@ -46,7 +50,10 @@ export default function AllLocationInventory({ title }) {
 
     return loading ? (
         <FlexContainer>
-            Loading totals for all locations... <Loader active inline />
+            <span>Loading totals for all locations</span>
+            <div>
+                <Loader active inline size="small" />
+            </div>
         </FlexContainer>
     ) : (
         <FlexContainer>

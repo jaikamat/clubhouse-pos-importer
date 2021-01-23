@@ -12,6 +12,13 @@ const FlexContainer = styled('div')({
     display: 'flex',
 });
 
+const QohLabel = ({ label, value }) => (
+    <Label color={value > 0 ? 'blue' : 'transparent'} image>
+        {label}
+        <Label.Detail>{value}</Label.Detail>
+    </Label>
+);
+
 // TODO: refetch on result set change
 export default function AllLocationInventory({ title }) {
     const [quantities, setQuantities] = useState({
@@ -46,51 +53,21 @@ export default function AllLocationInventory({ title }) {
             <div>
                 <Header sub>Beaverton totals:</Header>
                 <StyledContainer>
-                    <Label
-                        color={
-                            quantities.ch1.foilQty > 0 ? 'blue' : 'transparent'
-                        }
-                        image
-                    >
-                        Foil
-                        <Label.Detail>{quantities.ch1.foilQty}</Label.Detail>
-                    </Label>
-                    <Label
-                        color={
-                            quantities.ch1.nonfoilQty > 0
-                                ? 'blue'
-                                : 'transparent'
-                        }
-                        image
-                    >
-                        Nonfoil
-                        <Label.Detail>{quantities.ch1.nonfoilQty}</Label.Detail>
-                    </Label>
+                    <QohLabel label="Foil" value={quantities.ch1.foilQty} />
+                    <QohLabel
+                        label="Nonfoil"
+                        value={quantities.ch1.nonfoilQty}
+                    />
                 </StyledContainer>
             </div>
             <div>
                 <Header sub>Hillsboro totals:</Header>
                 <StyledContainer>
-                    <Label
-                        color={
-                            quantities.ch2.foilQty > 0 ? 'blue' : 'transparent'
-                        }
-                        image
-                    >
-                        Foil
-                        <Label.Detail>{quantities.ch2.foilQty}</Label.Detail>
-                    </Label>
-                    <Label
-                        color={
-                            quantities.ch2.nonfoilQty > 0
-                                ? 'blue'
-                                : 'transparent'
-                        }
-                        image
-                    >
-                        Nonfoil
-                        <Label.Detail>{quantities.ch2.nonfoilQty}</Label.Detail>
-                    </Label>
+                    <QohLabel label="Foil" value={quantities.ch2.foilQty} />
+                    <QohLabel
+                        label="Nonfoil"
+                        value={quantities.ch2.nonfoilQty}
+                    />
                 </StyledContainer>
             </div>
         </FlexContainer>

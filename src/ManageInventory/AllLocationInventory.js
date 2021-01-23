@@ -17,14 +17,14 @@ const FlexContainer = styled('div')({
 });
 
 const QohLabel = ({ label, value }) => (
-    <Label color={value > 0 ? 'blue' : 'transparent'} image>
+    <Label {...(value > 0 && { color: 'blue' })} image>
         {label}
         <Label.Detail>{value}</Label.Detail>
     </Label>
 );
 
 // TODO: refetch on result set change
-export default function AllLocationInventory({ title }) {
+export default function AllLocationInventory({ title, searchResults }) {
     const [quantities, setQuantities] = useState({
         ch1: { foilQty: 0, nonfoilQty: 0 },
         ch2: { foilQty: 0, nonfoilQty: 0 },
@@ -46,7 +46,7 @@ export default function AllLocationInventory({ title }) {
                 console.log(err);
             }
         })();
-    }, [title]);
+    }, [title, searchResults]);
 
     return loading ? (
         <FlexContainer>

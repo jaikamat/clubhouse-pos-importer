@@ -39,7 +39,7 @@ export default function Receiving() {
                             {searchResults.length > 0 && (
                                 <div>
                                     <AllLocationInventory
-                                        resultSet={searchResults}
+                                        searchResults={searchResults}
                                         title={searchResults[0].name}
                                     />
                                 </div>

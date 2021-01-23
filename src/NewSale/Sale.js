@@ -70,7 +70,7 @@ export default function Sale() {
                             <Header as="h2">Inventory</Header>
                             {searchResults.length > 0 && (
                                 <AllLocationInventory
-                                    resultSet={searchResults}
+                                    searchResults={searchResults}
                                     title={searchResults[0].name}
                                 />
                             )}

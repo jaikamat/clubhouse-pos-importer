@@ -75,7 +75,6 @@ async function getSingleLocationCard(
 }
 
 async function getCardFromAllLocations(title: string) {
-    // if matchInStock is false, we get all cards, even those with no stock
     const mongoConfig = { useNewUrlParser: true, useUnifiedTopology: true };
 
     try {

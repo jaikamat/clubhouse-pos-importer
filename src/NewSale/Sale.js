@@ -20,6 +20,13 @@ const HeaderContainer = styled('div')({
     justifyContent: 'space-between',
 });
 
+const ButtonContainer = styled('div')({
+    display: 'flex',
+    '& > *': {
+        marginLeft: '10px',
+    },
+});
+
 export default function Sale() {
     const {
         saleListCards,
@@ -77,28 +84,26 @@ export default function Sale() {
                         />
                     </Grid.Column>
                     <Grid.Column width="5">
-                        <Header
-                            as="h2"
-                            style={{ display: 'inline-block' }}
-                            id="sale-header"
-                        >
-                            {suspendedSale.name === ''
-                                ? 'Sale Items'
-                                : `${suspendedSale.name}'s Items`}
-                            <TotalCardsLabel
-                                listLength={findSaleCardsQty(saleListCards)}
-                            />
-                        </Header>
-
-                        <SuspendedSale
-                            restoreSale={restoreSale}
-                            suspendSale={suspendSale}
-                            saleListLength={saleListCards.length}
-                            deleteSuspendedSale={deleteSuspendedSale}
-                            id={suspendedSale._id}
-                        />
-
-                        <PrintList saleListCards={saleListCards} />
+                        <HeaderContainer>
+                            <Header as="h2" id="sale-header">
+                                {suspendedSale.name === ''
+                                    ? 'Sale Items'
+                                    : `${suspendedSale.name}'s Items`}
+                                <TotalCardsLabel
+                                    listLength={findSaleCardsQty(saleListCards)}
+                                />
+                            </Header>
+                            <ButtonContainer>
+                                <SuspendedSale
+                                    restoreSale={restoreSale}
+                                    suspendSale={suspendSale}
+                                    saleListLength={saleListCards.length}
+                                    deleteSuspendedSale={deleteSuspendedSale}
+                                    id={suspendedSale._id}
+                                />
+                                <PrintList saleListCards={saleListCards} />
+                            </ButtonContainer>
+                        </HeaderContainer>
 
                         <Divider />
 

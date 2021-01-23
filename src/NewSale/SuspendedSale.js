@@ -59,12 +59,14 @@ export default function SuspendedSale({
     }, [id]); // If the parent-level suspended-sale _id changes, we fetch again
 
     const modalTrigger = (
-        <Button
-            id="suspend-sale-btn"
-            style={{ display: 'inline-block', float: 'right' }}
-            onClick={() => setModalOpen(true)}
-            icon="ellipsis horizontal"
-        />
+        <div>
+            <Button
+                size="tiny"
+                id="suspend-sale-btn"
+                onClick={() => setModalOpen(true)}
+                icon="ellipsis horizontal"
+            />
+        </div>
     );
 
     const submitSuspendSale = async () => {

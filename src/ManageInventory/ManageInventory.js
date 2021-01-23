@@ -35,8 +35,8 @@ export default function ManageInventory() {
                     <Header icon>
                         <Icon name="search" />
                         <em>
-                            "Searching the future for answers often leads to
-                            further questions."
+                            "For the first time in his life, Grakk felt a little
+                            warm and fuzzy inside."
                         </em>
                     </Header>
                 </Segment>

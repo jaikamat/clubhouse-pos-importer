@@ -12,6 +12,20 @@ import SuspendedSale from './SuspendedSale';
 import { InventoryCard } from '../utils/ScryfallCard';
 import { SaleContext } from '../context/SaleContext';
 import TotalCardsLabel, { findSaleCardsQty } from '../common/TotalCardsLabel';
+import AllLocationInventory from '../ManageInventory/AllLocationInventory';
+import styled from 'styled-components';
+
+const HeaderContainer = styled('div')({
+    display: 'flex',
+    justifyContent: 'space-between',
+});
+
+const ButtonContainer = styled('div')({
+    display: 'flex',
+    '& > *': {
+        marginLeft: '10px',
+    },
+});
 
 export default function Sale() {
     const {
@@ -47,16 +61,20 @@ export default function Sale() {
 
     return (
         <>
-            <Grid.Row style={{ display: 'flex', alignItems: 'center' }}>
-                <SearchBar handleSearchSelect={handleResultSelect} />
-            </Grid.Row>
+            <SearchBar handleSearchSelect={handleResultSelect} />
             <br />
             <Grid stackable={true}>
                 <Grid.Row>
                     <Grid.Column width="11">
-                        <Header as="h2" style={{ display: 'inline-block' }}>
-                            Inventory
-                        </Header>
+                        <HeaderContainer>
+                            <Header as="h2">Inventory</Header>
+                            {searchResults.length > 0 && (
+                                <AllLocationInventory
+                                    searchResults={searchResults}
+                                    title={searchResults[0].name}
+                                />
+                            )}
+                        </HeaderContainer>
 
                         <Divider />
 
@@ -66,28 +84,26 @@ export default function Sale() {
                         />
                     </Grid.Column>
                     <Grid.Column width="5">
-                        <Header
-                            as="h2"
-                            style={{ display: 'inline-block' }}
-                            id="sale-header"
-                        >
-                            {suspendedSale.name === ''
-                                ? 'Sale Items'
-                                : `${suspendedSale.name}'s Items`}
-                            <TotalCardsLabel
-                                listLength={findSaleCardsQty(saleListCards)}
-                            />
-                        </Header>
-
-                        <SuspendedSale
-                            restoreSale={restoreSale}
-                            suspendSale={suspendSale}
-                            saleListLength={saleListCards.length}
-                            deleteSuspendedSale={deleteSuspendedSale}
-                            id={suspendedSale._id}
-                        />
-
-                        <PrintList saleListCards={saleListCards} />
+                        <HeaderContainer>
+                            <Header as="h2" id="sale-header">
+                                {suspendedSale.name === ''
+                                    ? 'Sale Items'
+                                    : `${suspendedSale.name}'s Items`}
+                                <TotalCardsLabel
+                                    listLength={findSaleCardsQty(saleListCards)}
+                                />
+                            </Header>
+                            <ButtonContainer>
+                                <SuspendedSale
+                                    restoreSale={restoreSale}
+                                    suspendSale={suspendSale}
+                                    saleListLength={saleListCards.length}
+                                    deleteSuspendedSale={deleteSuspendedSale}
+                                    id={suspendedSale._id}
+                                />
+                                <PrintList saleListCards={saleListCards} />
+                            </ButtonContainer>
+                        </HeaderContainer>
 
                         <Divider />
 

@@ -158,6 +158,7 @@ router.post('/finishSale', (req: RequestWithUserInfo, res, next) => {
 /**
  * Create root POST route
  */
+// TODO: add lightspeedEmployeeNumber here and pass into finishSale logic
 router.post('/finishSale', async (req: RequestWithUserInfo, res) => {
     try {
         const { cards } = req.body;

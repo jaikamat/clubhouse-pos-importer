@@ -1,15 +1,17 @@
 const { ExpectationFailed } = require('http-errors');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 
+let mongoServer;
+
 // Set up the mongo memory instance
 beforeAll(async () => {
-    const mongod = new MongoMemoryServer();
+    mongoServer = new MongoMemoryServer();
+    // Interactors use this to establish a connection
+    process.env.MONGO_URI = await mongoServer.getUri();
+});
 
-    const uri = await mongod.getUri();
-
-    console.log(uri);
-
-    await mongod.stop();
+afterAll(async () => {
+    await mongoServer.stop();
 });
 
 test('A single test', async () => {

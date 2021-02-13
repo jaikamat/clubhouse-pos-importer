@@ -5,7 +5,7 @@
     "scripts": {
         "start": "node ./built/bin/www",
         "gcp-build": "tsc -p .",
-        "start-dev": "tsc -p . && echo \"Built TS source\" && PORT=7331 ENVIRONMENT=development node ./built/bin/www",
+        "start-dev": "rm -r ./built && tsc -p . && echo \"Built TS source\" && PORT=7331 ENVIRONMENT=development node ./built/bin/www",
         "deploy": "gcloud app deploy app.yaml --stop-previous-version",
         "test": "jest"
     },

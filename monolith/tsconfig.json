@@ -3,8 +3,9 @@
       "outDir": "./built",
       "allowJs": true,
       "target": "es5",
-      "types": ["node"],
-      "esModuleInterop": true
+      "types": ["node", "jest"],
+      "esModuleInterop": true,
     },
+    "exclude": ["*/**.test.ts"],
     "include": ["./**/*"],
   }

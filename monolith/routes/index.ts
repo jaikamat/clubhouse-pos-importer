@@ -6,8 +6,20 @@ import getCardFromAllLocations from '../interactors/getCardFromAllLocations';
 
 router.post('/jwt', async (req, res) => {
     try {
-        const { username, password, currentLocation } = req.body;
-        const token = await getJwt(username, password, currentLocation);
+        const {
+            username,
+            password,
+            currentLocation,
+            lightspeedEmployeeNumber,
+        } = req.body;
+
+        const token = await getJwt(
+            username,
+            password,
+            currentLocation,
+            lightspeedEmployeeNumber
+        );
+
         res.status(200).send(token);
     } catch (err) {
         console.log(err);

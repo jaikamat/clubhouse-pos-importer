@@ -11,12 +11,14 @@ export type User = {
     username: symbol;
     locations: string[];
     currentLocation: ClubhouseLocation;
+    lightspeedEmployeeNumber: number;
 };
 
 async function getJwt(
     username: string,
     submittedPass: string,
-    currentLocation: ClubhouseLocation
+    currentLocation: ClubhouseLocation,
+    lightspeedEmployeeNumber: number
 ): Promise<{ token: string } | string> {
     const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,
@@ -51,6 +53,7 @@ async function getJwt(
                     username,
                     locations,
                     currentLocation,
+                    lightspeedEmployeeNumber,
                 },
                 process.env.PRIVATE_KEY
             );

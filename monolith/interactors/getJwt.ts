@@ -17,8 +17,7 @@ export type User = {
 async function getJwt(
     username: string,
     submittedPass: string,
-    currentLocation: ClubhouseLocation,
-    lightspeedEmployeeNumber: number
+    currentLocation: ClubhouseLocation
 ): Promise<{ token: string } | string> {
     const client = await new MongoClient(process.env.MONGO_URI, {
         useNewUrlParser: true,
@@ -36,8 +35,8 @@ async function getJwt(
 
         if (!user) return 'Not authorized';
 
-        // Retrieve the Clubhouse location permissions for the user
-        const { locations } = user;
+        // Retrieve the Clubhouse location permissions and employee number for the user
+        const { locations, lightspeedEmployeeNumber } = user;
 
         // Check if the user is allowed in the location
         if (!locations.includes(currentLocation)) {

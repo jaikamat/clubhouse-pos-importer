@@ -21,12 +21,14 @@ interface RequestWithUserInfo extends Request {
     locations: string[];
     currentLocation: ClubhouseLocation;
     isAdmin: boolean;
+    lightspeedEmployeeNumber: string;
 }
 
 type DecodedToken = {
     locations: string[];
     currentLocation: ClubhouseLocation;
     username: string;
+    lightspeedEmployeeNumber: string;
 };
 
 const finishes = [
@@ -53,14 +55,17 @@ router.use((req: RequestWithUserInfo, res, next) => {
     if (token) {
         try {
             // Will throw error if validation fails
-            const { username, locations, currentLocation } = jwt.verify(
-                token,
-                process.env.PRIVATE_KEY
-            ) as DecodedToken;
+            const {
+                username,
+                locations,
+                currentLocation,
+                lightspeedEmployeeNumber,
+            } = jwt.verify(token, process.env.PRIVATE_KEY) as DecodedToken;
 
             // Attach location information to the req and flag admins
             req.locations = locations;
             req.currentLocation = currentLocation;
+            req.lightspeedEmployeeNumber = lightspeedEmployeeNumber;
             req.isAdmin = locations.length === 2;
 
             console.log(

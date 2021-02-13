@@ -81,7 +81,7 @@ async function updateCardInventory(
 /**
  * Exposes the DB and passes it down to child queries; wraps the promises
  */
-async function updateInventoryCards(cards, location: ClubhouseLocation) {
+export async function updateInventoryCards(cards, location: ClubhouseLocation) {
     const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
 
     try {

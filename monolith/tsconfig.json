@@ -6,6 +6,6 @@
       "types": ["node", "jest"],
       "esModuleInterop": true,
     },
-    "exclude": ["*/**.test.js"],
+    "exclude": ["*/**.test.js", "built"],
     "include": ["./**/*"],
   }

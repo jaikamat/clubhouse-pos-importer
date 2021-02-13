@@ -1,4 +1,3 @@
-const { ExpectationFailed } = require('http-errors');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const { MongoClient } = require('mongodb');
 const {

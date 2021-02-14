@@ -133,7 +133,11 @@ async function createSale(saleData, cardList, location: ClubhouseLocation) {
  * Main function that wraps the execution
  * @param {Array} cards - the cards involved in the transaction
  */
-async function finishSale(cards, location: ClubhouseLocation) {
+async function finishSale(
+    cards,
+    location: ClubhouseLocation,
+    lightspeedEmployeeNumber: number
+) {
     try {
         const res = await request.post({
             url: 'https://cloud.lightspeedapp.com/oauth/access_token.php',
@@ -152,7 +156,8 @@ async function finishSale(cards, location: ClubhouseLocation) {
         const { data } = await createLightspeedSale(
             access_token,
             cards,
-            location
+            location,
+            lightspeedEmployeeNumber
         );
 
         // Map updated inserts after successful Lightspeed sale creation

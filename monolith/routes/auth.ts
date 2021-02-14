@@ -160,12 +160,15 @@ router.post('/finishSale', (req: RequestWithUserInfo, res, next) => {
  */
 router.post('/finishSale', async (req: RequestWithUserInfo, res) => {
     try {
-        const { cards, lightspeedEmployeeNumber } = req.body;
+        const { cards } = req.body;
+        const { currentLocation, lightspeedEmployeeNumber } = req;
+
         const data = await finishSale(
             cards,
-            req.currentLocation,
+            currentLocation,
             lightspeedEmployeeNumber
         );
+
         res.status(200).send(data);
     } catch (err) {
         console.log(err);

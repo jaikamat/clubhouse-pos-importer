@@ -21,14 +21,14 @@ interface RequestWithUserInfo extends Request {
     locations: string[];
     currentLocation: ClubhouseLocation;
     isAdmin: boolean;
-    lightspeedEmployeeNumber: string;
+    lightspeedEmployeeNumber: number;
 }
 
 type DecodedToken = {
     locations: string[];
     currentLocation: ClubhouseLocation;
     username: string;
-    lightspeedEmployeeNumber: string;
+    lightspeedEmployeeNumber: number;
 };
 
 const finishes = [
@@ -161,8 +161,12 @@ router.post('/finishSale', (req: RequestWithUserInfo, res, next) => {
 // TODO: add lightspeedEmployeeNumber here and pass into finishSale logic
 router.post('/finishSale', async (req: RequestWithUserInfo, res) => {
     try {
-        const { cards } = req.body;
-        const data = await finishSale(cards, req.currentLocation);
+        const { cards, lightspeedEmployeeNumber } = req.body;
+        const data = await finishSale(
+            cards,
+            req.currentLocation,
+            lightspeedEmployeeNumber
+        );
         res.status(200).send(data);
     } catch (err) {
         console.log(err);

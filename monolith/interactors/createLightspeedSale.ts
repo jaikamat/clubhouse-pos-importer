@@ -22,14 +22,12 @@ function registerInfoFromLocation(location: ClubhouseLocation) {
         return {
             shopId: 1,
             registerId: 2,
-            employeeId: 1,
         };
     }
     if (location === 'ch2') {
         return {
             shopId: 16,
             registerId: 19,
-            employeeId: 1,
         };
     }
 }
@@ -43,11 +41,10 @@ function registerInfoFromLocation(location: ClubhouseLocation) {
 async function createLightspeedSale(
     authToken,
     cards,
-    location: ClubhouseLocation
+    location: ClubhouseLocation,
+    lightspeedEmployeeNumber: number
 ) {
-    const { shopId, registerId, employeeId } = registerInfoFromLocation(
-        location
-    );
+    const { shopId, registerId } = registerInfoFromLocation(location);
 
     try {
         const url = `https://api.lightspeedapp.com/API/Account/${process.env.LIGHTSPEED_ACCT_ID}/Sale.json`;
@@ -70,7 +67,8 @@ async function createLightspeedSale(
         const bodyParameters = {
             completed: false,
             taxCategoryID: 0,
-            employeeID: employeeId,
+            // Default to number 1 (Lance) if number is not present somehow
+            employeeID: lightspeedEmployeeNumber || 1,
             shopID: shopId,
             registerID: registerId,
             SaleLines: {

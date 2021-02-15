@@ -11,6 +11,7 @@ export type User = {
     username: symbol;
     locations: string[];
     currentLocation: ClubhouseLocation;
+    lightspeedEmployeeNumber: number;
 };
 
 async function getJwt(
@@ -34,8 +35,8 @@ async function getJwt(
 
         if (!user) return 'Not authorized';
 
-        // Retrieve the Clubhouse location permissions for the user
-        const { locations } = user;
+        // Retrieve the Clubhouse location permissions and employee number for the user
+        const { locations, lightspeedEmployeeNumber } = user;
 
         // Check if the user is allowed in the location
         if (!locations.includes(currentLocation)) {
@@ -51,6 +52,7 @@ async function getJwt(
                     username,
                     locations,
                     currentLocation,
+                    lightspeedEmployeeNumber,
                 },
                 process.env.PRIVATE_KEY
             );

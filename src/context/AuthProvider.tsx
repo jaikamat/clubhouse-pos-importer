@@ -1,11 +1,9 @@
 import React, { FC, useState } from 'react';
-import makeAuthHeader from '../utils/makeAuthHeader';
-import { LOGIN } from '../utils/api_resources';
-import axios from 'axios';
+import loginQuery from './loginQuery';
 
 interface Props {}
 
-type ClubhouseLocation = 'ch1' | 'ch2';
+export type ClubhouseLocation = 'ch1' | 'ch2';
 
 interface Context {
     loggedIn: boolean;
@@ -16,11 +14,13 @@ interface Context {
     ) => Promise<any>;
     handleLogout?: () => void;
     currentLocation: ClubhouseLocation | null;
+    currentUser: string | null;
 }
 
 export const AuthContext = React.createContext<Context>({
     loggedIn: false,
     currentLocation: null,
+    currentUser: null,
 });
 
 const AuthProvider: FC<Props> = ({ children }) => {
@@ -35,21 +35,17 @@ const AuthProvider: FC<Props> = ({ children }) => {
         localStorage.getItem('currentLocation') as ClubhouseLocation
     );
 
+    const [currentUser, setCurrentUser] = useState<string | null>(
+        localStorage.getItem('currentUser')
+    );
+
     const handleLogin = async (
         username: string,
         password: string,
         currentLocation: ClubhouseLocation
     ) => {
         try {
-            const { data }: { data: { token: string } } = await axios.post(
-                LOGIN,
-                {
-                    username: username.toLowerCase(),
-                    password,
-                    currentLocation,
-                },
-                { headers: makeAuthHeader() }
-            );
+            const data = await loginQuery(username, password, currentLocation);
 
             if (data.token) {
                 localStorage.setItem('clubhouse_JWT', data.token);
@@ -57,6 +53,9 @@ const AuthProvider: FC<Props> = ({ children }) => {
 
                 localStorage.setItem('currentLocation', currentLocation);
                 setCurrentLocation(currentLocation);
+
+                localStorage.setItem('currentUser', username);
+                setCurrentUser(username);
             }
 
             return data;
@@ -65,21 +64,26 @@ const AuthProvider: FC<Props> = ({ children }) => {
         }
     };
 
-    const handleLogout = async () => {
-        try {
-            localStorage.removeItem('clubhouse_JWT');
-            setLoggedIn(!!localStorage.getItem('clubhouse_JWT'));
+    const handleLogout = () => {
+        localStorage.removeItem('clubhouse_JWT');
+        setLoggedIn(!!localStorage.getItem('clubhouse_JWT'));
 
-            localStorage.removeItem('currentLocation');
-            setCurrentLocation(null);
-        } catch (err) {
-            console.log(err);
-        }
+        localStorage.removeItem('currentLocation');
+        setCurrentLocation(null);
+
+        localStorage.removeItem('currentUser');
+        setCurrentUser(null);
     };
 
     return (
         <AuthContext.Provider
-            value={{ loggedIn, handleLogin, handleLogout, currentLocation }}
+            value={{
+                loggedIn,
+                currentLocation,
+                currentUser,
+                handleLogin,
+                handleLogout,
+            }}
         >
             {children}
         </AuthContext.Provider>

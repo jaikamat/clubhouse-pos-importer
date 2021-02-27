@@ -28,6 +28,11 @@ interface ScryfallApiCard {
     display_name: string;
     cardImage: string;
     color_identity: string[];
+    qoh?: Partial<QOH>;
+    quantity?: number;
+    qtyToSell?: number;
+    finishCondition?: string;
+    price?: number;
 }
 
 /**
@@ -122,10 +127,10 @@ export class ScryfallCard {
  */
 export class InventoryCard extends ScryfallCard {
     private _qoh: Partial<QOH>;
-    public quantity: number;
-    public qtyToSell: number;
-    public finishCondition: string;
-    public price: number;
+    public quantity: number | null;
+    public qtyToSell: number | null;
+    public finishCondition: string | null;
+    public price: number | null;
 
     public constructor(card: ScryfallApiCard) {
         super(card);
@@ -134,7 +139,7 @@ export class InventoryCard extends ScryfallCard {
         this.quantity = card.quantity || null;
         this.qtyToSell = card.qtyToSell || null;
         this.finishCondition = card.finishCondition || null;
-        this.price = card.price >= 0 ? card.price : null;
+        this.price = card.price && card.price >= 0 ? card.price : null;
     }
 
     get qohParsed() {

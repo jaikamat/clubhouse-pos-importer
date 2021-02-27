@@ -1,7 +1,5 @@
 import React, { FC, useState } from 'react';
-import makeAuthHeader from '../utils/makeAuthHeader';
-import { LOGIN } from '../utils/api_resources';
-import axios from 'axios';
+import loginQuery from './loginQuery';
 
 interface Props {}
 
@@ -16,11 +14,13 @@ interface Context {
     ) => Promise<any>;
     handleLogout?: () => void;
     currentLocation: ClubhouseLocation | null;
+    sessionUser: string | null;
 }
 
 export const AuthContext = React.createContext<Context>({
     loggedIn: false,
     currentLocation: null,
+    sessionUser: null,
 });
 
 const AuthProvider: FC<Props> = ({ children }) => {
@@ -35,21 +35,17 @@ const AuthProvider: FC<Props> = ({ children }) => {
         localStorage.getItem('currentLocation') as ClubhouseLocation
     );
 
+    const [sessionUser, setSessionUser] = useState<string | null>(
+        localStorage.getItem('username')
+    );
+
     const handleLogin = async (
         username: string,
         password: string,
         currentLocation: ClubhouseLocation
     ) => {
         try {
-            const { data }: { data: { token: string } } = await axios.post(
-                LOGIN,
-                {
-                    username: username.toLowerCase(),
-                    password,
-                    currentLocation,
-                },
-                { headers: makeAuthHeader() }
-            );
+            const data = await loginQuery(username, password, currentLocation);
 
             if (data.token) {
                 localStorage.setItem('clubhouse_JWT', data.token);
@@ -57,6 +53,9 @@ const AuthProvider: FC<Props> = ({ children }) => {
 
                 localStorage.setItem('currentLocation', currentLocation);
                 setCurrentLocation(currentLocation);
+
+                localStorage.setItem('username', username);
+                setSessionUser(username);
             }
 
             return data;
@@ -72,6 +71,9 @@ const AuthProvider: FC<Props> = ({ children }) => {
 
             localStorage.removeItem('currentLocation');
             setCurrentLocation(null);
+
+            localStorage.removeItem('username');
+            setSessionUser(null);
         } catch (err) {
             console.log(err);
         }
@@ -79,7 +81,13 @@ const AuthProvider: FC<Props> = ({ children }) => {
 
     return (
         <AuthContext.Provider
-            value={{ loggedIn, handleLogin, handleLogout, currentLocation }}
+            value={{
+                loggedIn,
+                currentLocation,
+                sessionUser,
+                handleLogin,
+                handleLogout,
+            }}
         >
             {children}
         </AuthContext.Provider>

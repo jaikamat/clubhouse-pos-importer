@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Header from './Header/Header';
 import AuthProvider from './context/AuthProvider';
 import { Switch, Route } from 'react-router-dom';
@@ -27,59 +27,57 @@ const BackgroundColor = styled.div`
     min-height: 100vh;
 `;
 
-class App extends React.Component {
-    render() {
-        return (
-            <AuthProvider>
-                <Header />
-                <Switch>
-                    <Route exact path="/" component={LandingPage} />
-                    <BackgroundColor>
-                        <ContentContainer id="content-container">
-                            <InventoryProvider>
-                                <Route
-                                    exact
-                                    path="/manage-inventory"
-                                    component={ManageInventory}
-                                />
-                            </InventoryProvider>
-                            <SaleProvider>
-                                <Route
-                                    exact
-                                    path="/new-sale"
-                                    component={Sale}
-                                />
-                            </SaleProvider>
+const App: FC<{}> = () => {
+    return (
+        <AuthProvider>
+            <Header />
+            <Switch>
+                <Route exact path="/" component={LandingPage} />
+                <BackgroundColor>
+                    <ContentContainer id="content-container">
+                        <InventoryProvider>
                             <Route
                                 exact
-                                path="/browse-sales"
-                                component={BrowseSales}
+                                path="/manage-inventory"
+                                component={ManageInventory}
                             />
+                        </InventoryProvider>
+                        <SaleProvider>
                             <Route
                                 exact
-                                path="/browse-inventory"
-                                component={DeckboxClone}
+                                path="/new-sale"
+                                component={Sale}
                             />
+                        </SaleProvider>
+                        <Route
+                            exact
+                            path="/browse-sales"
+                            component={BrowseSales}
+                        />
+                        <Route
+                            exact
+                            path="/browse-inventory"
+                            component={DeckboxClone}
+                        />
+                        <Route
+                            exact
+                            path="/public-inventory"
+                            component={PublicInventory}
+                        />
+                        <ReceivingProvider>
                             <Route
                                 exact
-                                path="/public-inventory"
-                                component={PublicInventory}
+                                path="/receiving"
+                                component={Receiving}
                             />
-                            <ReceivingProvider>
-                                <Route
-                                    exact
-                                    path="/receiving"
-                                    component={Receiving}
-                                />
-                            </ReceivingProvider>
-                            <Route exact path="/login" component={Login} />
-                            <Route exact path="/logout" component={Logout} />
-                        </ContentContainer>
-                    </BackgroundColor>
-                </Switch>
-            </AuthProvider>
-        );
-    }
+                        </ReceivingProvider>
+                        <Route exact path="/login" component={Login} />
+                        <Route exact path="/logout" component={Logout} />
+                    </ContentContainer>
+                </BackgroundColor>
+            </Switch>
+        </AuthProvider>
+    );
 }
 
 export default App;

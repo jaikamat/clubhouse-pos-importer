@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FC } from 'react';
 import axios from 'axios';
 import { GET_LIVE_PRICE } from '../utils/api_resources';
 import { Label, Icon } from 'semantic-ui-react';
@@ -13,15 +13,30 @@ const LabelStyle = styled(Label)`
             : null} !important;
 `;
 
+interface Response {
+    data: {
+        marketPrices: { foil: number; normal: number };
+        medianPrices: { foil: number; normal: number };
+    };
+}
+
+interface Props {
+    id: string;
+    finish: 'FOIL' | 'NONFOIL';
+    round: boolean;
+    showMid: boolean;
+}
+
 // Rounds the passed number to the nearest fifty cents
-const roundNearestStep = (num) => Math.ceil(num * 2) / 2;
+const roundNearestStep = (n: number) => Math.ceil(n * 2) / 2;
 
-const displayPrice = (price) => (!!price ? `$${price.toFixed(2)}` : 'N/A');
+const displayPrice = (price: number | null) =>
+    !!price ? `$${price.toFixed(2)}` : 'N/A';
 
-export default function MarketPrice({ id, finish, round, showMid = true }) {
-    const [market, setMarket] = useState(null);
-    const [median, setMedian] = useState(null);
-    const [loading, setLoading] = useState(false);
+const MarketPrice: FC<Props> = ({ id, finish, round, showMid = true }) => {
+    const [market, setMarket] = useState<number | null>(null);
+    const [median, setMedian] = useState<number | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
     const isFoil = finish === 'FOIL';
 
     useEffect(() => {
@@ -29,7 +44,7 @@ export default function MarketPrice({ id, finish, round, showMid = true }) {
             let _isMounted = true;
             setLoading(true);
 
-            const { data } = await axios.get(GET_LIVE_PRICE, {
+            const { data }: Response = await axios.get(GET_LIVE_PRICE, {
                 params: { scryfallId: id },
             });
             const { marketPrices, medianPrices } = data;
@@ -65,7 +80,9 @@ export default function MarketPrice({ id, finish, round, showMid = true }) {
                     <span>
                         Mkt.{' '}
                         {round
-                            ? displayPrice(roundNearestStep(market))
+                            ? displayPrice(
+                                  market ? roundNearestStep(market) : null
+                              )
                             : displayPrice(market)}
                     </span>
                 )}
@@ -81,4 +98,6 @@ export default function MarketPrice({ id, finish, round, showMid = true }) {
             )}
         </>
     );
-}
+};
+
+export default MarketPrice;

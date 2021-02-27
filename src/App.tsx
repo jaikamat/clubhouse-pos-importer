@@ -14,7 +14,7 @@ import LandingPage from './LandingPage/LandingPage';
 import styled from 'styled-components';
 import { SaleProvider } from './context/SaleContext';
 import { ReceivingProvider } from './context/ReceivingContext';
-import { InventoryProvider } from './context/InventoryContext';
+import InventoryProvider from './context/InventoryContext';
 
 const ContentContainer = styled.div`
     padding-top: 75px;
@@ -43,11 +43,7 @@ const App: FC<{}> = () => {
                             />
                         </InventoryProvider>
                         <SaleProvider>
-                            <Route
-                                exact
-                                path="/new-sale"
-                                component={Sale}
-                            />
+                            <Route exact path="/new-sale" component={Sale} />
                         </SaleProvider>
                         <Route
                             exact
@@ -78,6 +74,6 @@ const App: FC<{}> = () => {
             </Switch>
         </AuthProvider>
     );
-}
+};
 
 export default App;

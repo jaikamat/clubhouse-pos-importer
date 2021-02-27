@@ -20,7 +20,7 @@ const prettyLabel = (finishCondition: keyof QOH) => {
     return finishConditionLabels[finishCondition];
 };
 
-const createInventoryLineItems = (
+export const createInventoryLineItems = (
     inventoryQty: Partial<QOH>,
     matchStrings: (keyof QOH)[]
 ): string[] => {

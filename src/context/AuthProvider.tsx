@@ -41,7 +41,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
         currentLocation: ClubhouseLocation
     ) => {
         try {
-            const { data } = await axios.post(
+            const { data }: { data: { token: string } } = await axios.post(
                 LOGIN,
                 {
                     username: username.toLowerCase(),

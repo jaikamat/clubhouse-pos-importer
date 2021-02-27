@@ -3,7 +3,7 @@ import loginQuery from './loginQuery';
 
 interface Props {}
 
-type ClubhouseLocation = 'ch1' | 'ch2';
+export type ClubhouseLocation = 'ch1' | 'ch2';
 
 interface Context {
     loggedIn: boolean;

@@ -36,7 +36,26 @@ interface ScryfallApiCard {
  * the code easier to maintain and debug.
  */
 export class ScryfallCard {
-    constructor(card) {
+    public id: string;
+    public name: string;
+    public printed_name: string | null;
+    public set: string;
+    public set_name: string;
+    public rarity: string;
+    public image_uris: { normal: string };
+    public card_faces: { normal: string }[];
+    public nonfoil: boolean;
+    public foil: boolean;
+    public colors: string[];
+    public type_line: string;
+    public frame_effects: string[];
+    public lang: string;
+    public border_color: string;
+    public display_name: string;
+    public cardImage: string;
+    public color_identity: string[];
+
+    public constructor(card: ScryfallApiCard) {
         this.id = card.id;
         this.name = card.name;
         this.printed_name = card.printed_name || null;

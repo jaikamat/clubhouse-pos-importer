@@ -1,6 +1,6 @@
 import { QOH } from './ScryfallCard';
 
-export default function parseQoh(inventoryQty: QOH): [number, number] {
+export default function parseQoh(inventoryQty: Partial<QOH>): [number, number] {
     let foilQty = 0;
     let nonfoilQty = 0;
 

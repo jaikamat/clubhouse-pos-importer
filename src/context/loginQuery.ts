@@ -13,17 +13,21 @@ const loginQuery = async (
     password: string,
     currentLocation: ClubhouseLocation
 ) => {
-    const { data }: Response = await axios.post(
-        LOGIN,
-        {
-            username: username.toLowerCase(),
-            password,
-            currentLocation,
-        },
-        { headers: makeAuthHeader() }
-    );
+    try {
+        const { data }: Response = await axios.post(
+            LOGIN,
+            {
+                username: username.toLowerCase(),
+                password,
+                currentLocation,
+            },
+            { headers: makeAuthHeader() }
+        );
 
-    return data;
+        return data;
+    } catch (err) {
+        throw err;
+    }
 };
 
 export default loginQuery;

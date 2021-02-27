@@ -17,7 +17,7 @@ interface ScryfallApiCard {
     set_name: string;
     rarity: string;
     image_uris: { normal: string };
-    card_faces: { normal: string }[];
+    card_faces: { image_uris: { normal: string } }[];
     nonfoil: boolean;
     foil: boolean;
     colors: string[];
@@ -43,7 +43,7 @@ export class ScryfallCard {
     public set_name: string;
     public rarity: string;
     public image_uris: { normal: string };
-    public card_faces: { normal: string }[];
+    public card_faces: { image_uris: { normal: string } }[];
     public nonfoil: boolean;
     public foil: boolean;
     public colors: string[];
@@ -103,7 +103,7 @@ export class ScryfallCard {
     }
 
     _getCardImage() {
-        let myImage;
+        let myImage: string;
 
         try {
             // If normal prop doesn't exist, move to catch block for flip card faces

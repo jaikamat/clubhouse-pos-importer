@@ -5,7 +5,7 @@
  * @param {Boolean} nonfoilProp
  * @param {Boolean} foilProp
  */
-export default function checkCardFinish(nonfoil, foil) {
+export default function checkCardFinish(nonfoil: boolean, foil: boolean) {
     if (!nonfoil && foil) {
         return { selectedFinish: 'FOIL', finishDisabled: true };
     } else if (nonfoil && !foil) {

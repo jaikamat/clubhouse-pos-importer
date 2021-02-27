@@ -1,22 +1,47 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import makeAuthHeader from '../utils/makeAuthHeader';
 import { LOGIN } from '../utils/api_resources';
 import axios from 'axios';
 
-export const AuthContext = React.createContext();
+interface Props {}
 
-export default function AuthProvider(props) {
+type ClubhouseLocation = 'ch1' | 'ch2';
+
+interface Context {
+    loggedIn: boolean;
+    handleLogin?: (
+        username: string,
+        password: string,
+        currentLocation: ClubhouseLocation
+    ) => Promise<any>;
+    handleLogout?: () => void;
+    currentLocation: ClubhouseLocation | null;
+}
+
+export const AuthContext = React.createContext<Context>({
+    loggedIn: false,
+    currentLocation: null,
+});
+
+const AuthProvider: FC<Props> = ({ children }) => {
     const [loggedIn, setLoggedIn] = useState(
         !!localStorage.getItem('clubhouse_JWT')
     );
 
-    const [currentLocation, setCurrentLocation] = useState(
-        localStorage.getItem('currentLocation')
+    const [
+        currentLocation,
+        setCurrentLocation,
+    ] = useState<ClubhouseLocation | null>(
+        localStorage.getItem('currentLocation') as ClubhouseLocation
     );
 
-    const handleLogin = async (username, password, currentLocation) => {
+    const handleLogin = async (
+        username: string,
+        password: string,
+        currentLocation: ClubhouseLocation
+    ) => {
         try {
-            const { data } = await axios.post(
+            const { data }: { data: { token: string } } = await axios.post(
                 LOGIN,
                 {
                     username: username.toLowerCase(),
@@ -45,7 +70,7 @@ export default function AuthProvider(props) {
             localStorage.removeItem('clubhouse_JWT');
             setLoggedIn(!!localStorage.getItem('clubhouse_JWT'));
 
-            localStorage.removeItem('currentLocation', currentLocation);
+            localStorage.removeItem('currentLocation');
             setCurrentLocation(null);
         } catch (err) {
             console.log(err);
@@ -56,7 +81,9 @@ export default function AuthProvider(props) {
         <AuthContext.Provider
             value={{ loggedIn, handleLogin, handleLogout, currentLocation }}
         >
-            {props.children}
+            {children}
         </AuthContext.Provider>
     );
-}
+};
+
+export default AuthProvider;

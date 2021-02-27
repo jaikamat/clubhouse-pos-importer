@@ -14,13 +14,13 @@ interface Context {
     ) => Promise<any>;
     handleLogout?: () => void;
     currentLocation: ClubhouseLocation | null;
-    sessionUser: string | null;
+    currentUser: string | null;
 }
 
 export const AuthContext = React.createContext<Context>({
     loggedIn: false,
     currentLocation: null,
-    sessionUser: null,
+    currentUser: null,
 });
 
 const AuthProvider: FC<Props> = ({ children }) => {
@@ -35,8 +35,8 @@ const AuthProvider: FC<Props> = ({ children }) => {
         localStorage.getItem('currentLocation') as ClubhouseLocation
     );
 
-    const [sessionUser, setSessionUser] = useState<string | null>(
-        localStorage.getItem('username')
+    const [currentUser, setCurrentUser] = useState<string | null>(
+        localStorage.getItem('currentUser')
     );
 
     const handleLogin = async (
@@ -54,8 +54,8 @@ const AuthProvider: FC<Props> = ({ children }) => {
                 localStorage.setItem('currentLocation', currentLocation);
                 setCurrentLocation(currentLocation);
 
-                localStorage.setItem('username', username);
-                setSessionUser(username);
+                localStorage.setItem('currentUser', username);
+                setCurrentUser(username);
             }
 
             return data;
@@ -71,8 +71,8 @@ const AuthProvider: FC<Props> = ({ children }) => {
         localStorage.removeItem('currentLocation');
         setCurrentLocation(null);
 
-        localStorage.removeItem('username');
-        setSessionUser(null);
+        localStorage.removeItem('currentUser');
+        setCurrentUser(null);
     };
 
     return (
@@ -80,7 +80,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
             value={{
                 loggedIn,
                 currentLocation,
-                sessionUser,
+                currentUser,
                 handleLogin,
                 handleLogout,
             }}

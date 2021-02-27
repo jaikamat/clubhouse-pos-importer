@@ -1,7 +1,7 @@
 import React, { FC, useContext } from 'react';
 import ballLogo from './logos/magic-ball.png';
 import { Menu, Icon, Dropdown } from 'semantic-ui-react';
-import { Link, useLocation, withRouter } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { AuthContext, ClubhouseLocation } from '../context/AuthProvider';
 
 const style = {

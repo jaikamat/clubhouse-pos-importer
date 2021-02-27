@@ -64,19 +64,15 @@ const AuthProvider: FC<Props> = ({ children }) => {
         }
     };
 
-    const handleLogout = async () => {
-        try {
-            localStorage.removeItem('clubhouse_JWT');
-            setLoggedIn(!!localStorage.getItem('clubhouse_JWT'));
+    const handleLogout = () => {
+        localStorage.removeItem('clubhouse_JWT');
+        setLoggedIn(!!localStorage.getItem('clubhouse_JWT'));
 
-            localStorage.removeItem('currentLocation');
-            setCurrentLocation(null);
+        localStorage.removeItem('currentLocation');
+        setCurrentLocation(null);
 
-            localStorage.removeItem('username');
-            setSessionUser(null);
-        } catch (err) {
-            console.log(err);
-        }
+        localStorage.removeItem('username');
+        setSessionUser(null);
     };
 
     return (

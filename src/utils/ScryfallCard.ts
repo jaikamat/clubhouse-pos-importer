@@ -1,9 +1,62 @@
+interface QOH {
+    FOIL_NM: number;
+    FOIL_LP: number;
+    FOIL_MP: number;
+    FOIL_HP: number;
+    NONFOIL_NM: number;
+    NONFOIL_LP: number;
+    NONFOIL_MP: number;
+    NONFOIL_HP: number;
+}
+
+interface ScryfallApiCard {
+    id: string;
+    name: string;
+    printed_name: string;
+    set: string;
+    set_name: string;
+    rarity: string;
+    image_uris: { normal: string };
+    card_faces: { normal: string }[];
+    nonfoil: boolean;
+    foil: boolean;
+    colors: string[];
+    type_line: string;
+    frame_effects: string[];
+    lang: string;
+    border_color: string;
+    display_name: string;
+    cardImage: string;
+    color_identity: string[];
+}
+
 /**
  * This class wraps the Scryfall API request data and models it to something we can control.
  * Also acts as a safeguard for any future updates to Scryfall's API data model and makes
  * the code easier to maintain and debug.
  */
 export class ScryfallCard {
+    constructor(card) {
+        this.id = card.id;
+        this.name = card.name;
+        this.printed_name = card.printed_name || null;
+        this.set = card.set;
+        this.set_name = card.set_name;
+        this.rarity = card.rarity;
+        this.image_uris = card.image_uris || null;
+        this.card_faces = card.card_faces || null;
+        this.nonfoil = card.nonfoil;
+        this.foil = card.foil;
+        this.colors = card.colors;
+        this.type_line = card.type_line;
+        this.frame_effects = card.frame_effects || [];
+        this.lang = card.lang || '';
+        this.border_color = card.border_color;
+        this.display_name = this._createDisplayName();
+        this.cardImage = this._getCardImage();
+        this.color_identity = card.color_identity || null;
+    }
+
     // Computes the proper displayName for a card, depending on its properties
     _createDisplayName() {
         const { name, printed_name, frame_effects, border_color, lang } = this;
@@ -41,27 +94,6 @@ export class ScryfallCard {
         }
 
         return myImage;
-    }
-
-    constructor(card) {
-        this.id = card.id;
-        this.name = card.name;
-        this.printed_name = card.printed_name || null;
-        this.set = card.set;
-        this.set_name = card.set_name;
-        this.rarity = card.rarity;
-        this.image_uris = card.image_uris || null;
-        this.card_faces = card.card_faces || null;
-        this.nonfoil = card.nonfoil;
-        this.foil = card.foil;
-        this.colors = card.colors;
-        this.type_line = card.type_line;
-        this.frame_effects = card.frame_effects || [];
-        this.lang = card.lang || '';
-        this.border_color = card.border_color;
-        this.display_name = this._createDisplayName();
-        this.cardImage = this._getCardImage();
-        this.color_identity = card.color_identity || null;
     }
 }
 

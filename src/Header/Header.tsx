@@ -18,7 +18,7 @@ const getClubhouseLocationName = (location: ClubhouseLocation | null) => {
 interface Props {}
 
 const Header: FC<Props> = () => {
-    const { loggedIn, currentLocation, sessionUser } = useContext(AuthContext);
+    const { loggedIn, currentLocation, currentUser } = useContext(AuthContext);
     const { pathname } = useLocation();
 
     return (
@@ -32,6 +32,13 @@ const Header: FC<Props> = () => {
                     </h3>
                 </span>
             </Menu.Item>
+            {currentUser && (
+                <Menu.Item>
+                    <span>
+                        Currently logged in as <b>{currentUser}</b>
+                    </span>
+                </Menu.Item>
+            )}
             <Menu.Menu position="right">
                 <Menu.Item
                     active={pathname === '/public-inventory'}

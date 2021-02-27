@@ -121,7 +121,13 @@ export class ScryfallCard {
  * Models the data and makes writing cards to Mongo a more confident process.
  */
 export class InventoryCard extends ScryfallCard {
-    constructor(card) {
+    private _qoh: Partial<QOH>;
+    public quantity: number;
+    public qtyToSell: number;
+    public finishCondition: string;
+    public price: number;
+
+    public constructor(card: ScryfallApiCard) {
         super(card);
         this._qoh = card.qoh ? card.qoh : {};
         // `quantity` and `qtyToSell` are redundant transaction props, unify them down the line

@@ -1,15 +1,17 @@
+import { InventoryCard } from './ScryfallCard';
+
 /**
  * Takes in an unordered group of cards and sorts them according to The Clubhouse's specs:
  * WUBRG, then multicolor, then colorless, then land, alphabetically within each color/category
  */
-export default function sortSaleList(cards) {
+export default function sortSaleList(cards: InventoryCard[]) {
     const ORDER = ['W', 'U', 'B', 'R', 'G', 'MULTI', 'COLORLESS', 'LAND'];
 
     /**
      * Main helper function that manages sort order
      * @param {Object} card
      */
-    function helpSort(card) {
+    function helpSort(card: InventoryCard) {
         let arrayConst = null;
 
         let colorsLength = null;

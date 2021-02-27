@@ -9,7 +9,16 @@ export interface QOH {
     NONFOIL_HP: number;
 }
 
-interface ScryfallApiCard {
+interface CardFace {
+    colors: string[];
+    type_line: string;
+    color_identity: string[];
+    image_uris: {
+        normal: string;
+    };
+}
+
+export interface ScryfallApiCard {
     id: string;
     name: string;
     printed_name: string;
@@ -17,7 +26,7 @@ interface ScryfallApiCard {
     set_name: string;
     rarity: string;
     image_uris: { normal: string };
-    card_faces: { image_uris: { normal: string } }[];
+    card_faces: CardFace[];
     nonfoil: boolean;
     foil: boolean;
     colors: string[];
@@ -48,7 +57,7 @@ export class ScryfallCard {
     public set_name: string;
     public rarity: string;
     public image_uris: { normal: string };
-    public card_faces: { image_uris: { normal: string } }[];
+    public card_faces: CardFace[];
     public nonfoil: boolean;
     public foil: boolean;
     public colors: string[];

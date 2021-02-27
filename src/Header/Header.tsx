@@ -1,23 +1,25 @@
-import React, { useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import ballLogo from './logos/magic-ball.png';
 import { Menu, Icon, Dropdown } from 'semantic-ui-react';
-import { Link, withRouter } from 'react-router-dom';
-import { AuthContext } from '../context/AuthProvider';
+import { Link, useLocation, withRouter } from 'react-router-dom';
+import { AuthContext, ClubhouseLocation } from '../context/AuthProvider';
 
 const style = {
     background: 'linear-gradient(#2185d0, #206ac6)',
     boxShadow: '0 3px 5px 0 rgba(0,0,0,.25)',
 };
 
-const getClubhouseLocationName = (location) => {
+const getClubhouseLocationName = (location: ClubhouseLocation | null) => {
     if (location === 'ch1') return 'Beaverton';
     if (location === 'ch2') return 'Hillsboro';
     return '';
 };
 
-function Header(props) {
-    const { loggedIn, currentLocation } = useContext(AuthContext);
-    const { pathname } = props.location;
+interface Props {}
+
+const Header: FC<Props> = () => {
+    const { loggedIn, currentLocation, sessionUser } = useContext(AuthContext);
+    const { pathname } = useLocation();
 
     return (
         <Menu inverted fixed="top" style={style}>
@@ -108,6 +110,6 @@ function Header(props) {
             </Menu.Menu>
         </Menu>
     );
-}
+};
 
-export default withRouter((props) => <Header {...props} />);
+export default Header;

@@ -1,9 +1,6 @@
 import React, { FC, SyntheticEvent, useState } from 'react';
 import { Search, SearchProps, SearchResultData } from 'semantic-ui-react';
 import _ from 'lodash';
-import axios from 'axios';
-import makeAuthHeader from '../utils/makeAuthHeader';
-import { SCRYFALL_AUTOCOMPLETE } from '../utils/api_resources';
 import $ from 'jquery';
 import searchQuery from './searchQuery';
 

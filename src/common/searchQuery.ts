@@ -11,14 +11,18 @@ interface Response {
 }
 
 const searchQuery = async (cardName: string) => {
-    const { data }: Response = await axios.get(
-        `${SCRYFALL_AUTOCOMPLETE}?q=${cardName}`,
-        {
-            headers: makeAuthHeader(),
-        }
-    );
+    try {
+        const { data }: Response = await axios.get(
+            `${SCRYFALL_AUTOCOMPLETE}?q=${cardName}`,
+            {
+                headers: makeAuthHeader(),
+            }
+        );
 
-    return data;
+        return data;
+    } catch (err) {
+        throw err;
+    }
 };
 
 export default searchQuery;

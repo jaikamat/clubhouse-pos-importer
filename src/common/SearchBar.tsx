@@ -68,8 +68,7 @@ const SearchBar: FC<Props> = ({ handleSearchSelect, onBlur }) => {
             placeholder="Enter a card title"
             selectFirstResult={true}
             id="searchBar"
-            // TODO: Figure out how to select...
-            // onFocus={(e) => e.currentTarget.select()}
+            onFocus={(e) => (e.target as HTMLInputElement).select()}
             onBlur={onBlur} // Used to clear state in the Browse Inventory feature
         />
     );

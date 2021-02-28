@@ -10,7 +10,7 @@ interface Response {
     };
 }
 
-const searchQuery = async (cardName: string) => {
+const autocompleteQuery = async (cardName: string) => {
     try {
         const { data }: Response = await axios.get(
             `${SCRYFALL_AUTOCOMPLETE}?q=${cardName}`,
@@ -25,4 +25,4 @@ const searchQuery = async (cardName: string) => {
     }
 };
 
-export default searchQuery;
+export default autocompleteQuery;

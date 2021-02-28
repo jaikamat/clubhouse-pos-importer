@@ -2,7 +2,7 @@ import React, { FC, SyntheticEvent, useState } from 'react';
 import { Search, SearchProps, SearchResultData } from 'semantic-ui-react';
 import _ from 'lodash';
 import $ from 'jquery';
-import searchQuery from './searchQuery';
+import autocompleteQuery from './autocompleteQuery';
 
 interface Props {
     handleSearchSelect: (result: string) => void;
@@ -28,7 +28,7 @@ const SearchBar: FC<Props> = ({ handleSearchSelect, onBlur }) => {
         setLoading(true);
 
         setTimeout(async () => {
-            const data = await searchQuery(value);
+            const data = await autocompleteQuery(value);
 
             const formattedResults = data.data
                 .map((el) => ({ title: el }))

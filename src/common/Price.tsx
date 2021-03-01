@@ -7,7 +7,7 @@ interface Props {
 const Price: FC<Props> = ({ num }) => {
     let price: number = typeof num === 'string' ? Number(num) : num;
 
-    if (isNaN(price)) return <span>$0.00</span>;
+    if (num === null || isNaN(price)) return <span>$0.00</span>;
     return <span>${price.toFixed(2)}</span>;
 };
 

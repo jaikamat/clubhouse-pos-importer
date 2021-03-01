@@ -19,3 +19,8 @@ test('Price', () => {
     render(<Price num="-765.437" />);
     screen.getByText('$-765.44');
 });
+
+test('Price', () => {
+    render(<Price num={null} />);
+    screen.getByText('$0.00');
+});

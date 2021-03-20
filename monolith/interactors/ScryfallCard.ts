@@ -1,4 +1,4 @@
-export interface ScryfallCard {
+export default interface ScryfallCard {
     object: string;
     id: string;
     oracle_id: string;

@@ -3,6 +3,7 @@ import collectionFromLocation from '../lib/collectionFromLocation';
 import getDatabaseName from '../lib/getDatabaseName';
 import mongoOptions from '../lib/mongoOptions';
 import { ClubhouseLocation } from './getJwt';
+import { QOH } from '../lib/parseQoh';
 const DATABASE_NAME = getDatabaseName();
 
 type Card = {
@@ -15,6 +16,13 @@ type Card = {
     location: ClubhouseLocation;
 };
 
+interface ReturnCard {
+    _id: string;
+    name: string;
+    qoh: QOH;
+    set: string;
+}
+
 // `finishCondition` Refers to the configuration of Finishes and Conditions ex. NONFOIL_NM or FOIL_LP
 export default async function addCardToInventory({
     quantity,
@@ -24,7 +32,7 @@ export default async function addCardToInventory({
     set_name,
     set,
     location,
-}: Card) {
+}: Card): Promise<ReturnCard> {
     try {
         var client = await new MongoClient(
             process.env.MONGO_URI,

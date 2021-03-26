@@ -31,5 +31,3 @@ export const GET_CARDS_WITH_INFO = `${getPrefix()}/auth/getCardsWithInfo`;
 export const AUTOCOMPLETE = `${getPrefix()}/autocomplete`;
 export const SCRYFALL_SEARCH = 'https://api.scryfall.com/cards/search';
 export const GET_LIVE_PRICE = `https://us-central1-clubhouse-collection.cloudfunctions.net/getPriceFromTcg${env}`;
-export const SCRYFALL_AUTOCOMPLETE =
-    'https://api.scryfall.com/cards/autocomplete';

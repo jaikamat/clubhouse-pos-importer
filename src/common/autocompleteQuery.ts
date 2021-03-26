@@ -1,23 +1,17 @@
 import axios from 'axios';
-import makeAuthHeader from '../utils/makeAuthHeader';
-import { SCRYFALL_AUTOCOMPLETE } from '../utils/api_resources';
+import { AUTOCOMPLETE } from '../utils/api_resources';
 
 interface Response {
-    data: {
-        data: string[];
-        object: string;
-        total_values: 1;
-    };
+    data: string[];
 }
 
 const autocompleteQuery = async (cardName: string) => {
     try {
-        const { data }: Response = await axios.get(
-            `${SCRYFALL_AUTOCOMPLETE}?q=${cardName}`,
-            {
-                headers: makeAuthHeader(),
-            }
-        );
+        const { data }: Response = await axios.get(AUTOCOMPLETE, {
+            params: {
+                title: cardName,
+            },
+        });
 
         return data;
     } catch (err) {

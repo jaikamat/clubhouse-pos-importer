@@ -1,8 +1,15 @@
-import express from 'express';
+import express, { Request } from 'express';
 const router = express.Router();
 import getJwt from '../interactors/getJwt';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
 import getCardFromAllLocations from '../interactors/getCardFromAllLocations';
+import autocomplete from '../interactors/autocomplete';
+
+interface RequestWithQuery extends Request {
+    query: {
+        title: string;
+    };
+}
 
 router.post('/jwt', async (req, res) => {
     try {
@@ -11,6 +18,17 @@ router.post('/jwt', async (req, res) => {
         const token = await getJwt(username, password, currentLocation);
 
         res.status(200).send(token);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+});
+
+router.get('/autocomplete', async (req: RequestWithQuery, res) => {
+    try {
+        const { title } = req.query;
+        const results = await autocomplete(title);
+        res.status(200).send(results);
     } catch (err) {
         console.log(err);
         res.status(500).send(err);

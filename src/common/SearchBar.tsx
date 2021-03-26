@@ -29,11 +29,7 @@ const SearchBar: FC<Props> = ({ handleSearchSelect, onBlur }) => {
 
         setTimeout(async () => {
             const data = await autocompleteQuery(value);
-
-            const formattedResults = data
-                .map((el) => ({ title: el.name }))
-                .slice(0, 7);
-
+            const formattedResults = data.map((el) => ({ title: el }));
             setResults(formattedResults);
             setLoading(false);
         }, 100);

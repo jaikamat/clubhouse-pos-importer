@@ -2,7 +2,7 @@ import axios from 'axios';
 import { AUTOCOMPLETE } from '../utils/api_resources';
 
 interface Response {
-    data: { name: string }[];
+    data: string[];
 }
 
 const autocompleteQuery = async (cardName: string) => {

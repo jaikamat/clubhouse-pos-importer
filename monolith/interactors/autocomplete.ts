@@ -18,19 +18,21 @@ async function autocomplete(term: string) {
             .aggregate([
                 {
                     $search: {
-                        text: {
+                        index: 'autocomplete',
+                        autocomplete: {
                             query: term,
                             path: 'name',
+                            tokenOrder: 'sequential',
                             fuzzy: {
                                 maxEdits: 1,
                                 maxExpansions: 50,
-                                prefixLength: 2,
+                                prefixLength: 3,
                             },
                         },
                     },
                 },
                 {
-                    $limit: 15,
+                    $limit: 7,
                 },
                 {
                     $project: {

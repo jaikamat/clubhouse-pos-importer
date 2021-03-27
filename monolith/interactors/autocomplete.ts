@@ -32,7 +32,7 @@ async function autocomplete(term: string) {
                     },
                 },
                 {
-                    $limit: 7,
+                    $limit: 15,
                 },
                 {
                     $project: {

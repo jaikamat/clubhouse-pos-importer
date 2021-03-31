@@ -168,11 +168,10 @@ export const SaleProvider = (props) => {
             createToast({
                 color: 'red',
                 header: 'Error',
-                message: `Sale was not created`,
+                message: e.response.data || 'Sale was not created',
             });
 
             resetSaleState();
-            console.log(e.response);
         }
     };
 

@@ -1,4 +1,4 @@
-interface QOH {
+export interface QOH {
     FOIL_NM?: number;
     FOIL_LP?: number;
     FOIL_MP?: number;

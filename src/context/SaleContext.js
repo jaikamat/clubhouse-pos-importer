@@ -153,9 +153,19 @@ export const SaleProvider = (props) => {
                     headers: makeAuthHeader(),
                 });
 
+            // Extract only the necessary items for sale parameters
+            const transformedSaleListCards = saleListCards.map((saleCard) => ({
+                id: saleCard.id,
+                name: saleCard.name,
+                set_name: saleCard.set_name,
+                qtyToSell: saleCard.qtyToSell,
+                finishCondition: saleCard.finishCondition,
+                price: saleCard.price || 0,
+            }));
+
             const { data } = await axios.post(
                 FINISH_SALE,
-                { cards: saleListCards },
+                { cards: transformedSaleListCards },
                 { headers: makeAuthHeader() }
             );
 

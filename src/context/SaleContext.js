@@ -112,7 +112,7 @@ export const SaleProvider = (props) => {
             createToast({
                 color: 'red',
                 header: `Error`,
-                message: `${e.response.data}`,
+                message: e.response.data || 'Error suspending sale',
             });
         }
     };
@@ -132,7 +132,11 @@ export const SaleProvider = (props) => {
             });
         } catch (e) {
             console.log(e.response);
-            createToast({ color: 'red', header: `Error` });
+            createToast({
+                color: 'red',
+                header: `Error`,
+                message: e.response.data || 'Error deleting suspended sale',
+            });
         }
     };
 

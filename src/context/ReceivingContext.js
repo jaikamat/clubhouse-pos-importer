@@ -142,7 +142,8 @@ export function ReceivingProvider(props) {
             console.log(e);
             createToast({
                 color: 'red',
-                header: `Something went wrong...`,
+                header: 'Error',
+                message: e.response.data || 'Error receiving cards',
                 duration: 2000,
             });
         }

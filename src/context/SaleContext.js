@@ -112,7 +112,7 @@ export const SaleProvider = (props) => {
             createToast({
                 color: 'red',
                 header: `Error`,
-                message: `${e.response.data}`,
+                message: e.response.data || 'Error suspending sale',
             });
         }
     };
@@ -132,7 +132,11 @@ export const SaleProvider = (props) => {
             });
         } catch (e) {
             console.log(e.response);
-            createToast({ color: 'red', header: `Error` });
+            createToast({
+                color: 'red',
+                header: `Error`,
+                message: e.response.data || 'Error deleting suspended sale',
+            });
         }
     };
 
@@ -168,11 +172,10 @@ export const SaleProvider = (props) => {
             createToast({
                 color: 'red',
                 header: 'Error',
-                message: `Sale was not created`,
+                message: e.response.data || 'Sale was not created',
             });
 
             resetSaleState();
-            console.log(e.response);
         }
     };
 

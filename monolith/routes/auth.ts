@@ -129,8 +129,8 @@ router.post('/finishSale', (req: RequestWithUserInfo, res, next) => {
         const { price, qtyToSell, finishCondition, name, set_name, id } = card;
 
         if (!id) throw new Error(`Card property id missing`);
-        if (!name && !set_name)
-            throw new Error(`Card name or set_name missing for ${id}`);
+        if (!name) throw new Error(`Card name missing for ${id}`);
+        if (!set_name) throw new Error(`Card set_name missing for ${id}`);
         if (typeof price !== 'number')
             throw new Error(`Price not number for ${name}`);
         if (price < 0)

@@ -13,7 +13,7 @@ async function autocomplete(term: string) {
 
         const db = client.db(DATABASE_NAME);
 
-        const results = await db
+        const results: { name: string }[] = await db
             .collection('scryfall_bulk_cards')
             .aggregate([
                 {
@@ -32,9 +32,6 @@ async function autocomplete(term: string) {
                     },
                 },
                 {
-                    $limit: 15,
-                },
-                {
                     $project: {
                         _id: 0,
                         name: 1,
@@ -44,7 +41,9 @@ async function autocomplete(term: string) {
             .toArray();
 
         return results
-            .map((r: { name: string }) => r.name)
+            .map((r) => r.name)
+            .sort((a, b) => a.length - b.length)
+            .slice(0, 10)
             .filter((el, idx, arr) => {
                 return arr.indexOf(el) === idx;
             });

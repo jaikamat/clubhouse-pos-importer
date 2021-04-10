@@ -1,8 +1,6 @@
-const MongoClient = require('mongodb').MongoClient;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-import getDatabaseName from '../lib/getDatabaseName';
-const DATABASE_NAME = getDatabaseName();
+import getDatabaseConnection from '../database';
 
 export type ClubhouseLocation = 'ch1' | 'ch2';
 
@@ -19,15 +17,8 @@ async function getJwt(
     submittedPass: string,
     currentLocation: ClubhouseLocation
 ): Promise<{ token: string } | string> {
-    const client = await new MongoClient(process.env.MONGO_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
-
     try {
-        await client.connect();
-
-        const db = client.db(DATABASE_NAME);
+        const db = await getDatabaseConnection();
 
         const user: User = await db.collection('users').findOne({
             username: username,
@@ -64,8 +55,6 @@ async function getJwt(
     } catch (err) {
         console.log(err);
         throw err;
-    } finally {
-        await client.close();
     }
 }
 

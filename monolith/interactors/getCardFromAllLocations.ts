@@ -1,15 +1,14 @@
-import { Db, MongoClient } from 'mongodb';
+import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import getDatabaseName from '../lib/getDatabaseName';
 import parseQoh from '../lib/parseQoh';
 import { ClubhouseLocation } from './getJwt';
-const DATABASE_NAME = getDatabaseName();
 
 async function getSingleLocationCard(
     title: string,
-    db: Db,
     location: ClubhouseLocation
 ) {
+    const db = await getDatabaseConnection();
+
     const pipeline = [];
 
     // Fetch by title
@@ -75,18 +74,9 @@ async function getSingleLocationCard(
 }
 
 async function getCardFromAllLocations(title: string) {
-    const mongoConfig = { useNewUrlParser: true, useUnifiedTopology: true };
-
     try {
-        var client = await new MongoClient(
-            process.env.MONGO_URI,
-            mongoConfig
-        ).connect();
-
-        const db = client.db(DATABASE_NAME);
-
-        const ch1 = await getSingleLocationCard(title, db, 'ch1');
-        const ch2 = await getSingleLocationCard(title, db, 'ch2');
+        const ch1 = await getSingleLocationCard(title, 'ch1');
+        const ch2 = await getSingleLocationCard(title, 'ch2');
 
         // Add up the [foil, nonfoil] quantities of each card's QOH
         const ch1Combined = ch1.reduce(
@@ -118,8 +108,6 @@ async function getCardFromAllLocations(title: string) {
     } catch (err) {
         console.log(err);
         throw err;
-    } finally {
-        await client.close();
     }
 }
 

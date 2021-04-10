@@ -8,7 +8,13 @@ import app from '../app';
 import debugImport from 'debug';
 const debug = debugImport('monolith:server');
 import http from 'http';
+import connectToDatabase from '../database';
 require('dotenv').config(); // load local env vars
+
+/**
+ * Connect to the database first
+ */
+connectToDatabase();
 
 /**
  * Get port from environment and store in Express.

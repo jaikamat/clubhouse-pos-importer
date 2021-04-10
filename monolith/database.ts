@@ -20,9 +20,9 @@ const connectToDatabase = async () => {
 
     _connection = await client.connect();
 
-    console.log('Database connection established');
-
     _db = await client.db(DATABASE_NAME);
+
+    console.log(`Database connection established: ${DATABASE_NAME}`);
 
     return _db;
 };

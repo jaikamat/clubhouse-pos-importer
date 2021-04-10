@@ -1,17 +1,10 @@
-import { MongoClient } from 'mongodb';
+import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import getDatabaseName from '../lib/getDatabaseName';
-import mongoOptions from '../lib/mongoOptions';
 import { ClubhouseLocation } from './getJwt';
-const DATABASE_NAME = getDatabaseName();
 
 async function getSalesFromCardname(cardName, location: ClubhouseLocation) {
-    const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
-
     try {
-        await client.connect();
-
-        const db = client.db(DATABASE_NAME);
+        const db = await getDatabaseConnection();
 
         // Returns only the relevant queried cards from the card_list array of cards involved in the sale
         // Refer to https://blog.fullstacktraining.com/retrieve-only-queried-element-in-an-object-array-in-mongodb-collection/
@@ -37,8 +30,6 @@ async function getSalesFromCardname(cardName, location: ClubhouseLocation) {
     } catch (err) {
         console.log(err);
         throw err;
-    } finally {
-        await client.close();
     }
 }
 

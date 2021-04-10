@@ -1,16 +1,10 @@
 import { ClubhouseLocation } from './getJwt';
-import getDatabaseName from '../lib/getDatabaseName';
-import { MongoClient } from 'mongodb';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import mongoOptions from '../lib/mongoOptions';
-const DATABASE_NAME = getDatabaseName();
+import getDatabaseConnection from '../database';
 
 async function getFormatLegalities(location: ClubhouseLocation) {
-    const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
-
     try {
-        await client.connect();
-        const db = client.db(DATABASE_NAME);
+        const db = await getDatabaseConnection();
 
         const agg = []; // Build the aggregation
 
@@ -88,8 +82,6 @@ async function getFormatLegalities(location: ClubhouseLocation) {
     } catch (err) {
         console.log(err);
         throw err;
-    } finally {
-        await client.close();
     }
 }
 

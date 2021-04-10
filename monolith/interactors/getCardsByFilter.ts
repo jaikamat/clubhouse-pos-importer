@@ -1,7 +1,5 @@
-import { MongoClient } from 'mongodb';
+import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import getDatabaseName from '../lib/getDatabaseName';
-const DATABASE_NAME = getDatabaseName();
 const LIMIT = 100;
 
 export interface Arguments {
@@ -54,15 +52,13 @@ const getCardsByFilter = async ({
     frame,
     location,
 }: Arguments) => {
-    const client = await new MongoClient(process.env.MONGO_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
-
     try {
-        await client.connect();
+        const db = await getDatabaseConnection();
 
-        const db = client.db(DATABASE_NAME);
+        const collection = db.collection(
+            collectionFromLocation(location).cardInventory
+        );
+
         const SKIP = LIMIT * (Math.abs(Number(page) || 1) - 1); // `page` starts at 1 for clarity
 
         // Create aggregation
@@ -303,10 +299,7 @@ const getCardsByFilter = async ({
             },
         });
 
-        const docs = await db
-            .collection(collectionFromLocation(location).cardInventory)
-            .aggregate(aggregation)
-            .toArray();
+        const docs = await collection.aggregate(aggregation).toArray();
 
         const output: {
             cards?: any;
@@ -320,8 +313,6 @@ const getCardsByFilter = async ({
     } catch (err) {
         console.log(err);
         throw err;
-    } finally {
-        await client.close();
     }
 };
 

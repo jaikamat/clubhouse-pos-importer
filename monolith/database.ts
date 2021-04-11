@@ -11,12 +11,15 @@ export const closeConnection = async () => await _connection.close();
 /**
  * Connects to mongoDB. Returns a DB instance as a singleton for passing around
  */
-const getDatabaseConnection = async () => {
+const getDatabaseConnection = async (connectionUri?: string) => {
     if (_db) return _db;
 
     console.log('Attempting to connect to database...');
 
-    const client = new MongoClient(process.env.MONGO_URI, mongoOptions);
+    const client = new MongoClient(
+        connectionUri || process.env.MONGO_URI,
+        mongoOptions
+    );
 
     // TODO: trycatch for errors
     _connection = await client.connect();

@@ -7,7 +7,7 @@
         "gcp-build": "tsc -p .",
         "start-dev": "rm -r ./built && tsc -p . && echo \"Built TS source\" && PORT=7331 ENVIRONMENT=development node ./built/bin/www",
         "deploy": "gcloud app deploy app.yaml --stop-previous-version",
-        "test": "jest"
+        "test": "ENVIRONMENT=localtest jest"
     },
     "dependencies": {
         "axios": "^0.21.1",

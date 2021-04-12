@@ -3,20 +3,16 @@ const { MongoClient } = require('mongodb');
 const {
     default: wrapAddCardToInventoryReceiving,
 } = require('../built/interactors/addCardToInventoryReceiving');
+const getDatabaseConnection = require('../built/database').default;
 
 let mongoServer;
-let client;
-const mongoOptions = { useNewUrlParser: true, useUnifiedTopology: true };
-const PROD_DB = 'clubhouse_collection_production';
+let db;
 
 // Set up the mongo memory instance
 beforeAll(async () => {
     mongoServer = new MongoMemoryServer();
-    // Interactors use this to establish a connection
-    process.env.MONGO_URI = await mongoServer.getUri();
-
-    // Establish our own connection outside of interactors to inspect db
-    client = await new MongoClient.connect(process.env.MONGO_URI, mongoOptions);
+    const uri = await mongoServer.getUri();
+    db = await getDatabaseConnection(uri);
 });
 
 afterAll(async () => {
@@ -29,7 +25,7 @@ test('Receive one', async () => {
             {
                 quantity: 1,
                 finishCondition: 'NONFOIL_NM',
-                id: '1234',
+                id: '3678',
                 name: 'Black Lotus',
                 set_name: 'Limted Edition Alpha',
                 set: 'LEA',
@@ -37,7 +33,7 @@ test('Receive one', async () => {
             {
                 quantity: 4,
                 finishCondition: 'NONFOIL_NM',
-                id: '2345',
+                id: '2386',
                 name: 'Mox Diamond',
                 set_name: 'Stronghold',
                 set: 'STH',
@@ -47,16 +43,12 @@ test('Receive one', async () => {
     );
 
     // ch1 uses `card_inventory`, ch2 uses `card_inventory_ch2`
-    const foundDocs = await client
-        .db(PROD_DB)
-        .collection('card_inventory')
-        .find({})
-        .toArray();
+    const foundDocs = await db.collection('card_inventory').find({}).toArray();
 
     expect(foundDocs).toMatchInlineSnapshot(`
         Array [
           Object {
-            "_id": "1234",
+            "_id": "3678",
             "name": "Black Lotus",
             "qoh": Object {
               "NONFOIL_NM": 1,
@@ -65,7 +57,7 @@ test('Receive one', async () => {
             "set_name": "Limted Edition Alpha",
           },
           Object {
-            "_id": "2345",
+            "_id": "2386",
             "name": "Mox Diamond",
             "qoh": Object {
               "NONFOIL_NM": 4,
@@ -82,7 +74,7 @@ test('Receive more', async () => {
         {
             quantity: 1,
             finishCondition: 'NONFOIL_NM',
-            id: '1234',
+            id: '3678',
             name: 'Black Lotus',
             set_name: 'Limted Edition Alpha',
             set: 'LEA',
@@ -90,7 +82,7 @@ test('Receive more', async () => {
         {
             quantity: 4,
             finishCondition: 'NONFOIL_NM',
-            id: '2345',
+            id: '2386',
             name: 'Mox Diamond',
             set_name: 'Stronghold',
             set: 'STH',
@@ -108,16 +100,12 @@ test('Receive more', async () => {
     await wrapAddCardToInventoryReceiving(receiveMore, 'ch1');
 
     // ch1 uses `card_inventory`, ch2 uses `card_inventory_ch2`
-    const foundDocs = await client
-        .db(PROD_DB)
-        .collection('card_inventory')
-        .find({})
-        .toArray();
+    const foundDocs = await db.collection('card_inventory').find({}).toArray();
 
     expect(foundDocs).toMatchInlineSnapshot(`
         Array [
           Object {
-            "_id": "1234",
+            "_id": "3678",
             "name": "Black Lotus",
             "qoh": Object {
               "NONFOIL_NM": 2,
@@ -126,7 +114,7 @@ test('Receive more', async () => {
             "set_name": "Limted Edition Alpha",
           },
           Object {
-            "_id": "2345",
+            "_id": "2386",
             "name": "Mox Diamond",
             "qoh": Object {
               "NONFOIL_NM": 8,

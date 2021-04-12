@@ -1,10 +1,7 @@
-import { MongoClient } from 'mongodb';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import getDatabaseName from '../lib/getDatabaseName';
-import mongoOptions from '../lib/mongoOptions';
 import { ClubhouseLocation } from './getJwt';
 import { QOH } from '../lib/parseQoh';
-const DATABASE_NAME = getDatabaseName();
+import getDatabaseConnection from '../database';
 
 type Card = {
     quantity: number;
@@ -34,21 +31,17 @@ export default async function addCardToInventory({
     location,
 }: Card): Promise<ReturnCard> {
     try {
-        var client = await new MongoClient(
-            process.env.MONGO_URI,
-            mongoOptions
-        ).connect();
+        const db = await getDatabaseConnection();
+        const collection = db.collection(
+            collectionFromLocation(location).cardInventory
+        );
 
         console.log(
             `Update Info: QTY:${quantity}, ${finishCondition}, ${name}, ${id}, LOCATION: ${location}`
         );
 
-        const db = client
-            .db(DATABASE_NAME)
-            .collection(collectionFromLocation(location).cardInventory);
-
         // Upsert the new quantity in the document
-        await db.updateOne(
+        await collection.updateOne(
             { _id: id },
             {
                 $inc: {
@@ -60,7 +53,7 @@ export default async function addCardToInventory({
         );
 
         // Validate inventory quantites to never be negative numbers
-        await db.updateOne(
+        await collection.updateOne(
             {
                 _id: id,
                 [`qoh.${finishCondition}`]: { $lt: 0 },
@@ -71,7 +64,7 @@ export default async function addCardToInventory({
         );
 
         // Get the updated document for return
-        return await db.findOne(
+        return await collection.findOne(
             { _id: id },
             {
                 projection: {
@@ -86,7 +79,5 @@ export default async function addCardToInventory({
     } catch (err) {
         console.log(err);
         throw err;
-    } finally {
-        await client.close();
     }
 }

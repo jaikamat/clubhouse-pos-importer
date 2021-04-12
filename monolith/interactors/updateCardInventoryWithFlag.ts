@@ -1,9 +1,6 @@
 import { ClubhouseLocation } from './getJwt';
-import getDatabaseName from '../lib/getDatabaseName';
-import { MongoClient } from 'mongodb';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import mongoOptions from '../lib/mongoOptions';
-const DATABASE_NAME = getDatabaseName();
+import getDatabaseConnection from '../database';
 
 /**
  * Updates card inventory based on the card's passed properties (qtyToSell, finishCondition, id, name) and CHANGE_FLAG
@@ -13,8 +10,7 @@ const DATABASE_NAME = getDatabaseName();
 async function updateCardInventoryWithFlag(
     card,
     CHANGE_FLAG,
-    location: ClubhouseLocation,
-    databaseClient: MongoClient
+    location: ClubhouseLocation
 ) {
     const { qtyToSell, finishCondition, id, name } = card;
     let quantityChange;
@@ -32,11 +28,12 @@ async function updateCardInventoryWithFlag(
             `Suspend sale, ${CHANGE_FLAG}: QTY: ${qtyToSell}, ${finishCondition}, ${name}, ${id}, LOCATION: ${location}`
         );
 
-        const db = databaseClient
-            .db(DATABASE_NAME)
-            .collection(collectionFromLocation(location).cardInventory);
+        const db = await getDatabaseConnection();
+        const collection = db.collection(
+            collectionFromLocation(location).cardInventory
+        );
 
-        await db.updateOne(
+        await collection.updateOne(
             { _id: id },
             {
                 $inc: {
@@ -46,7 +43,7 @@ async function updateCardInventoryWithFlag(
         );
 
         // Validate inventory quantites to never be negative numbers
-        return await db.updateOne(
+        return await collection.updateOne(
             {
                 _id: id,
                 [`qoh.${finishCondition}`]: { $lt: 0 },

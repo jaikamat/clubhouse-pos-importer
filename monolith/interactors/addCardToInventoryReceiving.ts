@@ -1,9 +1,7 @@
-import { MongoClient } from 'mongodb';
+import { Collection } from 'mongodb';
 import { ClubhouseLocation } from './getJwt';
-import getDatabaseName from '../lib/getDatabaseName';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import mongoOptions from '../lib/mongoOptions';
-const DATABASE_NAME = getDatabaseName();
+import getDatabaseConnection from '../database';
 
 type Card = {
     quantity: number;
@@ -17,7 +15,7 @@ type Card = {
 // `finishCondition` Refers to the configuration of Finishes and Conditions ex. NONFOIL_NM or FOIL_LP
 async function addCardToInventoryReceiving(
     { quantity, finishCondition, id, name, set_name, set }: Card,
-    database
+    collection: Collection
 ) {
     try {
         console.log(
@@ -25,7 +23,7 @@ async function addCardToInventoryReceiving(
         );
 
         // Upsert the new quantity in the document
-        return await database.updateOne(
+        return await collection.updateOne(
             { _id: id },
             {
                 $inc: {
@@ -47,17 +45,14 @@ async function wrapAddCardToInventoryReceiving(
     location: ClubhouseLocation
 ) {
     try {
-        var client = await new MongoClient(
-            process.env.MONGO_URI,
-            mongoOptions
-        ).connect();
+        const db = await getDatabaseConnection();
 
-        const db = client
-            .db(DATABASE_NAME)
-            .collection(collectionFromLocation(location).cardInventory);
+        const collection = db.collection(
+            collectionFromLocation(location).cardInventory
+        );
 
         const promises = cards.map(async (c) =>
-            addCardToInventoryReceiving(c, db)
+            addCardToInventoryReceiving(c, collection)
         );
 
         const messages = await Promise.all(promises);
@@ -68,8 +63,6 @@ async function wrapAddCardToInventoryReceiving(
     } catch (err) {
         console.log(err);
         throw err;
-    } finally {
-        await client.close();
     }
 }
 

@@ -1,11 +1,8 @@
-import { MongoClient } from 'mongodb';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import getDatabaseName from '../lib/getDatabaseName';
 import { ClubhouseLocation } from './getJwt';
 import request from 'request-promise-native';
 import createLightspeedSale from './createLightspeedSale';
-import mongoOptions from '../lib/mongoOptions';
-const DATABASE_NAME = getDatabaseName();
+import getDatabaseConnection from '../database';
 
 /**
  * Updates a single card's QOH based on qtyToSell, finishCondition, id, name
@@ -82,12 +79,8 @@ async function updateCardInventory(
  * Exposes the DB and passes it down to child queries; wraps the promises
  */
 export async function updateInventoryCards(cards, location: ClubhouseLocation) {
-    const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
-
     try {
-        await client.connect();
-
-        const db = client.db(DATABASE_NAME);
+        const db = await getDatabaseConnection();
         const dbInserts = cards.map((card) =>
             updateCardInventory(db, card, location)
         );
@@ -96,8 +89,6 @@ export async function updateInventoryCards(cards, location: ClubhouseLocation) {
     } catch (err) {
         console.log(err);
         throw err;
-    } finally {
-        await client.close();
     }
 }
 
@@ -108,12 +99,8 @@ export async function updateInventoryCards(cards, location: ClubhouseLocation) {
  * @param cardList - an array of cards that were involved in the sale
  */
 async function createSale(saleData, cardList, location: ClubhouseLocation) {
-    const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
-
     try {
-        await client.connect();
-
-        const db = client.db(DATABASE_NAME);
+        const db = await getDatabaseConnection();
 
         return await db
             .collection(collectionFromLocation(location).salesData)
@@ -124,8 +111,6 @@ async function createSale(saleData, cardList, location: ClubhouseLocation) {
     } catch (err) {
         console.log(err);
         throw err;
-    } finally {
-        await client.close();
     }
 }
 

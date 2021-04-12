@@ -1,29 +1,19 @@
-const { ExpectationFailed } = require('http-errors');
 const { MongoMemoryServer } = require('mongodb-memory-server');
-const { MongoClient } = require('mongodb');
 // TODO: We currently require in the built code. We should be requiring the TS file,
 // but this will require some finagling with tooling configs
 const {
     default: addCardToInventory,
 } = require('../built/interactors/addCardToInventory');
+const getDatabaseConnection = require('../built/database').default;
 
 let mongoServer;
-let client;
-const mongoOptions = { useNewUrlParser: true, useUnifiedTopology: true };
-const PROD_DB = 'clubhouse_collection_production';
+let db;
 
 // Set up the mongo memory instance
-beforeEach(async () => {
+beforeAll(async () => {
     mongoServer = new MongoMemoryServer();
-    // Interactors use this to establish a connection
-    process.env.MONGO_URI = await mongoServer.getUri();
-
-    // Establish our own connection outside of interactors to inspect db
-    client = await new MongoClient.connect(process.env.MONGO_URI, mongoOptions);
-});
-
-afterEach(async () => {
-    await mongoServer.stop();
+    const uri = await mongoServer.getUri();
+    db = await getDatabaseConnection(uri);
 });
 
 test('Single card addition', async () => {
@@ -38,8 +28,7 @@ test('Single card addition', async () => {
     });
 
     // ch1 uses `card_inventory`, ch2 uses `card_inventory_ch2`
-    const foundDoc = await client
-        .db(PROD_DB)
+    const foundDoc = await db
         .collection('card_inventory')
         .findOne({ _id: '1234' });
 
@@ -61,7 +50,7 @@ test('Multiple card additions', async () => {
     await addCardToInventory({
         quantity: 2,
         finishCondition: 'FOIL_NM',
-        id: '1234',
+        id: '2345',
         name: 'CardName',
         set_name: 'SetName',
         set: 'SNM',
@@ -72,21 +61,20 @@ test('Multiple card additions', async () => {
     await addCardToInventory({
         quantity: -2,
         finishCondition: 'FOIL_NM',
-        id: '1234',
+        id: '2345',
         name: 'CardName',
         set_name: 'SetName',
         set: 'SNM',
         location: 'ch1',
     });
 
-    const foundDoc = await client
-        .db(PROD_DB)
+    const foundDoc = await db
         .collection('card_inventory')
-        .findOne({ _id: '1234' });
+        .findOne({ _id: '2345' });
 
     expect(foundDoc).toMatchInlineSnapshot(`
         Object {
-          "_id": "1234",
+          "_id": "2345",
           "name": "CardName",
           "qoh": Object {
             "FOIL_NM": 0,
@@ -120,8 +108,7 @@ test('Attempt negative card addition', async () => {
         location: 'ch1',
     });
 
-    const foundDoc = await client
-        .db(PROD_DB)
+    const foundDoc = await db
         .collection('card_inventory')
         .findOne({ _id: '1234' });
 
@@ -172,8 +159,7 @@ test('Multiple finish conditions', async () => {
         location: 'ch1',
     });
 
-    const foundDoc = await client
-        .db(PROD_DB)
+    const foundDoc = await db
         .collection('card_inventory')
         .findOne({ _id: '1234' });
 

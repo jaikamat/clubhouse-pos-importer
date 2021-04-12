@@ -1,24 +1,15 @@
-import { MongoClient } from 'mongodb';
+import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import getDatabaseName from '../lib/getDatabaseName';
 import { ClubhouseLocation } from './getJwt';
-const DATABASE_NAME = getDatabaseName();
 
 async function getCardsWithInfo(
     title: string,
+    // if matchInStock is false, we get all cards, even those with no stock
     matchInStock: boolean = false,
     location: ClubhouseLocation
 ) {
-    // if matchInStock is false, we get all cards, even those with no stock
-    const mongoConfig = { useNewUrlParser: true, useUnifiedTopology: true };
-
     try {
-        var client = await new MongoClient(
-            process.env.MONGO_URI,
-            mongoConfig
-        ).connect();
-
-        const db = client.db(DATABASE_NAME);
+        const db = await getDatabaseConnection();
 
         const pipeline = [];
 
@@ -77,8 +68,6 @@ async function getCardsWithInfo(
     } catch (err) {
         console.log(err);
         throw err;
-    } finally {
-        await client.close();
     }
 }
 

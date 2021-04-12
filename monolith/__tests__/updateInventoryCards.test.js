@@ -6,20 +6,16 @@ const {
 const {
     updateInventoryCards,
 } = require('../built/interactors/updateInventoryCards');
+const getDatabaseConnection = require('../built/database').default;
 
 let mongoServer;
-let client;
-const mongoOptions = { useNewUrlParser: true, useUnifiedTopology: true };
-const PROD_DB = 'clubhouse_collection_production';
+let db;
 
 // Set up the mongo memory instance
-beforeEach(async () => {
+beforeAll(async () => {
     mongoServer = new MongoMemoryServer();
-    // Interactors use this to establish a connection
-    process.env.MONGO_URI = await mongoServer.getUri();
-
-    // Establish our own connection outside of interactors to inspect db
-    client = await new MongoClient.connect(process.env.MONGO_URI, mongoOptions);
+    const uri = await mongoServer.getUri();
+    db = await getDatabaseConnection(uri);
 });
 
 afterEach(async () => {
@@ -30,7 +26,7 @@ test('Ensure multiple update', async () => {
     await addCardToInventory({
         quantity: 1,
         finishCondition: 'NONFOIL_NM',
-        id: '1234',
+        id: '1337',
         name: 'Black Lotus',
         set_name: 'Limted Edition Alpha',
         set: 'LEA',
@@ -40,7 +36,7 @@ test('Ensure multiple update', async () => {
     await addCardToInventory({
         quantity: 4,
         finishCondition: 'NONFOIL_NM',
-        id: '2345',
+        id: '5699',
         name: 'Mox Diamond',
         set_name: 'Stronghold',
         set: 'STH',
@@ -51,13 +47,13 @@ test('Ensure multiple update', async () => {
         {
             qtyToSell: 1,
             finishCondition: 'NONFOIL_NM',
-            id: '1234',
+            id: '1337',
             name: 'Black Lotus',
         },
         {
             qtyToSell: 3,
             finishCondition: 'NONFOIL_NM',
-            id: '2345',
+            id: '5699',
             name: 'Mox Diamond',
         },
     ];
@@ -65,16 +61,12 @@ test('Ensure multiple update', async () => {
     await updateInventoryCards(cardsInSale, 'ch1');
 
     // ch1 uses `card_inventory`, ch2 uses `card_inventory_ch2`
-    const foundDocs = await client
-        .db(PROD_DB)
-        .collection('card_inventory')
-        .find({})
-        .toArray();
+    const foundDocs = await db.collection('card_inventory').find({}).toArray();
 
     expect(foundDocs).toMatchInlineSnapshot(`
         Array [
           Object {
-            "_id": "1234",
+            "_id": "1337",
             "name": "Black Lotus",
             "qoh": Object {
               "NONFOIL_NM": 0,
@@ -83,7 +75,7 @@ test('Ensure multiple update', async () => {
             "set_name": "Limted Edition Alpha",
           },
           Object {
-            "_id": "2345",
+            "_id": "5699",
             "name": "Mox Diamond",
             "qoh": Object {
               "NONFOIL_NM": 1,

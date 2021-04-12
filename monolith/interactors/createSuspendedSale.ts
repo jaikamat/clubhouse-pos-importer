@@ -1,10 +1,7 @@
-import { MongoClient } from 'mongodb';
+import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import getDatabaseName from '../lib/getDatabaseName';
-import mongoOptions from '../lib/mongoOptions';
 import { ClubhouseLocation } from './getJwt';
 import updateCardInventoryWithFlag from './updateCardInventoryWithFlag';
-const DATABASE_NAME = getDatabaseName();
 
 /**
  * Validates a card's quantity-to-sell against available inventory
@@ -12,15 +9,15 @@ const DATABASE_NAME = getDatabaseName();
  */
 async function validateInventory(
     { qtyToSell, finishCondition, name, id },
-    location: ClubhouseLocation,
-    databaseClient: MongoClient
+    location: ClubhouseLocation
 ) {
     try {
-        const db = databaseClient
-            .db(DATABASE_NAME)
-            .collection(collectionFromLocation(location).cardInventory);
+        const db = await getDatabaseConnection();
+        const collection = db.collection(
+            collectionFromLocation(location).cardInventory
+        );
 
-        const doc = await db.findOne({ _id: id });
+        const doc = await collection.findOne({ _id: id });
 
         const quantityOnHand = doc.qoh[finishCondition];
 
@@ -48,31 +45,28 @@ async function createSuspendedSale(
     saleList,
     location: ClubhouseLocation
 ) {
-    const client = await new MongoClient(process.env.MONGO_URI, mongoOptions);
-
     try {
-        await client.connect();
-
-        const db = client
-            .db(DATABASE_NAME)
-            .collection(collectionFromLocation(location).suspendedSales);
+        const db = await getDatabaseConnection();
+        const collection = db.collection(
+            collectionFromLocation(location).suspendedSales
+        );
 
         console.log(`Creating new suspended sale at ${location}`);
 
         // Validate inventory prior to transacting
         const validations = saleList.map(
-            async (card) => await validateInventory(card, location, client)
+            async (card) => await validateInventory(card, location)
         );
         await Promise.all(validations);
 
         // Removes the passed cards from inventory prior to creating
         const dbInserts = saleList.map(
             async (card) =>
-                await updateCardInventoryWithFlag(card, 'DEC', location, client)
+                await updateCardInventoryWithFlag(card, 'DEC', location)
         );
         await Promise.all(dbInserts);
 
-        return await db.insertOne({
+        return await collection.insertOne({
             createdAt: new Date(),
             name: customerName,
             notes: notes,
@@ -80,8 +74,6 @@ async function createSuspendedSale(
         });
     } catch (e) {
         throw e;
-    } finally {
-        await client.close();
     }
 }
 

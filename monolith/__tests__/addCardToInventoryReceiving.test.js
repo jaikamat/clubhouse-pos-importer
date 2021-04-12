@@ -1,5 +1,4 @@
 const { MongoMemoryServer } = require('mongodb-memory-server');
-const { MongoClient } = require('mongodb');
 const {
     default: wrapAddCardToInventoryReceiving,
 } = require('../built/interactors/addCardToInventoryReceiving');
@@ -13,10 +12,6 @@ beforeAll(async () => {
     mongoServer = new MongoMemoryServer();
     const uri = await mongoServer.getUri();
     db = await getDatabaseConnection(uri);
-});
-
-afterAll(async () => {
-    await mongoServer.stop();
 });
 
 test('Receive one', async () => {

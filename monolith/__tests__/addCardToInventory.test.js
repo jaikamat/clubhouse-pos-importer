@@ -9,11 +9,14 @@ const getDatabaseConnection = require('../built/database').default;
 let mongoServer;
 let db;
 
-test.only('Single card addition', async () => {
+// Set up the mongo memory instance
+beforeAll(async () => {
     mongoServer = new MongoMemoryServer();
     const uri = await mongoServer.getUri();
     db = await getDatabaseConnection(uri);
+});
 
+test('Single card addition', async () => {
     await addCardToInventory({
         quantity: 2,
         finishCondition: 'FOIL_NM',
@@ -43,15 +46,11 @@ test.only('Single card addition', async () => {
 });
 
 test('Multiple card additions', async () => {
-    mongoServer = new MongoMemoryServer();
-    const uri = await mongoServer.getUri();
-    db = await getDatabaseConnection(uri);
-
     // First addition
     await addCardToInventory({
         quantity: 2,
         finishCondition: 'FOIL_NM',
-        id: '1234',
+        id: '2345',
         name: 'CardName',
         set_name: 'SetName',
         set: 'SNM',
@@ -62,7 +61,7 @@ test('Multiple card additions', async () => {
     await addCardToInventory({
         quantity: -2,
         finishCondition: 'FOIL_NM',
-        id: '1234',
+        id: '2345',
         name: 'CardName',
         set_name: 'SetName',
         set: 'SNM',
@@ -71,11 +70,11 @@ test('Multiple card additions', async () => {
 
     const foundDoc = await db
         .collection('card_inventory')
-        .findOne({ _id: '1234' });
+        .findOne({ _id: '2345' });
 
     expect(foundDoc).toMatchInlineSnapshot(`
         Object {
-          "_id": "1234",
+          "_id": "2345",
           "name": "CardName",
           "qoh": Object {
             "FOIL_NM": 0,
@@ -87,10 +86,6 @@ test('Multiple card additions', async () => {
 });
 
 test('Attempt negative card addition', async () => {
-    mongoServer = new MongoMemoryServer();
-    const uri = await mongoServer.getUri();
-    db = await getDatabaseConnection(uri);
-
     // First addition
     await addCardToInventory({
         quantity: 2,
@@ -131,10 +126,6 @@ test('Attempt negative card addition', async () => {
 });
 
 test('Multiple finish conditions', async () => {
-    mongoServer = new MongoMemoryServer();
-    const uri = await mongoServer.getUri();
-    db = await getDatabaseConnection(uri);
-
     // First addition
     await addCardToInventory({
         quantity: 2,

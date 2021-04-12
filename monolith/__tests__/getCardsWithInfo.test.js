@@ -1,6 +1,4 @@
-const { ExpectationFailed } = require('http-errors');
 const { MongoMemoryServer } = require('mongodb-memory-server');
-const { MongoClient } = require('mongodb');
 // TODO: We currently require in the built code. We should be requiring the TS file,
 // but this will require some finagling with tooling configs
 const {
@@ -9,27 +7,22 @@ const {
 const {
     default: addCardToInventory,
 } = require('../built/interactors/addCardToInventory');
+const getDatabaseConnection = require('../built/database').default;
 const bulkCard = require('../fixtures/fixtures');
 
-let mongoServer;
-let client;
-const mongoOptions = { useNewUrlParser: true, useUnifiedTopology: true };
-const PROD_DB = 'clubhouse_collection_production';
 const SCRYFALL_BULK = 'scryfall_bulk_cards';
 
-// Set up the mongo memory instance
-beforeEach(async () => {
-    mongoServer = new MongoMemoryServer();
-    // Interactors use this to establish a connection
-    process.env.MONGO_URI = await mongoServer.getUri();
+let mongoServer;
+let db;
 
-    // Establish our own connection outside of interactors to inspect db
-    client = await new MongoClient.connect(process.env.MONGO_URI, mongoOptions);
+// Set up the mongo memory instance
+beforeAll(async () => {
+    mongoServer = new MongoMemoryServer();
+    const uri = await mongoServer.getUri();
+    db = await getDatabaseConnection(uri);
 
     // Create fake bulk collection
-    const bulkCollection = await client
-        .db(PROD_DB)
-        .createCollection(SCRYFALL_BULK);
+    const bulkCollection = await db.createCollection(SCRYFALL_BULK);
 
     // Insert one bulk card
     await bulkCollection.insert(bulkCard);
@@ -44,10 +37,6 @@ beforeEach(async () => {
         set: bulkCard.set,
         location: 'ch1',
     });
-});
-
-afterEach(async () => {
-    await mongoServer.stop();
 });
 
 test('Fetching the bulk card to ensure it persisted', async () => {

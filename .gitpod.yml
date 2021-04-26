@@ -5,5 +5,5 @@ ports:
 
 # List the start up tasks. You can start them in parallel in multiple terminals. See https://www.gitpod.io/docs/config-start-tasks/
 tasks:
-    - init: cd ./frontend && npm install && cd ../monolith && npm install # runs during prebuild
+    - init: cd ./frontend && npm install && cd ../monolith && npm install && tsc -p . && cd .. # runs during prebuild
       command: echo 'start script'

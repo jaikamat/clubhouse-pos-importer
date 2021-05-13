@@ -94,11 +94,23 @@ export class ScryfallCard {
 
     // Computes the proper displayName for a card, depending on its properties
     _createDisplayName() {
-        const { name, printed_name, frame_effects, border_color, lang } = this;
+        const {
+            name,
+            printed_name,
+            frame_effects,
+            border_color,
+            lang,
+            set,
+            foil,
+            nonfoil,
+        } = this;
 
         if (lang !== 'en') return `${name} (${lang.toUpperCase()})`;
 
-        if (name !== printed_name && printed_name) {
+        // Covers strixhaven etched foil mystical archive cards
+        if (set === 'sta' && foil === true && nonfoil === false) {
+            return `${name} (Etched foil)`;
+        } else if (name !== printed_name && printed_name) {
             // Covers cards like Godzilla series
             return `${name} (IP series)`;
         } else if (

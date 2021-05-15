@@ -49,6 +49,7 @@ const ManageInventoryListItem: FC<Props> = ({
         lang,
         card_faces,
         image_uris,
+        display_name,
     },
 }) => {
     const [selectedFinish, setSelectedFinish] = useState<Finish>(
@@ -120,12 +121,12 @@ const ManageInventoryListItem: FC<Props> = ({
                             image={cardImage}
                             image_uris={image_uris}
                             card_faces={card_faces}
-                            hover={false}
+                            hover={true}
                         />
                     </Item.Image>
                     <Item.Content>
                         <Item.Header as="h3">
-                            {name}{' '}
+                            {display_name}{' '}
                             <i
                                 className={`ss ss-fw ss-${set} ss-${rarity}`}
                                 style={{ fontSize: '30px' }}

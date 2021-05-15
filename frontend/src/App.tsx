@@ -13,7 +13,7 @@ import Receiving from './Receiving/Receiving';
 import LandingPage from './LandingPage/LandingPage';
 import styled from 'styled-components';
 import { SaleProvider } from './context/SaleContext';
-import { ReceivingProvider } from './context/ReceivingContext';
+import ReceivingProvider from './context/ReceivingContext';
 import InventoryProvider from './context/InventoryContext';
 
 const ContentContainer = styled.div`

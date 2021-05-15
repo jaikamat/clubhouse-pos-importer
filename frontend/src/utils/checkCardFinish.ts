@@ -1,4 +1,4 @@
-type Finish = 'FOIL' | 'NONFOIL';
+export type Finish = 'FOIL' | 'NONFOIL';
 
 interface CardFinishState {
     selectedFinish: Finish;

@@ -20,9 +20,11 @@ interface Response {
     };
 }
 
+type Finish = 'FOIL' | 'NONFOIL';
+
 interface Props {
     id: string;
-    finish: 'FOIL' | 'NONFOIL';
+    finish: Finish;
     round: boolean;
     showMid: boolean;
 }

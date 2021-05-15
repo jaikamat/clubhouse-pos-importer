@@ -1,10 +1,11 @@
+import { SaleListCard } from '../context/SaleContext';
 import { InventoryCard } from './ScryfallCard';
 
 /**
  * Takes in an unordered group of cards and sorts them according to The Clubhouse's specs:
  * WUBRG, then multicolor, then colorless, then land, alphabetically within each color/category
  */
-export default function sortSaleList(cards: InventoryCard[]) {
+export default function sortSaleList(cards: SaleListCard[]) {
     const ORDER = ['W', 'U', 'B', 'R', 'G', 'MULTI', 'COLORLESS', 'LAND'];
 
     /**

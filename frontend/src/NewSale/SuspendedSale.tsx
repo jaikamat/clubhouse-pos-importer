@@ -1,9 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FC, ChangeEvent } from 'react';
 import axios from 'axios';
 import { SUSPEND_SALE } from '../utils/api_resources';
-import { Modal, Button, Grid, Form, Message } from 'semantic-ui-react';
+import {
+    Modal,
+    Button,
+    Grid,
+    Form,
+    Message,
+    TextAreaProps,
+    DropdownProps,
+} from 'semantic-ui-react';
 import styled from 'styled-components';
 import makeAuthHeader from '../utils/makeAuthHeader';
+import {
+    SaleContext,
+    SuspendedSale as SuspendedSaleT,
+} from '../context/SaleContext';
+
+interface Props {
+    id: string;
+    saleListLength: number;
+    restoreSale: SaleContext['restoreSale'];
+    deleteSuspendedSale: SaleContext['deleteSuspendedSale'];
+    suspendSale: SaleContext['suspendSale'];
+}
+
+interface SuspendButtonState {
+    suspendBtn: boolean;
+    restoreBtn: boolean;
+    deleteBtn: boolean;
+}
 
 const Divider = styled.div`
     border-left: 1px solid rgba(0, 0, 0, 0.2);
@@ -21,29 +47,32 @@ const CharLimit = styled.p`
     float: right;
 `;
 
-export default function SuspendedSale({
+const SuspendedSale: FC<Props> = ({
     restoreSale,
     deleteSuspendedSale,
     saleListLength,
     suspendSale,
     id,
-}) {
-    const [sales, setSales] = useState([]);
-    const [saleID, setSaleID] = useState('');
-    const [modalOpen, setModalOpen] = useState(false);
-    const [customerName, setCustomerName] = useState('');
-    const [notes, setNotes] = useState('');
-    const [disabled, setDisabled] = useState(false);
-    const [loadingBtn, setLoadingBtn] = useState({
+}) => {
+    const [sales, setSales] = useState<SuspendedSaleT[]>([]);
+    const [saleID, setSaleID] = useState<string>('');
+    const [modalOpen, setModalOpen] = useState<boolean>(false);
+    const [customerName, setCustomerName] = useState<string>('');
+    const [notes, setNotes] = useState<string>('');
+    const [disabled, setDisabled] = useState<boolean>(false);
+    const [loadingBtn, setLoadingBtn] = useState<SuspendButtonState>({
         suspendBtn: false,
         restoreBtn: false,
         deleteBtn: false,
     });
 
     const getSales = async () => {
-        const { data } = await axios.get(SUSPEND_SALE, {
-            headers: makeAuthHeader(),
-        });
+        const { data }: { data: SuspendedSaleT[] } = await axios.get(
+            SUSPEND_SALE,
+            {
+                headers: makeAuthHeader(),
+            }
+        );
         setSales(data);
     };
 
@@ -71,33 +100,33 @@ export default function SuspendedSale({
 
     const submitSuspendSale = async () => {
         setDisabled(true);
-        setLoadingBtn({ suspendBtn: true });
+        setLoadingBtn({ ...loadingBtn, suspendBtn: true });
         await suspendSale({ customerName, notes });
         setModalOpen(false); // Close the modal to avoid "flicker" when state re-renders
         await getSales(); // Parent _id does not change, re-fetch sales
         clearFields();
         setDisabled(false);
-        setLoadingBtn({ suspendBtn: false });
+        setLoadingBtn({ ...loadingBtn, suspendBtn: false });
     };
 
     const submitRestoreSale = async () => {
         setDisabled(true);
-        setLoadingBtn({ restoreBtn: true });
+        setLoadingBtn({ ...loadingBtn, restoreBtn: true });
         await restoreSale(saleID);
         setModalOpen(false);
         clearFields();
         setDisabled(false);
-        setLoadingBtn({ restoreBtn: false });
+        setLoadingBtn({ ...loadingBtn, restoreBtn: false });
     };
 
     const submitDeleteSale = async () => {
         setDisabled(true);
-        setLoadingBtn({ deleteBtn: true });
+        setLoadingBtn({ ...loadingBtn, deleteBtn: true });
         await deleteSuspendedSale();
         setModalOpen(false);
         clearFields();
         setDisabled(false);
-        setLoadingBtn({ deleteBtn: false });
+        setLoadingBtn({ ...loadingBtn, deleteBtn: false });
     };
 
     return (
@@ -134,11 +163,22 @@ export default function SuspendedSale({
                                                 label="Notes"
                                                 placeholder="Sometimes, I forget things..."
                                                 value={notes}
-                                                onChange={(e, { value }) =>
-                                                    setNotes(
-                                                        value.substring(0, 150)
-                                                    )
-                                                }
+                                                onChange={(
+                                                    e,
+                                                    { value }: TextAreaProps
+                                                ) => {
+                                                    if (
+                                                        typeof value ===
+                                                        'string'
+                                                    ) {
+                                                        setNotes(
+                                                            value.substring(
+                                                                0,
+                                                                150
+                                                            )
+                                                        );
+                                                    }
+                                                }}
                                             />
                                         </ClearMargin>
                                         <ClearMargin>
@@ -178,9 +218,14 @@ export default function SuspendedSale({
                                                 };
                                             })}
                                             placeholder="Select a sale"
-                                            onChange={(e, { value }) =>
-                                                setSaleID(value)
-                                            }
+                                            onChange={(
+                                                e,
+                                                { value }: DropdownProps
+                                            ) => {
+                                                if (typeof value === 'string') {
+                                                    setSaleID(value);
+                                                }
+                                            }}
                                         />
                                         <Form.Button
                                             primary
@@ -224,4 +269,6 @@ export default function SuspendedSale({
             </Modal>
         </React.Fragment>
     );
-}
+};
+
+export default SuspendedSale;

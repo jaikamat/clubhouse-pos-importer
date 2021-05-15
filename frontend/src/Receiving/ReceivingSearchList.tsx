@@ -10,13 +10,7 @@ const ReceivingCardList: FC<Props> = () => {
     return (
         <>
             {searchResults.map((card) => {
-                return (
-                    <ReceivingSearchItem
-                        key={card.id}
-                        card={card}
-                        qoh={card.qoh}
-                    />
-                );
+                return <ReceivingSearchItem key={card.id} card={card} />;
             })}
         </>
     );

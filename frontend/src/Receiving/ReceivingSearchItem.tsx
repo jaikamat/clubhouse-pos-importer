@@ -17,14 +17,13 @@ import { ReceivingContext } from '../context/ReceivingContext';
 import Language from '../common/Language';
 import { finishes, cardConditions } from '../utils/dropdownOptions';
 import checkCardFinish, { Finish } from '../utils/checkCardFinish';
-import { InventoryCard, QOH } from '../utils/ScryfallCard';
+import { InventoryCard } from '../utils/ScryfallCard';
 
 interface Props {
     card: InventoryCard;
-    qoh: Partial<QOH>;
 }
 
-const ReceivingSearchItem: FC<Props> = ({ card, qoh }) => {
+const ReceivingSearchItem: FC<Props> = ({ card }) => {
     const [quantity, setQuantity] = useState<number | null>(1);
     const [cashPrice, setCashPrice] = useState<number | null>(0);
     const [creditPrice, setCreditPrice] = useState<number | null>(0);
@@ -163,7 +162,7 @@ const ReceivingSearchItem: FC<Props> = ({ card, qoh }) => {
                             <Label color="grey">
                                 {set_name} ({String(set).toUpperCase()})
                             </Label>
-                            <QohLabels inventoryQty={qoh} />{' '}
+                            <QohLabels inventoryQty={card.qoh} />{' '}
                             <MarketPrice
                                 id={id}
                                 finish={selectedFinish}

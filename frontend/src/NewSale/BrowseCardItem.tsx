@@ -1,4 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, {
+    useState,
+    useContext,
+    FC,
+    SyntheticEvent,
+    ChangeEvent,
+} from 'react';
 import {
     Segment,
     Label,
@@ -15,6 +21,13 @@ import MarketPrice from '../common/MarketPrice';
 import QohLabels from '../common/QohLabels';
 import Language from '../common/Language';
 import { SaleContext } from '../context/SaleContext';
+import { InventoryCard, QOH } from '../utils/ScryfallCard';
+
+interface ConditionOptions {
+    text: string;
+    value: string;
+    key: string;
+}
 
 /**
  * Creates a list of conditions for the dropdown menu from the `qoh`
@@ -22,8 +35,8 @@ import { SaleContext } from '../context/SaleContext';
  * @param {Object} qoh
  * @param {String} id
  */
-function createConditionOptions(qoh, id) {
-    const removeZeroedQuantites = _.pickBy(qoh, (p) => p > 0); // Quantites of zero not included
+function createConditionOptions(qoh: QOH, id: string): ConditionOptions[] {
+    const removeZeroedQuantites = _.pickBy(qoh, (p) => p && p > 0); // Quantites of zero not included
 
     return Object.entries(removeZeroedQuantites).map((d) => {
         const [conditionFinish, qty] = d;
@@ -36,13 +49,15 @@ function createConditionOptions(qoh, id) {
     });
 }
 
+type Finish = 'FOIL' | 'NONFOIL';
+
 /**
  * Creates initial selectedFinish value, used for the MarketPrice component
  * Returns FOIL or NONFOIL depending on what's in current inventory (qoh)
  * @param {Object} qoh
  */
-function createInitialSelectedFinish(qoh) {
-    const removeZeroedQuantites = _.pickBy(qoh, (p) => p > 0);
+function createInitialSelectedFinish(qoh: QOH): Finish {
+    const removeZeroedQuantites = _.pickBy(qoh, (p) => p && p > 0);
     // Isolate only the FOIL or NONFOIL values with mapping
     const keysMapped = _.keys(removeZeroedQuantites).map(
         (k) => k.split('_')[0]
@@ -51,25 +66,35 @@ function createInitialSelectedFinish(qoh) {
     return uniqueValues.indexOf('NONFOIL') > -1 ? 'NONFOIL' : 'FOIL';
 }
 
-export default function BrowseCardItem(props) {
-    const [selectedFinishCondition, setSelectedFinishCondition] = useState('');
+interface Props {
+    card: InventoryCard;
+    qoh: QOH;
+}
+
+const BrowseCardItem: FC<Props> = ({ card, qoh }) => {
+    const [selectedFinishCondition, setSelectedFinishCondition] = useState<
+        string
+    >('');
     const [
         selectedFinishConditionQty,
         setSelectedFinishConditionQty,
-    ] = useState(0);
-    const [quantityToSell, setQuantityToSell] = useState(0);
-    const [price, setPrice] = useState(0);
-    const [selectedFinish, setSelectedFinish] = useState(
-        createInitialSelectedFinish(props.qoh)
+    ] = useState<number>(0);
+    const [quantityToSell, setQuantityToSell] = useState<number | null>(0);
+    const [price, setPrice] = useState<number | null>(0);
+    const [selectedFinish, setSelectedFinish] = useState<Finish>(
+        createInitialSelectedFinish(qoh)
     );
-    const [conditionOptions, setConditionOptions] = useState(
-        createConditionOptions(props.qoh, props.id)
-    );
+    const [conditionOptions, setConditionOptions] = useState<
+        ConditionOptions[]
+    >(createConditionOptions(qoh, card.id));
     const { addToSaleList } = useContext(SaleContext);
 
-    const handleQuantityChange = (e, { value }) => {
+    const handleQuantityChange = (
+        e: SyntheticEvent,
+        { value }: { value: string }
+    ) => {
         if (value === '') {
-            setQuantityToSell('');
+            setQuantityToSell(null);
             return;
         }
 
@@ -83,16 +108,23 @@ export default function BrowseCardItem(props) {
         setQuantityToSell(numVal);
     };
 
-    const handleSelectedFinishCondition = (e, { value }) => {
-        setSelectedFinish(value.split('_')[0]);
+    const handleSelectedFinishCondition = (
+        e: SyntheticEvent,
+        { value }: { value: keyof QOH }
+    ) => {
+        // TODO: we need to not coerce here
+        setSelectedFinish(value.split('_')[0] as Finish);
         setSelectedFinishCondition(value);
-        setSelectedFinishConditionQty(props.qoh[value]);
+        setSelectedFinishConditionQty(qoh[value]);
         setQuantityToSell(0);
     };
 
-    const handlePriceChange = (e, { value }) => {
+    const handlePriceChange = (
+        e: SyntheticEvent,
+        { value }: { value: string }
+    ) => {
         if (value === '') {
-            setPrice('');
+            setPrice(null);
             return;
         }
 
@@ -106,13 +138,13 @@ export default function BrowseCardItem(props) {
     };
 
     const handleAddToSale = () => {
-        const { qoh, id } = props;
+        const { id } = card;
 
         addToSaleList(
-            { ...props },
+            card,
             selectedFinishCondition,
-            quantityToSell,
-            price
+            quantityToSell || 0,
+            price || 0
         );
 
         // Reset state
@@ -133,28 +165,32 @@ export default function BrowseCardItem(props) {
                 <Item>
                     <Item.Image size="tiny">
                         <CardImage
-                            image_uris={props.image_uris}
-                            card_faces={props.card_faces}
+                            image_uris={card.image_uris}
+                            card_faces={card.card_faces}
+                            image={''}
+                            hover={false}
                         />
                     </Item.Image>
                     <Item.Content>
                         <Item.Header as="h3">
-                            {props.name}{' '}
+                            {/* // TODO: displayname */}
+                            {card.name}{' '}
                             <i
-                                className={`ss ss-fw ss-${props.set} ss-${props.rarity}`}
+                                className={`ss ss-fw ss-${card.set} ss-${card.rarity}`}
                                 style={{ fontSize: '30px' }}
                             />
                             <Label color="grey">
-                                {props.set_name} (
-                                {String(props.set).toUpperCase()})
+                                {card.set_name} (
+                                {String(card.set).toUpperCase()})
                             </Label>
-                            <QohLabels inventoryQty={props.qoh} />{' '}
+                            <QohLabels inventoryQty={qoh} />{' '}
                             <MarketPrice
-                                id={props.id}
+                                id={card.id}
                                 finish={selectedFinish}
                                 round
+                                showMid={false}
                             />
-                            <Language languageCode={props.lang} />
+                            <Language languageCode={card.lang} />
                         </Item.Header>
                         <Item.Description>
                             <Form>
@@ -177,7 +213,9 @@ export default function BrowseCardItem(props) {
                                         value={quantityToSell}
                                         onChange={handleQuantityChange}
                                         disabled={!selectedFinishConditionQty}
-                                        onFocus={(e) => e.target.select()}
+                                        onFocus={(
+                                            e: ChangeEvent<HTMLInputElement>
+                                        ) => e.target.select()}
                                     />
                                     <Form.Field
                                         className="sale-price"
@@ -187,7 +225,9 @@ export default function BrowseCardItem(props) {
                                         value={price}
                                         onChange={handlePriceChange}
                                         disabled={!selectedFinishConditionQty}
-                                        onFocus={(e) => e.target.select()}
+                                        onFocus={(
+                                            e: ChangeEvent<HTMLInputElement>
+                                        ) => e.target.select()}
                                         step={0.5}
                                     />
                                     <Form.Button
@@ -196,7 +236,10 @@ export default function BrowseCardItem(props) {
                                         control={Button}
                                         primary
                                         onClick={handleAddToSale}
-                                        disabled={!quantityToSell}
+                                        disabled={
+                                            !quantityToSell ||
+                                            quantityToSell <= 0
+                                        }
                                     >
                                         Sell
                                     </Form.Button>
@@ -208,4 +251,6 @@ export default function BrowseCardItem(props) {
             </Item.Group>
         </Segment>
     );
-}
+};
+
+export default BrowseCardItem;

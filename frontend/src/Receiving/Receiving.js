@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import SearchBar from '../common/SearchBar';
-import ReceivingSearchList from './ReceivingSearchList';
+import ReceivingSearchItem from './ReceivingSearchItem';
 import { Header, Grid, Divider } from 'semantic-ui-react';
 import { ReceivingContext } from '../context/ReceivingContext';
 import DefaultPlaceholder from './DefaultPlaceholder';
@@ -52,7 +52,9 @@ export default function Receiving() {
                             "So many cards, so little time."
                         </DefaultPlaceholder>
 
-                        <ReceivingSearchList />
+                        {searchResults.map((card) => (
+                            <ReceivingSearchItem key={card.id} card={card} />
+                        ))}
                     </Grid.Column>
                     <Grid.Column width="6">
                         <Header as="h2" style={{ display: 'inline-block' }}>

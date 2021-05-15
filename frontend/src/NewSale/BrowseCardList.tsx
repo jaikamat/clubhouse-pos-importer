@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { FC } from 'react';
 import BrowseCardItem from './BrowseCardItem';
 import { Segment, Header, Icon } from 'semantic-ui-react';
+import { InventoryCard } from '../utils/ScryfallCard';
 
-export default function BrowseCardList({ term, cards }) {
+interface Props {
+    term: string;
+    cards: InventoryCard[];
+}
+
+const BrowseCardList: FC<Props> = ({ term, cards }) => {
     // Creates text to notify the user of zero-result searches
     const searchNotification = () => {
         if (term && !cards.length) {
@@ -31,7 +37,15 @@ export default function BrowseCardList({ term, cards }) {
         );
     }
 
-    return cards.map((card) => {
-        return <BrowseCardItem key={card.id} card={card} qoh={card.qoh} />;
-    });
-}
+    return (
+        <>
+            {cards.map((card) => {
+                return (
+                    <BrowseCardItem key={card.id} card={card} qoh={card.qoh} />
+                );
+            })}
+        </>
+    );
+};
+
+export default BrowseCardList;

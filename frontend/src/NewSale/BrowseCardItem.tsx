@@ -35,7 +35,10 @@ interface ConditionOptions {
  * @param {Object} qoh
  * @param {String} id
  */
-function createConditionOptions(qoh: QOH, id: string): ConditionOptions[] {
+function createConditionOptions(
+    qoh: Partial<QOH>,
+    id: string
+): ConditionOptions[] {
     const removeZeroedQuantites = _.pickBy(qoh, (p) => p && p > 0); // Quantites of zero not included
 
     return Object.entries(removeZeroedQuantites).map((d) => {
@@ -56,7 +59,7 @@ type Finish = 'FOIL' | 'NONFOIL';
  * Returns FOIL or NONFOIL depending on what's in current inventory (qoh)
  * @param {Object} qoh
  */
-function createInitialSelectedFinish(qoh: QOH): Finish {
+function createInitialSelectedFinish(qoh: Partial<QOH>): Finish {
     const removeZeroedQuantites = _.pickBy(qoh, (p) => p && p > 0);
     // Isolate only the FOIL or NONFOIL values with mapping
     const keysMapped = _.keys(removeZeroedQuantites).map(
@@ -68,7 +71,7 @@ function createInitialSelectedFinish(qoh: QOH): Finish {
 
 interface Props {
     card: InventoryCard;
-    qoh: QOH;
+    qoh: Partial<QOH>;
 }
 
 const BrowseCardItem: FC<Props> = ({ card, qoh }) => {
@@ -115,7 +118,7 @@ const BrowseCardItem: FC<Props> = ({ card, qoh }) => {
         // TODO: we need to not coerce here
         setSelectedFinish(value.split('_')[0] as Finish);
         setSelectedFinishCondition(value);
-        setSelectedFinishConditionQty(qoh[value]);
+        setSelectedFinishConditionQty(qoh[value] || 0);
         setQuantityToSell(0);
     };
 

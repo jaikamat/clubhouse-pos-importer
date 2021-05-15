@@ -1,37 +1,70 @@
-import React, { useState } from 'react';
+import React, { useState, createContext, FC } from 'react';
 import _ from 'lodash';
-import uuid from 'uuid';
+import { v4 as uuid } from 'uuid';
 import axios from 'axios';
 import createToast from '../common/createToast';
 import makeAuthHeader from '../utils/makeAuthHeader';
-import { InventoryCard } from '../utils/ScryfallCard';
+import { InventoryCard, ScryfallApiCard } from '../utils/ScryfallCard';
 import { GET_CARDS_WITH_INFO, RECEIVE_CARDS } from '../utils/api_resources';
 
-const TRADE_TYPES = { CASH: 'CASH', CREDIT: 'CREDIT' }; // Customers can only receive cash or credit for their assets
+interface Props {}
 
-// Models the line item in the Receiving List and sets a unique UUID key on each
-class LineItem extends InventoryCard {
-    constructor(cardProps) {
-        super(cardProps);
-
-        const { cashPrice, marketPrice, creditPrice } = cardProps;
-
-        this.cashPrice = cashPrice;
-        this.marketPrice = marketPrice;
-        this.creditPrice = creditPrice;
-        this.uuid_key = uuid();
-
-        if (creditPrice === 0) this.tradeType = TRADE_TYPES.CASH;
-        // Set to cash if customer doesn't want credit
-        else this.tradeType = TRADE_TYPES.CREDIT; // Otherwise, default to credit
-    }
+enum Trade {
+    Cash = 'CASH',
+    Credit = 'CREDIT',
 }
 
-export const ReceivingContext = React.createContext();
+// Customers can only receive cash or credit for their assets
+const TRADE_TYPES = { CASH: Trade.Cash, CREDIT: Trade.Credit };
 
-export function ReceivingProvider(props) {
-    const [searchResults, setSearchResults] = useState([]);
-    const [receivingList, setReceivingList] = useState([]);
+export type ReceivingCard = InventoryCard & {
+    uuid_key: string;
+    cashPrice: number;
+    marketPrice: number;
+    creditPrice: number;
+    tradeType: Trade;
+};
+
+interface Context {
+    searchResults: InventoryCard[];
+    receivingList: ReceivingCard[];
+    handleSearchSelect: (term: string) => void;
+    addToList: (
+        quantity: number,
+        card: InventoryCard,
+        meta: AddToListMeta
+    ) => void;
+    removeFromList: (uuid: string) => void;
+    activeTradeType: (uuid: string, tradeType: Trade) => void;
+    selectAll: (trade: Trade) => void;
+    commitToInventory: () => void;
+    resetSearchResults: () => void;
+}
+
+const defaultContext: Context = {
+    searchResults: [],
+    receivingList: [],
+    handleSearchSelect: () => null,
+    addToList: () => null,
+    removeFromList: () => null,
+    activeTradeType: () => null,
+    selectAll: () => null,
+    commitToInventory: () => null,
+    resetSearchResults: () => null,
+};
+
+interface AddToListMeta {
+    cashPrice: number;
+    marketPrice: number;
+    creditPrice: number;
+    finishCondition: string;
+}
+
+export const ReceivingContext = createContext<Context>(defaultContext);
+
+const ReceivingProvider: FC<Props> = ({ children }) => {
+    const [searchResults, setSearchResults] = useState<InventoryCard[]>([]);
+    const [receivingList, setReceivingList] = useState<ReceivingCard[]>([]);
 
     /**
      * Fetches cards from the DB by title when a user selects a title after querying.
@@ -39,12 +72,15 @@ export function ReceivingProvider(props) {
      *
      * @param {String} term - the search term
      */
-    const handleSearchSelect = async (term) => {
+    const handleSearchSelect = async (term: string) => {
         try {
-            const { data } = await axios.get(GET_CARDS_WITH_INFO, {
-                params: { title: term, matchInStock: false },
-                headers: makeAuthHeader(),
-            });
+            const { data }: { data: ScryfallApiCard[] } = await axios.get(
+                GET_CARDS_WITH_INFO,
+                {
+                    params: { title: term, matchInStock: false },
+                    headers: makeAuthHeader(),
+                }
+            );
 
             setSearchResults(data.map((d) => new InventoryCard(d)));
         } catch (e) {
@@ -55,12 +91,26 @@ export function ReceivingProvider(props) {
     /**
      * Adds a card to the receiving list, with a unique uuid
      */
-    const addToList = (quantity, cardProps) => {
+    const addToList = (
+        quantity: number,
+        card: InventoryCard,
+        { cashPrice, marketPrice, creditPrice, finishCondition }: AddToListMeta
+    ) => {
         const previousState = [...receivingList];
 
         // Each line-item represents one card. Use _.times() to repeat
         const newState = previousState.concat(
-            _.times(quantity, () => new LineItem(cardProps))
+            _.times(quantity, () =>
+                Object.assign(card, {
+                    cashPrice,
+                    marketPrice,
+                    creditPrice,
+                    finishCondition,
+                    // Set to cash if customer doesn't want credit
+                    tradeType: creditPrice === 0 ? Trade.Cash : Trade.Credit,
+                    uuid_key: uuid(),
+                })
+            )
         );
 
         setReceivingList(_.sortBy(newState, 'name'));
@@ -69,7 +119,7 @@ export function ReceivingProvider(props) {
     /**
      * Removes a card from the receiving list using the uuid
      */
-    const removeFromList = (uuid_key) => {
+    const removeFromList = (uuid_key: string) => {
         const copiedState = [...receivingList];
         _.remove(copiedState, (e) => e.uuid_key === uuid_key); // Mutates array
         setReceivingList(copiedState);
@@ -79,10 +129,12 @@ export function ReceivingProvider(props) {
      * Determines whether line-items use cash or credit. Changes the tradeType by reference in the receivingList array
      * which changes the active prop in ReceivingListItem
      */
-    const activeTradeType = (uuid_key, tradeType) => {
+    const activeTradeType = (uuid_key: string, tradeType: Trade) => {
         const previousState = [...receivingList];
         const card = previousState.find((e) => e.uuid_key === uuid_key);
-        card.tradeType = TRADE_TYPES[tradeType];
+        if (card) {
+            card.tradeType = TRADE_TYPES[tradeType];
+        }
         setReceivingList(previousState);
     };
 
@@ -91,7 +143,7 @@ export function ReceivingProvider(props) {
      *
      * @param {String} selectType - `CASH` or `CREDIT`
      */
-    const selectAll = (selectType) => {
+    const selectAll = (selectType: Trade) => {
         const oldState = [...receivingList];
         const { CASH, CREDIT } = TRADE_TYPES;
 
@@ -165,7 +217,9 @@ export function ReceivingProvider(props) {
                 resetSearchResults,
             }}
         >
-            {props.children}
+            {children}
         </ReceivingContext.Provider>
     );
-}
+};
+
+export default ReceivingProvider;

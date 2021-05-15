@@ -69,8 +69,7 @@ export default function ReceivingSearchItem({ card, qoh }) {
     const handleFocus = (e) => e.target.select();
 
     const handleInventoryAdd = () => {
-        addToList(quantity, {
-            ...card,
+        addToList(quantity, card, {
             cashPrice,
             marketPrice,
             creditPrice,

@@ -14,7 +14,7 @@ interface SuspendSaleArgs {
     notes: string;
 }
 
-interface SuspendedSale {
+export interface SuspendedSale {
     _id: string;
     name: string;
     notes: string;
@@ -22,7 +22,7 @@ interface SuspendedSale {
     list: SaleListCard[];
 }
 
-interface SaleContext {
+export interface SaleContext {
     saleListCards: SaleListCard[];
     suspendedSale: SuspendedSale;
     addToSaleList: (

@@ -1,4 +1,4 @@
-import React, { useState, createContext } from 'react';
+import React, { useState, createContext, FC } from 'react';
 import axios from 'axios';
 import _ from 'lodash';
 import { SUSPEND_SALE, FINISH_SALE } from '../utils/api_resources';
@@ -7,24 +7,90 @@ import sortSaleList from '../utils/sortSaleList';
 import createToast from '../common/createToast';
 import makeAuthHeader from '../utils/makeAuthHeader';
 
-export const SaleContext = createContext();
+interface Props {}
 
-export const SaleProvider = (props) => {
-    const [saleListCards, setSaleListCards] = useState([]);
-    const [suspendedSale, setSuspendedSale] = useState({
-        _id: '',
-        name: '',
-        notes: '',
-        list: [],
-    });
+interface SuspendSaleArgs {
+    customerName: string;
+    notes: string;
+}
+
+interface SuspendedSale {
+    _id: string;
+    name: string;
+    notes: string;
+    // TODO: is this the right type?
+    list: SaleListCard[];
+}
+
+interface SaleContext {
+    saleListCards: SaleListCard[];
+    suspendedSale: SuspendedSale;
+    addToSaleList: (
+        card: InventoryCard,
+        finishCondition: string,
+        qtyToSell: number,
+        price: number
+    ) => void;
+    removeFromSaleList: (id: string, finishCondition: string) => void;
+    restoreSale: (saleId: string) => void;
+    suspendSale: (args: SuspendSaleArgs) => void;
+    deleteSuspendedSale: () => void;
+    finalizeSale: () => void;
+    resetSaleState: () => void;
+}
+
+export type SaleListCard = InventoryCard & {
+    finishCondition: string;
+    qtyToSell: number;
+    price: number;
+};
+
+const defaultSuspendedSale: SuspendedSale = {
+    _id: '',
+    name: '',
+    notes: '',
+    list: [],
+};
+
+export const SaleContext = createContext<SaleContext>({
+    saleListCards: [],
+    suspendedSale: defaultSuspendedSale,
+    addToSaleList: () => null,
+    removeFromSaleList: () => null,
+    restoreSale: () => null,
+    suspendSale: () => null,
+    deleteSuspendedSale: () => null,
+    finalizeSale: () => null,
+    resetSaleState: () => null,
+});
+
+export const SaleProvider: FC<Props> = ({ children }) => {
+    const [saleListCards, setSaleListCards] = useState<SaleListCard[]>([]);
+    const [suspendedSale, setSuspendedSale] = useState<SuspendedSale>(
+        defaultSuspendedSale
+    );
 
     /**
      * Adds product to the sale list
      */
-    const addToSaleList = (card, finishCondition, qtyToSell, price) => {
-        const newCard = { ...card, finishCondition, qtyToSell, price };
+    const addToSaleList = (
+        card: InventoryCard,
+        finishCondition: string,
+        qtyToSell: number,
+        price: number
+    ) => {
+        // TODO: is this stable? We have to use
+        // Object.assign() to preserve getter and setter methods
+        const newCard = Object.assign(card, {
+            finishCondition,
+            qtyToSell,
+            price,
+        });
+
         const oldState = [...saleListCards];
-        const modeledCard = new InventoryCard(newCard);
+        // TODO: do we have to re-model this??
+        // const modeledCard = new InventoryCard(newCard);
+        const modeledCard = newCard;
 
         // Need to make sure same ID's with differing conditions are separate line-items
         const idx = oldState.findIndex((el) => {
@@ -48,7 +114,7 @@ export const SaleProvider = (props) => {
     /**
      * Removes product from the sale list
      */
-    const removeFromSaleList = (id, finishCondition) => {
+    const removeFromSaleList = (id: string, finishCondition: string) => {
         const newState = _.reject([...saleListCards], (el) => {
             return el.id === id && el.finishCondition === finishCondition;
         });
@@ -59,12 +125,17 @@ export const SaleProvider = (props) => {
     /**
      * Restores a sale (assigns a saleList to state) from a suspended sale from the db
      */
-    const restoreSale = async (id) => {
+    const restoreSale = async (id: string) => {
         try {
-            const { data } = await axios.get(`${SUSPEND_SALE}/${id}`, {
-                headers: makeAuthHeader(),
-            });
-            const modeledData = data.list.map((c) => new InventoryCard(c));
+            const { data }: { data: SuspendedSale } = await axios.get(
+                `${SUSPEND_SALE}/${id}`,
+                {
+                    headers: makeAuthHeader(),
+                }
+            );
+            // TODO: Is this going to map correctly?
+            // const modeledData = data.list.map((c) => new InventoryCard(c));
+            const modeledData = data.list.map((c) => c);
 
             setSaleListCards(modeledData);
             setSuspendedSale(data);
@@ -82,7 +153,13 @@ export const SaleProvider = (props) => {
     /**
      * Suspends a sale (persists it to mongo) via the SuspendedSale component and API
      */
-    const suspendSale = async ({ customerName, notes }) => {
+    const suspendSale = async ({
+        customerName,
+        notes,
+    }: {
+        customerName: string;
+        notes: string;
+    }) => {
         const { _id } = suspendedSale;
 
         try {
@@ -181,12 +258,7 @@ export const SaleProvider = (props) => {
 
     const resetSaleState = () => {
         setSaleListCards([]);
-        setSuspendedSale({
-            _id: '',
-            name: '',
-            notes: '',
-            list: [],
-        });
+        setSuspendedSale(defaultSuspendedSale);
     };
 
     return (
@@ -203,7 +275,7 @@ export const SaleProvider = (props) => {
                 resetSaleState,
             }}
         >
-            {props.children}
+            {children}
         </SaleContext.Provider>
     );
 };

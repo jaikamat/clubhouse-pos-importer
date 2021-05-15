@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, FC, ChangeEvent } from 'react';
 import $ from 'jquery';
 import {
     Segment,
@@ -16,15 +16,21 @@ import createToast from '../common/createToast';
 import { ReceivingContext } from '../context/ReceivingContext';
 import Language from '../common/Language';
 import { finishes, cardConditions } from '../utils/dropdownOptions';
-import checkCardFinish from '../utils/checkCardFinish';
+import checkCardFinish, { Finish } from '../utils/checkCardFinish';
+import { InventoryCard, QOH } from '../utils/ScryfallCard';
 
-export default function ReceivingSearchItem({ card, qoh }) {
-    const [quantity, setQuantity] = useState(1);
-    const [cashPrice, setCashPrice] = useState(0);
-    const [creditPrice, setCreditPrice] = useState(0);
-    const [selectedCondition, setSelectedCondition] = useState('NM');
-    const [marketPrice, setMarketPrice] = useState(0);
-    const [selectedFinish, setSelectedFinish] = useState(
+interface Props {
+    card: InventoryCard;
+    qoh: Partial<QOH>;
+}
+
+const ReceivingSearchItem: FC<Props> = ({ card, qoh }) => {
+    const [quantity, setQuantity] = useState<number | null>(1);
+    const [cashPrice, setCashPrice] = useState<number | null>(0);
+    const [creditPrice, setCreditPrice] = useState<number | null>(0);
+    const [selectedCondition, setSelectedCondition] = useState<string>('NM');
+    const [marketPrice, setMarketPrice] = useState<number | null>(0);
+    const [selectedFinish, setSelectedFinish] = useState<Finish>(
         checkCardFinish(card.nonfoil, card.foil).selectedFinish // seed state from props
     );
 
@@ -34,15 +40,24 @@ export default function ReceivingSearchItem({ card, qoh }) {
 
     const { addToList } = useContext(ReceivingContext);
 
-    const handleFinishChange = (e, { value }) => setSelectedFinish(value);
+    const handleFinishChange = (
+        e: ChangeEvent<HTMLInputElement>,
+        { value }: { value: Finish }
+    ) => setSelectedFinish(value);
 
-    const handleConditionChange = (e, { value }) => setSelectedCondition(value);
+    const handleConditionChange = (
+        e: ChangeEvent<HTMLInputElement>,
+        { value }: { value: string }
+    ) => setSelectedCondition(value);
 
     // Validates/sanitizes user inputs by tracking the `name` attribute of the input element
-    const handlePriceChange = (e, { value }) => {
-        let val = Number(value) || 0;
+    const handlePriceChange = (
+        e: ChangeEvent<HTMLInputElement>,
+        { value }: { value: string }
+    ) => {
+        let val: number | null = Number(value) || 0;
         if (val < 0) val = 0;
-        if (value === '') val = '';
+        if (value === '') val = null;
 
         switch (e.target.name) {
             case 'cashInput':
@@ -59,37 +74,42 @@ export default function ReceivingSearchItem({ card, qoh }) {
         }
     };
 
-    const handleQuantityChange = (e, { value }) => {
+    const handleQuantityChange = (
+        e: ChangeEvent<HTMLInputElement>,
+        { value }: { value: string }
+    ) => {
         let val = parseInt(value, 10) || 0;
         if (val < 0) val = 0; // cannot receive less than 0
         if (val > 50) val = 50; // set max to 50 cards per single transaction
         setQuantity(val);
     };
 
-    const handleFocus = (e) => e.target.select();
+    const handleFocus = (e: ChangeEvent<HTMLInputElement>) => e.target.select();
 
     const handleInventoryAdd = () => {
-        addToList(quantity, card, {
-            cashPrice,
-            marketPrice,
-            creditPrice,
-            finishCondition: `${selectedFinish}_${selectedCondition}`, // ex. NONFOIL_NM
-        });
+        if (quantity) {
+            addToList(quantity, card, {
+                cashPrice,
+                marketPrice,
+                creditPrice,
+                finishCondition: `${selectedFinish}_${selectedCondition}`, // ex. NONFOIL_NM
+            });
 
-        setQuantity(1);
-        setCashPrice(0);
-        setMarketPrice(0);
-        setCreditPrice(0);
-        setSelectedCondition('NM');
-        setSelectedFinish(
-            checkCardFinish(card.nonfoil, card.foil).selectedFinish
-        );
+            setQuantity(1);
+            setCashPrice(0);
+            setMarketPrice(0);
+            setCreditPrice(0);
+            setSelectedCondition('NM');
+            setSelectedFinish(
+                checkCardFinish(card.nonfoil, card.foil).selectedFinish
+            );
 
-        createToast({
-            color: 'green',
-            header: `${quantity}x ${card.name} added to buylist!`,
-            duration: 2000,
-        });
+            createToast({
+                color: 'green',
+                header: `${quantity}x ${card.name} added to buylist!`,
+                duration: 2000,
+            });
+        }
 
         // Highlight the input after successful card add
         $('#searchBar').focus().select();
@@ -99,14 +119,11 @@ export default function ReceivingSearchItem({ card, qoh }) {
      * Determines whether the `Add` button should be disabled
      */
     const submitDisabled = () => {
-        const validateQty = quantity === 0 || quantity === '';
-        const validateTradeTypes =
-            !(cashPrice || creditPrice) ||
-            cashPrice === '' ||
-            creditPrice === '';
-        const validateMarketPrice = marketPrice === 0 || marketPrice === '';
+        const validateQty = !quantity;
+        const validateTradeTypes = !(cashPrice || creditPrice);
+        const validateMarketPrice = !marketPrice;
 
-        if (cashPrice > 0) {
+        if (!!cashPrice) {
             return validateQty || validateTradeTypes || validateMarketPrice;
         }
 
@@ -133,6 +150,7 @@ export default function ReceivingSearchItem({ card, qoh }) {
                             image_uris={image_uris}
                             card_faces={card_faces}
                             hover={false}
+                            image=""
                         />
                     </Item.Image>
                     <Item.Content>
@@ -146,7 +164,12 @@ export default function ReceivingSearchItem({ card, qoh }) {
                                 {set_name} ({String(set).toUpperCase()})
                             </Label>
                             <QohLabels inventoryQty={qoh} />{' '}
-                            <MarketPrice id={id} finish={selectedFinish} />
+                            <MarketPrice
+                                id={id}
+                                finish={selectedFinish}
+                                round={false}
+                                showMid={false}
+                            />
                             <Language languageCode={lang} />
                         </Item.Header>
                         <Item.Description>
@@ -158,7 +181,9 @@ export default function ReceivingSearchItem({ card, qoh }) {
                                         label="Quantity"
                                         value={quantity}
                                         onChange={handleQuantityChange}
-                                        onFocus={(e) => e.target.select()}
+                                        onFocus={(
+                                            e: ChangeEvent<HTMLInputElement>
+                                        ) => e.target.select()}
                                         className="receiving-quantity"
                                     />
                                     <Form.Field
@@ -192,9 +217,7 @@ export default function ReceivingSearchItem({ card, qoh }) {
                                         onChange={handlePriceChange}
                                         onFocus={handleFocus}
                                         step="0.25"
-                                        disabled={
-                                            cashPrice === 0 || cashPrice === ''
-                                        }
+                                        disabled={cashPrice === 0}
                                         className="receiving-market"
                                     />
                                 </Form.Group>
@@ -231,4 +254,6 @@ export default function ReceivingSearchItem({ card, qoh }) {
             </Item.Group>
         </Segment>
     );
-}
+};
+
+export default ReceivingSearchItem;

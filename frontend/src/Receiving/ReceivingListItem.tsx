@@ -81,13 +81,13 @@ const ReceivingListItem: FC<Props> = ({
                 <div style={{ whiteSpace: 'nowrap' }}>
                     Cash{' '}
                     <b>
-                        <Price num={cashPrice} />
+                        <Price num={cashPrice || 0} />
                     </b>
                 </div>
                 <div style={{ whiteSpace: 'nowrap' }}>
                     Credit{' '}
                     <b>
-                        <Price num={creditPrice} />
+                        <Price num={creditPrice || 0} />
                     </b>
                 </div>
                 {finishCondition && (

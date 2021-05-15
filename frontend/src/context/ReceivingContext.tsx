@@ -19,9 +19,9 @@ const TRADE_TYPES = { CASH: Trade.Cash, CREDIT: Trade.Credit };
 
 export type ReceivingCard = InventoryCard & {
     uuid_key: string;
-    cashPrice: number;
-    marketPrice: number;
-    creditPrice: number;
+    cashPrice: number | null;
+    marketPrice: number | null;
+    creditPrice: number | null;
     tradeType: Trade;
 };
 
@@ -54,9 +54,9 @@ const defaultContext: Context = {
 };
 
 interface AddToListMeta {
-    cashPrice: number;
-    marketPrice: number;
-    creditPrice: number;
+    cashPrice: number | null;
+    marketPrice: number | null;
+    creditPrice: number | null;
     finishCondition: string;
 }
 
@@ -152,8 +152,10 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
         oldState.forEach((card, idx, arr) => {
             let selectedPrice = 0;
 
-            if (selectType === CASH) selectedPrice = card.cashPrice;
-            else if (selectType === CREDIT) selectedPrice = card.creditPrice;
+            if (selectType === CASH && card.cashPrice !== null)
+                selectedPrice = card.cashPrice;
+            else if (selectType === CREDIT && card.creditPrice !== null)
+                selectedPrice = card.creditPrice;
 
             if (selectedPrice > 0) arr[idx].tradeType = selectType;
         });

@@ -1,23 +1,13 @@
 import React, { useState, useContext, FC, ChangeEvent } from 'react';
 import $ from 'jquery';
-import {
-    Segment,
-    Input,
-    Button,
-    Form,
-    Select,
-    Label,
-    Item,
-} from 'semantic-ui-react';
-import QohLabels from '../common/QohLabels';
+import { Segment, Input, Button, Form, Select, Item } from 'semantic-ui-react';
 import CardImage from '../common/CardImage';
-import MarketPrice from '../common/MarketPrice';
 import createToast from '../common/createToast';
 import { ReceivingContext } from '../context/ReceivingContext';
-import Language from '../common/Language';
 import { finishes, cardConditions } from '../utils/dropdownOptions';
 import checkCardFinish, { Finish } from '../utils/checkCardFinish';
 import { InventoryCard } from '../utils/ScryfallCard';
+import CardHeader from '../ui/CardHeader';
 
 interface Props {
     card: InventoryCard;
@@ -153,24 +143,10 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
                         />
                     </Item.Image>
                     <Item.Content>
-                        <Item.Header as="h3">
-                            {name}{' '}
-                            <i
-                                className={`ss ss-fw ss-${set} ss-${rarity}`}
-                                style={{ fontSize: '30px' }}
-                            />
-                            <Label color="grey">
-                                {set_name} ({String(set).toUpperCase()})
-                            </Label>
-                            <QohLabels inventoryQty={card.qoh} />{' '}
-                            <MarketPrice
-                                id={id}
-                                finish={selectedFinish}
-                                round={false}
-                                showMid={false}
-                            />
-                            <Language languageCode={lang} />
-                        </Item.Header>
+                        <CardHeader
+                            card={card}
+                            selectedFinish={selectedFinish}
+                        />
                         <Item.Description>
                             <Form>
                                 <Form.Group widths="12">

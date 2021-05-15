@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import {
     Segment,
-    Label,
     Form,
     Input,
     Dropdown,
@@ -17,11 +16,9 @@ import {
 import $ from 'jquery';
 import _ from 'lodash';
 import CardImage from '../common/CardImage';
-import MarketPrice from '../common/MarketPrice';
-import QohLabels from '../common/QohLabels';
-import Language from '../common/Language';
 import { SaleContext } from '../context/SaleContext';
 import { InventoryCard, QOH } from '../utils/ScryfallCard';
+import CardHeader from '../ui/CardHeader';
 
 interface ConditionOptions {
     text: string;
@@ -174,26 +171,10 @@ const BrowseCardItem: FC<Props> = ({ card }) => {
                         />
                     </Item.Image>
                     <Item.Content>
-                        <Item.Header as="h3">
-                            {/* // TODO: displayname */}
-                            {card.name}{' '}
-                            <i
-                                className={`ss ss-fw ss-${card.set} ss-${card.rarity}`}
-                                style={{ fontSize: '30px' }}
-                            />
-                            <Label color="grey">
-                                {card.set_name} (
-                                {String(card.set).toUpperCase()})
-                            </Label>
-                            <QohLabels inventoryQty={card.qoh} />{' '}
-                            <MarketPrice
-                                id={card.id}
-                                finish={selectedFinish}
-                                round
-                                showMid={false}
-                            />
-                            <Language languageCode={card.lang} />
-                        </Item.Header>
+                        <CardHeader
+                            card={card}
+                            selectedFinish={selectedFinish}
+                        />
                         <Item.Description>
                             <Form>
                                 <Form.Group>

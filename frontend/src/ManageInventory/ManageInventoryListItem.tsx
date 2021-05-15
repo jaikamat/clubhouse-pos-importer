@@ -1,27 +1,17 @@
 import React, { FC, useContext, useState } from 'react';
-import {
-    Segment,
-    Input,
-    Button,
-    Form,
-    Select,
-    Label,
-    Item,
-} from 'semantic-ui-react';
+import { Segment, Input, Button, Form, Select, Item } from 'semantic-ui-react';
 import axios from 'axios';
 import $ from 'jquery';
 import { Formik, FormikErrors, FormikHelpers } from 'formik';
-import QohLabels from '../common/QohLabels';
 import createToast from '../common/createToast';
 import CardImage from '../common/CardImage';
 import makeAuthHeader from '../utils/makeAuthHeader';
-import MarketPrice from '../common/MarketPrice';
 import { ADD_CARD_TO_INVENTORY } from '../utils/api_resources';
-import Language from '../common/Language';
 import { finishes, cardConditions } from '../utils/dropdownOptions';
 import checkCardFinish from '../utils/checkCardFinish';
 import { InventoryContext } from '../context/InventoryContext';
 import { InventoryCard } from '../utils/ScryfallCard';
+import CardHeader from '../ui/CardHeader';
 
 interface Props {
     card: InventoryCard;
@@ -35,23 +25,19 @@ interface FormValues {
 
 type Finish = 'FOIL' | 'NONFOIL';
 
-const ManageInventoryListItem: FC<Props> = ({
-    card: {
-        qoh,
+const ManageInventoryListItem: FC<Props> = ({ card }) => {
+    const {
         foil,
         nonfoil,
         name,
         set_name,
         set,
-        rarity,
         id,
         cardImage,
-        lang,
         card_faces,
         image_uris,
-        display_name,
-    },
-}) => {
+    } = card;
+
     const [selectedFinish, setSelectedFinish] = useState<Finish>(
         checkCardFinish(nonfoil, foil).selectedFinish
     );
@@ -125,24 +111,10 @@ const ManageInventoryListItem: FC<Props> = ({
                         />
                     </Item.Image>
                     <Item.Content>
-                        <Item.Header as="h3">
-                            {display_name}{' '}
-                            <i
-                                className={`ss ss-fw ss-${set} ss-${rarity}`}
-                                style={{ fontSize: '30px' }}
-                            />
-                            <Label color="grey">
-                                {set_name} ({String(set).toUpperCase()})
-                            </Label>
-                            <QohLabels inventoryQty={qoh} />{' '}
-                            <MarketPrice
-                                id={id}
-                                finish={selectedFinish}
-                                round={false}
-                                showMid={false}
-                            />
-                            <Language languageCode={lang} />
-                        </Item.Header>
+                        <CardHeader
+                            card={card}
+                            selectedFinish={selectedFinish}
+                        />
                         <Item.Description>
                             <Formik
                                 initialValues={initialFormValues}

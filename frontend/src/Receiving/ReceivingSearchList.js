@@ -5,11 +5,7 @@ import { ReceivingContext } from '../context/ReceivingContext';
 export default function ReceivingCardList() {
     const { searchResults } = useContext(ReceivingContext);
 
-    return searchResults.map(c => {
-        return <ReceivingSearchItem
-            key={c.id}
-            {...c}
-            qoh={c.qoh}
-        />
+    return searchResults.map((card) => {
+        return <ReceivingSearchItem key={card.id} card={card} qoh={card.qoh} />;
     });
 }

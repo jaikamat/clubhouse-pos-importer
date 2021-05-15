@@ -18,18 +18,18 @@ import Language from '../common/Language';
 import { finishes, cardConditions } from '../utils/dropdownOptions';
 import checkCardFinish from '../utils/checkCardFinish';
 
-export default function ReceivingSearchItem(props) {
+export default function ReceivingSearchItem({ card, qoh }) {
     const [quantity, setQuantity] = useState(1);
     const [cashPrice, setCashPrice] = useState(0);
     const [creditPrice, setCreditPrice] = useState(0);
     const [selectedCondition, setSelectedCondition] = useState('NM');
     const [marketPrice, setMarketPrice] = useState(0);
     const [selectedFinish, setSelectedFinish] = useState(
-        checkCardFinish(props.nonfoil, props.foil).selectedFinish // seed state from props
+        checkCardFinish(card.nonfoil, card.foil).selectedFinish // seed state from props
     );
 
     // Determines whether the select finish dropdown is permanently disabled, seeded from props
-    const finishDisabled = checkCardFinish(props.nonfoil, props.foil)
+    const finishDisabled = checkCardFinish(card.nonfoil, card.foil)
         .finishDisabled;
 
     const { addToList } = useContext(ReceivingContext);
@@ -70,7 +70,7 @@ export default function ReceivingSearchItem(props) {
 
     const handleInventoryAdd = () => {
         addToList(quantity, {
-            ...props,
+            ...card,
             cashPrice,
             marketPrice,
             creditPrice,
@@ -83,12 +83,12 @@ export default function ReceivingSearchItem(props) {
         setCreditPrice(0);
         setSelectedCondition('NM');
         setSelectedFinish(
-            checkCardFinish(props.nonfoil, props.foil).selectedFinish
+            checkCardFinish(card.nonfoil, card.foil).selectedFinish
         );
 
         createToast({
             color: 'green',
-            header: `${quantity}x ${props.name} added to buylist!`,
+            header: `${quantity}x ${card.name} added to buylist!`,
             duration: 2000,
         });
 
@@ -123,7 +123,7 @@ export default function ReceivingSearchItem(props) {
         card_faces,
         id,
         lang,
-    } = props;
+    } = card;
 
     return (
         <Segment>
@@ -146,7 +146,7 @@ export default function ReceivingSearchItem(props) {
                             <Label color="grey">
                                 {set_name} ({String(set).toUpperCase()})
                             </Label>
-                            <QohLabels inventoryQty={props.qoh} />{' '}
+                            <QohLabels inventoryQty={qoh} />{' '}
                             <MarketPrice id={id} finish={selectedFinish} />
                             <Language languageCode={lang} />
                         </Item.Header>

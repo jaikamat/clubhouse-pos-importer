@@ -85,11 +85,7 @@ const SaleLineItem: FC<Props> = ({
                     onClick={() => removeFromSaleList(id, finishCondition)}
                     onMouseOver={() => setHovered(true)}
                     onMouseOut={() => setHovered(false)}
-                    // TODO: remove inline styles
-                    style={{
-                        backgroundColor: hovered ? 'red' : null,
-                        color: hovered ? 'white' : null,
-                    }}
+                    color={hovered ? 'red' : undefined}
                 ></Button>
             </Table.Cell>
         </Table.Row>

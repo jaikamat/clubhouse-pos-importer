@@ -9,7 +9,19 @@ const ToastContainer = styled(Message)`
     bottom: 10px;
 `;
 
-const createToast = ({ color, header, message, duration = 2000 }) => {
+interface CreateToastArgs {
+    color: string;
+    header: string;
+    message?: string;
+    duration?: number;
+}
+
+const createToast = ({
+    color,
+    header,
+    message,
+    duration = 2000,
+}: CreateToastArgs) => {
     return toaster.notify(
         () => (
             <ToastContainer color={color} compact>
@@ -19,9 +31,9 @@ const createToast = ({ color, header, message, duration = 2000 }) => {
         ),
         {
             position: 'bottom-right',
-            duration: duration
+            duration: duration,
         }
     );
-}
+};
 
 export default createToast;

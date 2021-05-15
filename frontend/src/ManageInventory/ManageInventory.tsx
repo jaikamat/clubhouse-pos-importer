@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import SearchBar from '../common/SearchBar';
-import ManageInventoryList from './ManageInventoryList';
 import { Segment, Header, Icon, Divider } from 'semantic-ui-react';
 import styled from 'styled-components';
 import AllLocationInventory from './AllLocationInventory';
 import { InventoryContext } from '../context/InventoryContext';
+import ManageInventoryListItem from './ManageInventoryListItem';
 
 const HeaderContainer = styled('div')({
     display: 'flex',
@@ -41,7 +41,9 @@ export default function ManageInventory() {
                     </Header>
                 </Segment>
             )}
-            <ManageInventoryList cards={searchResults} />
+            {searchResults.map((card) => (
+                <ManageInventoryListItem key={card.id} card={card} />
+            ))}
         </>
     );
 }

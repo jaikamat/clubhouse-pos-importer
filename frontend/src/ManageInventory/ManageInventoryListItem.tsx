@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import {
     Segment,
     Input,
@@ -10,7 +10,7 @@ import {
 } from 'semantic-ui-react';
 import axios from 'axios';
 import $ from 'jquery';
-import { Formik } from 'formik';
+import { Formik, FormikErrors, FormikHelpers } from 'formik';
 import QohLabels from '../common/QohLabels';
 import createToast from '../common/createToast';
 import CardImage from '../common/CardImage';
@@ -21,27 +21,50 @@ import Language from '../common/Language';
 import { finishes, cardConditions } from '../utils/dropdownOptions';
 import checkCardFinish from '../utils/checkCardFinish';
 import { InventoryContext } from '../context/InventoryContext';
+import { InventoryCard } from '../utils/ScryfallCard';
 
-export default function ManageInventoryListItem({
-    qoh,
-    foil,
-    nonfoil,
-    name,
-    set_name,
-    set,
-    rarity,
-    id,
-    cardImage,
-    lang,
-}) {
-    const [selectedFinish, setSelectedFinish] = useState(
+interface Props {
+    card: InventoryCard;
+}
+
+interface FormValues {
+    selectedFinish: Finish;
+    selectedCondition: string;
+    quantity: string;
+}
+
+type Finish = 'FOIL' | 'NONFOIL';
+
+const ManageInventoryListItem: FC<Props> = ({
+    card: {
+        qoh,
+        foil,
+        nonfoil,
+        name,
+        set_name,
+        set,
+        rarity,
+        id,
+        cardImage,
+        lang,
+        card_faces,
+        image_uris,
+    },
+}) => {
+    const [selectedFinish, setSelectedFinish] = useState<Finish>(
         checkCardFinish(nonfoil, foil).selectedFinish
     );
 
     const { changeCardQuantity } = useContext(InventoryContext);
 
-    const validate = ({ quantity }) => {
-        const errors = {};
+    const initialFormValues: FormValues = {
+        selectedFinish: checkCardFinish(nonfoil, foil).selectedFinish,
+        selectedCondition: 'NM',
+        quantity: '0',
+    };
+
+    const validate = ({ quantity }: FormValues) => {
+        let errors: FormikErrors<FormValues> = {};
 
         if (
             !Number(quantity) ||
@@ -54,8 +77,8 @@ export default function ManageInventoryListItem({
     };
 
     const onSubmit = async (
-        { quantity, selectedFinish, selectedCondition },
-        { resetForm }
+        { quantity, selectedFinish, selectedCondition }: FormValues,
+        { resetForm }: FormikHelpers<FormValues>
     ) => {
         try {
             const { data } = await axios.post(
@@ -76,7 +99,7 @@ export default function ManageInventoryListItem({
             createToast({
                 color: 'green',
                 header: `${quantity}x ${name} ${
-                    quantity > 0 ? 'added' : 'removed'
+                    parseInt(quantity, 10) > 0 ? 'added' : 'removed'
                 }!`,
                 duration: 2000,
             });
@@ -93,7 +116,12 @@ export default function ManageInventoryListItem({
             <Item.Group divided>
                 <Item>
                     <Item.Image size="tiny">
-                        <CardImage image={cardImage} />
+                        <CardImage
+                            image={cardImage}
+                            image_uris={image_uris}
+                            card_faces={card_faces}
+                            hover={false}
+                        />
                     </Item.Image>
                     <Item.Content>
                         <Item.Header as="h3">
@@ -106,19 +134,17 @@ export default function ManageInventoryListItem({
                                 {set_name} ({String(set).toUpperCase()})
                             </Label>
                             <QohLabels inventoryQty={qoh} />{' '}
-                            <MarketPrice id={id} finish={selectedFinish} />
+                            <MarketPrice
+                                id={id}
+                                finish={selectedFinish}
+                                round={false}
+                                showMid={false}
+                            />
                             <Language languageCode={lang} />
                         </Item.Header>
                         <Item.Description>
                             <Formik
-                                initialValues={{
-                                    selectedFinish: checkCardFinish(
-                                        nonfoil,
-                                        foil
-                                    ).selectedFinish,
-                                    selectedCondition: 'NM',
-                                    quantity: 0,
-                                }}
+                                initialValues={initialFormValues}
                                 validate={validate}
                                 onSubmit={onSubmit}
                                 initialErrors={{ quantity: 'error' }}
@@ -137,7 +163,10 @@ export default function ManageInventoryListItem({
                                                 type="number"
                                                 label="Quantity"
                                                 value={values.quantity}
-                                                onChange={(_, { value }) =>
+                                                onChange={(
+                                                    _: any,
+                                                    { value }: { value: number }
+                                                ) =>
                                                     setFieldValue(
                                                         'quantity',
                                                         value
@@ -165,7 +194,10 @@ export default function ManageInventoryListItem({
                                                         foil
                                                     ).finishDisabled
                                                 }
-                                                onChange={(_, { value }) => {
+                                                onChange={(
+                                                    _: any,
+                                                    { value }: { value: Finish }
+                                                ) => {
                                                     setSelectedFinish(value);
                                                     setFieldValue(
                                                         'selectedFinish',
@@ -178,7 +210,10 @@ export default function ManageInventoryListItem({
                                                 control={Select}
                                                 value={values.selectedCondition}
                                                 options={cardConditions}
-                                                onChange={(_, { value }) =>
+                                                onChange={(
+                                                    _: any,
+                                                    { value }: { value: string }
+                                                ) =>
                                                     setFieldValue(
                                                         'selectedCondition',
                                                         value
@@ -192,7 +227,7 @@ export default function ManageInventoryListItem({
                                                 disabled={
                                                     !isValid || isSubmitting
                                                 }
-                                                onClick={handleSubmit}
+                                                onClick={() => handleSubmit()}
                                                 loading={isSubmitting}
                                             >
                                                 Submit
@@ -207,4 +242,6 @@ export default function ManageInventoryListItem({
             </Item.Group>
         </Segment>
     );
-}
+};
+
+export default ManageInventoryListItem;

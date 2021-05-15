@@ -1,3 +1,5 @@
+import createDisplayName from './createDisplayName';
+
 export interface QOH {
     FOIL_NM: number;
     FOIL_LP: number;
@@ -94,28 +96,7 @@ export class ScryfallCard {
 
     // Computes the proper displayName for a card, depending on its properties
     _createDisplayName() {
-        const { name, printed_name, frame_effects, border_color, lang } = this;
-
-        if (lang !== 'en') return `${name} (${lang.toUpperCase()})`;
-
-        if (name !== printed_name && printed_name) {
-            // Covers cards like Godzilla series
-            return `${name} (IP series)`;
-        } else if (
-            frame_effects.length === 0 &&
-            border_color === 'borderless'
-        ) {
-            // Covers cards like comic-art Vivien, Monsters' Advocate
-            return `${name} (Borderless)`;
-        } else if (frame_effects.includes('showcase')) {
-            // Covers showcase cards like comic-art Illuna, Apex of Wishes
-            return `${name} (Showcase)`;
-        } else if (frame_effects.includes('extendedart')) {
-            // Covers cards with extended left and roght border art
-            return `${name} (Extended art)`;
-        } else {
-            return name;
-        }
+        return createDisplayName(this);
     }
 
     _getCardImage() {

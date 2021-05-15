@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, FC } from 'react';
 import axios from 'axios';
 import $ from 'jquery';
 import { Grid, Header, Divider } from 'semantic-ui-react';
@@ -9,11 +9,13 @@ import CustomerSaleList from './CustomerSaleList';
 import PrintList from './PrintList';
 import makeAuthHeader from '../utils/makeAuthHeader';
 import SuspendedSale from './SuspendedSale';
-import { InventoryCard } from '../utils/ScryfallCard';
+import { InventoryCard, ScryfallApiCard } from '../utils/ScryfallCard';
 import { SaleContext } from '../context/SaleContext';
 import TotalCardsLabel, { findSaleCardsQty } from '../common/TotalCardsLabel';
 import AllLocationInventory from '../ManageInventory/AllLocationInventory';
 import styled from 'styled-components';
+
+interface Props {}
 
 const HeaderContainer = styled('div')({
     display: 'flex',
@@ -27,7 +29,7 @@ const ButtonContainer = styled('div')({
     },
 });
 
-export default function Sale() {
+const Sale: FC<Props> = () => {
     const {
         saleListCards,
         suspendedSale,
@@ -36,15 +38,18 @@ export default function Sale() {
         suspendSale,
     } = useContext(SaleContext);
 
-    const [searchResults, setSearchResults] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchResults, setSearchResults] = useState<InventoryCard[]>([]);
+    const [searchTerm, setSearchTerm] = useState<string>('');
 
-    const handleResultSelect = async (term) => {
+    const handleResultSelect = async (term: string) => {
         try {
-            const { data } = await axios.get(GET_CARDS_WITH_INFO, {
-                params: { title: term, matchInStock: true },
-                headers: makeAuthHeader(),
-            });
+            const { data }: { data: ScryfallApiCard[] } = await axios.get(
+                GET_CARDS_WITH_INFO,
+                {
+                    params: { title: term, matchInStock: true },
+                    headers: makeAuthHeader(),
+                }
+            );
 
             const modeledData = data.map((c) => new InventoryCard(c));
 
@@ -113,4 +118,6 @@ export default function Sale() {
             </Grid>
         </>
     );
-}
+};
+
+export default Sale;

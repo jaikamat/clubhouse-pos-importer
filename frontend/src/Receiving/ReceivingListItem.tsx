@@ -1,9 +1,17 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, FC, MouseEvent } from 'react';
 import { Table, Button, Label, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import Price from '../common/Price';
-import { ReceivingContext } from '../context/ReceivingContext';
+import {
+    ReceivingCard,
+    ReceivingContext,
+    Trade,
+} from '../context/ReceivingContext';
 import TooltipImage from '../common/TooltipImage';
+
+interface Props {
+    card: ReceivingCard;
+}
 
 const BoldHelp = styled.b`
     cursor: help;
@@ -12,27 +20,41 @@ const BoldHelp = styled.b`
 // Defines whether it uses cash or credit for trade types
 const TRADE_TYPE = { CASH: 'CASH', CREDIT: 'CREDIT' };
 
-export default function ReceivingListItem({ display_name, set, rarity, cashPrice, creditPrice, finishCondition, uuid_key, tradeType, cardImage }) {
+const ReceivingListItem: FC<Props> = ({
+    card: {
+        display_name,
+        set,
+        rarity,
+        cashPrice,
+        creditPrice,
+        finishCondition,
+        uuid_key,
+        tradeType,
+        cardImage,
+    },
+}) => {
     const { CASH, CREDIT } = TRADE_TYPE;
     const [hovered, setHovered] = useState(false);
     const [mouseInside, setMouseInside] = useState(false);
-    const [mousePos, setMousePos] = useState({});
+    const [mousePos, setMousePos] = useState<{ X?: number }>({});
     const { removeFromList, activeTradeType } = useContext(ReceivingContext);
 
-    const mouseEnter = e => {
-        const rect = e.target.getBoundingClientRect();
+    const mouseEnter = (e: MouseEvent<HTMLElement>) => {
+        const node = e.target as HTMLElement;
+        const rect = node.getBoundingClientRect();
         const X = Math.round(e.clientX - rect.x) + 30;
         setMouseInside(true);
         setMousePos({ X });
-    }
+    };
 
-    const mouseMove = e => {
-        const rect = e.target.getBoundingClientRect();
+    const mouseMove = (e: MouseEvent<HTMLElement>) => {
+        const node = e.target as HTMLElement;
+        const rect = node.getBoundingClientRect();
         const X = Math.round(e.clientX - rect.x) + 30;
         setMousePos({ X });
-    }
+    };
 
-    const mouseLeave = e => setMouseInside(false);
+    const mouseLeave = () => setMouseInside(false);
 
     return (
         <Table.Row>
@@ -43,7 +65,9 @@ export default function ReceivingListItem({ display_name, set, rarity, cashPrice
                     onMouseLeave={mouseLeave}
                 >
                     {display_name}
-                    {mouseInside && <TooltipImage image_uri={cardImage} posX={mousePos.X} />}
+                    {mouseInside && (
+                        <TooltipImage image_uri={cardImage} posX={mousePos.X} />
+                    )}
                 </BoldHelp>
             </Table.Cell>
             <Table.Cell singleLine>
@@ -54,19 +78,30 @@ export default function ReceivingListItem({ display_name, set, rarity, cashPrice
                 <Label color="grey">{set.toUpperCase()}</Label>
             </Table.Cell>
             <Table.Cell>
-                <div style={{ whiteSpace: 'noWrap' }}>
-                    Cash <b><Price num={cashPrice} /></b>
+                <div style={{ whiteSpace: 'nowrap' }}>
+                    Cash{' '}
+                    <b>
+                        <Price num={cashPrice} />
+                    </b>
                 </div>
-                <div style={{ whiteSpace: 'noWrap' }}>
-                    Credit <b><Price num={creditPrice} /></b>
+                <div style={{ whiteSpace: 'nowrap' }}>
+                    Credit{' '}
+                    <b>
+                        <Price num={creditPrice} />
+                    </b>
                 </div>
-                <p>{finishCondition.split('_')[0]} | {finishCondition.split('_')[1]}</p>
+                {finishCondition && (
+                    <p>
+                        {finishCondition.split('_')[0]} |{' '}
+                        {finishCondition.split('_')[1]}
+                    </p>
+                )}
             </Table.Cell>
             <Table.Cell>
                 <Button
                     active={tradeType === CASH}
-                    color={tradeType === CASH ? 'blue' : null}
-                    onClick={() => activeTradeType(uuid_key, CASH)}
+                    color={tradeType === CASH ? 'blue' : undefined}
+                    onClick={() => activeTradeType(uuid_key, Trade.Cash)}
                     disabled={cashPrice === 0}
                     icon
                 >
@@ -76,8 +111,8 @@ export default function ReceivingListItem({ display_name, set, rarity, cashPrice
             <Table.Cell>
                 <Button
                     active={tradeType === CREDIT}
-                    color={tradeType === CREDIT ? 'blue' : null}
-                    onClick={() => activeTradeType(uuid_key, CREDIT)}
+                    color={tradeType === CREDIT ? 'blue' : undefined}
+                    onClick={() => activeTradeType(uuid_key, Trade.Credit)}
                     disabled={creditPrice === 0}
                     icon
                 >
@@ -91,10 +126,11 @@ export default function ReceivingListItem({ display_name, set, rarity, cashPrice
                     onClick={() => removeFromList(uuid_key)}
                     onMouseOver={() => setHovered(true)}
                     onMouseOut={() => setHovered(false)}
-                    color={hovered ? 'red' : null}
-                >
-                </Button>
+                    color={hovered ? 'red' : undefined}
+                ></Button>
             </Table.Cell>
         </Table.Row>
     );
-}
+};
+
+export default ReceivingListItem;

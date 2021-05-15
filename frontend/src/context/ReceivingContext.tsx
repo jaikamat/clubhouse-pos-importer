@@ -9,7 +9,7 @@ import { GET_CARDS_WITH_INFO, RECEIVE_CARDS } from '../utils/api_resources';
 
 interface Props {}
 
-enum Trade {
+export enum Trade {
     Cash = 'CASH',
     Credit = 'CREDIT',
 }

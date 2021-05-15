@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { FC } from 'react';
 import SaleLineItem from './SaleLineItem';
 import { Table, Segment, Header, Icon } from 'semantic-ui-react';
 import SalePriceTotal from './SalePriceTotal';
 import FinishSale from './FinishSale';
+import { SaleListCard } from '../context/SaleContext';
 
-export default function CustomerSaleList({ saleList }) {
+interface Props {
+    saleList: SaleListCard[];
+}
+
+const CustomerSaleList: FC<Props> = ({ saleList }) => {
     if (saleList.length === 0) {
         return (
             <Segment placeholder>
@@ -23,8 +28,8 @@ export default function CustomerSaleList({ saleList }) {
                     {saleList.map((card) => {
                         return (
                             <SaleLineItem
-                                {...card}
                                 key={`${card.id}${card.finishCondition}${card.qtyToSell}`}
+                                card={card}
                             />
                         );
                     })}
@@ -40,4 +45,6 @@ export default function CustomerSaleList({ saleList }) {
             </Segment>
         </React.Fragment>
     );
-}
+};
+
+export default CustomerSaleList;

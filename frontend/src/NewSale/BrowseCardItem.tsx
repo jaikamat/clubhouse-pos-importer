@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import {
     Segment,
-    Label,
     Form,
     Input,
     Dropdown,
@@ -17,11 +16,9 @@ import {
 import $ from 'jquery';
 import _ from 'lodash';
 import CardImage from '../common/CardImage';
-import MarketPrice from '../common/MarketPrice';
-import QohLabels from '../common/QohLabels';
-import Language from '../common/Language';
 import { SaleContext } from '../context/SaleContext';
 import { InventoryCard, QOH } from '../utils/ScryfallCard';
+import CardHeader from '../ui/CardHeader';
 
 interface ConditionOptions {
     text: string;
@@ -71,10 +68,9 @@ function createInitialSelectedFinish(qoh: Partial<QOH>): Finish {
 
 interface Props {
     card: InventoryCard;
-    qoh: Partial<QOH>;
 }
 
-const BrowseCardItem: FC<Props> = ({ card, qoh }) => {
+const BrowseCardItem: FC<Props> = ({ card }) => {
     const [selectedFinishCondition, setSelectedFinishCondition] = useState<
         string
     >('');
@@ -85,11 +81,11 @@ const BrowseCardItem: FC<Props> = ({ card, qoh }) => {
     const [quantityToSell, setQuantityToSell] = useState<number | null>(0);
     const [price, setPrice] = useState<number | null>(0);
     const [selectedFinish, setSelectedFinish] = useState<Finish>(
-        createInitialSelectedFinish(qoh)
+        createInitialSelectedFinish(card.qoh)
     );
     const [conditionOptions, setConditionOptions] = useState<
         ConditionOptions[]
-    >(createConditionOptions(qoh, card.id));
+    >(createConditionOptions(card.qoh, card.id));
     const { addToSaleList } = useContext(SaleContext);
 
     const handleQuantityChange = (
@@ -118,7 +114,7 @@ const BrowseCardItem: FC<Props> = ({ card, qoh }) => {
         // TODO: we need to not coerce here
         setSelectedFinish(value.split('_')[0] as Finish);
         setSelectedFinishCondition(value);
-        setSelectedFinishConditionQty(qoh[value] || 0);
+        setSelectedFinishConditionQty(card.qoh[value] || 0);
         setQuantityToSell(0);
     };
 
@@ -155,8 +151,8 @@ const BrowseCardItem: FC<Props> = ({ card, qoh }) => {
         setSelectedFinishConditionQty(0);
         setQuantityToSell(0);
         setPrice(0);
-        setConditionOptions(createConditionOptions(qoh, id));
-        setSelectedFinish(createInitialSelectedFinish(qoh));
+        setConditionOptions(createConditionOptions(card.qoh, id));
+        setSelectedFinish(createInitialSelectedFinish(card.qoh));
 
         // Highlight the input after successful card add
         $('#searchBar').focus().select();
@@ -175,26 +171,10 @@ const BrowseCardItem: FC<Props> = ({ card, qoh }) => {
                         />
                     </Item.Image>
                     <Item.Content>
-                        <Item.Header as="h3">
-                            {/* // TODO: displayname */}
-                            {card.name}{' '}
-                            <i
-                                className={`ss ss-fw ss-${card.set} ss-${card.rarity}`}
-                                style={{ fontSize: '30px' }}
-                            />
-                            <Label color="grey">
-                                {card.set_name} (
-                                {String(card.set).toUpperCase()})
-                            </Label>
-                            <QohLabels inventoryQty={qoh} />{' '}
-                            <MarketPrice
-                                id={card.id}
-                                finish={selectedFinish}
-                                round
-                                showMid={false}
-                            />
-                            <Language languageCode={card.lang} />
-                        </Item.Header>
+                        <CardHeader
+                            card={card}
+                            selectedFinish={selectedFinish}
+                        />
                         <Item.Description>
                             <Form>
                                 <Form.Group>

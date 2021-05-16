@@ -46,6 +46,7 @@ export interface ScryfallApiCard {
     qtyToSell?: number;
     finishCondition?: string;
     price?: number;
+    promo_types?: string[];
 }
 
 /**
@@ -72,6 +73,7 @@ export class ScryfallCard {
     public display_name: string;
     public cardImage: string;
     public color_identity: string[];
+    public promo_types: string[];
 
     public constructor(card: ScryfallApiCard) {
         this.id = card.id;
@@ -89,9 +91,10 @@ export class ScryfallCard {
         this.frame_effects = card.frame_effects || [];
         this.lang = card.lang || '';
         this.border_color = card.border_color;
-        this.display_name = this._createDisplayName();
-        this.cardImage = this._getCardImage();
         this.color_identity = card.color_identity || null;
+        this.promo_types = card.promo_types || [];
+        this.cardImage = this._getCardImage();
+        this.display_name = this._createDisplayName();
     }
 
     // Computes the proper displayName for a card, depending on its properties

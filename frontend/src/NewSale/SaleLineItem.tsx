@@ -1,5 +1,5 @@
 import React, { useState, useContext, FC, MouseEvent } from 'react';
-import { Button, Label, Table } from 'semantic-ui-react';
+import { Button, Grid, Header, Label, Segment } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { SaleContext, SaleListCard } from '../context/SaleContext';
 import Price from '../common/Price';
@@ -48,47 +48,55 @@ const SaleLineItem: FC<Props> = ({
     const mouseLeave = (e: MouseEvent) => setMouseInside(false);
 
     return (
-        <Table.Row>
-            <Table.Cell>
-                <h4 className="line-item-title">
-                    <BoldHelp
-                        onMouseEnter={mouseEnter}
-                        onMouseMove={mouseMove}
-                        onMouseLeave={mouseLeave}
-                    >
-                        {display_name}
-                        {mouseInside && (
-                            <TooltipImage
-                                image_uri={cardImage}
-                                posX={mousePos.X}
-                            />
+        <Segment>
+            <Grid verticalAlign="middle">
+                <Grid.Column tablet={16} computer={11}>
+                    <div>
+                        <BoldHelp
+                            onMouseEnter={mouseEnter}
+                            onMouseMove={mouseMove}
+                            onMouseLeave={mouseLeave}
+                        >
+                            <Header as="h4">{display_name}</Header>
+                        </BoldHelp>
+                        <span>
+                            {mouseInside && (
+                                <TooltipImage
+                                    image_uri={cardImage}
+                                    posX={mousePos.X}
+                                />
+                            )}
+                        </span>
+                    </div>
+                    <i
+                        className={`ss ss-fw ss-${set} ss-${rarity}`}
+                        style={{ fontSize: '20px' }}
+                    />
+                    <Label color="grey">{set.toUpperCase()}</Label>
+                    <div className="line-item-price">
+                        {qtyToSell}x @ <Price num={price} />
+                        {' • '}
+                        {finishCondition && (
+                            <span>
+                                {finishCondition.split('_')[1]} {' | '}
+                                {finishCondition.split('_')[0]}
+                            </span>
                         )}
-                    </BoldHelp>
-                </h4>
-            </Table.Cell>
-            <Table.Cell singleLine>
-                <i
-                    className={`ss ss-fw ss-${set} ss-${rarity}`}
-                    style={{ fontSize: '20px' }}
-                />
-                <Label color="grey">{set.toUpperCase()}</Label>
-            </Table.Cell>
-            <Table.Cell>
-                <div className="line-item-price">
-                    {qtyToSell}x @ <Price num={price} /> | {finishCondition}
-                </div>
-            </Table.Cell>
-            <Table.Cell>
-                <Button
-                    icon="cancel"
-                    circular
-                    onClick={() => removeFromSaleList(id, finishCondition)}
-                    onMouseOver={() => setHovered(true)}
-                    onMouseOut={() => setHovered(false)}
-                    color={hovered ? 'red' : undefined}
-                ></Button>
-            </Table.Cell>
-        </Table.Row>
+                    </div>
+                </Grid.Column>
+                <Grid.Column tablet={16} computer={5} textAlign="right">
+                    <Button
+                        compact
+                        icon="cancel"
+                        circular
+                        onClick={() => removeFromSaleList(id, finishCondition)}
+                        onMouseOver={() => setHovered(true)}
+                        onMouseOut={() => setHovered(false)}
+                        color={hovered ? 'red' : undefined}
+                    />
+                </Grid.Column>
+            </Grid>
+        </Segment>
     );
 };
 

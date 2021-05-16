@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import SaleLineItem from './SaleLineItem';
-import { Table, Segment, Header, Icon } from 'semantic-ui-react';
+import { Segment, Header, Icon } from 'semantic-ui-react';
 import SalePriceTotal from './SalePriceTotal';
 import FinishSale from './FinishSale';
 import { SaleListCard } from '../context/SaleContext';
@@ -22,20 +22,15 @@ const CustomerSaleList: FC<Props> = ({ saleList }) => {
     }
 
     return (
-        <React.Fragment>
-            <Table>
-                <Table.Body>
-                    {saleList.map((card) => {
-                        return (
-                            <SaleLineItem
-                                key={`${card.id}${card.finishCondition}${card.qtyToSell}`}
-                                card={card}
-                            />
-                        );
-                    })}
-                </Table.Body>
-            </Table>
-
+        <>
+            <Segment.Group>
+                {saleList.map((card) => (
+                    <SaleLineItem
+                        key={`${card.id}${card.finishCondition}${card.qtyToSell}`}
+                        card={card}
+                    />
+                ))}
+            </Segment.Group>
             <Segment clearing>
                 <Header floated="left">
                     <Header sub>Subtotal</Header>
@@ -43,7 +38,7 @@ const CustomerSaleList: FC<Props> = ({ saleList }) => {
                 </Header>
                 <FinishSale />
             </Segment>
-        </React.Fragment>
+        </>
     );
 };
 

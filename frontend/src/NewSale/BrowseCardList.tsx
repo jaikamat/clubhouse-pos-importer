@@ -40,9 +40,7 @@ const BrowseCardList: FC<Props> = ({ term, cards }) => {
     return (
         <>
             {cards.map((card) => {
-                return (
-                    <BrowseCardItem key={card.id} card={card} qoh={card.qoh} />
-                );
+                return <BrowseCardItem key={card.id} card={card} />;
             })}
         </>
     );

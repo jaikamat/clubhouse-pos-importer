@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC, ChangeEvent } from 'react';
+import React, { useState, useEffect, FC } from 'react';
 import axios from 'axios';
 import { SUSPEND_SALE } from '../utils/api_resources';
 import {

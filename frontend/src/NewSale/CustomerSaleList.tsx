@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import SaleLineItem from './SaleLineItem';
-import { Table, Segment, Header, Icon } from 'semantic-ui-react';
+import { Segment, Header, Icon } from 'semantic-ui-react';
 import SalePriceTotal from './SalePriceTotal';
 import FinishSale from './FinishSale';
 import { SaleListCard } from '../context/SaleContext';

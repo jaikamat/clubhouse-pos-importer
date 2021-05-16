@@ -1,5 +1,5 @@
 import React, { useState, useContext, FC, MouseEvent } from 'react';
-import { Button, Grid, Header, Label, Segment, Table } from 'semantic-ui-react';
+import { Button, Grid, Header, Label, Segment } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { SaleContext, SaleListCard } from '../context/SaleContext';
 import Price from '../common/Price';

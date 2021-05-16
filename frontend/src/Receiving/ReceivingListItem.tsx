@@ -88,7 +88,6 @@ const ReceivingListItem: FC<Props> = ({
                             {finishCondition.split('_')[0]}
                         </span>
                     )}
-                    <div></div>
                     <div>
                         <span style={{ whiteSpace: 'nowrap' }}>
                             Cash:{' '}

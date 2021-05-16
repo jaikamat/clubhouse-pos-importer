@@ -11,13 +11,19 @@ interface Props {
     card: InventoryCard;
     selectedFinish: Finish;
     showMid?: boolean;
+    round?: boolean;
 }
 
 const SetIcon = styled('i')({
     fontSize: '30px',
 });
 
-const CardHeader: FC<Props> = ({ card, selectedFinish, showMid = false }) => {
+const CardHeader: FC<Props> = ({
+    card,
+    selectedFinish,
+    showMid = false,
+    round = false,
+}) => {
     const { id, display_name, set, rarity, set_name, qoh, lang } = card;
 
     return (
@@ -31,8 +37,8 @@ const CardHeader: FC<Props> = ({ card, selectedFinish, showMid = false }) => {
             <MarketPrice
                 id={id}
                 finish={selectedFinish}
-                round
                 showMid={showMid}
+                round={round}
             />
             <Language languageCode={lang} />
         </Item.Header>

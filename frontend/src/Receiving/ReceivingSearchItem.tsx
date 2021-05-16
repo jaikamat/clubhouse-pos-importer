@@ -119,16 +119,7 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
         return validateQty || validateTradeTypes;
     };
 
-    const {
-        image_uris,
-        name,
-        set_name,
-        set,
-        rarity,
-        card_faces,
-        id,
-        lang,
-    } = card;
+    const { image_uris, card_faces } = card;
 
     return (
         <Segment>

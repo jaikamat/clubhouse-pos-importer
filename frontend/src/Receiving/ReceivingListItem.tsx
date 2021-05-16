@@ -1,14 +1,5 @@
 import React, { useState, useContext, FC, MouseEvent } from 'react';
-import {
-    Table,
-    Button,
-    Label,
-    Icon,
-    List,
-    Grid,
-    Segment,
-    Header,
-} from 'semantic-ui-react';
+import { Button, Label, Icon, Grid, Segment, Header } from 'semantic-ui-react';
 import styled from 'styled-components';
 import Price from '../common/Price';
 import {

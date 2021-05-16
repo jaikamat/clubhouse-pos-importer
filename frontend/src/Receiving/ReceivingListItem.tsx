@@ -67,8 +67,8 @@ const ReceivingListItem: FC<Props> = ({
 
     return (
         <Segment>
-            <Grid>
-                <Grid.Column width={11} verticalAlign="middle">
+            <Grid verticalAlign="middle">
+                <Grid.Column tablet={16} computer={11}>
                     <div>
                         <BoldHelp
                             onMouseEnter={mouseEnter}
@@ -93,28 +93,28 @@ const ReceivingListItem: FC<Props> = ({
                     <Label color="grey">{set.toUpperCase()}</Label>
                     {finishCondition && (
                         <span>
-                            {finishCondition.split('_')[0]} {' | '}
-                            {finishCondition.split('_')[1]}
+                            {finishCondition.split('_')[1]} {' | '}
+                            {finishCondition.split('_')[0]}
                         </span>
                     )}
                     <div></div>
                     <div>
                         <span style={{ whiteSpace: 'nowrap' }}>
-                            Cash{' '}
+                            Cash:{' '}
                             <b>
                                 <Price num={cashPrice || 0} />
                             </b>
                         </span>
-                        {' | '}
+                        {' • '}
                         <span style={{ whiteSpace: 'nowrap' }}>
-                            Credit{' '}
+                            Credit:{' '}
                             <b>
                                 <Price num={creditPrice || 0} />
                             </b>
                         </span>
                     </div>
                 </Grid.Column>
-                <Grid.Column width={5} textAlign="right" verticalAlign="middle">
+                <Grid.Column tablet={16} computer={5} textAlign="right">
                     <Button
                         compact
                         active={tradeType === CASH}

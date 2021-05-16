@@ -10,13 +10,14 @@ import styled from 'styled-components';
 interface Props {
     card: InventoryCard;
     selectedFinish: Finish;
+    showMid?: boolean;
 }
 
 const SetIcon = styled('i')({
     fontSize: '30px',
 });
 
-const CardHeader: FC<Props> = ({ card, selectedFinish }) => {
+const CardHeader: FC<Props> = ({ card, selectedFinish, showMid = false }) => {
     const { id, display_name, set, rarity, set_name, qoh, lang } = card;
 
     return (
@@ -31,7 +32,7 @@ const CardHeader: FC<Props> = ({ card, selectedFinish }) => {
                 id={id}
                 finish={selectedFinish}
                 round
-                showMid={false}
+                showMid={showMid}
             />
             <Language languageCode={lang} />
         </Item.Header>

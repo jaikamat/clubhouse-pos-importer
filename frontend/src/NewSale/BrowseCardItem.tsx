@@ -174,6 +174,7 @@ const BrowseCardItem: FC<Props> = ({ card }) => {
                         <CardHeader
                             card={card}
                             selectedFinish={selectedFinish}
+                            showMid
                         />
                         <Item.Description>
                             <Form>

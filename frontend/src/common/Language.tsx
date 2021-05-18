@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Label } from 'semantic-ui-react';
 
 // Language codes from Scryfall. See https://scryfall.com/docs/api/languages for reference.
@@ -19,9 +19,19 @@ const LANG_CODES = {
     grc: 'Ancient Greek',
     ar: 'Arabic',
     sa: 'Sanskrit',
-    px: 'Phyrexian'
+    px: 'Phyrexian',
+};
+
+export type LanguageCode = keyof typeof LANG_CODES;
+
+interface Props {
+    languageCode: LanguageCode;
 }
 
-export default function Language({ languageCode }) {
-    return <Label image color="grey">{LANG_CODES[languageCode]}</Label>
-}
+const Language: FC<Props> = ({ languageCode }) => (
+    <Label image color="grey">
+        {LANG_CODES[languageCode]}
+    </Label>
+);
+
+export default Language;

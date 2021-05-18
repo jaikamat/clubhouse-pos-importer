@@ -1,4 +1,5 @@
 import createDisplayName from './createDisplayName';
+import { LanguageCode } from '../common/Language';
 
 export interface QOH {
     FOIL_NM: number;
@@ -36,7 +37,7 @@ export interface ScryfallApiCard {
     colors: string[];
     type_line: string;
     frame_effects: string[];
-    lang: string;
+    lang: LanguageCode;
     border_color: string;
     display_name: string;
     cardImage: string;
@@ -68,7 +69,7 @@ export class ScryfallCard {
     public colors: string[];
     public type_line: string;
     public frame_effects: string[];
-    public lang: string;
+    public lang: LanguageCode;
     public border_color: string;
     public display_name: string;
     public cardImage: string;
@@ -89,7 +90,7 @@ export class ScryfallCard {
         this.colors = card.colors;
         this.type_line = card.type_line;
         this.frame_effects = card.frame_effects || [];
-        this.lang = card.lang || '';
+        this.lang = card.lang;
         this.border_color = card.border_color;
         this.color_identity = card.color_identity || null;
         this.promo_types = card.promo_types || [];

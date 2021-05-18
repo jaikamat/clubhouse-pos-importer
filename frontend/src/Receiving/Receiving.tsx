@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { FC, useContext, useEffect } from 'react';
 import SearchBar from '../common/SearchBar';
 import ReceivingSearchItem from './ReceivingSearchItem';
 import { Header, Grid, Divider } from 'semantic-ui-react';
@@ -9,12 +9,14 @@ import TotalCardsLabel from '../common/TotalCardsLabel';
 import styled from 'styled-components';
 import AllLocationInventory from '../ManageInventory/AllLocationInventory';
 
+interface Props {}
+
 const HeaderContainer = styled('div')({
     display: 'flex',
     justifyContent: 'space-between',
 });
 
-export default function Receiving() {
+const Receiving: FC<Props> = () => {
     const {
         searchResults,
         receivingList,
@@ -76,4 +78,6 @@ export default function Receiving() {
             </Grid>
         </>
     );
-}
+};
+
+export default Receiving;

@@ -4,7 +4,6 @@ test('create display name', () => {
     expect(
         createDisplayName({
             name: 'Card, the Name',
-            printed_name: 'Card, the Name',
             promo_types: [],
             frame_effects: ['normal'],
             border_color: 'black',
@@ -18,7 +17,6 @@ test('create display name', () => {
     expect(
         createDisplayName({
             name: 'Card, the Name',
-            printed_name: 'Card, the Name',
             promo_types: [],
             frame_effects: ['normal'],
             border_color: 'black',
@@ -33,7 +31,6 @@ test('create display name', () => {
         createDisplayName({
             name: 'Card, the Name',
             promo_types: ['godzillaseries'],
-            printed_name: null,
             frame_effects: ['normal'],
             border_color: 'black',
             lang: 'en',
@@ -46,7 +43,6 @@ test('create display name', () => {
     expect(
         createDisplayName({
             name: 'Card, the Name',
-            printed_name: 'Card, the Name',
             promo_types: [],
             frame_effects: ['showcase'],
             border_color: 'black',
@@ -60,7 +56,6 @@ test('create display name', () => {
     expect(
         createDisplayName({
             name: 'Card, the Name',
-            printed_name: 'Card, the Name',
             promo_types: [],
             frame_effects: ['extendedart'],
             border_color: 'black',

@@ -6,12 +6,11 @@ import { ReceivingCard } from '../context/ReceivingContext';
 
 interface Props {
     receivingList: ReceivingCard[];
-    closeCashModal: () => void;
 }
 
 // Am I crazy or is this logic really convoluted?
 // Perhaps look at this down the line for improvement...
-const CashReport: FC<Props> = ({ receivingList, closeCashModal }) => {
+const CashReport: FC<Props> = ({ receivingList }) => {
     // If id, cashPrice and marketPrice are the same, goes in one bucket
     const countByPriceAndID = _.chain(receivingList)
         .filter((c) => c.tradeType === 'CASH')

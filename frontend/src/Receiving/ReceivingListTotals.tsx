@@ -83,10 +83,7 @@ const ReceivingListTotals: FC<Props> = () => {
                         }
                     >
                         <Modal.Content>
-                            <CashReport
-                                receivingList={receivingList}
-                                closeCashModal={closeCashModal}
-                            />
+                            <CashReport receivingList={receivingList} />
                         </Modal.Content>
                         <Modal.Actions>
                             <Button

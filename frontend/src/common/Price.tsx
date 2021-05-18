@@ -1,14 +1,18 @@
 import React, { FC } from 'react';
 
+type Price = number | string | null;
+
 interface Props {
-    num: number | string;
+    num: Price;
 }
 
-const Price: FC<Props> = ({ num }) => {
-    let price: number = typeof num === 'string' ? Number(num) : num;
+export function getPrice(val: Price) {
+    if (val === null) return '$0.00';
+    let price: number = typeof val === 'string' ? Number(val) : val;
+    if (isNaN(price)) return '$0.00';
+    return `$${price.toFixed(2)}`;
+}
 
-    if (num === null || isNaN(price)) return <span>$0.00</span>;
-    return <span>${price.toFixed(2)}</span>;
-};
+const Price: FC<Props> = ({ num }) => <span>{getPrice(num)}</span>;
 
 export default Price;

@@ -1,16 +1,14 @@
 import React, { FC } from 'react';
 import Price from '../common/Price';
 import { SaleListCard } from '../context/SaleContext';
+import sum from '../utils/sum';
 
 interface Props {
     saleList: SaleListCard[];
 }
 
 const SalePriceTotal: FC<Props> = ({ saleList }) => {
-    const total = saleList.reduce(
-        (acc, val) => acc + val.qtyToSell * Number(val.price),
-        0
-    );
+    const total = sum(saleList.map((c) => c.qtyToSell * Number(c.price)));
 
     return (
         <div id="sale-price-total">

@@ -1,5 +1,25 @@
 import createDisplayName from './createDisplayName';
 
+// Language codes from Scryfall. See https://scryfall.com/docs/api/languages for reference.
+export type LanguageCode =
+    | 'en'
+    | 'es'
+    | 'fr'
+    | 'de'
+    | 'it'
+    | 'pt'
+    | 'ja'
+    | 'ko'
+    | 'ru'
+    | 'zhs'
+    | 'zht'
+    | 'he'
+    | 'la'
+    | 'grc'
+    | 'ar'
+    | 'sa'
+    | 'px';
+
 export interface QOH {
     FOIL_NM: number;
     FOIL_LP: number;
@@ -36,7 +56,7 @@ export interface ScryfallApiCard {
     colors: string[];
     type_line: string;
     frame_effects: string[];
-    lang: string;
+    lang: LanguageCode;
     border_color: string;
     display_name: string;
     cardImage: string;
@@ -68,7 +88,7 @@ export class ScryfallCard {
     public colors: string[];
     public type_line: string;
     public frame_effects: string[];
-    public lang: string;
+    public lang: LanguageCode;
     public border_color: string;
     public display_name: string;
     public cardImage: string;
@@ -89,7 +109,7 @@ export class ScryfallCard {
         this.colors = card.colors;
         this.type_line = card.type_line;
         this.frame_effects = card.frame_effects || [];
-        this.lang = card.lang || '';
+        this.lang = card.lang;
         this.border_color = card.border_color;
         this.color_identity = card.color_identity || null;
         this.promo_types = card.promo_types || [];

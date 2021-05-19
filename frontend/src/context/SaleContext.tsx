@@ -14,11 +14,16 @@ interface SuspendSaleArgs {
     notes: string;
 }
 
+export type SaleListCard = InventoryCard & {
+    finishCondition: string;
+    qtyToSell: number;
+    price: number;
+};
+
 export interface SuspendedSale {
     _id: string;
     name: string;
     notes: string;
-    // TODO: is this the right type?
     list: SaleListCard[];
 }
 
@@ -38,12 +43,6 @@ export interface SaleContext {
     finalizeSale: () => void;
     resetSaleState: () => void;
 }
-
-export type SaleListCard = InventoryCard & {
-    finishCondition: string;
-    qtyToSell: number;
-    price: number;
-};
 
 const defaultSuspendedSale: SuspendedSale = {
     _id: '',
@@ -79,8 +78,9 @@ export const SaleProvider: FC<Props> = ({ children }) => {
         qtyToSell: number,
         price: number
     ) => {
-        // TODO: is this stable? We have to use
-        // Object.assign() to preserve getter and setter methods
+        const oldState = [...saleListCards];
+
+        // TODO: is this stable? We have to use Object.assign() to preserve getter and setter methods
         const newCard = _.clone(
             Object.assign(card, {
                 finishCondition,
@@ -88,11 +88,6 @@ export const SaleProvider: FC<Props> = ({ children }) => {
                 price,
             })
         );
-
-        const oldState = [...saleListCards];
-        // TODO: do we have to re-model this??
-        // const modeledCard = new InventoryCard(newCard);
-        const modeledCard = newCard;
 
         // Need to make sure same ID's with differing conditions are separate line-items
         const idx = oldState.findIndex((el) => {
@@ -102,23 +97,20 @@ export const SaleProvider: FC<Props> = ({ children }) => {
         });
 
         if (idx !== -1) {
-            oldState.splice(idx, 1, modeledCard);
+            oldState.splice(idx, 1, newCard);
         } else {
-            oldState.push(modeledCard);
+            oldState.push(newCard);
         }
 
-        // Sorting the saleList cards here, on add
-        const sortedCards = sortSaleList(oldState);
-
-        setSaleListCards(sortedCards);
+        setSaleListCards(sortSaleList(oldState));
     };
 
     /**
      * Removes product from the sale list
      */
     const removeFromSaleList = (id: string, finishCondition: string) => {
-        const newState = _.reject([...saleListCards], (el) => {
-            return el.id === id && el.finishCondition === finishCondition;
+        const newState = [...saleListCards].filter((c) => {
+            return !(c.id === id && c.finishCondition === finishCondition);
         });
 
         setSaleListCards(newState);

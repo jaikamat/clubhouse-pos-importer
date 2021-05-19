@@ -11,9 +11,10 @@ import makeAuthHeader from '../utils/makeAuthHeader';
 import SuspendedSale from './SuspendedSale';
 import { InventoryCard, ScryfallApiCard } from '../utils/ScryfallCard';
 import { SaleContext } from '../context/SaleContext';
-import TotalCardsLabel, { findSaleCardsQty } from '../common/TotalCardsLabel';
+import TotalCardsLabel from '../common/TotalCardsLabel';
 import AllLocationInventory from '../ManageInventory/AllLocationInventory';
 import styled from 'styled-components';
+import sum from '../utils/sum';
 
 interface Props {}
 
@@ -95,7 +96,9 @@ const Sale: FC<Props> = () => {
                                     ? 'Sale Items'
                                     : `${suspendedSale.name}'s Items`}
                                 <TotalCardsLabel
-                                    listLength={findSaleCardsQty(saleListCards)}
+                                    listLength={sum(
+                                        saleListCards.map((c) => c.qtyToSell)
+                                    )}
                                 />
                             </Header>
                             <ButtonContainer>

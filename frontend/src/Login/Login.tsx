@@ -1,10 +1,16 @@
-import React, { useContext } from 'react';
+import React, { SyntheticEvent, useContext } from 'react';
 import createToast from '../common/createToast';
 import { Form, Button, Segment, Select } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
-import { AuthContext } from '../context/AuthProvider';
+import { AuthContext, ClubhouseLocation } from '../context/AuthProvider';
 import styled from 'styled-components';
 import { Formik } from 'formik';
+
+interface FormValues {
+    username: string;
+    password: string;
+    location: ClubhouseLocation;
+}
 
 const LoginContainer = styled.div`
     margin-top: 15px;
@@ -17,10 +23,16 @@ const FormContainer = styled(Segment)`
     padding: 25px 25px 25px 25px !important;
 `;
 
-export default function Login() {
+const initialFormValues: FormValues = {
+    username: '',
+    password: '',
+    location: 'ch1',
+};
+
+const Login = () => {
     const { loggedIn, handleLogin } = useContext(AuthContext);
 
-    const onSubmit = async ({ username, password, location }) => {
+    const onSubmit = async ({ username, password, location }: FormValues) => {
         const data = await handleLogin(username, password, location);
 
         if (data.token) {
@@ -42,14 +54,7 @@ export default function Login() {
 
     return (
         <LoginContainer>
-            <Formik
-                initialValues={{
-                    username: '',
-                    password: '',
-                    location: '',
-                }}
-                onSubmit={onSubmit}
-            >
+            <Formik initialValues={initialFormValues} onSubmit={onSubmit}>
                 {({ values, handleSubmit, setFieldValue, isSubmitting }) => (
                     <FormContainer raised loading={isSubmitting}>
                         <Form>
@@ -93,7 +98,10 @@ export default function Login() {
                                         value: 'ch2',
                                     },
                                 ]}
-                                onChange={(_, { value }) => {
+                                onChange={(
+                                    _: SyntheticEvent,
+                                    { value }: { value: ClubhouseLocation }
+                                ) => {
                                     setFieldValue('location', value);
                                 }}
                             />
@@ -102,7 +110,7 @@ export default function Login() {
                                 fluid
                                 floated="right"
                                 type="submit"
-                                onClick={handleSubmit}
+                                onClick={() => handleSubmit()}
                                 className="login-btn"
                                 disabled={
                                     !values.username ||
@@ -118,4 +126,6 @@ export default function Login() {
             </Formik>
         </LoginContainer>
     );
-}
+};
+
+export default Login;

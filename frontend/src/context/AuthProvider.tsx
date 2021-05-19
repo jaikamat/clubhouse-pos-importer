@@ -7,12 +7,12 @@ export type ClubhouseLocation = 'ch1' | 'ch2';
 
 interface Context {
     loggedIn: boolean;
-    handleLogin?: (
+    handleLogin: (
         username: string,
         password: string,
         currentLocation: ClubhouseLocation
     ) => Promise<any>;
-    handleLogout?: () => void;
+    handleLogout: () => void;
     currentLocation: ClubhouseLocation | null;
     currentUser: string | null;
 }
@@ -21,6 +21,8 @@ export const AuthContext = React.createContext<Context>({
     loggedIn: false,
     currentLocation: null,
     currentUser: null,
+    handleLogout: () => null,
+    handleLogin: () => new Promise(() => null),
 });
 
 const AuthProvider: FC<Props> = ({ children }) => {

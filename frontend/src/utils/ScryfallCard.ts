@@ -168,22 +168,6 @@ export class InventoryCard extends ScryfallCard {
         this.price = card.price && card.price >= 0 ? card.price : null;
     }
 
-    get qohParsed() {
-        const foilQty =
-            (this._qoh.FOIL_NM || 0) +
-            (this._qoh.FOIL_LP || 0) +
-            (this._qoh.FOIL_MP || 0) +
-            (this._qoh.FOIL_HP || 0);
-
-        const nonfoilQty =
-            (this._qoh.NONFOIL_NM || 0) +
-            (this._qoh.NONFOIL_LP || 0) +
-            (this._qoh.NONFOIL_MP || 0) +
-            (this._qoh.NONFOIL_HP || 0);
-
-        return [foilQty, nonfoilQty];
-    }
-
     get qoh() {
         return this._qoh;
     }

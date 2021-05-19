@@ -1,20 +1,17 @@
 import { QOH } from './ScryfallCard';
 
-export default function parseQoh(inventoryQty: Partial<QOH>): [number, number] {
-    let foilQty = 0;
-    let nonfoilQty = 0;
+export default function parseQoh(qoh: Partial<QOH>) {
+    const foilQty =
+        (qoh.FOIL_NM || 0) +
+        (qoh.FOIL_LP || 0) +
+        (qoh.FOIL_MP || 0) +
+        (qoh.FOIL_HP || 0);
 
-    foilQty =
-        (inventoryQty.FOIL_NM || 0) +
-        (inventoryQty.FOIL_LP || 0) +
-        (inventoryQty.FOIL_MP || 0) +
-        (inventoryQty.FOIL_HP || 0);
+    const nonfoilQty =
+        (qoh.NONFOIL_NM || 0) +
+        (qoh.NONFOIL_LP || 0) +
+        (qoh.NONFOIL_MP || 0) +
+        (qoh.NONFOIL_HP || 0);
 
-    nonfoilQty =
-        (inventoryQty.NONFOIL_NM || 0) +
-        (inventoryQty.NONFOIL_LP || 0) +
-        (inventoryQty.NONFOIL_MP || 0) +
-        (inventoryQty.NONFOIL_HP || 0);
-
-    return [foilQty, nonfoilQty];
+    return [foilQty, nonfoilQty] as const;
 }

@@ -81,11 +81,13 @@ export const SaleProvider: FC<Props> = ({ children }) => {
     ) => {
         // TODO: is this stable? We have to use
         // Object.assign() to preserve getter and setter methods
-        const newCard = Object.assign(card, {
-            finishCondition,
-            qtyToSell,
-            price,
-        });
+        const newCard = _.clone(
+            Object.assign(card, {
+                finishCondition,
+                qtyToSell,
+                price,
+            })
+        );
 
         const oldState = [...saleListCards];
         // TODO: do we have to re-model this??

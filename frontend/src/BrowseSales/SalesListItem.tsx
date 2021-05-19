@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { Table } from 'semantic-ui-react';
 import moment from 'moment';
 import { Sale } from './SalesList';
+import sum from '../utils/sum';
 
 interface Props {
     sale: Sale;
@@ -10,9 +11,7 @@ interface Props {
 const SalesListItem: FC<Props> = ({ sale }) => {
     const { card_list, sale_data } = sale;
 
-    const quantitySold = card_list
-        .map((c) => Number(c.qtyToSell))
-        .reduce((pre, curr) => pre + curr, 0);
+    const quantitySold = sum(card_list.map((c) => Number(c.qtyToSell)));
 
     return (
         <Table.Row>

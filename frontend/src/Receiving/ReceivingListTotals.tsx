@@ -6,6 +6,7 @@ import CashReport from './CashReport';
 import printCashReport from './printCashReport';
 import ReceivingListModal from './ReceivingListModal';
 import { ReceivingContext, Trade } from '../context/ReceivingContext';
+import sum from '../utils/sum';
 
 interface Props {}
 
@@ -41,15 +42,17 @@ const ReceivingListTotals: FC<Props> = () => {
         printCashReport();
     };
 
-    const cashTotal = receivingList.reduce((acc, curr) => {
-        let cashVal = curr.tradeType === Cash ? curr.cashPrice : 0;
-        return acc + (cashVal || 0);
-    }, 0);
+    const cashTotal = sum(
+        receivingList
+            .filter((c) => c.tradeType === Cash)
+            .map((c) => c.cashPrice || 0)
+    );
 
-    const creditTotal = receivingList.reduce((acc, curr) => {
-        let creditVal = curr.tradeType === Credit ? curr.creditPrice : 0;
-        return acc + (creditVal || 0);
-    }, 0);
+    const creditTotal = sum(
+        receivingList
+            .filter((c) => c.tradeType === Credit)
+            .map((c) => c.creditPrice || 0)
+    );
 
     return (
         <Segment>

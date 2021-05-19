@@ -1,5 +1,24 @@
 import createDisplayName from './createDisplayName';
-import { LanguageCode } from '../common/Language';
+
+// Language codes from Scryfall. See https://scryfall.com/docs/api/languages for reference.
+export type LanguageCode =
+    | 'en'
+    | 'es'
+    | 'fr'
+    | 'de'
+    | 'it'
+    | 'pt'
+    | 'ja'
+    | 'ko'
+    | 'ru'
+    | 'zhs'
+    | 'zht'
+    | 'he'
+    | 'la'
+    | 'grc'
+    | 'ar'
+    | 'sa'
+    | 'px';
 
 export interface QOH {
     FOIL_NM: number;

@@ -11,11 +11,12 @@ import {
     Button,
 } from 'semantic-ui-react';
 import SearchBar from '../common/SearchBar';
-import PublicCardList from './PublicCardList';
 import { GET_CARDS_WITH_INFO_PUBLIC } from '../utils/api_resources';
 import { InventoryCard, ScryfallApiCard } from '../utils/ScryfallCard';
 import { Formik } from 'formik';
 import { ClubhouseLocation } from '../context/AuthProvider';
+import styled from 'styled-components';
+import PublicCardItem from './PublicCardItem';
 
 interface State {
     searchResults: InventoryCard[];
@@ -27,6 +28,13 @@ interface FormValues {
     searchTerm: string;
     selectedLocation: ClubhouseLocation;
 }
+
+const GridContainer = styled('div')({
+    display: 'grid',
+    gridGap: '10px',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    justifyItems: 'center',
+});
 
 const initialState: State = {
     searchResults: [],
@@ -138,7 +146,11 @@ const PublicInventory: FC = () => {
                     <Divider />
 
                     {state.searchResults.length > 0 ? (
-                        <PublicCardList cards={state.searchResults} />
+                        <GridContainer>
+                            {state.searchResults.map((c) => (
+                                <PublicCardItem key={c.id} card={c} />
+                            ))}
+                        </GridContainer>
                     ) : (
                         <Segment placeholder>
                             <Header icon>

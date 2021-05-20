@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Image, Label } from 'semantic-ui-react';
+import { Image as SurImage, Label } from 'semantic-ui-react';
 import MarketPrice from '../common/MarketPrice';
 import styled from 'styled-components';
 import { InventoryCard } from '../utils/ScryfallCard';
@@ -9,13 +9,21 @@ interface Props {
     card: InventoryCard;
 }
 
+// These numbers were the originally calculated px values
+const cardImageRatio = 418.3 / 300;
+const cardImageWidth = 275;
+const cardImageHeight = cardImageRatio * cardImageWidth;
+
 const Wrapper = styled.div`
-    display: inline-block;
-    margin: 10px 10px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: ${cardImageWidth}px;
 `;
 
 const InventoryWrapper = styled.div`
     display: flex;
+    width: 100%;
     flex-direction: column;
     justify-content: space-between;
     padding: 5px;
@@ -32,8 +40,8 @@ const InventoryRow = styled.div`
 `;
 
 const ImageWrapper = styled.div`
-    width: 300px;
-    height: 418.3px;
+    width: ${cardImageWidth}px;
+    height: ${cardImageHeight}px;
     box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.25);
     background: repeating-linear-gradient(
         45deg,
@@ -45,44 +53,48 @@ const ImageWrapper = styled.div`
     border-radius: 15px;
 `;
 
+const Image = styled(SurImage)({
+    borderRadius: '15px',
+});
+
 const PublicCardItem: FC<Props> = ({ card }) => {
     const { id, cardImage } = card;
     const [foilQty, nonfoilQty] = parseQoh(card.qoh);
 
-    const displayFoil = (
-        <InventoryRow>
-            <Label color="blue" image>
-                Foil<Label.Detail>{foilQty}</Label.Detail>
-            </Label>
-            <MarketPrice id={id} finish="FOIL" round showMid={false} />
-        </InventoryRow>
-    );
-
-    const displayNonfoil = (
-        <InventoryRow>
-            <Label color="blue" image>
-                Nonfoil<Label.Detail>{nonfoilQty}</Label.Detail>
-            </Label>
-            <MarketPrice id={id} finish="NONFOIL" round showMid={false} />
-        </InventoryRow>
-    );
-
     return (
-        <React.Fragment>
-            <Wrapper>
-                <ImageWrapper>
-                    <Image
-                        src={cardImage}
-                        size="medium"
-                        style={{ borderRadius: '15px' }}
-                    />
-                </ImageWrapper>
-                <InventoryWrapper>
-                    {foilQty > 0 ? displayFoil : null}
-                    {nonfoilQty > 0 ? displayNonfoil : null}
-                </InventoryWrapper>
-            </Wrapper>
-        </React.Fragment>
+        <Wrapper>
+            <ImageWrapper>
+                <Image src={cardImage} size="medium" />
+            </ImageWrapper>
+            <InventoryWrapper>
+                {foilQty > 0 && (
+                    <InventoryRow>
+                        <Label color="blue" image>
+                            Foil<Label.Detail>{foilQty}</Label.Detail>
+                        </Label>
+                        <MarketPrice
+                            id={id}
+                            finish="FOIL"
+                            round
+                            showMid={false}
+                        />
+                    </InventoryRow>
+                )}
+                {nonfoilQty > 0 && (
+                    <InventoryRow>
+                        <Label color="blue" image>
+                            Nonfoil<Label.Detail>{nonfoilQty}</Label.Detail>
+                        </Label>
+                        <MarketPrice
+                            id={id}
+                            finish="NONFOIL"
+                            round
+                            showMid={false}
+                        />
+                    </InventoryRow>
+                )}
+            </InventoryWrapper>
+        </Wrapper>
     );
 };
 

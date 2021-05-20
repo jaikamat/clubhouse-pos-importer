@@ -1,15 +1,6 @@
 import React, { FC, SyntheticEvent, useState } from 'react';
 import axios from 'axios';
-import {
-    Grid,
-    Segment,
-    Header,
-    Icon,
-    Divider,
-    Form,
-    Select,
-    Button,
-} from 'semantic-ui-react';
+import { Grid, Segment, Header, Icon, Form, Select } from 'semantic-ui-react';
 import SearchBar from '../common/SearchBar';
 import { GET_CARDS_WITH_INFO_PUBLIC } from '../utils/api_resources';
 import { InventoryCard, ScryfallApiCard } from '../utils/ScryfallCard';
@@ -31,9 +22,13 @@ interface FormValues {
 
 const GridContainer = styled('div')({
     display: 'grid',
-    gridGap: '10px',
+    gridGap: '20px',
     gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
     justifyItems: 'center',
+});
+
+const StyledFormGroup = styled(Form.Group)({
+    alignItems: 'flex-end',
 });
 
 const initialState: State = {
@@ -102,7 +97,7 @@ const PublicInventory: FC = () => {
             >
                 {({ values, handleSubmit, setFieldValue, isSubmitting }) => (
                     <Form>
-                        <Form.Group>
+                        <StyledFormGroup widths="5">
                             <Form.Field>
                                 <label>Card search</label>
                                 <SearchBar
@@ -121,23 +116,20 @@ const PublicInventory: FC = () => {
                                     { value }: { value: ClubhouseLocation }
                                 ) => setFieldValue('selectedLocation', value)}
                             />
-                            <Form.Field>
-                                <div style={{ paddingTop: 25 }}>
-                                    <Button
-                                        type="submit"
-                                        primary
-                                        disabled={!values.searchTerm}
-                                        loading={isSubmitting}
-                                        onClick={() => handleSubmit()}
-                                    >
-                                        Search
-                                    </Button>
-                                </div>
-                            </Form.Field>
-                        </Form.Group>
+                            <Form.Button
+                                type="submit"
+                                primary
+                                disabled={!values.searchTerm}
+                                loading={isSubmitting}
+                                onClick={() => handleSubmit()}
+                            >
+                                Search
+                            </Form.Button>
+                        </StyledFormGroup>
                     </Form>
                 )}
             </Formik>
+            <br />
             <Grid stackable={true}>
                 <Grid.Column>
                     <Header as="h2">
@@ -149,9 +141,6 @@ const PublicInventory: FC = () => {
                             </em>
                         </Header.Subheader>
                     </Header>
-
-                    <Divider />
-
                     {state.searchResults.length > 0 ? (
                         <GridContainer>
                             {state.searchResults.map((c) => (

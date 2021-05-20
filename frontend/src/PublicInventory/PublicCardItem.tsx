@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Image, Label } from 'semantic-ui-react';
 import MarketPrice from '../common/MarketPrice';
 import styled from 'styled-components';
+import { InventoryCard } from '../utils/ScryfallCard';
+import parseQoh from '../utils/parseQoh';
+
+interface Props {
+    card: InventoryCard;
+}
 
 const Wrapper = styled.div`
     display: inline-block;
@@ -39,9 +45,9 @@ const ImageWrapper = styled.div`
     border-radius: 15px;
 `;
 
-export default function PublicCardItem({ card }) {
+const PublicCardItem: FC<Props> = ({ card }) => {
     const { id, cardImage } = card;
-    const [foilQty, nonfoilQty] = card.qohParsed;
+    const [foilQty, nonfoilQty] = parseQoh(card.qoh);
 
     const displayFoil = (
         <InventoryRow>
@@ -57,7 +63,7 @@ export default function PublicCardItem({ card }) {
             <Label color="blue" image>
                 Nonfoil<Label.Detail>{nonfoilQty}</Label.Detail>
             </Label>
-            <MarketPrice id={id} round showMid={false} />
+            <MarketPrice id={id} finish="NONFOIL" round showMid={false} />
         </InventoryRow>
     );
 
@@ -78,4 +84,6 @@ export default function PublicCardItem({ card }) {
             </Wrapper>
         </React.Fragment>
     );
-}
+};
+
+export default PublicCardItem;

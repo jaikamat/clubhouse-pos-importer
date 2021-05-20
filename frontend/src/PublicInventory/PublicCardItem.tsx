@@ -61,32 +61,38 @@ const PublicCardItem: FC<Props> = ({ card }) => {
     const { id, cardImage } = card;
     const [foilQty, nonfoilQty] = parseQoh(card.qoh);
 
-    const displayFoil = (
-        <InventoryRow>
-            <Label color="blue" image>
-                Foil<Label.Detail>{foilQty}</Label.Detail>
-            </Label>
-            <MarketPrice id={id} finish="FOIL" round showMid={false} />
-        </InventoryRow>
-    );
-
-    const displayNonfoil = (
-        <InventoryRow>
-            <Label color="blue" image>
-                Nonfoil<Label.Detail>{nonfoilQty}</Label.Detail>
-            </Label>
-            <MarketPrice id={id} finish="NONFOIL" round showMid={false} />
-        </InventoryRow>
-    );
-
     return (
         <Wrapper>
             <ImageWrapper>
                 <Image src={cardImage} size="medium" />
             </ImageWrapper>
             <InventoryWrapper>
-                {foilQty > 0 ? displayFoil : null}
-                {nonfoilQty > 0 ? displayNonfoil : null}
+                {foilQty > 0 && (
+                    <InventoryRow>
+                        <Label color="blue" image>
+                            Foil<Label.Detail>{foilQty}</Label.Detail>
+                        </Label>
+                        <MarketPrice
+                            id={id}
+                            finish="FOIL"
+                            round
+                            showMid={false}
+                        />
+                    </InventoryRow>
+                )}
+                {nonfoilQty > 0 && (
+                    <InventoryRow>
+                        <Label color="blue" image>
+                            Nonfoil<Label.Detail>{nonfoilQty}</Label.Detail>
+                        </Label>
+                        <MarketPrice
+                            id={id}
+                            finish="NONFOIL"
+                            round
+                            showMid={false}
+                        />
+                    </InventoryRow>
+                )}
             </InventoryWrapper>
         </Wrapper>
     );

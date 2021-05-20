@@ -54,6 +54,7 @@ const locationOptions = [
 
 const PublicInventory: FC = () => {
     const [state, setState] = useState<State>(initialState);
+    const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
 
     const fetchCards = async ({
         title,
@@ -86,12 +87,17 @@ const PublicInventory: FC = () => {
     return (
         <>
             <Formik
-                onSubmit={({ searchTerm, selectedLocation }) =>
-                    fetchCards({
+                onSubmit={async ({
+                    searchTerm,
+                    selectedLocation,
+                }: FormValues) => {
+                    await fetchCards({
                         title: searchTerm,
                         location: selectedLocation,
-                    })
-                }
+                    });
+
+                    setFormSubmitted(true);
+                }}
                 initialValues={initialFormState}
             >
                 {({ values, handleSubmit, setFieldValue, isSubmitting }) => (
@@ -118,6 +124,7 @@ const PublicInventory: FC = () => {
                             <Form.Field>
                                 <div style={{ paddingTop: 25 }}>
                                     <Button
+                                        type="submit"
                                         primary
                                         disabled={!values.searchTerm}
                                         loading={isSubmitting}
@@ -155,7 +162,11 @@ const PublicInventory: FC = () => {
                         <Segment placeholder>
                             <Header icon>
                                 <Icon name="search" />
-                                <span>No cards found in stock</span>
+                                {formSubmitted ? (
+                                    <span>No cards found in stock</span>
+                                ) : (
+                                    <span>Search for a card</span>
+                                )}
                             </Header>
                         </Segment>
                     )}

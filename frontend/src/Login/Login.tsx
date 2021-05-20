@@ -1,8 +1,8 @@
-import React, { SyntheticEvent, useContext } from 'react';
+import React, { SyntheticEvent } from 'react';
 import createToast from '../common/createToast';
 import { Form, Button, Segment, Select } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
-import { AuthContext, ClubhouseLocation } from '../context/AuthProvider';
+import { ClubhouseLocation, useAuthContext } from '../context/AuthProvider';
 import styled from 'styled-components';
 import { Formik } from 'formik';
 
@@ -30,7 +30,7 @@ const initialFormValues: FormValues = {
 };
 
 const Login = () => {
-    const { loggedIn, handleLogin } = useContext(AuthContext);
+    const { loggedIn, handleLogin } = useAuthContext();
 
     const onSubmit = async ({ username, password, location }: FormValues) => {
         const data = await handleLogin(username, password, location);

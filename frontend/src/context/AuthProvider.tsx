@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import loginQuery from './loginQuery';
 
 interface Props {}
@@ -24,6 +24,8 @@ export const AuthContext = React.createContext<Context>({
     handleLogout: () => null,
     handleLogin: () => new Promise(() => null),
 });
+
+export const useAuthContext = () => useContext(AuthContext);
 
 const AuthProvider: FC<Props> = ({ children }) => {
     const [loggedIn, setLoggedIn] = useState(

@@ -1,9 +1,9 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import { Redirect } from 'react-router-dom';
-import { AuthContext } from '../context/AuthProvider';
+import { useAuthContext } from '../context/AuthProvider';
 
 const Logout: FC = () => {
-    const { handleLogout } = useContext(AuthContext);
+    const { handleLogout } = useAuthContext();
     handleLogout();
     return <Redirect to="/login" />;
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FC, SyntheticEvent, useState } from 'react';
 import axios from 'axios';
 import {
     Grid,
@@ -13,13 +13,32 @@ import {
 import SearchBar from '../common/SearchBar';
 import PublicCardList from './PublicCardList';
 import { GET_CARDS_WITH_INFO_PUBLIC } from '../utils/api_resources';
-import { InventoryCard } from '../utils/ScryfallCard';
+import { InventoryCard, ScryfallApiCard } from '../utils/ScryfallCard';
 import { Formik } from 'formik';
+import { ClubhouseLocation } from '../context/AuthProvider';
 
-const initialState = {
+interface State {
+    searchResults: InventoryCard[] | null;
+    searchTerm: string;
+    selectedLocation: ClubhouseLocation;
+}
+
+interface FormValues {
+    searchTerm: string;
+    selectedLocation: ClubhouseLocation;
+    isSubmitted: boolean;
+}
+
+const initialState: State = {
     searchResults: null,
     searchTerm: '',
     selectedLocation: 'ch1',
+};
+
+const initialFormState: FormValues = {
+    searchTerm: '',
+    selectedLocation: 'ch1',
+    isSubmitted: false,
 };
 
 const locationOptions = [
@@ -27,18 +46,27 @@ const locationOptions = [
     { key: 'hillsboro', text: 'CH Hillsboro', value: 'ch2' },
 ];
 
-function PublicInventory() {
-    const [state, setState] = useState(initialState);
+const PublicInventory: FC = () => {
+    const [state, setState] = useState<State>(initialState);
 
-    const fetchCards = async ({ title, location }) => {
+    const fetchCards = async ({
+        title,
+        location,
+    }: {
+        title: string;
+        location: ClubhouseLocation;
+    }) => {
         try {
-            const { data } = await axios.get(GET_CARDS_WITH_INFO_PUBLIC, {
-                params: {
-                    title,
-                    location,
-                    matchInStock: true,
-                },
-            });
+            const { data }: { data: ScryfallApiCard[] } = await axios.get(
+                GET_CARDS_WITH_INFO_PUBLIC,
+                {
+                    params: {
+                        title,
+                        location,
+                        matchInStock: true,
+                    },
+                }
+            );
 
             const modeledData = data.map((c) => new InventoryCard(c));
 
@@ -60,11 +88,7 @@ function PublicInventory() {
                         location: selectedLocation,
                     })
                 }
-                initialValues={{
-                    searchTerm: '',
-                    selectedLocation: 'ch1',
-                    isSubmitted: false,
-                }}
+                initialValues={initialFormState}
             >
                 {({ values, handleSubmit, setFieldValue, isSubmitting }) => (
                     <Form>
@@ -82,9 +106,10 @@ function PublicInventory() {
                                 control={Select}
                                 value={values.selectedLocation}
                                 options={locationOptions}
-                                onChange={(_, { value }) =>
-                                    setFieldValue('selectedLocation', value)
-                                }
+                                onChange={(
+                                    _: SyntheticEvent,
+                                    { value }: { value: ClubhouseLocation }
+                                ) => setFieldValue('selectedLocation', value)}
                             />
                             <Form.Field>
                                 <div style={{ paddingTop: 25 }}>
@@ -92,7 +117,7 @@ function PublicInventory() {
                                         primary
                                         disabled={!values.searchTerm}
                                         loading={isSubmitting}
-                                        onClick={handleSubmit}
+                                        onClick={() => handleSubmit()}
                                     >
                                         Search
                                     </Button>
@@ -142,6 +167,6 @@ function PublicInventory() {
             </Grid>
         </>
     );
-}
+};
 
 export default PublicInventory;

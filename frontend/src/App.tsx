@@ -15,6 +15,7 @@ import styled from 'styled-components';
 import { SaleProvider } from './context/SaleContext';
 import ReceivingProvider from './context/ReceivingContext';
 import InventoryProvider from './context/InventoryContext';
+import AdminRoute from './AuthenticatedRoute';
 
 const ContentContainer = styled.div`
     padding-top: 75px;
@@ -27,7 +28,7 @@ const BackgroundColor = styled.div`
     min-height: 100vh;
 `;
 
-const App: FC<{}> = () => {
+const App: FC = () => {
     return (
         <AuthProvider>
             <Header />
@@ -35,38 +36,32 @@ const App: FC<{}> = () => {
                 <Route exact path="/" component={LandingPage} />
                 <BackgroundColor>
                     <ContentContainer id="content-container">
-                        <InventoryProvider>
-                            <Route
-                                exact
-                                path="/manage-inventory"
-                                component={ManageInventory}
-                            />
-                        </InventoryProvider>
-                        <SaleProvider>
-                            <Route exact path="/new-sale" component={Sale} />
-                        </SaleProvider>
-                        <Route
-                            exact
-                            path="/browse-sales"
-                            component={BrowseSales}
-                        />
-                        <Route
-                            exact
-                            path="/browse-inventory"
-                            component={DeckboxClone}
-                        />
+                        <AdminRoute exact path="/manage-inventory">
+                            <InventoryProvider>
+                                <ManageInventory />
+                            </InventoryProvider>
+                        </AdminRoute>
+                        <AdminRoute exact path="/new-sale">
+                            <SaleProvider>
+                                <Sale />
+                            </SaleProvider>
+                        </AdminRoute>
+                        <AdminRoute exact path="/receiving">
+                            <ReceivingProvider>
+                                <Receiving />
+                            </ReceivingProvider>
+                        </AdminRoute>
+                        <AdminRoute exact path="/browse-sales">
+                            <BrowseSales />
+                        </AdminRoute>
+                        <AdminRoute exact path="/browse-inventory">
+                            <DeckboxClone />
+                        </AdminRoute>
                         <Route
                             exact
                             path="/public-inventory"
                             component={PublicInventory}
                         />
-                        <ReceivingProvider>
-                            <Route
-                                exact
-                                path="/receiving"
-                                component={Receiving}
-                            />
-                        </ReceivingProvider>
                         <Route exact path="/login" component={Login} />
                         <Route exact path="/logout" component={Logout} />
                     </ContentContainer>

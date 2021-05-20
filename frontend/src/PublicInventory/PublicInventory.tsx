@@ -18,7 +18,7 @@ import { Formik } from 'formik';
 import { ClubhouseLocation } from '../context/AuthProvider';
 
 interface State {
-    searchResults: InventoryCard[] | null;
+    searchResults: InventoryCard[];
     searchTerm: string;
     selectedLocation: ClubhouseLocation;
 }
@@ -26,11 +26,10 @@ interface State {
 interface FormValues {
     searchTerm: string;
     selectedLocation: ClubhouseLocation;
-    isSubmitted: boolean;
 }
 
 const initialState: State = {
-    searchResults: null,
+    searchResults: [],
     searchTerm: '',
     selectedLocation: 'ch1',
 };
@@ -38,7 +37,6 @@ const initialState: State = {
 const initialFormState: FormValues = {
     searchTerm: '',
     selectedLocation: 'ch1',
-    isSubmitted: false,
 };
 
 const locationOptions = [
@@ -68,11 +66,9 @@ const PublicInventory: FC = () => {
                 }
             );
 
-            const modeledData = data.map((c) => new InventoryCard(c));
-
             setState({
                 ...state,
-                searchResults: modeledData,
+                searchResults: data.map((c) => new InventoryCard(c)),
             });
         } catch (err) {
             console.log(err);
@@ -141,28 +137,16 @@ const PublicInventory: FC = () => {
 
                     <Divider />
 
-                    {state.searchResults === null && (
+                    {state.searchResults.length > 0 ? (
+                        <PublicCardList cards={state.searchResults} />
+                    ) : (
                         <Segment placeholder>
                             <Header icon>
                                 <Icon name="search" />
-                                <span>Search for a card</span>
+                                <span>No cards found in stock</span>
                             </Header>
                         </Segment>
                     )}
-
-                    {state.searchResults !== null &&
-                        (state.searchResults.length === 0 ? (
-                            <Segment placeholder>
-                                <Header icon>
-                                    <Icon name="search" />
-                                    <span>No cards found in stock</span>
-                                </Header>
-                            </Segment>
-                        ) : (
-                            state.searchResults.length > 0 && (
-                                <PublicCardList cards={state.searchResults} />
-                            )
-                        ))}
                 </Grid.Column>
             </Grid>
         </>

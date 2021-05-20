@@ -3,11 +3,12 @@ import ballLogo from './logos/magic-ball.png';
 import { Menu, Icon, Dropdown } from 'semantic-ui-react';
 import { Link, useLocation } from 'react-router-dom';
 import { AuthContext, ClubhouseLocation } from '../context/AuthProvider';
+import styled from 'styled-components';
+import AppVersion from './AppVersion';
 
-const style = {
-    background: 'linear-gradient(#2185d0, #206ac6)',
-    boxShadow: '0 3px 5px 0 rgba(0,0,0,.25)',
-};
+const StyledMenu = styled(Menu)({
+    boxShadow: '0 3px 5px 0 rgba(0,0,0,.25) !important',
+});
 
 const getClubhouseLocationName = (location: ClubhouseLocation | null) => {
     if (location === 'ch1') return 'Beaverton';
@@ -22,7 +23,7 @@ const Header: FC<Props> = () => {
     const { pathname } = useLocation();
 
     return (
-        <Menu inverted fixed="top" style={style}>
+        <StyledMenu inverted fixed="top" color="blue">
             <Menu.Item as={Link} replace to="/">
                 <img src={ballLogo} style={{ marginRight: '7px' }} alt="logo" />
                 <span>
@@ -33,11 +34,14 @@ const Header: FC<Props> = () => {
                 </span>
             </Menu.Item>
             {currentUser && (
-                <Menu.Item>
-                    <span>
-                        Currently logged in as <b>{currentUser}</b>
-                    </span>
-                </Menu.Item>
+                <>
+                    <Menu.Item>
+                        <span>
+                            Currently logged in as <b>{currentUser}</b>
+                        </span>
+                    </Menu.Item>
+                    <AppVersion />
+                </>
             )}
             <Menu.Menu position="right">
                 <Menu.Item
@@ -115,7 +119,7 @@ const Header: FC<Props> = () => {
                     </Dropdown>
                 )}
             </Menu.Menu>
-        </Menu>
+        </StyledMenu>
     );
 };
 

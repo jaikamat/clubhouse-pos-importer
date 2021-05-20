@@ -1,8 +1,8 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import ballLogo from './logos/magic-ball.png';
 import { Menu, Icon, Dropdown } from 'semantic-ui-react';
 import { Link, useLocation } from 'react-router-dom';
-import { AuthContext, ClubhouseLocation } from '../context/AuthProvider';
+import { ClubhouseLocation, useAuthContext } from '../context/AuthProvider';
 import styled from 'styled-components';
 import AppVersion from './AppVersion';
 
@@ -19,7 +19,7 @@ const getClubhouseLocationName = (location: ClubhouseLocation | null) => {
 interface Props {}
 
 const Header: FC<Props> = () => {
-    const { loggedIn, currentLocation, currentUser } = useContext(AuthContext);
+    const { loggedIn, currentLocation, currentUser } = useAuthContext();
     const { pathname } = useLocation();
 
     return (

@@ -17,7 +17,7 @@ const colors = {
     },
 };
 
-const primaryRbg = `rgba(33, 133, 208)`;
+const primaryRgb = '44, 47, 51,';
 
 const desktopMediaQuery = `@media only screen and (min-width: 769px)`;
 const tabletMediaQuery = `@media only screen and (max-width: 768px)`;
@@ -56,9 +56,9 @@ const LocationImageContainer = styled('div')({
 const ImageGradient = styled('div')({
     backgroundImage: `linear-gradient(
         to top,
-        rgba(44, 47, 51, 0.9),
-        rgba(44, 47, 51, 0.85),
-        rgba(44, 47, 51, 0.70),
+        rgba(${primaryRgb} 0.9),
+        rgba(${primaryRgb} 0.85),
+        rgba(${primaryRgb} 0.70),
         rgba(255, 255, 255, 0)
     )`,
     height: '100%',
@@ -66,7 +66,7 @@ const ImageGradient = styled('div')({
 });
 
 const ImageGradient2 = styled('div')({
-    backgroundColor: 'rgba(44, 47, 51, 0.85)',
+    backgroundColor: `rgba(${primaryRgb} 0.85)`,
     height: '100%',
     width: '100%',
     borderRadius: borderRadius,

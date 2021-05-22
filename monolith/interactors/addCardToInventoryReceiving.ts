@@ -4,6 +4,11 @@ import collectionFromLocation from '../lib/collectionFromLocation';
 import getDatabaseConnection from '../database';
 import addCardsToReceivingRecords from './addCardsToReceivingRecords';
 
+export enum Trade {
+    Cash = 'CASH',
+    Credit = 'CREDIT',
+}
+
 export type ReceivingCard = {
     quantity: number;
     finishCondition: string;
@@ -14,6 +19,7 @@ export type ReceivingCard = {
     credit_price: number | null;
     cash_price: number | null;
     market_price: number | null;
+    tradeType: Trade;
 };
 
 // `finishCondition` Refers to the configuration of Finishes and Conditions ex. NONFOIL_NM or FOIL_LP

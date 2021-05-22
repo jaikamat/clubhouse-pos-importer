@@ -2,19 +2,23 @@ import { Collection } from 'mongodb';
 import { ClubhouseLocation } from './getJwt';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import getDatabaseConnection from '../database';
+import addCardsToReceivingRecords from './addCardsToReceivingRecords';
 
-type Card = {
+export type ReceivingCard = {
     quantity: number;
     finishCondition: string;
     id: string;
     name: string;
     set_name: string;
     set: string;
+    credit_price: number | null;
+    cash_price: number | null;
+    market_price: number | null;
 };
 
 // `finishCondition` Refers to the configuration of Finishes and Conditions ex. NONFOIL_NM or FOIL_LP
 async function addCardToInventoryReceiving(
-    { quantity, finishCondition, id, name, set_name, set }: Card,
+    { quantity, finishCondition, id, name, set_name, set }: ReceivingCard,
     collection: Collection
 ) {
     try {
@@ -41,7 +45,7 @@ async function addCardToInventoryReceiving(
 
 // Wraps the database connection and exposes addCardToInventoryReceiving to the db connection
 async function wrapAddCardToInventoryReceiving(
-    cards: Card[],
+    cards: ReceivingCard[],
     location: ClubhouseLocation
 ) {
     try {
@@ -56,6 +60,8 @@ async function wrapAddCardToInventoryReceiving(
         );
 
         const messages = await Promise.all(promises);
+
+        await addCardsToReceivingRecords(cards, location);
 
         console.log(`Receiving cards at ${location}`);
 

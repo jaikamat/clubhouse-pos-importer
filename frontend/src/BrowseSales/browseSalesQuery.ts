@@ -39,10 +39,8 @@ interface Payload {
     cardName: string;
 }
 
-const browseSalesQuery = async (payload: Payload) => {
+const browseSalesQuery = async ({ cardName }: Payload) => {
     try {
-        const { cardName } = payload;
-
         const { data }: Response = await axios.get(GET_SALES_BY_TITLE, {
             params: { cardName: cardName },
             headers: makeAuthHeader(),

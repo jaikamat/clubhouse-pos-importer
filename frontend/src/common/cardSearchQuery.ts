@@ -16,10 +16,8 @@ interface Payload {
  * Fetches cards from the DB by title when a user selects a title after querying.
  * This function merges the data (inventory quantity and card objects) from two endpoints into one array.
  */
-const cardSearchQuery = async (payload: Payload) => {
+const cardSearchQuery = async ({ cardName, inStockOnly }: Payload) => {
     try {
-        const { cardName, inStockOnly } = payload;
-
         const { data }: Response = await axios.get(GET_CARDS_WITH_INFO, {
             params: {
                 title: cardName,

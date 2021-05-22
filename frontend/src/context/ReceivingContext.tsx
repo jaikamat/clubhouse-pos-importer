@@ -169,15 +169,29 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
     const commitToInventory = async () => {
         try {
             const cardsToCommit = receivingList.map((card) => {
-                const { finishCondition, id, name, set_name, set } = card;
-                return {
-                    quantity: 1,
+                const {
                     finishCondition,
                     id,
                     name,
                     set_name,
                     set,
-                }; // Only committing one per line-item
+                    marketPrice,
+                    cashPrice,
+                    creditPrice,
+                    tradeType,
+                } = card;
+                return {
+                    quantity: 1, // Only committing one per line-item
+                    finishCondition,
+                    id,
+                    name,
+                    set_name,
+                    set,
+                    creditPrice,
+                    cashPrice,
+                    marketPrice,
+                    tradeType,
+                };
             });
 
             await axios.post(

@@ -162,6 +162,7 @@ export class InventoryCard extends ScryfallCard {
         this._qoh = card.qoh ? card.qoh : {};
         // `quantity` and `qtyToSell` are redundant transaction props, unify them down the line
         // TODO: remove quantity as it seems to be unused
+        // TODO: Never mind, it's used in Receiving briefly
         this.quantity = card.quantity || null;
         this.qtyToSell = card.qtyToSell || null;
         this.finishCondition = card.finishCondition || null;

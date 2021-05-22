@@ -5,7 +5,8 @@ import axios from 'axios';
 import createToast from '../common/createToast';
 import makeAuthHeader from '../utils/makeAuthHeader';
 import { InventoryCard, ScryfallApiCard } from '../utils/ScryfallCard';
-import { GET_CARDS_WITH_INFO, RECEIVE_CARDS } from '../utils/api_resources';
+import { GET_CARDS_WITH_INFO } from '../utils/api_resources';
+import receivingQuery from './receivingQuery';
 
 interface Props {}
 
@@ -163,42 +164,37 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
         setReceivingList(oldState);
     };
 
+    /** We want to filter out cards with possible `null` finishConditions, this is the target type */
+    type DefinedFinishCondition = Omit<ReceivingCard, 'finishCondition'> & {
+        finishCondition: string;
+    };
+
+    /** This allows us to filter out finishConditions that are `null` */
+    const isDefined = (card: ReceivingCard): card is DefinedFinishCondition => {
+        return card.finishCondition !== null;
+    };
+
     /**
      * Persists all passed cards to inventory
      */
     const commitToInventory = async () => {
         try {
-            const cardsToCommit = receivingList.map((card) => {
-                const {
-                    finishCondition,
-                    id,
-                    name,
-                    set_name,
-                    set,
-                    marketPrice,
-                    cashPrice,
-                    creditPrice,
-                    tradeType,
-                } = card;
-                return {
+            const cardsToCommit = receivingList
+                .filter(isDefined)
+                .map((card) => ({
                     quantity: 1, // Only committing one per line-item
-                    finishCondition,
-                    id,
-                    name,
-                    set_name,
-                    set,
-                    creditPrice,
-                    cashPrice,
-                    marketPrice,
-                    tradeType,
-                };
-            });
+                    marketPrice: card.marketPrice,
+                    cashPrice: card.cashPrice,
+                    creditPrice: card.creditPrice,
+                    tradeType: card.tradeType,
+                    finishCondition: card.finishCondition,
+                    id: card.id,
+                    name: card.name,
+                    set_name: card.set_name,
+                    set: card.set,
+                }));
 
-            await axios.post(
-                RECEIVE_CARDS,
-                { cards: cardsToCommit },
-                { headers: makeAuthHeader() }
-            );
+            await receivingQuery({ cards: cardsToCommit });
 
             setSearchResults([]);
             setReceivingList([]);

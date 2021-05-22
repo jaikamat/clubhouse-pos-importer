@@ -5,6 +5,7 @@ import { ReceivingCard } from './addCardToInventoryReceiving';
 
 async function addCardsToReceivingRecords(
     cards: ReceivingCard[],
+    employeeNumber: number,
     location: ClubhouseLocation
 ) {
     try {
@@ -14,6 +15,7 @@ async function addCardsToReceivingRecords(
             .collection(collectionFromLocation(location).receivedCards)
             .insertOne({
                 created_at: new Date(),
+                employee_number: employeeNumber,
                 received_card_list: cards,
             });
 

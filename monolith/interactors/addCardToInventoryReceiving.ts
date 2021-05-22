@@ -2,7 +2,6 @@ import { Collection } from 'mongodb';
 import { ClubhouseLocation } from './getJwt';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import getDatabaseConnection from '../database';
-import addCardsToReceivingRecords from './addCardsToReceivingRecords';
 
 export enum Trade {
     Cash = 'CASH',
@@ -66,8 +65,6 @@ async function wrapAddCardToInventoryReceiving(
         );
 
         const messages = await Promise.all(promises);
-
-        await addCardsToReceivingRecords(cards, location);
 
         console.log(`Receiving cards at ${location}`);
 

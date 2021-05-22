@@ -1,8 +1,6 @@
-import axios from 'axios';
 import React, { createContext, FC, useState } from 'react';
-import makeAuthHeader from '../utils/makeAuthHeader';
-import { InventoryCard, QOH, ScryfallApiCard } from '../utils/ScryfallCard';
-import { GET_CARDS_WITH_INFO } from '../utils/api_resources';
+import { InventoryCard, QOH } from '../utils/ScryfallCard';
+import cardSearchQuery from '../common/cardSearchQuery';
 
 interface Props {}
 
@@ -22,21 +20,12 @@ const InventoryProvider: FC<Props> = ({ children }) => {
     const [searchResults, setSearchResults] = useState<InventoryCard[]>([]);
 
     const handleSearchSelect = async (term: string) => {
-        try {
-            const { data }: { data: ScryfallApiCard[] } = await axios.get(
-                GET_CARDS_WITH_INFO,
-                {
-                    params: { title: term, matchInStock: false },
-                    headers: makeAuthHeader(),
-                }
-            );
+        const cards = await cardSearchQuery({
+            cardName: term,
+            inStockOnly: false,
+        });
 
-            const modeledData = data.map((c) => new InventoryCard(c));
-
-            setSearchResults(modeledData);
-        } catch (e) {
-            console.log(e);
-        }
+        setSearchResults(cards);
     };
 
     const changeCardQuantity = (id: string, qoh: QOH) => {

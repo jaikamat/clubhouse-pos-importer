@@ -1,12 +1,10 @@
 import React, { useState, createContext, FC } from 'react';
 import _ from 'lodash';
 import { v4 as uuid } from 'uuid';
-import axios from 'axios';
 import createToast from '../common/createToast';
-import makeAuthHeader from '../utils/makeAuthHeader';
-import { InventoryCard, ScryfallApiCard } from '../utils/ScryfallCard';
-import { GET_CARDS_WITH_INFO } from '../utils/api_resources';
+import { InventoryCard } from '../utils/ScryfallCard';
 import receivingQuery from './receivingQuery';
+import cardSearchQuery from '../common/cardSearchQuery';
 
 interface Props {}
 
@@ -67,26 +65,13 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
     const [searchResults, setSearchResults] = useState<InventoryCard[]>([]);
     const [receivingList, setReceivingList] = useState<ReceivingCard[]>([]);
 
-    /**
-     * Fetches cards from the DB by title when a user selects a title after querying.
-     * This function merges the data (inventory quantity and card objects) from two endpoints into one array.
-     *
-     * @param {String} term - the search term
-     */
     const handleSearchSelect = async (term: string) => {
-        try {
-            const { data }: { data: ScryfallApiCard[] } = await axios.get(
-                GET_CARDS_WITH_INFO,
-                {
-                    params: { title: term, matchInStock: false },
-                    headers: makeAuthHeader(),
-                }
-            );
+        const cards = await cardSearchQuery({
+            cardName: term,
+            inStockOnly: false,
+        });
 
-            setSearchResults(data.map((d) => new InventoryCard(d)));
-        } catch (e) {
-            console.log(e);
-        }
+        setSearchResults(cards);
     };
 
     /**

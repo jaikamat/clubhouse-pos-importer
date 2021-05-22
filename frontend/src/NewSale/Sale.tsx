@@ -1,20 +1,18 @@
 import React, { useState, useContext, FC } from 'react';
-import axios from 'axios';
 import $ from 'jquery';
 import { Grid, Header, Divider } from 'semantic-ui-react';
-import { GET_CARDS_WITH_INFO } from '../utils/api_resources';
 import SearchBar from '../common/SearchBar';
 import BrowseCardList from './BrowseCardList';
 import CustomerSaleList from './CustomerSaleList';
 import PrintList from './PrintList';
-import makeAuthHeader from '../utils/makeAuthHeader';
 import SuspendedSale from './SuspendedSale';
-import { InventoryCard, ScryfallApiCard } from '../utils/ScryfallCard';
+import { InventoryCard } from '../utils/ScryfallCard';
 import { SaleContext } from '../context/SaleContext';
 import TotalCardsLabel from '../common/TotalCardsLabel';
 import AllLocationInventory from '../ManageInventory/AllLocationInventory';
 import styled from 'styled-components';
 import sum from '../utils/sum';
+import cardSearchQuery from '../common/cardSearchQuery';
 
 interface Props {}
 
@@ -43,25 +41,16 @@ const Sale: FC<Props> = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
 
     const handleResultSelect = async (term: string) => {
-        try {
-            const { data }: { data: ScryfallApiCard[] } = await axios.get(
-                GET_CARDS_WITH_INFO,
-                {
-                    params: { title: term, matchInStock: true },
-                    headers: makeAuthHeader(),
-                }
-            );
+        const cards = await cardSearchQuery({
+            cardName: term,
+            inStockOnly: true,
+        });
 
-            const modeledData = data.map((c) => new InventoryCard(c));
+        setSearchResults(cards);
+        setSearchTerm(term);
 
-            setSearchResults(modeledData);
-            setSearchTerm(term);
-
-            if (data.length === 0) {
-                $('#searchBar').focus().select();
-            }
-        } catch (e) {
-            console.log(e.response);
+        if (cards.length === 0) {
+            $('#searchBar').focus().select();
         }
     };
 

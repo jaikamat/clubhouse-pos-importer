@@ -10,8 +10,6 @@ async function addCardsToReceivingRecords(
     try {
         const db = await getDatabaseConnection();
 
-        // TODO: test to make sure cards at ch2 get received
-
         await db
             .collection(collectionFromLocation(location).receivedCards)
             .insertOne({

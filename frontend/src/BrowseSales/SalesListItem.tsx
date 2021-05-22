@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { Table } from 'semantic-ui-react';
 import moment from 'moment';
-import { Sale } from './SalesList';
 import sum from '../utils/sum';
+import { Sale } from './browseSalesQuery';
 
 interface Props {
     sale: Sale;

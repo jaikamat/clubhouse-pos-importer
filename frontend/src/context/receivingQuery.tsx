@@ -25,11 +25,11 @@ interface Payload {
     cards: ReceivingQueryCard[];
 }
 
-const receivingQuery = async (payload: Payload) => {
+const receivingQuery = async ({ cards }: Payload) => {
     try {
         const { data }: Response = await axios.post(
             RECEIVE_CARDS,
-            { cards: payload.cards },
+            { cards },
             { headers: makeAuthHeader() }
         );
 

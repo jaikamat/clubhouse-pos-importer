@@ -1,12 +1,10 @@
 import React, { useState, createContext, FC } from 'react';
 import _ from 'lodash';
 import { v4 as uuid } from 'uuid';
-import axios from 'axios';
 import createToast from '../common/createToast';
-import makeAuthHeader from '../utils/makeAuthHeader';
-import { InventoryCard, ScryfallApiCard } from '../utils/ScryfallCard';
-import { GET_CARDS_WITH_INFO } from '../utils/api_resources';
+import { InventoryCard } from '../utils/ScryfallCard';
 import receivingQuery from './receivingQuery';
+import cardSearchQuery from '../common/cardSearchQuery';
 
 interface Props {}
 
@@ -67,26 +65,13 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
     const [searchResults, setSearchResults] = useState<InventoryCard[]>([]);
     const [receivingList, setReceivingList] = useState<ReceivingCard[]>([]);
 
-    /**
-     * Fetches cards from the DB by title when a user selects a title after querying.
-     * This function merges the data (inventory quantity and card objects) from two endpoints into one array.
-     *
-     * @param {String} term - the search term
-     */
     const handleSearchSelect = async (term: string) => {
-        try {
-            const { data }: { data: ScryfallApiCard[] } = await axios.get(
-                GET_CARDS_WITH_INFO,
-                {
-                    params: { title: term, matchInStock: false },
-                    headers: makeAuthHeader(),
-                }
-            );
+        const cards = await cardSearchQuery({
+            cardName: term,
+            inStockOnly: false,
+        });
 
-            setSearchResults(data.map((d) => new InventoryCard(d)));
-        } catch (e) {
-            console.log(e);
-        }
+        setSearchResults(cards);
     };
 
     /**
@@ -129,39 +114,44 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
     };
 
     /**
-     * Determines whether line-items use cash or credit. Changes the tradeType by reference in the receivingList array
-     * which changes the active prop in ReceivingListItem
+     * Determines whether line-items use cash or credit.
+     * Assigns a new trade type.
      */
     const activeTradeType = (uuid_key: string, tradeType: Trade) => {
-        const previousState = [...receivingList];
-        const card = previousState.find((e) => e.uuid_key === uuid_key);
-        if (card) {
-            card.tradeType = TRADE_TYPES[tradeType];
-        }
-        setReceivingList(previousState);
+        setReceivingList(
+            [...receivingList].map((card) => {
+                if (card.uuid_key === uuid_key) {
+                    card.tradeType = TRADE_TYPES[tradeType];
+                }
+                return card;
+            })
+        );
     };
 
     /**
      * Sets all items to a tradeType, if possible
-     *
-     * @param {String} selectType - `CASH` or `CREDIT`
      */
     const selectAll = (selectType: Trade) => {
-        const oldState = [...receivingList];
         const { CASH, CREDIT } = TRADE_TYPES;
 
-        oldState.forEach((card, idx, arr) => {
-            let selectedPrice = 0;
+        const newState = [...receivingList].map((card) => {
+            if (
+                selectType === CASH &&
+                card.cashPrice !== null &&
+                card.cashPrice > 0
+            )
+                card.tradeType = selectType;
+            else if (
+                selectType === CREDIT &&
+                card.creditPrice !== null &&
+                card.creditPrice > 0
+            )
+                card.tradeType = selectType;
 
-            if (selectType === CASH && card.cashPrice !== null)
-                selectedPrice = card.cashPrice;
-            else if (selectType === CREDIT && card.creditPrice !== null)
-                selectedPrice = card.creditPrice;
-
-            if (selectedPrice > 0) arr[idx].tradeType = selectType;
+            return card;
         });
 
-        setReceivingList(oldState);
+        setReceivingList(newState);
     };
 
     /** We want to filter out cards with possible `null` finishConditions, this is the target type */

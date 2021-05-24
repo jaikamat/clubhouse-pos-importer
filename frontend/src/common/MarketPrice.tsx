@@ -1,8 +1,7 @@
 import React, { useState, useEffect, FC } from 'react';
-import axios from 'axios';
-import { GET_LIVE_PRICE } from '../utils/api_resources';
 import { Label, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
+import marketPriceQuery from './marketPriceQuery';
 
 const LabelStyle = styled(Label)`
     background-color: ${(props) =>
@@ -46,10 +45,9 @@ const MarketPrice: FC<Props> = ({ id, finish, round, showMid = true }) => {
             let _isMounted = true;
             setLoading(true);
 
-            const { data }: Response = await axios.get(GET_LIVE_PRICE, {
-                params: { scryfallId: id },
+            const { marketPrices, medianPrices } = await marketPriceQuery({
+                scryfallId: id,
             });
-            const { marketPrices, medianPrices } = data;
 
             if (_isMounted) {
                 if (isFoil) {

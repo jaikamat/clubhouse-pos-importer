@@ -1,8 +1,10 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Header, Label, Loader } from 'semantic-ui-react';
 import styled from 'styled-components';
-import { GET_CARD_FROM_ALL_LOCATIONS } from '../utils/api_resources';
+import { InventoryCard } from '../utils/ScryfallCard';
+import allLocationInventoryQuery, {
+    Response,
+} from './allLocationInventoryQuery';
 
 const StyledContainer = styled('div')({
     display: 'inline',
@@ -16,16 +18,29 @@ const FlexContainer = styled('div')({
     },
 });
 
-const QohLabel = ({ label, value }) => (
+interface QohLabelProps {
+    label: string;
+    value: number;
+}
+
+const QohLabel: FC<QohLabelProps> = ({ label, value }) => (
     <Label {...(value > 0 && { color: 'blue' })} image>
         {label}
         <Label.Detail>{value}</Label.Detail>
     </Label>
 );
 
+interface AllLocationInventoryProps {
+    title: string;
+    searchResults: InventoryCard[];
+}
+
 // TODO: refetch on result set change
-export default function AllLocationInventory({ title, searchResults }) {
-    const [quantities, setQuantities] = useState({
+const AllLocationInventory: FC<AllLocationInventoryProps> = ({
+    title,
+    searchResults,
+}) => {
+    const [quantities, setQuantities] = useState<Response['data']>({
         ch1: { foilQty: 0, nonfoilQty: 0 },
         ch2: { foilQty: 0, nonfoilQty: 0 },
     });
@@ -36,10 +51,7 @@ export default function AllLocationInventory({ title, searchResults }) {
         (async () => {
             try {
                 setLoading(true);
-                const { data } = await axios.get(GET_CARD_FROM_ALL_LOCATIONS, {
-                    params: { title },
-                });
-
+                const data = await allLocationInventoryQuery({ title });
                 setQuantities(data);
                 setLoading(false);
             } catch (err) {
@@ -48,14 +60,18 @@ export default function AllLocationInventory({ title, searchResults }) {
         })();
     }, [title, searchResults]);
 
-    return loading ? (
-        <FlexContainer>
-            <span>Loading totals for all locations</span>
-            <div>
-                <Loader active inline size="small" />
-            </div>
-        </FlexContainer>
-    ) : (
+    if (loading) {
+        return (
+            <FlexContainer>
+                <span>Loading totals for all locations</span>
+                <div>
+                    <Loader active inline size="small" />
+                </div>
+            </FlexContainer>
+        );
+    }
+
+    return (
         <FlexContainer>
             <div>
                 <Header sub>Beaverton totals:</Header>
@@ -79,4 +95,6 @@ export default function AllLocationInventory({ title, searchResults }) {
             </div>
         </FlexContainer>
     );
-}
+};
+
+export default AllLocationInventory;

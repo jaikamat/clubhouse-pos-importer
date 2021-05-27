@@ -24,7 +24,7 @@ interface QohLabelProps {
 }
 
 const QohLabel: FC<QohLabelProps> = ({ label, value }) => (
-    <Label {...(value > 0 && { color: 'blue' })} image>
+    <Label color={value > 0 ? 'blue' : undefined} image>
         {label}
         <Label.Detail>{value}</Label.Detail>
     </Label>

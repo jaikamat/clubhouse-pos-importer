@@ -13,6 +13,6 @@ export function getPrice(val: Price) {
     return `$${price.toFixed(2)}`;
 }
 
-const Price: FC<Props> = ({ num }) => <span>{getPrice(num)}</span>;
+const DisplayPrice: FC<Props> = ({ num }) => <span>{getPrice(num)}</span>;
 
-export default Price;
+export default DisplayPrice;

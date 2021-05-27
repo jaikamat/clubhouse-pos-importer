@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { List, Segment, Table } from 'semantic-ui-react';
+import { Segment } from 'semantic-ui-react';
 import { ReceivingCard } from '../context/ReceivingContext';
 import ReceivingListItem from './ReceivingListItem';
 import ReceivingListTotals from './ReceivingListTotals';

@@ -103,12 +103,7 @@ const ManageInventoryListItem: FC<Props> = ({ card }) => {
             <Item.Group divided>
                 <Item>
                     <Item.Image size="tiny">
-                        <CardImage
-                            image={cardImage}
-                            image_uris={image_uris}
-                            card_faces={card_faces}
-                            hover={true}
-                        />
+                        <CardImage image={cardImage} hover />
                     </Item.Image>
                     <Item.Content>
                         <CardHeader

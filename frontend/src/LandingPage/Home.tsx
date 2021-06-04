@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Button, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import clubhouse_products from './clubhouse_products.png';
-import play_area from './play_area.jpg';
 import ch1 from './tables.jpg';
 import learn_to_play from './learn_to_play.jpg';
 import ch2 from './ch2.jpg';

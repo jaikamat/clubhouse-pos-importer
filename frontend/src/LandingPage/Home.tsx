@@ -4,7 +4,8 @@ import { Button, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import clubhouse_products from './clubhouse_products.png';
 import play_area from './play_area.jpg';
-import ch1 from './learn_to_play.jpg';
+import ch1 from './tables.jpg';
+import learn_to_play from './learn_to_play.jpg';
 import ch2 from './ch2.jpg';
 
 const colors = {
@@ -206,16 +207,16 @@ const Home: FC = () => {
     return (
         <Container>
             <HeroImageContainer>
-                <Image src={play_area}>
+                <Image src={learn_to_play}>
                     <ImageGradient>
                         <HeaderContainer>
                             <HeroText>The Clubhouse is open 🎉</HeroText>
                             <TextWidth>
                                 <SubheaderText>
-                                    We are open all week for your CCG needs!
-                                    (Play space use and events are cancelled
-                                    until further notice due to WPN's in-store
-                                    play suspension)
+                                    <SectionText>
+                                        We are open all week for your tabletop
+                                        gaming needs!
+                                    </SectionText>
                                 </SubheaderText>
                             </TextWidth>
                             <br />

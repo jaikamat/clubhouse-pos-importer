@@ -4,6 +4,7 @@ import getJwt from '../interactors/getJwt';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
 import getCardFromAllLocations from '../interactors/getCardFromAllLocations';
 import autocomplete from '../interactors/autocomplete';
+import getCardsFromReceiving from '../interactors/getCardsFromReceiving';
 
 interface RequestWithQuery extends Request {
     query: {
@@ -65,6 +66,17 @@ router.get('/getCardFromAllLocations', async (req, res) => {
         } else {
             throw new Error('title should be a string');
         }
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+});
+
+router.get('/getReceivedCards', async (req, res) => {
+    try {
+        const message = await getCardsFromReceiving(18, 'ch1', null, null);
+
+        return message;
     } catch (err) {
         console.log(err);
         res.status(500).send(err);

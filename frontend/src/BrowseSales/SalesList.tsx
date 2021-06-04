@@ -1,35 +1,7 @@
 import React, { FC } from 'react';
 import SalesListItem from './SalesListItem';
 import { Table } from 'semantic-ui-react';
-import { FinishCondition } from '../utils/ScryfallCard';
-
-interface SaleData {
-    total: string;
-    saleID: string;
-    timeStamp: string;
-    createTime: string;
-}
-
-interface SaleCard {
-    foil: boolean;
-    nonfoil: boolean;
-    id: string;
-    name: string;
-    set: string;
-    set_name: string;
-    rarity: string;
-    reserved: true;
-    finishCondition: FinishCondition;
-    price: string | number;
-    qtyToSell: string | number;
-    card_faces: string | number;
-}
-
-export interface Sale {
-    _id: string;
-    sale_data: SaleData;
-    card_list: SaleCard[];
-}
+import { Sale } from './browseSalesQuery';
 
 interface Props {
     list: Sale[];

@@ -16,6 +16,7 @@ import getSuspendedSales from '../interactors/getSuspendedSales';
 import getSuspendedSale from '../interactors/getSuspendedSale';
 import createSuspendedSale from '../interactors/createSuspendedSale';
 import deleteSuspendedSale from '../interactors/deleteSuspendedSale';
+import addCardsToReceivingRecords from '../interactors/addCardsToReceivingRecords';
 
 interface RequestWithUserInfo extends Request {
     locations: string[];
@@ -235,6 +236,12 @@ router.post('/receiveCards', async (req: RequestWithUserInfo, res) => {
         const { cards } = req.body;
         const messages = await addCardToInventoryReceiving(
             cards,
+            req.currentLocation
+        );
+
+        await addCardsToReceivingRecords(
+            cards,
+            req.lightspeedEmployeeNumber,
             req.currentLocation
         );
 

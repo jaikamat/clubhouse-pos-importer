@@ -163,12 +163,7 @@ const BrowseCardItem: FC<Props> = ({ card }) => {
             <Item.Group divided>
                 <Item>
                     <Item.Image size="tiny">
-                        <CardImage
-                            image_uris={card.image_uris}
-                            card_faces={card.card_faces}
-                            image={''}
-                            hover={false}
-                        />
+                        <CardImage image={card.cardImage} />
                     </Item.Image>
                     <Item.Content>
                         <CardHeader

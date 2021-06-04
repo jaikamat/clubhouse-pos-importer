@@ -119,19 +119,14 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
         return validateQty || validateTradeTypes;
     };
 
-    const { image_uris, card_faces } = card;
+    const { image_uris, card_faces, cardImage } = card;
 
     return (
         <Segment>
             <Item.Group divided>
                 <Item>
                     <Item.Image size="small">
-                        <CardImage
-                            image_uris={image_uris}
-                            card_faces={card_faces}
-                            hover={false}
-                            image=""
-                        />
+                        <CardImage image={cardImage} />
                     </Item.Image>
                     <Item.Content>
                         <CardHeader

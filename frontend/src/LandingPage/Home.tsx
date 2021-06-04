@@ -18,7 +18,8 @@ const colors = {
     },
 };
 
-const primaryRgb = '44, 47, 51,';
+const primaryRgb = '13, 49, 69,';
+const bodyBackground = '#f8f5ef';
 
 const desktopMediaQuery = `@media only screen and (min-width: 769px)`;
 const tabletMediaQuery = `@media only screen and (max-width: 768px)`;
@@ -60,6 +61,7 @@ const ImageGradient = styled('div')({
         rgba(${primaryRgb} 0.9),
         rgba(${primaryRgb} 0.85),
         rgba(${primaryRgb} 0.70),
+        rgba(${primaryRgb} 0.60),
         rgba(255, 255, 255, 0)
     )`,
     height: '100%',
@@ -205,7 +207,7 @@ const FlexRow = styled.div<FlexRowProps>`
 
 const Home: FC = () => {
     return (
-        <Container>
+        <Container style={{ backgroundColor: bodyBackground }}>
             <HeroImageContainer>
                 <Image src={learn_to_play}>
                     <ImageGradient>
@@ -234,10 +236,8 @@ const Home: FC = () => {
                 <HeaderText>Your local game store.</HeaderText>
                 <TextWidth>
                     <Description>
-                        Play space use and events are cancelled until further
-                        notice due to WPN's in-store play suspension. Play space
-                        use and events are cancelled until further notice due to
-                        WPN's in-store play suspension
+                        We take pride in our friendly community of players, and
+                        always ensure that our customers are well served.
                     </Description>
                 </TextWidth>
             </Content>
@@ -251,7 +251,7 @@ const Home: FC = () => {
                         <br />
                         <Description>
                             We stock an extensive selection of singles and CCG
-                            supplies just for you! When the deckbuilding itch
+                            supplies just for you! When the deck-building itch
                             strikes, turn to us
                         </Description>
                     </div>
@@ -262,9 +262,8 @@ const Home: FC = () => {
                         </IconContainer>
                         <br />
                         <Description>
-                            We pride ourselves on our friendly atmosphere. Young
-                            or seasoned, beginner or advanced, we welcome all
-                            players!
+                            Young or seasoned, beginner or advanced, we welcome
+                            all players!
                         </Description>
                     </div>
                     <div>
@@ -378,7 +377,7 @@ const Home: FC = () => {
                                     Follow us on Facebook or become a member of
                                     our Discord community for up-to-date
                                     announcements on store events, product
-                                    releases, preorders, and so much more!
+                                    releases, pre-orders, and so much more!
                                 </SubheaderText>
                             </TextWidth>
                         </HeaderContainer>

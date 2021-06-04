@@ -10,12 +10,12 @@ import DeckboxClone from './DeckboxClone/DeckboxClone';
 import Login from './Login/Login';
 import Logout from './Logout/Logout';
 import Receiving from './Receiving/Receiving';
-import LandingPage from './LandingPage/LandingPage';
 import styled from 'styled-components';
 import { SaleProvider } from './context/SaleContext';
 import ReceivingProvider from './context/ReceivingContext';
 import InventoryProvider from './context/InventoryContext';
 import AdminRoute from './AuthenticatedRoute';
+import Home from './LandingPage/Home';
 
 const ContentContainer = styled.div`
     padding-top: 75px;
@@ -33,7 +33,7 @@ const App: FC = () => {
         <AuthProvider>
             <Header />
             <Switch>
-                <Route exact path="/" component={LandingPage} />
+                <Route exact path="/" component={Home} />
                 <BackgroundColor>
                     <ContentContainer id="content-container">
                         <AdminRoute exact path="/manage-inventory">

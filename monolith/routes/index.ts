@@ -76,7 +76,7 @@ router.get('/getReceivedCards', async (req, res) => {
     try {
         const message = await getCardsFromReceiving(18, 'ch1', null, null);
 
-        return message;
+        res.status(200).send(message);
     } catch (err) {
         console.log(err);
         res.status(500).send(err);

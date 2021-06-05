@@ -32,7 +32,10 @@ async function getCardsFromReceiving(
         // pipeline.push(match);
 
         return await collection.aggregate(pipeline).toArray();
-    } catch (err) {}
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
 }
 
 export default getCardsFromReceiving;

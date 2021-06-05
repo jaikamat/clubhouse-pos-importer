@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useRef } from 'react';
+import { useReactToPrint } from 'react-to-print';
 import { Button, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import Price from '../common/Price';
@@ -12,11 +13,6 @@ interface Props {
 const PrintWrapper = styled.div`
     @media print {
         background-color: white;
-        height: 100%;
-        width: 100%;
-        position: fixed;
-        top: 0;
-        left: 0;
         margin: 0;
         padding: 0;
         font-size: 30px;
@@ -30,33 +26,20 @@ const PrintWrapper = styled.div`
 `;
 
 const PrintList: FC<Props> = ({ saleListCards }) => {
-    const [printClicked, setPrintClicked] = useState<boolean>(false);
+    const componentRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        if (printClicked) {
-            window.print();
-            setPrintClicked(false);
-        }
-    }, [printClicked]);
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,
+    });
 
     return (
         <>
             <div>
-                {saleListCards.length > 0 && (
-                    <Button
-                        size="tiny"
-                        onClick={() => setPrintClicked(true)}
-                        icon
-                    >
-                        <Icon name="print" />
-                    </Button>
-                )}
+                <Button size="tiny" onClick={handlePrint} icon>
+                    <Icon name="print" />
+                </Button>
             </div>
-            <PrintWrapper
-                style={{
-                    display: printClicked ? 'inline-block' : 'none',
-                }}
-            >
+            <PrintWrapper ref={componentRef}>
                 <ul>
                     {saleListCards.map((slc) => {
                         return (

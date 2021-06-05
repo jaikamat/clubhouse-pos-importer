@@ -17,6 +17,7 @@ import getSuspendedSale from '../interactors/getSuspendedSale';
 import createSuspendedSale from '../interactors/createSuspendedSale';
 import deleteSuspendedSale from '../interactors/deleteSuspendedSale';
 import addCardsToReceivingRecords from '../interactors/addCardsToReceivingRecords';
+import getCardsFromReceiving from '../interactors/getCardsFromReceiving';
 
 interface RequestWithUserInfo extends Request {
     locations: string[];
@@ -375,6 +376,33 @@ router.get('/getCardsWithInfo', async (req: RequestWithUserInfo, res) => {
         } else {
             throw new Error('title should be a string');
         }
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+});
+
+// TODO: Ensure we mimic this pattern throughout this file
+interface GetReceivedCardsReq extends RequestWithUserInfo {
+    body: {
+        startDate: string | null;
+        endDate: string | null;
+        cardName: string | null;
+    };
+}
+
+router.get('/getReceivedCards', async (req: GetReceivedCardsReq, res) => {
+    const { startDate = null, endDate = null, cardName = null } = req.body;
+
+    try {
+        const message = await getCardsFromReceiving({
+            location: req.currentLocation,
+            startDate: startDate ? new Date(startDate) : null,
+            endDate: endDate ? new Date(endDate) : null,
+            cardName,
+        });
+
+        res.status(200).send(message);
     } catch (err) {
         console.log(err);
         res.status(500).send(err);

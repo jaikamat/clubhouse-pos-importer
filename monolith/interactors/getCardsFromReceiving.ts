@@ -3,7 +3,6 @@ import collectionFromLocation from '../lib/collectionFromLocation';
 import { ClubhouseLocation } from './getJwt';
 
 interface Args {
-    employeeNumber: number;
     location: ClubhouseLocation;
     startDate: Date | null;
     endDate: Date | null;
@@ -11,7 +10,6 @@ interface Args {
 }
 
 async function getCardsFromReceiving({
-    employeeNumber,
     location,
     startDate,
     endDate,

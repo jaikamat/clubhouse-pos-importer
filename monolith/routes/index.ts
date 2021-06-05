@@ -74,7 +74,13 @@ router.get('/getCardFromAllLocations', async (req, res) => {
 
 router.get('/getReceivedCards', async (req, res) => {
     try {
-        const message = await getCardsFromReceiving(18, 'ch1', null, null);
+        const message = await getCardsFromReceiving({
+            employeeNumber: 18,
+            location: 'ch1',
+            startDate: null,
+            endDate: null,
+            cardName: null,
+        });
 
         res.status(200).send(message);
     } catch (err) {

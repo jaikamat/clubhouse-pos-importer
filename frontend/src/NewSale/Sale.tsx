@@ -98,7 +98,9 @@ const Sale: FC<Props> = () => {
                                     deleteSuspendedSale={deleteSuspendedSale}
                                     id={suspendedSale._id}
                                 />
-                                <PrintList saleListCards={saleListCards} />
+                                {saleListCards.length > 0 && (
+                                    <PrintList saleListCards={saleListCards} />
+                                )}
                             </ButtonContainer>
                         </HeaderContainer>
 

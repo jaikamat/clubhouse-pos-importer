@@ -61,6 +61,12 @@ async function getCardsFromReceiving({
             pipeline.push(cardNameMatch);
         }
 
+        pipeline.push({
+            $sort: {
+                created_at: -1,
+            },
+        });
+
         return await collection.aggregate(pipeline).toArray();
     } catch (err) {
         console.log(err);

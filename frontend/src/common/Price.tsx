@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
-
-type Price = number | string | null;
+import { Price, price } from '../utils/price';
 
 interface Props {
     num: Price;
@@ -13,6 +12,6 @@ export function getPrice(val: Price) {
     return `$${price.toFixed(2)}`;
 }
 
-const DisplayPrice: FC<Props> = ({ num }) => <span>{getPrice(num)}</span>;
+const DisplayPrice: FC<Props> = ({ num }) => <span>{price(num)}</span>;
 
 export default DisplayPrice;

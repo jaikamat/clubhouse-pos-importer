@@ -1,24 +1,8 @@
 import React, { FC } from 'react';
 import { Label, Popup } from 'semantic-ui-react';
+import displayFinishCondition from '../utils/finishCondition';
 import parseQoh from '../utils/parseQoh';
 import { QOH } from '../utils/ScryfallCard';
-
-type FinishConditionLabels = Record<keyof QOH, string>;
-
-const prettyLabel = (finishCondition: keyof QOH) => {
-    const finishConditionLabels: FinishConditionLabels = {
-        FOIL_NM: 'Foil (NM)',
-        FOIL_LP: 'Foil (LP)',
-        FOIL_MP: 'Foil (MP)',
-        FOIL_HP: 'Foil (HP)',
-        NONFOIL_NM: 'Nonfoil (NM)',
-        NONFOIL_LP: 'Nonfoil (LP)',
-        NONFOIL_MP: 'Nonfoil (MP)',
-        NONFOIL_HP: 'Nonfoil (HP)',
-    };
-
-    return finishConditionLabels[finishCondition];
-};
 
 export const createInventoryLineItems = (
     inventoryQty: Partial<QOH>,
@@ -28,7 +12,9 @@ export const createInventoryLineItems = (
         .map((finishCondition) => {
             const quantity = inventoryQty[finishCondition];
             if (quantity && quantity > 0)
-                return `${prettyLabel(finishCondition)}: ${quantity}`;
+                return `${displayFinishCondition(
+                    finishCondition
+                )}: ${quantity}`;
         })
         .filter((m): m is string => !!m);
 

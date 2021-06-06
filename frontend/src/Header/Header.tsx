@@ -105,6 +105,15 @@ const Header: FC<Props> = () => {
                                 <Icon name="eye" color="blue" />
                                 Browse Sales
                             </Dropdown.Item>
+                            <Dropdown.Item
+                                active={pathname === '/browse-receiving'}
+                                as={Link}
+                                replace
+                                to="/browse-receiving"
+                            >
+                                <Icon name="list layout" color="blue" />
+                                Browse Receiving
+                            </Dropdown.Item>
                             <Dropdown.Divider />
                             <Dropdown.Item
                                 active={pathname === '/logout'}

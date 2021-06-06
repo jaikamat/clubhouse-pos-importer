@@ -384,7 +384,7 @@ router.get('/getCardsWithInfo', async (req: RequestWithUserInfo, res) => {
 
 // TODO: Ensure we mimic this pattern throughout this file
 interface GetReceivedCardsReq extends RequestWithUserInfo {
-    body: {
+    query: {
         startDate: string | null;
         endDate: string | null;
         cardName: string | null;
@@ -392,7 +392,7 @@ interface GetReceivedCardsReq extends RequestWithUserInfo {
 }
 
 router.get('/getReceivedCards', async (req: GetReceivedCardsReq, res) => {
-    const { startDate = null, endDate = null, cardName = null } = req.body;
+    const { startDate = null, endDate = null, cardName = null } = req.query;
 
     try {
         const message = await getCardsFromReceiving({

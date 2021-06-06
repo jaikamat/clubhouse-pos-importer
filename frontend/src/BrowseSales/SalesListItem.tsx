@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { Table } from 'semantic-ui-react';
-import moment from 'moment';
 import sum from '../utils/sum';
 import { Sale } from './browseSalesQuery';
+import formatDate from '../utils/formatDate';
 
 interface Props {
     sale: Sale;
@@ -16,9 +16,7 @@ const SalesListItem: FC<Props> = ({ sale }) => {
     return (
         <Table.Row>
             <Table.Cell>{sale_data.saleID}</Table.Cell>
-            <Table.Cell>
-                {moment(sale_data.createTime).format('MM/DD/YYYY - h:mm A')}
-            </Table.Cell>
+            <Table.Cell>{formatDate(sale_data.createTime)}</Table.Cell>
             <Table.Cell>{quantitySold}</Table.Cell>
         </Table.Row>
     );

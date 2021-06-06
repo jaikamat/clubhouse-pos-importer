@@ -7,6 +7,7 @@ const BrowseReceiving: FC = () => {
     const [receivedList, setReceivedList] = useState<Received[]>([]);
     const [cardName, setCardName] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const [count, setCount] = useState<number>(0);
 
     useEffect(() => {
         (async () => {
@@ -23,11 +24,16 @@ const BrowseReceiving: FC = () => {
 
     const handleSearchSelect = (cardName: string) => setCardName(cardName);
 
-    const handleClear = () => setCardName(null);
+    // This used to reset the key of the searchbar to force a rerender via key change and state reset
+    // Hacky but gets the job done until we can refactor the search bar component
+    const handleClear = () => {
+        setCount(count + 1);
+        setCardName(null);
+    };
 
     return (
         <div>
-            <SearchBar handleSearchSelect={handleSearchSelect} />
+            <SearchBar handleSearchSelect={handleSearchSelect} key={count} />
             {cardName && <Button onClick={handleClear}>Clear</Button>}
 
             <Header as="h2">Browse Receiving</Header>

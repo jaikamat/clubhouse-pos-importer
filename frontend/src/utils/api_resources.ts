@@ -25,6 +25,7 @@ export const GET_SET_NAMES = `${getPrefix()}/auth/getDistinctSetNames`;
 export const SUSPEND_SALE = `${getPrefix()}/auth/suspendSale`;
 export const LOGIN = `${getPrefix()}/jwt`;
 export const GET_SALES_BY_TITLE = `${getPrefix()}/auth/getSaleByTitle`;
+export const GET_RECEIVING_LIST = `${getPrefix()}/auth/getReceivedCards`;
 export const GET_ALL_SALES = `${getPrefix()}/auth/allSales`;
 export const GET_CARDS_WITH_INFO_PUBLIC = `${getPrefix()}/getCardsWithInfo`;
 export const GET_CARDS_WITH_INFO = `${getPrefix()}/auth/getCardsWithInfo`;

@@ -16,7 +16,7 @@ import ReceivingProvider from './context/ReceivingContext';
 import InventoryProvider from './context/InventoryContext';
 import AdminRoute from './AuthenticatedRoute';
 import Home from './LandingPage/Home';
-import BrowseReceiving from './BrowseReceiving/BrowseReceving';
+import BrowseReceiving from './BrowseReceiving/BrowseReceiving';
 
 const ContentContainer = styled.div`
     padding-top: 75px;

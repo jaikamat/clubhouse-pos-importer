@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import SearchBar from '../common/SearchBar';
-import { Header, Divider, Button } from 'semantic-ui-react';
+import { Header, Divider, Button, Loader } from 'semantic-ui-react';
 import browseReceivingQuery, { Received } from './browseReceivingQuery';
 
 const BrowseReceiving: FC = () => {
@@ -38,12 +38,8 @@ const BrowseReceiving: FC = () => {
 
             <Header as="h2">Browse Receiving</Header>
             <Divider />
-
-            <span>
-                <em>Testing, 123!</em>
-            </span>
             {loading ? (
-                <p>LOADING</p>
+                <Loader active inline="centered" />
             ) : (
                 <pre>{JSON.stringify({ receivedList }, null, 2)}</pre>
             )}

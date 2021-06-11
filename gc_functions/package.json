@@ -5,7 +5,8 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "update-test-bulk": "node ./db_scripts/update_scryfall_bulk/index.js --database test"
+        "update-test-bulk": "node ./db_scripts/update_scryfall_bulk/index.js --database test",
+        "update-prod-bulk": "node ./db_scripts/update_scryfall_bulk/index.js --database clubhouse_collection_production"
     },
     "author": "",
     "license": "ISC",

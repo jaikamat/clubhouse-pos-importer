@@ -77,6 +77,7 @@ export interface ScryfallApiCard {
     finishCondition?: string;
     price?: number;
     promo_types?: string[];
+    tcgplayer_id?: number;
 }
 
 /**
@@ -104,6 +105,7 @@ export class ScryfallCard {
     public cardImage: string;
     public color_identity: string[];
     public promo_types: string[];
+    public tcgplayer_id: number | null;
 
     public constructor(card: ScryfallApiCard) {
         this.id = card.id;
@@ -125,6 +127,7 @@ export class ScryfallCard {
         this.promo_types = card.promo_types || [];
         this.cardImage = this._getCardImage();
         this.display_name = this._createDisplayName();
+        this.tcgplayer_id = card.tcgplayer_id || null;
     }
 
     // Computes the proper displayName for a card, depending on its properties

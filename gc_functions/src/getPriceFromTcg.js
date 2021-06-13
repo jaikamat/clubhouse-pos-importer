@@ -1,7 +1,7 @@
-const express = require('express');
-const cors = require('cors');
-const axios = require('axios');
-const cheerio = require('cheerio');
+const express = require("express");
+const cors = require("cors");
+const axios = require("axios");
+const cheerio = require("cheerio");
 
 const app = express();
 app.use(cors());
@@ -11,7 +11,7 @@ app.use(cors());
  * @param {String} price - A string of format $dd,ddd.dd
  */
 function convertPriceStr(price) {
-    const converted = Number(price.replace('$', '').replace(',', ''));
+    const converted = Number(price.replace("$", "").replace(",", ""));
     if (Number.isNaN(converted)) return null;
     return converted.toFixed(2);
 }
@@ -22,12 +22,16 @@ function convertPriceStr(price) {
  */
 async function getPurchaseUrl(scryfallId) {
     try {
-        const SCRYFALL_ID_SEARCH = 'https://api.scryfall.com/cards';
+        const SCRYFALL_ID_SEARCH = "https://api.scryfall.com/cards";
         const { data } = await axios.get(`${SCRYFALL_ID_SEARCH}/${scryfallId}`);
         const { purchase_uris } = data;
 
-        if (purchase_uris.tcgplayer) return purchase_uris.tcgplayer; // This is the purhase URL from Scryfall data
-        else throw new Error(`Purchase URI for Scryfall ID ${scryfallId} not found`);
+        if (purchase_uris.tcgplayer) return purchase_uris.tcgplayer;
+        // This is the purhase URL from Scryfall data
+        else
+            throw new Error(
+                `Purchase URI for Scryfall ID ${scryfallId} not found`
+            );
     } catch (e) {
         throw e;
     }
@@ -45,16 +49,16 @@ async function parseTcgHtml(purchaseUrl) {
         const medianPrices = {};
 
         // Capture the Market Price table and loop over its rows to capture price data
-        $('.price-point--market tbody tr').each((i, el) => {
-            const finishTxt = $(el).find('th.price-point__name').text();
-            const priceTxt = $(el).find('td.price-point__data').text();
+        $(".price-point--market tbody tr").each((i, el) => {
+            const finishTxt = $(el).find("th.price-point__name").text();
+            const priceTxt = $(el).find("td.price-point__data").text();
             marketPrices[finishTxt.toLowerCase()] = convertPriceStr(priceTxt);
         });
 
         // Capture the Median Price table and loop over its rows to capture price data
-        $('.price-point--listed-median tbody tr').each((i, el) => {
-            const finishTxt = $(el).find('th.price-point__name').text();
-            const priceTxt = $(el).find('td.price-point__data').text();
+        $(".price-point--listed-median tbody tr").each((i, el) => {
+            const finishTxt = $(el).find("th.price-point__name").text();
+            const priceTxt = $(el).find("td.price-point__data").text();
             medianPrices[finishTxt.toLowerCase()] = convertPriceStr(priceTxt);
         });
 
@@ -65,7 +69,7 @@ async function parseTcgHtml(purchaseUrl) {
 }
 
 // Route handler
-app.get('/', async (req, res, next) => {
+app.get("/", async (req, res, next) => {
     try {
         const { scryfallId } = req.query;
         const purchaseUrl = await getPurchaseUrl(scryfallId);
@@ -82,7 +86,7 @@ app.use((err, req, res, next) => {
     res.status(err.status || 500);
     res.json({
         message: err.message,
-        error: err.stack
+        error: err.stack,
     });
 });
 

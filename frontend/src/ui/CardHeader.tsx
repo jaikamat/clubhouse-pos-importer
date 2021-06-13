@@ -22,27 +22,10 @@ const SetIcon = styled('i')({
 const TcgPriceButton: FC<{ tcgId: number | null }> = ({ tcgId }) => {
     const tcgUrl = `https://www.tcgplayer.com/product/${tcgId}`;
 
-    if (!tcgId) {
-        return (
-            <Button
-                icon
-                disabled
-                color="twitter"
-                labelPosition="right"
-                size="mini"
-                as="a"
-                href={tcgUrl}
-                target="_blank"
-            >
-                Link unavailable
-                <Icon name="external share" />
-            </Button>
-        );
-    }
-
     return (
         <Button
             icon
+            disabled={!tcgId}
             color="twitter"
             labelPosition="right"
             size="mini"
@@ -50,7 +33,7 @@ const TcgPriceButton: FC<{ tcgId: number | null }> = ({ tcgId }) => {
             href={tcgUrl}
             target="_blank"
         >
-            View on TCG
+            {!tcgId ? 'Link unavailable' : 'View on TCG'}
             <Icon name="external share" />
         </Button>
     );

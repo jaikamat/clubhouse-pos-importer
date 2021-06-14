@@ -35,7 +35,10 @@ const ReceivingListItem: FC<Props> = ({ received }) => {
                 />
             )}
             <Card variant="outlined">
-                <CardActionArea onClick={() => setDialogOpen(true)}>
+                <CardActionArea
+                    disableRipple
+                    onClick={() => setDialogOpen(true)}
+                >
                     <CardContent>
                         <Grid
                             container

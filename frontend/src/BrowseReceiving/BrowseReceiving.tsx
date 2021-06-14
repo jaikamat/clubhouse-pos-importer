@@ -1,14 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 import SearchBar from '../common/SearchBar';
 import browseReceivingQuery, { Received } from './browseReceivingQuery';
-import {
-    Grid,
-    Button,
-    Typography,
-    Box,
-    CircularProgress,
-} from '@material-ui/core';
+import { Grid, Typography, Box, CircularProgress } from '@material-ui/core';
 import ReceivingListItem from './ReceivingListItem';
+import Button from '../ui/Button';
 
 const BrowseReceiving: FC = () => {
     const [receivedList, setReceivedList] = useState<Received[]>([]);

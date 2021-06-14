@@ -8,6 +8,8 @@ import {
     List,
     Segment,
     Label,
+    Grid,
+    Icon,
 } from 'semantic-ui-react';
 import browseReceivingQuery, { Received } from './browseReceivingQuery';
 import pluralize from '../utils/pluralize';
@@ -15,6 +17,9 @@ import formatDate from '../utils/formatDate';
 import { Trade } from '../context/ReceivingContext';
 import displayFinishCondition from '../utils/finishCondition';
 import { price } from '../utils/price';
+import sum from '../utils/sum';
+import styled from 'styled-components';
+import { getPrice } from '../common/Price';
 
 function alphaSort<T extends { name: string }>(arr: T[]) {
     return [...arr].sort((a, b) => a.name.localeCompare(b.name));
@@ -24,6 +29,11 @@ function displayTrade(trade: Trade) {
     if (trade === Trade.Credit) return 'Credit';
     else if (trade === Trade.Cash) return 'Cash';
 }
+
+const FlexContainer = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
+});
 
 const BrowseReceiving: FC = () => {
     const [receivedList, setReceivedList] = useState<Received[]>([]);
@@ -101,6 +111,10 @@ const ReceivingItem: FC<ReceivingItemProps> = ({
     onClick,
 }) => {
     const active = activeIndex === index;
+    const { received_card_list, employee_number, created_at } = received;
+
+    const cashPrice = sum(received_card_list.map((r) => r.cashPrice));
+    const creditPrice = sum(received_card_list.map((r) => r.creditPrice));
 
     return (
         <Segment>
@@ -113,25 +127,54 @@ const ReceivingItem: FC<ReceivingItemProps> = ({
                     }
                 }}
             >
-                <List.Item>
-                    <List.Icon
-                        name="dropdown"
-                        size="large"
-                        verticalAlign="middle"
-                    />
-
-                    <Label>
-                        {`${received.received_card_list.length} ${pluralize(
-                            received.received_card_list.length,
-                            'card'
-                        )}`}
-                    </Label>
-                    <span> {formatDate(received.created_at)}</span>
-                </List.Item>
+                <FlexContainer>
+                    <Icon name="dropdown" size="large" verticalAlign="middle" />
+                    <Grid>
+                        <Grid.Column>
+                            <Grid.Row>
+                                <span>
+                                    <strong>
+                                        {`${
+                                            received_card_list.length
+                                        } ${pluralize(
+                                            received_card_list.length,
+                                            'card'
+                                        )}`}
+                                    </strong>
+                                </span>
+                                <Label
+                                    color={cashPrice > 0 ? 'blue' : undefined}
+                                    image
+                                >
+                                    Cash:
+                                    <Label.Detail>
+                                        {getPrice(cashPrice)}
+                                    </Label.Detail>
+                                </Label>
+                                <Label
+                                    color={creditPrice > 0 ? 'blue' : undefined}
+                                    image
+                                >
+                                    Credit:
+                                    <Label.Detail>
+                                        {getPrice(creditPrice)}
+                                    </Label.Detail>
+                                </Label>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <span>{formatDate(created_at)}</span>
+                                <span>{' • '}</span>
+                                <span>
+                                    Received by employee #{employee_number}
+                                </span>
+                            </Grid.Row>
+                        </Grid.Column>
+                    </Grid>
+                </FlexContainer>
             </Accordion.Title>
             <Accordion.Content active={active}>
                 <List divided relaxed>
-                    {alphaSort(received.received_card_list).map((c) => {
+                    {alphaSort(received_card_list).map((c) => {
                         return (
                             <List.Item>
                                 <List.Content>

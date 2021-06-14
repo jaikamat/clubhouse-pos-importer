@@ -14,6 +14,7 @@ import ReceivingListDialog from './ReceivingListDialog';
 import { sum } from 'lodash';
 import { getPrice } from '../common/Price';
 import MetaData from '../ui/MetaData';
+import { Trade } from '../context/ReceivingContext';
 
 interface Props {
     received: Received;
@@ -23,8 +24,17 @@ const ReceivingListItem: FC<Props> = ({ received }) => {
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
     const { received_card_list, employee_number, created_at } = received;
 
-    const cashPrice = sum(received_card_list.map((r) => r.cashPrice));
-    const creditPrice = sum(received_card_list.map((r) => r.creditPrice));
+    const cashPrice = sum(
+        received_card_list
+            .filter((r) => r.tradeType === Trade.Cash)
+            .map((r) => r.cashPrice)
+    );
+
+    const creditPrice = sum(
+        received_card_list
+            .filter((r) => r.tradeType === Trade.Credit)
+            .map((r) => r.creditPrice)
+    );
 
     return (
         <>

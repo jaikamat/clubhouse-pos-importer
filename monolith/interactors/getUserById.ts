@@ -1,15 +1,13 @@
-import { ClubhouseLocation } from './getJwt';
 import getDatabaseConnection from '../database';
 import { ObjectID } from 'mongodb';
 
-type User = {
+export interface User {
     _id: string;
     password: string;
     username: string;
     locations: string[];
-    currentLocation: ClubhouseLocation;
     lightspeedEmployeeNumber: number;
-};
+}
 
 export default async function getUserById(id: string): Promise<User> {
     try {

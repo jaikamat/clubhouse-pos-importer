@@ -4,7 +4,7 @@ require('dotenv').config();
 import jwt from 'jsonwebtoken';
 import getCardsByFilter, { Arguments } from '../interactors/getCardsByFilter';
 import addCardToInventory from '../interactors/addCardToInventory';
-import { ClubhouseLocation, User } from '../interactors/getJwt';
+import { ClubhouseLocation } from '../interactors/getJwt';
 import getDistinctSetNames from '../interactors/getDistinctSetNames';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
 import finishSale from '../interactors/updateInventoryCards';
@@ -18,7 +18,7 @@ import createSuspendedSale from '../interactors/createSuspendedSale';
 import deleteSuspendedSale from '../interactors/deleteSuspendedSale';
 import addCardsToReceivingRecords from '../interactors/addCardsToReceivingRecords';
 import getCardsFromReceiving from '../interactors/getCardsFromReceiving';
-import getUserById from '../interactors/getUserById';
+import getUserById, { User } from '../interactors/getUserById';
 
 interface RequestWithUserInfo extends Request {
     locations: string[];

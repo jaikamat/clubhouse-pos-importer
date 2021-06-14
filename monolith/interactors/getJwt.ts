@@ -1,17 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-import getUserByName from './getUserByName';
+import getUserByName, { User } from './getUserByName';
 
 export type ClubhouseLocation = 'ch1' | 'ch2';
-
-export type User = {
-    _id: string;
-    password: string;
-    username: string;
-    locations: string[];
-    currentLocation: ClubhouseLocation;
-    lightspeedEmployeeNumber: number;
-};
 
 async function getJwt(
     username: string,

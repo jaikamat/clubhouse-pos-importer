@@ -6,12 +6,14 @@ import formatDate from '../utils/formatDate';
 import {
     Card,
     CardActionArea,
-    CardHeader,
+    CardContent,
+    Grid,
     Typography,
 } from '@material-ui/core';
 import ReceivingListDialog from './ReceivingListDialog';
 import { sum } from 'lodash';
 import { getPrice } from '../common/Price';
+import MetaData from '../ui/MetaData';
 
 interface Props {
     received: Received;
@@ -34,15 +36,31 @@ const ReceivingListItem: FC<Props> = ({ received }) => {
             )}
             <Card variant="outlined">
                 <CardActionArea onClick={() => setDialogOpen(true)}>
-                    <CardHeader
-                        title={
-                            <>
-                                <Typography variant="h6" component="span">
+                    <CardContent>
+                        <Grid
+                            container
+                            spacing={2}
+                            justify="space-between"
+                            alignItems="center"
+                        >
+                            <Grid item>
+                                <Typography variant="h6">
                                     {`${received_card_list.length} ${pluralize(
                                         received_card_list.length,
                                         'card'
                                     )}`}
                                 </Typography>
+                                <Typography color="textSecondary">
+                                    <MetaData>
+                                        <span>{formatDate(created_at)}</span>
+                                        <span>
+                                            Received by employee #
+                                            {employee_number}
+                                        </span>
+                                    </MetaData>
+                                </Typography>
+                            </Grid>
+                            <Grid item>
                                 <Label
                                     color={cashPrice > 0 ? 'blue' : undefined}
                                     image
@@ -61,18 +79,9 @@ const ReceivingListItem: FC<Props> = ({ received }) => {
                                         {getPrice(creditPrice)}
                                     </Label.Detail>
                                 </Label>
-                            </>
-                        }
-                        subheader={
-                            <>
-                                <span>{formatDate(created_at)}</span>
-                                <span>{' • '}</span>
-                                <span>
-                                    Received by employee #{employee_number}
-                                </span>
-                            </>
-                        }
-                    />
+                            </Grid>
+                        </Grid>
+                    </CardContent>
                 </CardActionArea>
             </Card>
         </>

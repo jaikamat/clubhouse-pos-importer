@@ -51,10 +51,10 @@ const BrowseReceiving: FC = () => {
             {loading ? (
                 <CircularProgress />
             ) : (
-                <Grid container spacing={2}>
+                <Grid container direction="column" spacing={2}>
                     {receivedList.map((rl) => {
                         return (
-                            <Grid item xs={12} key={rl._id}>
+                            <Grid item xs={12} md={6} key={rl._id}>
                                 <ReceivingListItem received={rl} />
                             </Grid>
                         );

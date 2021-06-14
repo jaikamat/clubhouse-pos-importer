@@ -13,6 +13,7 @@ import {
     ListItemText,
 } from '@material-ui/core';
 import { ReceivedCard } from './browseReceivingQuery';
+import MetaData from '../ui/MetaData';
 
 interface Props {
     receivingList: ReceivedCard[];
@@ -51,31 +52,34 @@ const ReceivingListDialog: FC<Props> = ({ receivingList, onClose }) => {
                                         </>
                                     }
                                     secondary={
-                                        <>
+                                        <MetaData>
                                             <span>
-                                                {`${displayFinishCondition(
+                                                {displayFinishCondition(
                                                     c.finishCondition
-                                                )} | ${displayTrade(
-                                                    c.tradeType
-                                                )}`}
+                                                )}
+                                            </span>
+                                            <span>
+                                                {displayTrade(c.tradeType)}
                                             </span>
                                             {c.tradeType === Trade.Credit && (
                                                 <span>
-                                                    {` | Credit price: ${price(
-                                                        c.creditPrice
-                                                    )}`}
+                                                    Credit price:{' '}
+                                                    {price(c.creditPrice)}
                                                 </span>
                                             )}
                                             {c.tradeType === Trade.Cash && (
-                                                <span>
-                                                    {` | Cash price: ${price(
-                                                        c.cashPrice
-                                                    )} | Market price: ${price(
-                                                        c.marketPrice
-                                                    )}`}
-                                                </span>
+                                                <>
+                                                    <span>
+                                                        Cash price:{' '}
+                                                        {price(c.cashPrice)}
+                                                    </span>
+                                                    <span>
+                                                        Market price:{' '}
+                                                        {price(c.marketPrice)}
+                                                    </span>
+                                                </>
                                             )}
-                                        </>
+                                        </MetaData>
                                     }
                                 ></ListItemText>
                             </ListItem>

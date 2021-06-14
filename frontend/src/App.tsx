@@ -17,6 +17,7 @@ import InventoryProvider from './context/InventoryContext';
 import AdminRoute from './AuthenticatedRoute';
 import Home from './LandingPage/Home';
 import BrowseReceiving from './BrowseReceiving/BrowseReceiving';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 
 const ContentContainer = styled.div`
     padding-top: 75px;
@@ -29,48 +30,58 @@ const BackgroundColor = styled.div`
     min-height: 100vh;
 `;
 
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            main: '#2185d0',
+        },
+    },
+});
+
 const App: FC = () => {
     return (
         <AuthProvider>
-            <Header />
-            <Switch>
-                <Route exact path="/" component={Home} />
-                <BackgroundColor>
-                    <ContentContainer id="content-container">
-                        <AdminRoute exact path="/manage-inventory">
-                            <InventoryProvider>
-                                <ManageInventory />
-                            </InventoryProvider>
-                        </AdminRoute>
-                        <AdminRoute exact path="/new-sale">
-                            <SaleProvider>
-                                <Sale />
-                            </SaleProvider>
-                        </AdminRoute>
-                        <AdminRoute exact path="/receiving">
-                            <ReceivingProvider>
-                                <Receiving />
-                            </ReceivingProvider>
-                        </AdminRoute>
-                        <AdminRoute exact path="/browse-sales">
-                            <BrowseSales />
-                        </AdminRoute>
-                        <AdminRoute exact path="/browse-inventory">
-                            <DeckboxClone />
-                        </AdminRoute>
-                        <AdminRoute exact path="/browse-receiving">
-                            <BrowseReceiving />
-                        </AdminRoute>
-                        <Route
-                            exact
-                            path="/public-inventory"
-                            component={PublicInventory}
-                        />
-                        <Route exact path="/login" component={Login} />
-                        <Route exact path="/logout" component={Logout} />
-                    </ContentContainer>
-                </BackgroundColor>
-            </Switch>
+            <ThemeProvider theme={theme}>
+                <Header />
+                <Switch>
+                    <Route exact path="/" component={Home} />
+                    <BackgroundColor>
+                        <ContentContainer id="content-container">
+                            <AdminRoute exact path="/manage-inventory">
+                                <InventoryProvider>
+                                    <ManageInventory />
+                                </InventoryProvider>
+                            </AdminRoute>
+                            <AdminRoute exact path="/new-sale">
+                                <SaleProvider>
+                                    <Sale />
+                                </SaleProvider>
+                            </AdminRoute>
+                            <AdminRoute exact path="/receiving">
+                                <ReceivingProvider>
+                                    <Receiving />
+                                </ReceivingProvider>
+                            </AdminRoute>
+                            <AdminRoute exact path="/browse-sales">
+                                <BrowseSales />
+                            </AdminRoute>
+                            <AdminRoute exact path="/browse-inventory">
+                                <DeckboxClone />
+                            </AdminRoute>
+                            <AdminRoute exact path="/browse-receiving">
+                                <BrowseReceiving />
+                            </AdminRoute>
+                            <Route
+                                exact
+                                path="/public-inventory"
+                                component={PublicInventory}
+                            />
+                            <Route exact path="/login" component={Login} />
+                            <Route exact path="/logout" component={Logout} />
+                        </ContentContainer>
+                    </BackgroundColor>
+                </Switch>
+            </ThemeProvider>
         </AuthProvider>
     );
 };

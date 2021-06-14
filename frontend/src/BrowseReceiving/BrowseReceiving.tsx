@@ -35,9 +35,17 @@ const BrowseReceiving: FC = () => {
 
     return (
         <div>
-            <SearchBar handleSearchSelect={handleSearchSelect} key={count} />
-            {cardName && <Button onClick={handleClear}>Clear</Button>}
-
+            <Box display="flex">
+                <Box pr={2}>
+                    <SearchBar
+                        handleSearchSelect={handleSearchSelect}
+                        key={count}
+                    />
+                </Box>
+                {cardName && (
+                    <Button onClick={handleClear}>Clear filter</Button>
+                )}
+            </Box>
             <Box py={2}>
                 <Typography variant="h5">
                     <strong>Browse Receiving</strong>

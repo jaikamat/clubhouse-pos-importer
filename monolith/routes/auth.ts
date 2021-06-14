@@ -252,7 +252,8 @@ router.post('/receiveCards', async (req: RequestWithUserInfo, res) => {
         await addCardsToReceivingRecords(
             cards,
             req.lightspeedEmployeeNumber,
-            req.currentLocation
+            req.currentLocation,
+            req.userId
         );
 
         res.status(200).send(messages);

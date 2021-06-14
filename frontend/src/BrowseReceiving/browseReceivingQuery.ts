@@ -4,7 +4,7 @@ import makeAuthHeader from '../utils/makeAuthHeader';
 import { GET_RECEIVING_LIST } from '../utils/api_resources';
 import { Trade } from '../context/ReceivingContext';
 
-interface ReceivedCard {
+export interface ReceivedCard {
     quantity: number;
     marketPrice: number;
     cashPrice: number;

@@ -1,4 +1,5 @@
 import createDisplayName from './createDisplayName';
+import getCardImage from './getCardImage';
 
 // Language codes from Scryfall. See https://scryfall.com/docs/api/languages for reference.
 export type LanguageCode =
@@ -125,27 +126,9 @@ export class ScryfallCard {
         this.border_color = card.border_color;
         this.color_identity = card.color_identity || null;
         this.promo_types = card.promo_types || [];
-        this.cardImage = this._getCardImage();
-        this.display_name = this._createDisplayName();
+        this.cardImage = getCardImage(this);
+        this.display_name = createDisplayName(this);
         this.tcgplayer_id = card.tcgplayer_id || null;
-    }
-
-    // Computes the proper displayName for a card, depending on its properties
-    _createDisplayName() {
-        return createDisplayName(this);
-    }
-
-    _getCardImage() {
-        let myImage: string;
-
-        try {
-            // If normal prop doesn't exist, move to catch block for flip card faces
-            myImage = this.image_uris.normal;
-        } catch (e) {
-            myImage = this.card_faces[0].image_uris.normal;
-        }
-
-        return myImage;
     }
 }
 

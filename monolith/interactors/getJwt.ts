@@ -1,13 +1,13 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-import getDatabaseConnection from '../database';
+import getUserByName from './getUserByName';
 
 export type ClubhouseLocation = 'ch1' | 'ch2';
 
 export type User = {
     _id: string;
     password: string;
-    username: symbol;
+    username: string;
     locations: string[];
     currentLocation: ClubhouseLocation;
     lightspeedEmployeeNumber: number;
@@ -19,16 +19,12 @@ async function getJwt(
     currentLocation: ClubhouseLocation
 ): Promise<{ token: string } | string> {
     try {
-        const db = await getDatabaseConnection();
-
-        const user: User = await db.collection('users').findOne({
-            username: username,
-        });
+        const user: User = await getUserByName(username);
 
         if (!user) return 'Not authorized';
 
         // Retrieve the Clubhouse location permissions and employee number for the user
-        const { _id, locations, lightspeedEmployeeNumber, password } = user;
+        const { _id, locations, password } = user;
 
         // Check if the user is allowed in the location
         if (!locations.includes(currentLocation)) {
@@ -42,10 +38,7 @@ async function getJwt(
             const token: string = jwt.sign(
                 {
                     userId: _id,
-                    username,
-                    locations,
                     currentLocation,
-                    lightspeedEmployeeNumber,
                 },
                 process.env.PRIVATE_KEY
             );

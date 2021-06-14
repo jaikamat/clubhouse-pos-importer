@@ -4,7 +4,7 @@ require('dotenv').config();
 import jwt from 'jsonwebtoken';
 import getCardsByFilter, { Arguments } from '../interactors/getCardsByFilter';
 import addCardToInventory from '../interactors/addCardToInventory';
-import { ClubhouseLocation } from '../interactors/getJwt';
+import { ClubhouseLocation, User } from '../interactors/getJwt';
 import getDistinctSetNames from '../interactors/getDistinctSetNames';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
 import finishSale from '../interactors/updateInventoryCards';
@@ -18,19 +18,19 @@ import createSuspendedSale from '../interactors/createSuspendedSale';
 import deleteSuspendedSale from '../interactors/deleteSuspendedSale';
 import addCardsToReceivingRecords from '../interactors/addCardsToReceivingRecords';
 import getCardsFromReceiving from '../interactors/getCardsFromReceiving';
+import getUserById from '../interactors/getUserById';
 
 interface RequestWithUserInfo extends Request {
     locations: string[];
     currentLocation: ClubhouseLocation;
     isAdmin: boolean;
     lightspeedEmployeeNumber: number;
+    userId: string;
 }
 
 type DecodedToken = {
-    locations: string[];
+    userId: string;
     currentLocation: ClubhouseLocation;
-    username: string;
-    lightspeedEmployeeNumber: number;
 };
 
 const finishes = [
@@ -46,8 +46,10 @@ const finishes = [
 
 /**
  * Middleware to check for Bearer token by validating JWT
+ *
+ * It attaches current user information to the req for downstream use
  */
-router.use((req: RequestWithUserInfo, res, next) => {
+router.use(async (req: RequestWithUserInfo, res, next) => {
     let token = req.headers['authorization']; // Express headers converted to lowercase
 
     if (token.startsWith('Bearer ')) {
@@ -57,25 +59,32 @@ router.use((req: RequestWithUserInfo, res, next) => {
     if (token) {
         try {
             // Will throw error if validation fails
-            const {
-                username,
-                locations,
-                currentLocation,
-                lightspeedEmployeeNumber,
-            } = jwt.verify(token, process.env.PRIVATE_KEY) as DecodedToken;
+            const { userId, currentLocation } = jwt.verify(
+                token,
+                process.env.PRIVATE_KEY
+            ) as DecodedToken;
 
-            // Attach location information to the req and flag admins
-            req.locations = locations;
+            const user: User = await getUserById(userId);
+
+            // Attach current location information to the req
+            // TODO: This should eventually just be a "store id"
             req.currentLocation = currentLocation;
-            req.lightspeedEmployeeNumber = lightspeedEmployeeNumber;
-            req.isAdmin = locations.length === 2;
+
+            // Attach user information
+            req.userId = userId;
+            req.locations = user.locations;
+            req.lightspeedEmployeeNumber = user.lightspeedEmployeeNumber;
+
+            // Flag admins
+            req.isAdmin = user.locations.length === 2;
 
             console.log(
-                `Operation started by ${username} at location ${currentLocation}`
+                `Operation started by ${user.username} at location ${currentLocation}`
             );
 
             return next();
         } catch (err) {
+            console.log(err);
             res.status(401).send('Invalid token');
         }
     } else {

@@ -61,7 +61,7 @@ async function getCardsFromReceiving({
             },
         };
 
-        if (cardName !== null) {
+        if (cardName) {
             pipeline.push(cardNameMatch);
         }
 

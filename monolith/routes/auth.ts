@@ -25,7 +25,7 @@ import {
     DecodedToken,
     finishes,
     FinishSaleCard,
-    GetReceivedCardsReq,
+    ReceivedCardQuery,
     ReceivingCard,
     RequestWithUserInfo,
     ReqWithFinishSaleCards,
@@ -428,15 +428,28 @@ router.get('/getCardsWithInfo', async (req: RequestWithUserInfo, res) => {
     }
 });
 
-router.get('/getReceivedCards', async (req: GetReceivedCardsReq, res) => {
-    const { startDate = null, endDate = null, cardName = null } = req.query;
+router.get('/getReceivedCards', async (req: RequestWithUserInfo, res) => {
+    const schema = Joi.object<ReceivedCardQuery>({
+        startDate: Joi.date().iso().allow(null),
+        endDate: Joi.date().iso().allow(null),
+        cardName: Joi.string().allow(null),
+    });
+
+    const { error, value }: { error?: Error; value: ReceivedCardQuery } =
+        schema.validate(req.query, {
+            abortEarly: false,
+        });
+
+    if (error) {
+        return res.status(400).json(error);
+    }
 
     try {
         const message = await getCardsFromReceiving({
             location: req.currentLocation,
-            startDate: startDate ? new Date(startDate) : null,
-            endDate: endDate ? new Date(endDate) : null,
-            cardName,
+            startDate: value.startDate ? new Date(value.startDate) : null,
+            endDate: value.endDate ? new Date(value.endDate) : null,
+            cardName: value.cardName || null,
         });
 
         res.status(200).send(message);

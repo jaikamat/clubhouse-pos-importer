@@ -19,6 +19,7 @@ import deleteSuspendedSale from '../interactors/deleteSuspendedSale';
 import addCardsToReceivingRecords from '../interactors/addCardsToReceivingRecords';
 import getCardsFromReceiving from '../interactors/getCardsFromReceiving';
 import getUserById, { User } from '../interactors/getUserById';
+import Joi from 'joi';
 
 interface RequestWithUserInfo extends Request {
     locations: string[];
@@ -92,24 +93,50 @@ router.use(async (req: RequestWithUserInfo, res, next) => {
     }
 });
 
+interface AddCardToInventoryReqBody {
+    quantity: number;
+    finishCondition: typeof finishes[number];
+    cardInfo: {
+        id: string;
+        name: string;
+        set_name: string;
+        set: string;
+    };
+}
+
+interface AddCardToInventoryReq extends RequestWithUserInfo {
+    body: AddCardToInventoryReqBody;
+}
+
 /**
- * Middleware that sanitizes card object properties so nothing funky is committed to the database
+ * Request body schema sanitization middleware
  */
-router.post('/addCardToInventory', (req: RequestWithUserInfo, res, next) => {
-    const { quantity, finishCondition, cardInfo } = req.body;
-    const { name, id } = cardInfo;
+router.post('/addCardToInventory', (req: AddCardToInventoryReq, res, next) => {
+    const schema = Joi.object<AddCardToInventoryReqBody>({
+        quantity: Joi.number().integer().required(),
+        finishCondition: Joi.string()
+            .valid(...finishes)
+            .required(),
+        cardInfo: Joi.object({
+            id: Joi.string().required(),
+            name: Joi.string().required(),
+            set_name: Joi.string().required(),
+            set: Joi.string().required(),
+        }).required(),
+    });
 
-    if (!id) res.status(400).send(`Card id must be provided`);
-    if (!name) res.status(400).send(`Card name must be provided for ${id}`);
-    if (typeof quantity !== 'number')
-        res.status(400).send(`Card quantity formatted incorrectly for ${name}`);
-    if (finishes.indexOf(finishCondition) < 0)
-        res.status(400).send(`FinishCondition not a defined type for ${name}`);
+    const { error } = schema.validate(req.body, {
+        abortEarly: false,
+        allowUnknown: true,
+    });
 
+    if (error) {
+        return res.status(400).json(error);
+    }
     return next();
 });
 
-router.post('/addCardToInventory', async (req: RequestWithUserInfo, res) => {
+router.post('/addCardToInventory', async (req: AddCardToInventoryReq, res) => {
     try {
         const { quantity, finishCondition, cardInfo } = req.body;
         const { currentLocation: location } = req;

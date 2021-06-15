@@ -99,12 +99,10 @@ export interface ReqWithSuspendSale extends RequestWithUserInfo {
     body: SuspendSaleBody;
 }
 
-export interface GetReceivedCardsReq extends RequestWithUserInfo {
-    query: {
-        startDate: string | null;
-        endDate: string | null;
-        cardName: string | null;
-    };
+export interface ReceivedCardQuery {
+    startDate: string | null;
+    endDate: string | null;
+    cardName: string | null;
 }
 
 export interface JwtBody {

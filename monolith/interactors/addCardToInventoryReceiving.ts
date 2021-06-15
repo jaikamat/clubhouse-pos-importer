@@ -15,9 +15,9 @@ export type ReceivingCard = {
     name: string;
     set_name: string;
     set: string;
-    credit_price: number | null;
-    cash_price: number | null;
-    market_price: number | null;
+    creditPrice: number | null;
+    cashPrice: number | null;
+    marketPrice: number | null;
     tradeType: Trade;
 };
 

@@ -11,7 +11,9 @@ import finishSale from '../interactors/updateInventoryCards';
 import getSalesFromCardname from '../interactors/getSalesFromCardname';
 import getAllSales from '../interactors/getAllSales';
 import getFormatLegalities from '../interactors/getFormatLegalities';
-import addCardToInventoryReceiving from '../interactors/addCardToInventoryReceiving';
+import addCardToInventoryReceiving, {
+    Trade,
+} from '../interactors/addCardToInventoryReceiving';
 import getSuspendedSales from '../interactors/getSuspendedSales';
 import getSuspendedSale from '../interactors/getSuspendedSale';
 import createSuspendedSale from '../interactors/createSuspendedSale';
@@ -44,6 +46,8 @@ const finishes = [
     'FOIL_MP',
     'FOIL_HP',
 ] as const;
+
+type FinishCondition = typeof finishes[number];
 
 /**
  * Middleware to check for Bearer token by validating JWT
@@ -95,7 +99,7 @@ router.use(async (req: RequestWithUserInfo, res, next) => {
 
 interface AddCardToInventoryReqBody {
     quantity: number;
-    finishCondition: typeof finishes[number];
+    finishCondition: FinishCondition;
     cardInfo: {
         id: string;
         name: string;
@@ -157,35 +161,48 @@ router.post('/addCardToInventory', async (req: AddCardToInventoryReq, res) => {
     }
 });
 
+interface FinishSaleCard {
+    id: string;
+    price: number;
+    qtyToSell: number;
+    finishCondition: FinishCondition;
+    name: string;
+    set_name: string;
+}
+
+interface ReqWithFinishSaleCards extends RequestWithUserInfo {
+    body: { cards: FinishSaleCard[] };
+}
+
 /**
  * Sale middleware that sanitizes card array to ensure inputs are valid. Will throw errors and end sale if needed
  */
-router.post('/finishSale', (req: RequestWithUserInfo, res, next) => {
+router.post('/finishSale', (req: ReqWithFinishSaleCards, res, next) => {
+    const schema = Joi.object<FinishSaleCard>({
+        id: Joi.string().required(),
+        price: Joi.number().min(0).required(),
+        qtyToSell: Joi.number().integer().required(),
+        name: Joi.string().required(),
+        set_name: Joi.string().required(),
+        finishCondition: Joi.string()
+            .valid(...finishes)
+            .required(),
+    });
+
     const { cards } = req.body;
-
-    function sanitizeOne(card) {
-        const { price, qtyToSell, finishCondition, name, set_name, id } = card;
-
-        if (!id) throw new Error(`Card property id missing`);
-        if (!name && !set_name)
-            throw new Error(`Card name or set_name missing for ${id}`);
-        if (typeof price !== 'number')
-            throw new Error(`Price not number for ${name}`);
-        if (price < 0)
-            throw new Error(`Price must not be negative for ${name}`);
-        if (typeof qtyToSell !== 'number' && qtyToSell % 2 !== 0)
-            throw new Error(`qtyToSell formatted incorrectly for ${name}`);
-        if (qtyToSell <= 0)
-            throw new Error(`qtyToSell must be greater than 0 for ${name}`);
-        if (finishes.indexOf(finishCondition) < 0)
-            throw new Error(`FinishCondition not a defined type for ${name}`);
-        return true;
-    }
 
     try {
         for (let card of cards) {
-            sanitizeOne(card);
+            const { error } = schema.validate(card, {
+                abortEarly: false,
+                allowUnknown: true,
+            });
+
+            if (error) {
+                return res.status(400).json(error);
+            }
         }
+
         return next();
     } catch (err) {
         console.log(err);
@@ -196,7 +213,7 @@ router.post('/finishSale', (req: RequestWithUserInfo, res, next) => {
 /**
  * Create root POST route
  */
-router.post('/finishSale', async (req: RequestWithUserInfo, res) => {
+router.post('/finishSale', async (req: ReqWithFinishSaleCards, res) => {
     try {
         const { cards } = req.body;
         const { currentLocation, lightspeedEmployeeNumber } = req;
@@ -241,34 +258,63 @@ router.get('/getSaleByTitle', async (req: RequestWithUserInfo, res) => {
     }
 });
 
-function validateOne({ id, quantity, finishCondition, name, set, set_name }) {
-    if (!id) throw new Error(`Card id must be provided`);
-    if (!name) throw new Error(`Card name must be provided for ${id}`);
-    if (!set)
-        throw new Error(`Card set abbreviation must be provided for ${id}`);
-    if (!set_name) throw new Error(`Card set name must be provided for ${id}`);
-    if (typeof quantity !== 'number')
-        throw new Error(`Card quantity formatted incorrectly for ${name}`);
-    if (finishes.indexOf(finishCondition) < 0)
-        throw new Error(`FinishCondition not a defined type for ${name}`);
-    return;
+interface ReceivingCard {
+    id: string;
+    quantity: number;
+    name: string;
+    set_name: string;
+    finishCondition: FinishCondition;
+    set: string;
+    creditPrice: number;
+    cashPrice: number;
+    marketPrice: number;
+    tradeType: Trade;
+}
+
+interface ReqWithReceivingCards extends RequestWithUserInfo {
+    body: { cards: ReceivingCard[] };
 }
 
 /**
  * Sanitizes card object properties so nothing funky is committed to the database
  */
-router.post('/receiveCards', (req: RequestWithUserInfo, res, next) => {
+router.post('/receiveCards', (req: ReqWithReceivingCards, res, next) => {
+    const schema = Joi.object<ReceivingCard>({
+        id: Joi.string().required(),
+        quantity: Joi.number().integer().required(),
+        name: Joi.string().required(),
+        set_name: Joi.string().required(),
+        finishCondition: Joi.string()
+            .valid(...finishes)
+            .required(),
+        set: Joi.string().required(),
+        creditPrice: Joi.number().min(0).required(),
+        cashPrice: Joi.number().min(0).required(),
+        marketPrice: Joi.number().min(0).required(),
+        tradeType: Joi.string().valid(Trade.Cash, Trade.Credit).required(),
+    });
+
     const { cards } = req.body;
 
     try {
-        for (let card of cards) validateOne(card);
+        for (let card of cards) {
+            const { error } = schema.validate(card, {
+                abortEarly: false,
+                allowUnknown: true,
+            });
+
+            if (error) {
+                return res.status(400).json(error);
+            }
+        }
+
         return next();
     } catch (err) {
         res.status(400).send(err.message);
     }
 });
 
-router.post('/receiveCards', async (req: RequestWithUserInfo, res) => {
+router.post('/receiveCards', async (req: ReqWithReceivingCards, res) => {
     try {
         const { cards } = req.body;
         const messages = await addCardToInventoryReceiving(

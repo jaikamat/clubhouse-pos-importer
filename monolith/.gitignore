@@ -44,3 +44,6 @@ db_scripts/update_scryfall_bulk/bulk_data/*
 
 # Ignore built tsc files
 built
+
+#Ignore migrations
+migrations

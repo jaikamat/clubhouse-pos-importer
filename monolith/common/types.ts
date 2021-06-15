@@ -106,3 +106,19 @@ export interface GetReceivedCardsReq extends RequestWithUserInfo {
         cardName: string | null;
     };
 }
+
+export interface JwtBody {
+    username: string;
+    password: string;
+    currentLocation: ClubhouseLocation;
+}
+
+export interface JwtRequest extends Request {
+    body: JwtBody;
+}
+
+export interface RequestWithQuery extends Request {
+    query: {
+        title: string;
+    };
+}

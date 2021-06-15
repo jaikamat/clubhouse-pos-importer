@@ -1,21 +1,11 @@
-import express, { Request } from 'express';
+import express from 'express';
 const router = express.Router();
 import getJwt from '../interactors/getJwt';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
 import getCardFromAllLocations from '../interactors/getCardFromAllLocations';
 import autocomplete from '../interactors/autocomplete';
 import Joi from 'joi';
-import { ClubhouseLocation } from '../common/types';
-
-interface JwtBody {
-    username: string;
-    password: string;
-    currentLocation: ClubhouseLocation;
-}
-
-interface JwtRequest extends Request {
-    body: JwtBody;
-}
+import { JwtBody, JwtRequest, RequestWithQuery } from '../common/types';
 
 router.post('/jwt', async (req: JwtRequest, res) => {
     const schema = Joi.object<JwtBody>({
@@ -44,12 +34,6 @@ router.post('/jwt', async (req: JwtRequest, res) => {
         res.status(500).send(err);
     }
 });
-
-interface RequestWithQuery extends Request {
-    query: {
-        title: string;
-    };
-}
 
 router.get('/autocomplete', async (req: RequestWithQuery, res) => {
     try {

@@ -1,17 +1,37 @@
 import express, { Request } from 'express';
 const router = express.Router();
-import getJwt from '../interactors/getJwt';
+import getJwt, { ClubhouseLocation } from '../interactors/getJwt';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
 import getCardFromAllLocations from '../interactors/getCardFromAllLocations';
 import autocomplete from '../interactors/autocomplete';
+import Joi from 'joi';
 
-interface RequestWithQuery extends Request {
-    query: {
-        title: string;
-    };
+interface JwtBody {
+    username: string;
+    password: string;
+    currentLocation: ClubhouseLocation;
 }
 
-router.post('/jwt', async (req, res) => {
+interface JwtRequest extends Request {
+    body: JwtBody;
+}
+
+router.post('/jwt', async (req: JwtRequest, res) => {
+    const schema = Joi.object<JwtBody>({
+        username: Joi.string().required(),
+        password: Joi.string().required(),
+        currentLocation: Joi.string().valid('ch1', 'ch2').required(),
+    });
+
+    const { error, value } = schema.validate(req.body, {
+        abortEarly: false,
+        allowUnknown: true,
+    });
+
+    if (error) {
+        res.status(400).json(error);
+    }
+
     try {
         const { username, password, currentLocation } = req.body;
 
@@ -23,6 +43,12 @@ router.post('/jwt', async (req, res) => {
         res.status(500).send(err);
     }
 });
+
+interface RequestWithQuery extends Request {
+    query: {
+        title: string;
+    };
+}
 
 router.get('/autocomplete', async (req: RequestWithQuery, res) => {
     try {

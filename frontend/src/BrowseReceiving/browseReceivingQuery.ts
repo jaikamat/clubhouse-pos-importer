@@ -3,6 +3,7 @@ import { FinishCondition } from '../utils/ScryfallCard';
 import makeAuthHeader from '../utils/makeAuthHeader';
 import { GET_RECEIVING_LIST } from '../utils/api_resources';
 import { Trade } from '../context/ReceivingContext';
+import { ClubhouseLocation } from '../context/AuthProvider';
 
 export interface ReceivedCard {
     quantity: number;
@@ -17,11 +18,19 @@ export interface ReceivedCard {
     set: string;
 }
 
+interface ReceivedUser {
+    _id: string;
+    lightspeedEmployeeNumber: number;
+    locations: ClubhouseLocation[];
+    username: string;
+}
+
 export interface Received {
     _id: string;
     created_at: string;
     employee_number: string;
     received_card_list: ReceivedCard[];
+    created_by: ReceivedUser;
 }
 
 interface Response {

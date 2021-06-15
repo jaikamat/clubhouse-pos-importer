@@ -22,7 +22,7 @@ interface Props {
 
 const ReceivingListItem: FC<Props> = ({ received }) => {
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-    const { received_card_list, employee_number, created_at } = received;
+    const { received_card_list, created_at, created_by } = received;
 
     const cashPrice = sum(
         received_card_list
@@ -67,8 +67,7 @@ const ReceivingListItem: FC<Props> = ({ received }) => {
                                     <MetaData>
                                         <span>{formatDate(created_at)}</span>
                                         <span>
-                                            Received by employee #
-                                            {employee_number}
+                                            Received by {created_by.username}
                                         </span>
                                     </MetaData>
                                 </Typography>

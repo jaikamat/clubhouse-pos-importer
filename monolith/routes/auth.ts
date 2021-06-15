@@ -444,12 +444,14 @@ router.get('/getReceivedCards', async (req: RequestWithUserInfo, res) => {
         return res.status(400).json(error);
     }
 
+    const { startDate, endDate, cardName } = value;
+
     try {
         const message = await getCardsFromReceiving({
             location: req.currentLocation,
-            startDate: value.startDate ? new Date(value.startDate) : null,
-            endDate: value.endDate ? new Date(value.endDate) : null,
-            cardName: value.cardName || null,
+            startDate: startDate ? new Date(startDate) : null,
+            endDate: endDate ? new Date(endDate) : null,
+            cardName: cardName || null,
         });
 
         res.status(200).send(message);

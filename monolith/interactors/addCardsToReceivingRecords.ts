@@ -1,7 +1,7 @@
-import { ClubhouseLocation } from './getJwt';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import getDatabaseConnection from '../database';
 import { ReceivingCard } from './addCardToInventoryReceiving';
+import { ClubhouseLocation } from '../common/types';
 
 async function addCardsToReceivingRecords(
     cards: ReceivingCard[],

@@ -1,6 +1,6 @@
+import { ClubhouseLocation } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import { ClubhouseLocation } from './getJwt';
 
 async function getCardsWithInfo(
     title: string,

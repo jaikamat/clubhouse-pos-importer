@@ -1,6 +1,6 @@
-import { ClubhouseLocation } from './getJwt';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import getDatabaseConnection from '../database';
+import { ClubhouseLocation } from '../common/types';
 
 /**
  * Returns all suspended sales' ids, customer names, and notes (omitting card lists)

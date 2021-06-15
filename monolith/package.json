@@ -7,7 +7,8 @@
         "gcp-build": "tsc -p .",
         "start-dev": "rm -r ./built && tsc -p . && echo \"Built TS source\" && PORT=7331 ENVIRONMENT=development node ./built/bin/www",
         "deploy": "gcloud app deploy app.yaml --stop-previous-version",
-        "test": "ENVIRONMENT=localtest jest"
+        "test": "ENVIRONMENT=localtest jest",
+        "typecheck": "tsc --noEmit"
     },
     "dependencies": {
         "axios": "^0.21.1",
@@ -19,6 +20,7 @@
         "express": "^4.17.1",
         "http-errors": "^1.8.0",
         "jade": "~1.11.0",
+        "joi": "^17.4.0",
         "jsonwebtoken": "^8.5.1",
         "mongodb": "^3.6.3",
         "morgan": "^1.10.0",

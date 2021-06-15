@@ -1,7 +1,6 @@
 import collectionFromLocation from '../lib/collectionFromLocation';
-import { ClubhouseLocation } from './getJwt';
-import { QOH } from '../lib/parseQoh';
 import getDatabaseConnection from '../database';
+import { ClubhouseLocation, QOH } from '../common/types';
 
 type Card = {
     quantity: number;

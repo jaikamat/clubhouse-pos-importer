@@ -1,6 +1,6 @@
+import { ClubhouseLocation } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import { ClubhouseLocation } from './getJwt';
 
 /**
  * Gets a list of all set names, for use in the Deckbox frontend dropdown selection

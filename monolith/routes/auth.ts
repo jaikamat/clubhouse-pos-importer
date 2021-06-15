@@ -358,21 +358,53 @@ router.get('/suspendSale/:id', async (req: RequestWithUserInfo, res) => {
     }
 });
 
-router.post('/suspendSale', async (req: RequestWithUserInfo, res) => {
+interface SuspendSaleBody {
+    customerName: string;
+    notes: string;
+    saleList: FinishSaleCard[];
+}
+
+interface ReqWithSuspendSale extends RequestWithUserInfo {
+    body: SuspendSaleBody;
+}
+
+router.post('/suspendSale', async (req: ReqWithSuspendSale, res) => {
+    const schema = Joi.object<SuspendSaleBody>({
+        customerName: Joi.string().min(3).max(100).required(),
+        notes: Joi.string().min(0).max(255).allow(''),
+        saleList: Joi.array().items(
+            Joi.object<FinishSaleCard>({
+                id: Joi.string().required(),
+                price: Joi.number().min(0).required(),
+                qtyToSell: Joi.number().integer().required(),
+                name: Joi.string().required(),
+                set_name: Joi.string().required(),
+                finishCondition: Joi.string()
+                    .valid(...finishes)
+                    .required(),
+            })
+        ),
+    });
+
     const { customerName = '', notes = '', saleList = [] } = req.body;
 
+    const { error } = schema.validate(req.body, {
+        abortEarly: false,
+        allowUnknown: true,
+    });
+
+    if (error) {
+        return res.status(400).json(error);
+    }
+
     try {
-        if (customerName.length <= 50 && notes.length <= 150) {
-            const message = await createSuspendedSale(
-                customerName,
-                notes,
-                saleList,
-                req.currentLocation
-            );
-            res.status(200).send(message);
-        } else {
-            res.status(400).send('Inputs were malformed');
-        }
+        const message = await createSuspendedSale(
+            customerName,
+            notes,
+            saleList,
+            req.currentLocation
+        );
+        res.status(200).send(message);
     } catch (err) {
         console.error(new Error(err));
         res.status(500).send(err.message);

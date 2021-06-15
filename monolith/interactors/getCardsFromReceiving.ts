@@ -30,6 +30,10 @@ async function getCardsFromReceiving({
                 created_at: {
                     $toDate: '$_id',
                 },
+                // $lookup requires an ObjectId reference, so we convert it here
+                user_id: {
+                    $toObjectId: '$created_by',
+                },
             },
         };
 
@@ -60,6 +64,34 @@ async function getCardsFromReceiving({
         if (cardName !== null) {
             pipeline.push(cardNameMatch);
         }
+
+        // Join users into the aggregation and replace created_by with user entity
+        const lookup = {
+            $lookup: {
+                from: collectionFromLocation(location).users,
+                localField: 'user_id',
+                foreignField: '_id',
+                as: 'created_by',
+            },
+        };
+
+        pipeline.push(lookup);
+
+        // Unwind the found user in the $lookup...it's an array
+        pipeline.push({
+            $unwind: '$created_by',
+        });
+
+        // Exclude password hash
+        const project = {
+            $project: {
+                created_by: {
+                    password: 0,
+                },
+            },
+        };
+
+        pipeline.push(project);
 
         pipeline.push({
             $sort: {

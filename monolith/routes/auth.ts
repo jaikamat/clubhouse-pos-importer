@@ -1,19 +1,16 @@
-import express, { Request } from 'express';
+import express from 'express';
 const router = express.Router();
 require('dotenv').config();
 import jwt from 'jsonwebtoken';
 import getCardsByFilter, { Arguments } from '../interactors/getCardsByFilter';
 import addCardToInventory from '../interactors/addCardToInventory';
-import { ClubhouseLocation } from '../interactors/getJwt';
 import getDistinctSetNames from '../interactors/getDistinctSetNames';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
 import finishSale from '../interactors/updateInventoryCards';
 import getSalesFromCardname from '../interactors/getSalesFromCardname';
 import getAllSales from '../interactors/getAllSales';
 import getFormatLegalities from '../interactors/getFormatLegalities';
-import addCardToInventoryReceiving, {
-    Trade,
-} from '../interactors/addCardToInventoryReceiving';
+import addCardToInventoryReceiving from '../interactors/addCardToInventoryReceiving';
 import getSuspendedSales from '../interactors/getSuspendedSales';
 import getSuspendedSale from '../interactors/getSuspendedSale';
 import createSuspendedSale from '../interactors/createSuspendedSale';
@@ -22,32 +19,21 @@ import addCardsToReceivingRecords from '../interactors/addCardsToReceivingRecord
 import getCardsFromReceiving from '../interactors/getCardsFromReceiving';
 import getUserById, { User } from '../interactors/getUserById';
 import Joi from 'joi';
-
-interface RequestWithUserInfo extends Request {
-    locations: string[];
-    currentLocation: ClubhouseLocation;
-    isAdmin: boolean;
-    lightspeedEmployeeNumber: number;
-    userId: string;
-}
-
-type DecodedToken = {
-    userId: string;
-    currentLocation: ClubhouseLocation;
-};
-
-const finishes = [
-    'NONFOIL_NM',
-    'NONFOIL_LP',
-    'NONFOIL_MP',
-    'NONFOIL_HP',
-    'FOIL_NM',
-    'FOIL_LP',
-    'FOIL_MP',
-    'FOIL_HP',
-] as const;
-
-type FinishCondition = typeof finishes[number];
+import {
+    AddCardToInventoryReq,
+    AddCardToInventoryReqBody,
+    DecodedToken,
+    finishes,
+    FinishSaleCard,
+    GetReceivedCardsReq,
+    ReceivingCard,
+    RequestWithUserInfo,
+    ReqWithFinishSaleCards,
+    ReqWithReceivingCards,
+    ReqWithSuspendSale,
+    SuspendSaleBody,
+    Trade,
+} from '../common/types';
 
 /**
  * Middleware to check for Bearer token by validating JWT
@@ -97,21 +83,6 @@ router.use(async (req: RequestWithUserInfo, res, next) => {
     }
 });
 
-interface AddCardToInventoryReqBody {
-    quantity: number;
-    finishCondition: FinishCondition;
-    cardInfo: {
-        id: string;
-        name: string;
-        set_name: string;
-        set: string;
-    };
-}
-
-interface AddCardToInventoryReq extends RequestWithUserInfo {
-    body: AddCardToInventoryReqBody;
-}
-
 /**
  * Request body schema sanitization middleware
  */
@@ -160,19 +131,6 @@ router.post('/addCardToInventory', async (req: AddCardToInventoryReq, res) => {
         res.status(500).send(err);
     }
 });
-
-interface FinishSaleCard {
-    id: string;
-    price: number;
-    qtyToSell: number;
-    finishCondition: FinishCondition;
-    name: string;
-    set_name: string;
-}
-
-interface ReqWithFinishSaleCards extends RequestWithUserInfo {
-    body: { cards: FinishSaleCard[] };
-}
 
 /**
  * Sale middleware that sanitizes card array to ensure inputs are valid. Will throw errors and end sale if needed
@@ -258,23 +216,6 @@ router.get('/getSaleByTitle', async (req: RequestWithUserInfo, res) => {
     }
 });
 
-interface ReceivingCard {
-    id: string;
-    quantity: number;
-    name: string;
-    set_name: string;
-    finishCondition: FinishCondition;
-    set: string;
-    creditPrice: number;
-    cashPrice: number;
-    marketPrice: number;
-    tradeType: Trade;
-}
-
-interface ReqWithReceivingCards extends RequestWithUserInfo {
-    body: { cards: ReceivingCard[] };
-}
-
 /**
  * Sanitizes card object properties so nothing funky is committed to the database
  */
@@ -357,16 +298,6 @@ router.get('/suspendSale/:id', async (req: RequestWithUserInfo, res) => {
         res.status(500).send(err.message);
     }
 });
-
-interface SuspendSaleBody {
-    customerName: string;
-    notes: string;
-    saleList: FinishSaleCard[];
-}
-
-interface ReqWithSuspendSale extends RequestWithUserInfo {
-    body: SuspendSaleBody;
-}
 
 router.post('/suspendSale', async (req: ReqWithSuspendSale, res) => {
     const schema = Joi.object<SuspendSaleBody>({
@@ -496,15 +427,6 @@ router.get('/getCardsWithInfo', async (req: RequestWithUserInfo, res) => {
         res.status(500).send(err);
     }
 });
-
-// TODO: Ensure we mimic this pattern throughout this file
-interface GetReceivedCardsReq extends RequestWithUserInfo {
-    query: {
-        startDate: string | null;
-        endDate: string | null;
-        cardName: string | null;
-    };
-}
 
 router.get('/getReceivedCards', async (req: GetReceivedCardsReq, res) => {
     const { startDate = null, endDate = null, cardName = null } = req.query;

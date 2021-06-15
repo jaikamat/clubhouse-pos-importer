@@ -1,10 +1,11 @@
 import express, { Request } from 'express';
 const router = express.Router();
-import getJwt, { ClubhouseLocation } from '../interactors/getJwt';
+import getJwt from '../interactors/getJwt';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
 import getCardFromAllLocations from '../interactors/getCardFromAllLocations';
 import autocomplete from '../interactors/autocomplete';
 import Joi from 'joi';
+import { ClubhouseLocation } from '../common/types';
 
 interface JwtBody {
     username: string;

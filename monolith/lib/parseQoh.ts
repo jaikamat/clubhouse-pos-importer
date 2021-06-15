@@ -1,20 +1,12 @@
-export interface QOH {
-    FOIL_NM?: number;
-    FOIL_LP?: number;
-    FOIL_MP?: number;
-    FOIL_HP?: number;
-    NONFOIL_NM?: number;
-    NONFOIL_LP?: number;
-    NONFOIL_MP?: number;
-    NONFOIL_HP?: number;
-}
+import { QOH } from '../common/types';
 
 /**
  * This function parses the `qoh` object from mongo into something more presentable
  */
-export default function parseQoh(
-    qoh: QOH
-): { foilQty: number; nonfoilQty: number } {
+export default function parseQoh(qoh: QOH): {
+    foilQty: number;
+    nonfoilQty: number;
+} {
     let foilQty = 0;
     let nonfoilQty = 0;
 

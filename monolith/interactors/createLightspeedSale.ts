@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ClubhouseLocation } from './getJwt';
+import { ClubhouseLocation } from '../common/types';
 
 /**
  * Helper fn used to create employee-readable note lines in the Lightspeed POS system

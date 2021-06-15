@@ -1,12 +1,7 @@
 import { Collection } from 'mongodb';
-import { ClubhouseLocation } from './getJwt';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import getDatabaseConnection from '../database';
-
-export enum Trade {
-    Cash = 'CASH',
-    Credit = 'CREDIT',
-}
+import { ClubhouseLocation, Trade } from '../common/types';
 
 export type ReceivingCard = {
     quantity: number;

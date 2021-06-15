@@ -1,6 +1,6 @@
-import { ClubhouseLocation } from './getJwt';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import getDatabaseConnection from '../database';
+import { ClubhouseLocation } from '../common/types';
 
 /**
  * Updates card inventory based on the card's passed properties (qtyToSell, finishCondition, id, name) and CHANGE_FLAG

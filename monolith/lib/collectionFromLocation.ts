@@ -1,4 +1,4 @@
-import { ClubhouseLocation } from '../interactors/getJwt';
+import { ClubhouseLocation } from '../common/types';
 
 interface Ch1Collection {
     cardInventory: 'card_inventory';

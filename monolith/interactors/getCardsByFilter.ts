@@ -46,7 +46,7 @@ const getCardsByFilter = async (
             collectionFromLocation(location).cardInventory
         );
 
-        const SKIP = LIMIT * (Math.abs(Number(page) || 1) - 1); // `page` starts at 1 for clarity
+        const SKIP = LIMIT * (page - 1); // `page` starts at 1 for clarity
 
         // Create aggregation
         const aggregation = [];
@@ -267,14 +267,14 @@ const getCardsByFilter = async (
 
         // Price filtering logic
         if (priceNum && priceFilter) {
-            endMatch.price = { [`$${priceFilter}`]: Number(priceNum) };
+            endMatch.price = { [`$${priceFilter}`]: priceNum };
         }
 
         aggregation.push({ $match: endMatch });
 
         const sortByFilter = {};
-        const sortByProp = sortBy || 'price';
-        const sortByDirectionProp = Number(sortByDirection) || -1;
+        const sortByProp = sortBy;
+        const sortByDirectionProp = sortByDirection;
         sortByFilter[sortByProp] = sortByDirectionProp;
 
         aggregation.push({ $sort: sortByFilter });

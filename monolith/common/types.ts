@@ -8,12 +8,12 @@ export enum Trade {
     Credit = 'CREDIT',
 }
 
-export interface DecodedToken {
-    userId: string;
-    currentLocation: ClubhouseLocation;
-}
+export const locations: Readonly<[ClubhouseLocation, ClubhouseLocation]> = [
+    'ch1',
+    'ch2',
+] as const;
 
-export const finishes = [
+export const finishConditions = [
     'NONFOIL_NM',
     'NONFOIL_LP',
     'NONFOIL_MP',
@@ -24,12 +24,67 @@ export const finishes = [
     'FOIL_HP',
 ] as const;
 
-export const locations: Readonly<[ClubhouseLocation, ClubhouseLocation]> = [
-    'ch1',
-    'ch2',
+export type FinishCondition = typeof finishConditions[number];
+
+export const priceFilters = ['gte', 'lte', 'gt', 'lt'] as const;
+
+export type PriceFilter = typeof priceFilters[number];
+
+export const formatLegalities = [
+    'standard',
+    'future',
+    'historic',
+    'pioneer',
+    'modern',
+    'legacy',
+    'pauper',
+    'vintage',
+    'penny',
+    'commander',
+    'brawl',
+    'duel',
+    'oldschool',
 ] as const;
 
-export type FinishCondition = typeof finishes[number];
+export type FormatLegality = typeof formatLegalities[number];
+
+export const finish = ['FOIL', 'NONFOIL'] as const;
+
+export type Finish = typeof finish[number];
+
+export const sortBy = ['price', 'name'] as const;
+
+export type SortBy = typeof sortBy[number];
+
+export const sortByDirection = [-1, 1] as const;
+
+export type SortByDirection = typeof sortByDirection[number];
+
+export const colorSpecificity = ['colorless', 'mono', 'multi'] as const;
+
+export type ColorSpecificity = typeof colorSpecificity[number];
+
+export const typeLines = [
+    'Artifact',
+    'Creature',
+    'Enchantment',
+    'Instant',
+    'Land',
+    'Planeswalker',
+    'Sorcery',
+    'Tribal',
+] as const;
+
+export type TypeLine = typeof typeLines[number];
+
+export const frames = ['borderless', 'extendedArt', 'showcase'] as const;
+
+export type Frame = typeof frames[number];
+
+export interface DecodedToken {
+    userId: string;
+    currentLocation: ClubhouseLocation;
+}
 
 export interface QOH {
     FOIL_NM?: number;

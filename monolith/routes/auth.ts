@@ -22,18 +22,33 @@ import Joi from 'joi';
 import {
     AddCardToInventoryReq,
     AddCardToInventoryReqBody,
+    ColorSpecificity,
+    colorSpecificity,
     DecodedToken,
-    finishes,
+    finish,
+    Finish,
+    finishConditions,
     FinishSaleCard,
+    formatLegalities,
+    FormatLegality,
+    Frame,
+    frames,
     JoiValidation,
-    locations,
+    PriceFilter,
+    priceFilters,
     ReceivingCard,
     RequestWithUserInfo,
     ReqWithFinishSaleCards,
     ReqWithReceivingCards,
     ReqWithSuspendSale,
+    SortBy,
+    sortBy,
+    sortByDirection,
+    SortByDirection,
     SuspendSaleBody,
     Trade,
+    TypeLine,
+    typeLines,
 } from '../common/types';
 
 /**
@@ -91,7 +106,7 @@ router.post('/addCardToInventory', (req: AddCardToInventoryReq, res, next) => {
     const schema = Joi.object<AddCardToInventoryReqBody>({
         quantity: Joi.number().integer().required(),
         finishCondition: Joi.string()
-            .valid(...finishes)
+            .valid(...finishConditions)
             .required(),
         cardInfo: Joi.object({
             id: Joi.string().required(),
@@ -147,7 +162,7 @@ router.post('/finishSale', (req: ReqWithFinishSaleCards, res, next) => {
         name: Joi.string().required(),
         set_name: Joi.string().required(),
         finishCondition: Joi.string()
-            .valid(...finishes)
+            .valid(...finishConditions)
             .required(),
     });
 
@@ -249,7 +264,7 @@ router.post('/receiveCards', (req: ReqWithReceivingCards, res, next) => {
         name: Joi.string().required(),
         set_name: Joi.string().required(),
         finishCondition: Joi.string()
-            .valid(...finishes)
+            .valid(...finishConditions)
             .required(),
         set: Joi.string().required(),
         creditPrice: Joi.number().min(0).required(),
@@ -337,7 +352,7 @@ router.post('/suspendSale', async (req: ReqWithSuspendSale, res) => {
                 name: Joi.string().required(),
                 set_name: Joi.string().required(),
                 finishCondition: Joi.string()
-                    .valid(...finishes)
+                    .valid(...finishConditions)
                     .required(),
             })
         ),
@@ -386,35 +401,38 @@ router.delete('/suspendSale/:id', async (req: RequestWithUserInfo, res) => {
 export interface GetCardsByFilterQuery {
     title?: string;
     setName?: string;
-    format?: string;
-    priceNum?: string;
-    finish?: string;
+    format?: FormatLegality;
+    priceNum?: number;
+    finish?: Finish;
     colors?: string;
-    sortBy?: string;
-    colorSpecificity?: string;
-    type?: string;
-    frame?: string;
-    priceFilter: string;
-    sortByDirection: number;
+    sortBy?: SortBy;
+    colorSpecificity?: ColorSpecificity;
+    type?: TypeLine;
+    frame?: Frame;
+    priceFilter: PriceFilter;
+    sortByDirection: SortByDirection;
     page: number;
 }
 
-// TODO: this
 router.get('/getCardsByFilter', async (req: RequestWithUserInfo, res) => {
     const schema = Joi.object<GetCardsByFilterQuery>({
         title: Joi.string(),
         setName: Joi.string(),
-        format: Joi.string(),
-        priceNum: Joi.string(),
-        finish: Joi.string(),
+        format: Joi.string().valid(...formatLegalities),
+        priceNum: Joi.number().positive().allow(0),
+        finish: Joi.string().valid(...finish),
         colors: Joi.string(),
-        sortBy: Joi.string(),
-        colorSpecificity: Joi.string(),
-        type: Joi.string(),
-        frame: Joi.string(),
-        priceFilter: Joi.string().required(),
-        sortByDirection: Joi.number().required(),
-        page: Joi.number().required(),
+        sortBy: Joi.string().valid(...sortBy),
+        colorSpecificity: Joi.string().valid(...colorSpecificity),
+        type: Joi.string().valid(...typeLines),
+        frame: Joi.string().valid(...frames),
+        priceFilter: Joi.string()
+            .valid(...priceFilters)
+            .required(),
+        sortByDirection: Joi.number()
+            .valid(...sortByDirection)
+            .required(),
+        page: Joi.number().integer().min(1).required(),
     });
 
     const { error, value }: JoiValidation<GetCardsByFilterQuery> =

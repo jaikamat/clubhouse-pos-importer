@@ -26,6 +26,7 @@ import {
     finishes,
     FinishSaleCard,
     JoiValidation,
+    locations,
     ReceivingCard,
     RequestWithUserInfo,
     ReqWithFinishSaleCards,
@@ -382,10 +383,52 @@ router.delete('/suspendSale/:id', async (req: RequestWithUserInfo, res) => {
     }
 });
 
+interface GetCardsByFilterQuery {
+    title?: string;
+    setName?: string;
+    format?: string;
+    priceNum?: string;
+    priceFilter?: string;
+    finish?: string;
+    colors?: string;
+    sortBy?: string;
+    sortByDirection?: string;
+    colorSpecificity?: string;
+    page?: string;
+    type?: string;
+    frame?: string;
+}
+
 // TODO: this
 router.get('/getCardsByFilter', async (req: RequestWithUserInfo, res) => {
+    const schema = Joi.object<GetCardsByFilterQuery>({
+        title: Joi.string(),
+        setName: Joi.string(),
+        format: Joi.string(),
+        priceNum: Joi.string(),
+        priceFilter: Joi.string(),
+        finish: Joi.string(),
+        colors: Joi.string(),
+        sortBy: Joi.string(),
+        sortByDirection: Joi.string(),
+        colorSpecificity: Joi.string(),
+        type: Joi.string(),
+        frame: Joi.string(),
+        page: Joi.number().required(),
+    });
+
+    const { error, value }: JoiValidation<GetCardsByFilterQuery> =
+        schema.validate(req.query, {
+            abortEarly: false,
+        });
+
+    if (error) {
+        return res.status(400).json(error);
+    }
+
     try {
-        const { currentLocation: location } = req;
+        const { currentLocation } = req;
+
         const {
             title,
             setName,
@@ -400,24 +443,26 @@ router.get('/getCardsByFilter', async (req: RequestWithUserInfo, res) => {
             page,
             type,
             frame,
-        }: Partial<Arguments> = req.query;
+        }: GetCardsByFilterQuery = value;
 
-        const message = await getCardsByFilter({
-            title,
-            setName,
-            format,
-            priceNum,
-            priceFilter,
-            finish,
-            colors,
-            colorSpecificity,
-            sortBy,
-            sortByDirection,
-            page,
-            type,
-            frame,
-            location,
-        });
+        const message = await getCardsByFilter(
+            {
+                title,
+                setName,
+                format,
+                priceNum,
+                priceFilter,
+                finish,
+                colors,
+                colorSpecificity,
+                sortBy,
+                sortByDirection,
+                page,
+                type,
+                frame,
+            },
+            currentLocation
+        );
 
         res.status(200).json(message);
     } catch (err) {

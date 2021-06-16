@@ -1,3 +1,4 @@
+import { ClubhouseLocation } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 const LIMIT = 100;
@@ -16,7 +17,6 @@ export interface Arguments {
     page: string;
     type: string;
     frame: string;
-    location: 'ch1' | 'ch2';
 }
 
 /**
@@ -36,22 +36,24 @@ export interface Arguments {
  * type - the typeline search, like `Artifact` or `Creature`
  * frame - the desired frame effect filter (borderless, extended-art, showcase, etc)
  */
-const getCardsByFilter = async ({
-    title,
-    setName,
-    format,
-    priceNum,
-    priceFilter,
-    finish,
-    colors,
-    sortBy,
-    sortByDirection,
-    colorSpecificity,
-    page,
-    type,
-    frame,
-    location,
-}: Arguments) => {
+const getCardsByFilter = async (
+    {
+        title,
+        setName,
+        format,
+        priceNum,
+        priceFilter,
+        finish,
+        colors,
+        sortBy,
+        sortByDirection,
+        colorSpecificity,
+        page,
+        type,
+        frame,
+    }: Arguments,
+    location: ClubhouseLocation
+) => {
     try {
         const db = await getDatabaseConnection();
 

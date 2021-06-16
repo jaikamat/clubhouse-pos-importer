@@ -1,4 +1,5 @@
 import { Request } from 'express';
+import { ValidationError } from 'joi';
 
 export type ClubhouseLocation = 'ch1' | 'ch2';
 
@@ -120,3 +121,8 @@ export interface RequestWithQuery extends Request {
         title: string;
     };
 }
+
+export type JoiValidation<T> = {
+    error?: ValidationError;
+    value: T;
+};

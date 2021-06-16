@@ -5,7 +5,12 @@ import getCardsWithInfo from '../interactors/getCardsWithInfo';
 import getCardFromAllLocations from '../interactors/getCardFromAllLocations';
 import autocomplete from '../interactors/autocomplete';
 import Joi from 'joi';
-import { JwtBody, JwtRequest, RequestWithQuery } from '../common/types';
+import {
+    JoiValidation,
+    JwtBody,
+    JwtRequest,
+    RequestWithQuery,
+} from '../common/types';
 
 router.post('/jwt', async (req: JwtRequest, res) => {
     const schema = Joi.object<JwtBody>({
@@ -14,7 +19,7 @@ router.post('/jwt', async (req: JwtRequest, res) => {
         currentLocation: Joi.string().valid('ch1', 'ch2').required(),
     });
 
-    const { error, value } = schema.validate(req.body, {
+    const { error }: JoiValidation<JwtBody> = schema.validate(req.body, {
         abortEarly: false,
         allowUnknown: true,
     });
@@ -35,9 +40,28 @@ router.post('/jwt', async (req: JwtRequest, res) => {
     }
 });
 
+interface AutocompleteQuery {
+    title: string;
+}
+
 router.get('/autocomplete', async (req: RequestWithQuery, res) => {
+    const schema = Joi.object<AutocompleteQuery>({
+        title: Joi.string().required(),
+    });
+
+    const { error, value }: JoiValidation<AutocompleteQuery> = schema.validate(
+        req.query,
+        {
+            abortEarly: false,
+        }
+    );
+
+    if (error) {
+        return res.status(400).json(error);
+    }
+
     try {
-        const { title } = req.query;
+        const { title } = value;
         const results = await autocomplete(title);
         res.status(200).send(results);
     } catch (err) {

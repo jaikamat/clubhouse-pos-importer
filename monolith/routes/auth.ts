@@ -25,6 +25,7 @@ import {
     DecodedToken,
     finishes,
     FinishSaleCard,
+    JoiValidation,
     ReceivedCardQuery,
     ReceivingCard,
     RequestWithUserInfo,
@@ -100,10 +101,13 @@ router.post('/addCardToInventory', (req: AddCardToInventoryReq, res, next) => {
         }).required(),
     });
 
-    const { error } = schema.validate(req.body, {
-        abortEarly: false,
-        allowUnknown: true,
-    });
+    const { error }: JoiValidation<AddCardToInventoryReqBody> = schema.validate(
+        req.body,
+        {
+            abortEarly: false,
+            allowUnknown: true,
+        }
+    );
 
     if (error) {
         return res.status(400).json(error);
@@ -151,10 +155,13 @@ router.post('/finishSale', (req: ReqWithFinishSaleCards, res, next) => {
 
     try {
         for (let card of cards) {
-            const { error } = schema.validate(card, {
-                abortEarly: false,
-                allowUnknown: true,
-            });
+            const { error }: JoiValidation<FinishSaleCard> = schema.validate(
+                card,
+                {
+                    abortEarly: false,
+                    allowUnknown: true,
+                }
+            );
 
             if (error) {
                 return res.status(400).json(error);
@@ -239,10 +246,13 @@ router.post('/receiveCards', (req: ReqWithReceivingCards, res, next) => {
 
     try {
         for (let card of cards) {
-            const { error } = schema.validate(card, {
-                abortEarly: false,
-                allowUnknown: true,
-            });
+            const { error }: JoiValidation<ReceivingCard> = schema.validate(
+                card,
+                {
+                    abortEarly: false,
+                    allowUnknown: true,
+                }
+            );
 
             if (error) {
                 return res.status(400).json(error);
@@ -319,10 +329,13 @@ router.post('/suspendSale', async (req: ReqWithSuspendSale, res) => {
 
     const { customerName = '', notes = '', saleList = [] } = req.body;
 
-    const { error } = schema.validate(req.body, {
-        abortEarly: false,
-        allowUnknown: true,
-    });
+    const { error }: JoiValidation<SuspendSaleBody> = schema.validate(
+        req.body,
+        {
+            abortEarly: false,
+            allowUnknown: true,
+        }
+    );
 
     if (error) {
         return res.status(400).json(error);
@@ -435,10 +448,12 @@ router.get('/getReceivedCards', async (req: RequestWithUserInfo, res) => {
         cardName: Joi.string().allow(null),
     });
 
-    const { error, value }: { error?: Error; value: ReceivedCardQuery } =
-        schema.validate(req.query, {
+    const { error, value }: JoiValidation<ReceivedCardQuery> = schema.validate(
+        req.query,
+        {
             abortEarly: false,
-        });
+        }
+    );
 
     if (error) {
         return res.status(400).json(error);

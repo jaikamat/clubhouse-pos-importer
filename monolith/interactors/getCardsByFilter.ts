@@ -1,23 +1,8 @@
 import { ClubhouseLocation } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
+import { GetCardsByFilterQuery } from '../routes/auth';
 const LIMIT = 100;
-
-export interface Arguments {
-    title: string;
-    setName: string;
-    format: string;
-    priceNum: string;
-    priceFilter: string;
-    finish: string;
-    colors: string;
-    sortBy: string;
-    sortByDirection: string;
-    colorSpecificity: string;
-    page: string;
-    type: string;
-    frame: string;
-}
 
 /**
  * Uses the Mongo Aggregation Pipeline to gather relevant cards in an itemized list
@@ -51,7 +36,7 @@ const getCardsByFilter = async (
         page,
         type,
         frame,
-    }: Arguments,
+    }: GetCardsByFilterQuery,
     location: ClubhouseLocation
 ) => {
     try {

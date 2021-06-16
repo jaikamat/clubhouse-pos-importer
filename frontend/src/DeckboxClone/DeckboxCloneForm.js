@@ -268,14 +268,14 @@ export default class DeckboxCloneForm extends React.Component {
                                     title: title || null,
                                     setName: setName || null,
                                     format: format || null,
-                                    priceNum: priceNum || null,
+                                    price: priceNum || null,
                                     finish: finish || null,
                                     colors: colors || null,
                                     colorSpecificity: colorSpecificity || null,
                                     type: typeLine || null,
                                     frame: frame || null,
                                     sortByDirection: sortByDirection,
-                                    priceFilter: priceFilter,
+                                    priceOperator: priceFilter,
                                     sortBy: sortBy,
                                 })
                             }

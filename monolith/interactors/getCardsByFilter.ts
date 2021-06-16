@@ -1,23 +1,8 @@
+import { ClubhouseLocation } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
+import { GetCardsByFilterQuery } from '../routes/auth';
 const LIMIT = 100;
-
-export interface Arguments {
-    title: string;
-    setName: string;
-    format: string;
-    priceNum: string;
-    priceFilter: string;
-    finish: string;
-    colors: string;
-    sortBy: string;
-    sortByDirection: string;
-    colorSpecificity: string;
-    page: string;
-    type: string;
-    frame: string;
-    location: 'ch1' | 'ch2';
-}
 
 /**
  * Uses the Mongo Aggregation Pipeline to gather relevant cards in an itemized list
@@ -36,22 +21,24 @@ export interface Arguments {
  * type - the typeline search, like `Artifact` or `Creature`
  * frame - the desired frame effect filter (borderless, extended-art, showcase, etc)
  */
-const getCardsByFilter = async ({
-    title,
-    setName,
-    format,
-    priceNum,
-    priceFilter,
-    finish,
-    colors,
-    sortBy,
-    sortByDirection,
-    colorSpecificity,
-    page,
-    type,
-    frame,
-    location,
-}: Arguments) => {
+const getCardsByFilter = async (
+    {
+        title,
+        setName,
+        format,
+        price,
+        priceOperator,
+        finish,
+        colors,
+        sortBy,
+        sortByDirection,
+        colorSpecificity,
+        page,
+        type,
+        frame,
+    }: GetCardsByFilterQuery,
+    location: ClubhouseLocation
+) => {
     try {
         const db = await getDatabaseConnection();
 
@@ -59,7 +46,7 @@ const getCardsByFilter = async ({
             collectionFromLocation(location).cardInventory
         );
 
-        const SKIP = LIMIT * (Math.abs(Number(page) || 1) - 1); // `page` starts at 1 for clarity
+        const SKIP = LIMIT * (page - 1); // `page` starts at 1 for clarity
 
         // Create aggregation
         const aggregation = [];
@@ -279,15 +266,15 @@ const getCardsByFilter = async ({
         endMatch[`inventory.v`] = { $gt: 0 };
 
         // Price filtering logic
-        if (priceNum && priceFilter) {
-            endMatch.price = { [`$${priceFilter}`]: Number(priceNum) };
+        if (price && priceOperator) {
+            endMatch.price = { [`$${priceOperator}`]: price };
         }
 
         aggregation.push({ $match: endMatch });
 
         const sortByFilter = {};
-        const sortByProp = sortBy || 'price';
-        const sortByDirectionProp = Number(sortByDirection) || -1;
+        const sortByProp = sortBy;
+        const sortByDirectionProp = sortByDirection;
         sortByFilter[sortByProp] = sortByDirectionProp;
 
         aggregation.push({ $sort: sortByFilter });

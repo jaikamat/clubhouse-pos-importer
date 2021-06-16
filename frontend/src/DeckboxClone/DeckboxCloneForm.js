@@ -265,18 +265,18 @@ export default class DeckboxCloneForm extends React.Component {
                             primary
                             onClick={() =>
                                 this.props.handleSubmit({
-                                    title,
-                                    setName,
-                                    format,
-                                    priceNum,
-                                    priceFilter,
-                                    finish,
-                                    sortBy,
-                                    sortByDirection,
-                                    colors,
-                                    colorSpecificity,
-                                    type: typeLine,
-                                    frame,
+                                    title: title || null,
+                                    setName: setName || null,
+                                    format: format || null,
+                                    price: priceNum || null,
+                                    finish: finish || null,
+                                    colors: colors || null,
+                                    colorSpecificity: colorSpecificity || null,
+                                    type: typeLine || null,
+                                    frame: frame || null,
+                                    sortByDirection: sortByDirection,
+                                    priceOperator: priceFilter,
+                                    sortBy: sortBy,
                                 })
                             }
                         >

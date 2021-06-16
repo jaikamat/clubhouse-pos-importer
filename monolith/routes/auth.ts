@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 require('dotenv').config();
 import jwt from 'jsonwebtoken';
-import getCardsByFilter, { Arguments } from '../interactors/getCardsByFilter';
+import getCardsByFilter from '../interactors/getCardsByFilter';
 import addCardToInventory from '../interactors/addCardToInventory';
 import getDistinctSetNames from '../interactors/getDistinctSetNames';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
@@ -22,17 +22,33 @@ import Joi from 'joi';
 import {
     AddCardToInventoryReq,
     AddCardToInventoryReqBody,
+    ColorSpecificity,
+    colorSpecificity,
     DecodedToken,
-    finishes,
+    finish,
+    Finish,
+    finishConditions,
     FinishSaleCard,
-    ReceivedCardQuery,
+    formatLegalities,
+    FormatLegality,
+    Frame,
+    frames,
+    JoiValidation,
+    PriceFilter,
+    priceFilters,
     ReceivingCard,
     RequestWithUserInfo,
     ReqWithFinishSaleCards,
     ReqWithReceivingCards,
     ReqWithSuspendSale,
+    SortBy,
+    sortBy,
+    sortByDirection,
+    SortByDirection,
     SuspendSaleBody,
     Trade,
+    TypeLine,
+    typeLines,
 } from '../common/types';
 
 /**
@@ -90,7 +106,7 @@ router.post('/addCardToInventory', (req: AddCardToInventoryReq, res, next) => {
     const schema = Joi.object<AddCardToInventoryReqBody>({
         quantity: Joi.number().integer().required(),
         finishCondition: Joi.string()
-            .valid(...finishes)
+            .valid(...finishConditions)
             .required(),
         cardInfo: Joi.object({
             id: Joi.string().required(),
@@ -100,10 +116,13 @@ router.post('/addCardToInventory', (req: AddCardToInventoryReq, res, next) => {
         }).required(),
     });
 
-    const { error } = schema.validate(req.body, {
-        abortEarly: false,
-        allowUnknown: true,
-    });
+    const { error }: JoiValidation<AddCardToInventoryReqBody> = schema.validate(
+        req.body,
+        {
+            abortEarly: false,
+            allowUnknown: true,
+        }
+    );
 
     if (error) {
         return res.status(400).json(error);
@@ -143,7 +162,7 @@ router.post('/finishSale', (req: ReqWithFinishSaleCards, res, next) => {
         name: Joi.string().required(),
         set_name: Joi.string().required(),
         finishCondition: Joi.string()
-            .valid(...finishes)
+            .valid(...finishConditions)
             .required(),
     });
 
@@ -151,10 +170,13 @@ router.post('/finishSale', (req: ReqWithFinishSaleCards, res, next) => {
 
     try {
         for (let card of cards) {
-            const { error } = schema.validate(card, {
-                abortEarly: false,
-                allowUnknown: true,
-            });
+            const { error }: JoiValidation<FinishSaleCard> = schema.validate(
+                card,
+                {
+                    abortEarly: false,
+                    allowUnknown: true,
+                }
+            );
 
             if (error) {
                 return res.status(400).json(error);
@@ -202,11 +224,27 @@ router.get('/allSales', async (req: RequestWithUserInfo, res) => {
     }
 });
 
+interface GetSaleByTitleQuery {
+    cardName: string;
+}
+
 router.get('/getSaleByTitle', async (req: RequestWithUserInfo, res) => {
+    const schema = Joi.object<GetSaleByTitleQuery>({
+        cardName: Joi.string().required(),
+    });
+
+    const { error, value }: JoiValidation<GetSaleByTitleQuery> =
+        schema.validate(req.query, {
+            abortEarly: false,
+        });
+
+    if (error) {
+        return res.status(400).json(error);
+    }
+
     try {
-        const { cardName } = req.query;
         const message = await getSalesFromCardname(
-            cardName,
+            value.cardName,
             req.currentLocation
         );
         res.status(200).send(message);
@@ -226,7 +264,7 @@ router.post('/receiveCards', (req: ReqWithReceivingCards, res, next) => {
         name: Joi.string().required(),
         set_name: Joi.string().required(),
         finishCondition: Joi.string()
-            .valid(...finishes)
+            .valid(...finishConditions)
             .required(),
         set: Joi.string().required(),
         creditPrice: Joi.number().min(0).required(),
@@ -239,10 +277,13 @@ router.post('/receiveCards', (req: ReqWithReceivingCards, res, next) => {
 
     try {
         for (let card of cards) {
-            const { error } = schema.validate(card, {
-                abortEarly: false,
-                allowUnknown: true,
-            });
+            const { error }: JoiValidation<ReceivingCard> = schema.validate(
+                card,
+                {
+                    abortEarly: false,
+                    allowUnknown: true,
+                }
+            );
 
             if (error) {
                 return res.status(400).json(error);
@@ -311,7 +352,7 @@ router.post('/suspendSale', async (req: ReqWithSuspendSale, res) => {
                 name: Joi.string().required(),
                 set_name: Joi.string().required(),
                 finishCondition: Joi.string()
-                    .valid(...finishes)
+                    .valid(...finishConditions)
                     .required(),
             })
         ),
@@ -319,10 +360,13 @@ router.post('/suspendSale', async (req: ReqWithSuspendSale, res) => {
 
     const { customerName = '', notes = '', saleList = [] } = req.body;
 
-    const { error } = schema.validate(req.body, {
-        abortEarly: false,
-        allowUnknown: true,
-    });
+    const { error }: JoiValidation<SuspendSaleBody> = schema.validate(
+        req.body,
+        {
+            abortEarly: false,
+            allowUnknown: true,
+        }
+    );
 
     if (error) {
         return res.status(400).json(error);
@@ -354,41 +398,56 @@ router.delete('/suspendSale/:id', async (req: RequestWithUserInfo, res) => {
     }
 });
 
-router.get('/getCardsByFilter', async (req: RequestWithUserInfo, res) => {
-    try {
-        const { currentLocation: location } = req;
-        const {
-            title,
-            setName,
-            format,
-            priceNum,
-            priceFilter,
-            finish,
-            colors,
-            sortBy,
-            sortByDirection,
-            colorSpecificity,
-            page,
-            type,
-            frame,
-        }: Partial<Arguments> = req.query;
+export interface GetCardsByFilterQuery {
+    title?: string;
+    setName?: string;
+    format?: FormatLegality;
+    price?: number;
+    finish?: Finish;
+    colors?: string;
+    sortBy?: SortBy;
+    colorSpecificity?: ColorSpecificity;
+    type?: TypeLine;
+    frame?: Frame;
+    priceOperator: PriceFilter;
+    sortByDirection: SortByDirection;
+    page: number;
+}
 
-        const message = await getCardsByFilter({
-            title,
-            setName,
-            format,
-            priceNum,
-            priceFilter,
-            finish,
-            colors,
-            colorSpecificity,
-            sortBy,
-            sortByDirection,
-            page,
-            type,
-            frame,
-            location,
+router.get('/getCardsByFilter', async (req: RequestWithUserInfo, res) => {
+    const schema = Joi.object<GetCardsByFilterQuery>({
+        title: Joi.string(),
+        setName: Joi.string(),
+        format: Joi.string().valid(...formatLegalities),
+        price: Joi.number().positive().allow(0),
+        finish: Joi.string().valid(...finish),
+        colors: Joi.string(),
+        sortBy: Joi.string().valid(...sortBy),
+        colorSpecificity: Joi.string().valid(...colorSpecificity),
+        type: Joi.string().valid(...typeLines),
+        frame: Joi.string().valid(...frames),
+        priceOperator: Joi.string()
+            .valid(...priceFilters)
+            .required(),
+        sortByDirection: Joi.number()
+            .valid(...sortByDirection)
+            .required(),
+        page: Joi.number().integer().min(1).required(),
+    });
+
+    const { error, value }: JoiValidation<GetCardsByFilterQuery> =
+        schema.validate(req.query, {
+            abortEarly: false,
         });
+
+    if (error) {
+        return res.status(400).json(error);
+    }
+
+    try {
+        const { currentLocation } = req;
+
+        const message = await getCardsByFilter(value, currentLocation);
 
         res.status(200).json(message);
     } catch (err) {
@@ -407,26 +466,46 @@ router.get('/getDistinctSetNames', async (req: RequestWithUserInfo, res) => {
     }
 });
 
-router.get('/getCardsWithInfo', async (req: RequestWithUserInfo, res) => {
-    try {
-        const { title, matchInStock } = req.query;
-        const myMatch = matchInStock === 'true';
+interface GetCardsWithInfoQuery {
+    title: string;
+    matchInStock: boolean;
+}
 
-        if (typeof title === 'string') {
-            const message = await getCardsWithInfo(
-                title,
-                myMatch,
-                req.currentLocation
-            );
-            res.status(200).send(message);
-        } else {
-            throw new Error('title should be a string');
-        }
+router.get('/getCardsWithInfo', async (req: RequestWithUserInfo, res) => {
+    const schema = Joi.object({
+        title: Joi.string().required(),
+        matchInStock: Joi.boolean().required(),
+    });
+
+    const { error, value }: JoiValidation<GetCardsWithInfoQuery> =
+        schema.validate(req.query, {
+            abortEarly: false,
+        });
+
+    if (error) {
+        return res.status(400).json(error);
+    }
+
+    try {
+        const { title, matchInStock } = value;
+
+        const message = await getCardsWithInfo(
+            title,
+            matchInStock,
+            req.currentLocation
+        );
+        res.status(200).send(message);
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
     }
 });
+
+interface ReceivedCardQuery {
+    startDate: string | null;
+    endDate: string | null;
+    cardName: string | null;
+}
 
 router.get('/getReceivedCards', async (req: RequestWithUserInfo, res) => {
     const schema = Joi.object<ReceivedCardQuery>({
@@ -435,10 +514,12 @@ router.get('/getReceivedCards', async (req: RequestWithUserInfo, res) => {
         cardName: Joi.string().allow(null),
     });
 
-    const { error, value }: { error?: Error; value: ReceivedCardQuery } =
-        schema.validate(req.query, {
+    const { error, value }: JoiValidation<ReceivedCardQuery> = schema.validate(
+        req.query,
+        {
             abortEarly: false,
-        });
+        }
+    );
 
     if (error) {
         return res.status(400).json(error);

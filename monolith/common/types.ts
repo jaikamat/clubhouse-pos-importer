@@ -24,6 +24,11 @@ export const finishes = [
     'FOIL_HP',
 ] as const;
 
+export const locations: Readonly<[ClubhouseLocation, ClubhouseLocation]> = [
+    'ch1',
+    'ch2',
+] as const;
+
 export type FinishCondition = typeof finishes[number];
 
 export interface QOH {
@@ -114,12 +119,6 @@ export interface JwtBody {
 
 export interface JwtRequest extends Request {
     body: JwtBody;
-}
-
-export interface RequestWithQuery extends Request {
-    query: {
-        title: string;
-    };
 }
 
 export type JoiValidation<T> = {

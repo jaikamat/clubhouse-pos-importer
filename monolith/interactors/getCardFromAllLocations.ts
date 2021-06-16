@@ -15,9 +15,27 @@ async function getSingleLocationCard(
     const match = {
         $match: {
             name: title,
-            games: {
-                $in: ['paper'],
-            },
+            $or: [
+                /**
+                 * Some cards with _no_ `games` array, we want to include
+                 *
+                 * ex. World Championship cards, and freshly-added cards are in this list
+                 */
+                {
+                    'games.0': {
+                        $exists: false,
+                    },
+                },
+                /**
+                 * We also want to include cards that, if they _do_ have a `games` array,
+                 * include "paper" as a game type
+                 */
+                {
+                    games: {
+                        $in: ['paper'],
+                    },
+                },
+            ],
         },
     };
 

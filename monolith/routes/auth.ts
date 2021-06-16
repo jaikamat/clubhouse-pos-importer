@@ -402,14 +402,14 @@ export interface GetCardsByFilterQuery {
     title?: string;
     setName?: string;
     format?: FormatLegality;
-    priceNum?: number;
+    price?: number;
     finish?: Finish;
     colors?: string;
     sortBy?: SortBy;
     colorSpecificity?: ColorSpecificity;
     type?: TypeLine;
     frame?: Frame;
-    priceFilter: PriceFilter;
+    priceOperator: PriceFilter;
     sortByDirection: SortByDirection;
     page: number;
 }
@@ -419,14 +419,14 @@ router.get('/getCardsByFilter', async (req: RequestWithUserInfo, res) => {
         title: Joi.string(),
         setName: Joi.string(),
         format: Joi.string().valid(...formatLegalities),
-        priceNum: Joi.number().positive().allow(0),
+        price: Joi.number().positive().allow(0),
         finish: Joi.string().valid(...finish),
         colors: Joi.string(),
         sortBy: Joi.string().valid(...sortBy),
         colorSpecificity: Joi.string().valid(...colorSpecificity),
         type: Joi.string().valid(...typeLines),
         frame: Joi.string().valid(...frames),
-        priceFilter: Joi.string()
+        priceOperator: Joi.string()
             .valid(...priceFilters)
             .required(),
         sortByDirection: Joi.number()

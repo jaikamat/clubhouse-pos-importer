@@ -26,8 +26,8 @@ const getCardsByFilter = async (
         title,
         setName,
         format,
-        priceNum,
-        priceFilter,
+        price,
+        priceOperator,
         finish,
         colors,
         sortBy,
@@ -266,8 +266,8 @@ const getCardsByFilter = async (
         endMatch[`inventory.v`] = { $gt: 0 };
 
         // Price filtering logic
-        if (priceNum && priceFilter) {
-            endMatch.price = { [`$${priceFilter}`]: priceNum };
+        if (price && priceOperator) {
+            endMatch.price = { [`$${priceOperator}`]: price };
         }
 
         aggregation.push({ $match: endMatch });

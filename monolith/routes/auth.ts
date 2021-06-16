@@ -26,7 +26,6 @@ import {
     finishes,
     FinishSaleCard,
     JoiValidation,
-    ReceivedCardQuery,
     ReceivingCard,
     RequestWithUserInfo,
     ReqWithFinishSaleCards,
@@ -209,11 +208,27 @@ router.get('/allSales', async (req: RequestWithUserInfo, res) => {
     }
 });
 
+interface GetSaleByTitleQuery {
+    cardName: string;
+}
+
 router.get('/getSaleByTitle', async (req: RequestWithUserInfo, res) => {
+    const schema = Joi.object<GetSaleByTitleQuery>({
+        cardName: Joi.string().required(),
+    });
+
+    const { error, value }: JoiValidation<GetSaleByTitleQuery> =
+        schema.validate(req.query, {
+            abortEarly: false,
+        });
+
+    if (error) {
+        return res.status(400).json(error);
+    }
+
     try {
-        const { cardName } = req.query;
         const message = await getSalesFromCardname(
-            cardName,
+            value.cardName,
             req.currentLocation
         );
         res.status(200).send(message);
@@ -367,6 +382,7 @@ router.delete('/suspendSale/:id', async (req: RequestWithUserInfo, res) => {
     }
 });
 
+// TODO: this
 router.get('/getCardsByFilter', async (req: RequestWithUserInfo, res) => {
     try {
         const { currentLocation: location } = req;
@@ -420,26 +436,46 @@ router.get('/getDistinctSetNames', async (req: RequestWithUserInfo, res) => {
     }
 });
 
-router.get('/getCardsWithInfo', async (req: RequestWithUserInfo, res) => {
-    try {
-        const { title, matchInStock } = req.query;
-        const myMatch = matchInStock === 'true';
+interface GetCardsWithInfoQuery {
+    title: string;
+    matchInStock: boolean;
+}
 
-        if (typeof title === 'string') {
-            const message = await getCardsWithInfo(
-                title,
-                myMatch,
-                req.currentLocation
-            );
-            res.status(200).send(message);
-        } else {
-            throw new Error('title should be a string');
-        }
+router.get('/getCardsWithInfo', async (req: RequestWithUserInfo, res) => {
+    const schema = Joi.object({
+        title: Joi.string().required(),
+        matchInStock: Joi.boolean().required(),
+    });
+
+    const { error, value }: JoiValidation<GetCardsWithInfoQuery> =
+        schema.validate(req.query, {
+            abortEarly: false,
+        });
+
+    if (error) {
+        return res.status(400).json(error);
+    }
+
+    try {
+        const { title, matchInStock } = value;
+
+        const message = await getCardsWithInfo(
+            title,
+            matchInStock,
+            req.currentLocation
+        );
+        res.status(200).send(message);
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
     }
 });
+
+interface ReceivedCardQuery {
+    startDate: string | null;
+    endDate: string | null;
+    cardName: string | null;
+}
 
 router.get('/getReceivedCards', async (req: RequestWithUserInfo, res) => {
     const schema = Joi.object<ReceivedCardQuery>({

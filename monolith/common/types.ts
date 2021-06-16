@@ -105,12 +105,6 @@ export interface ReqWithSuspendSale extends RequestWithUserInfo {
     body: SuspendSaleBody;
 }
 
-export interface ReceivedCardQuery {
-    startDate: string | null;
-    endDate: string | null;
-    cardName: string | null;
-}
-
 export interface JwtBody {
     username: string;
     password: string;

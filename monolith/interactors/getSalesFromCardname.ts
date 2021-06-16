@@ -2,7 +2,10 @@ import { ClubhouseLocation } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 
-async function getSalesFromCardname(cardName, location: ClubhouseLocation) {
+async function getSalesFromCardname(
+    cardName: string,
+    location: ClubhouseLocation
+) {
     try {
         const db = await getDatabaseConnection();
 

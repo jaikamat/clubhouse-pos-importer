@@ -6,11 +6,9 @@ import { InventoryCard } from '../utils/ScryfallCard';
 import sortSaleList from '../utils/sortSaleList';
 import createToast from '../common/createToast';
 import makeAuthHeader from '../utils/makeAuthHeader';
-import getSuspendedSaleQuery, {
-    SaleListCard,
-    SuspendedSale,
-} from './getSuspendedSaleQuery';
+import getSuspendedSaleQuery, { SuspendedSale } from './getSuspendedSaleQuery';
 import deleteSuspendedSaleQuery from './deleteSuspendedSaleQuery';
+import createSuspendedSaleQuery from './createSuspendedSaleQuery';
 
 interface Props {}
 
@@ -18,6 +16,12 @@ interface SuspendSaleArgs {
     customerName: string;
     notes: string;
 }
+
+export type SaleListCard = InventoryCard & {
+    finishCondition: string;
+    qtyToSell: number;
+    price: number;
+};
 
 export interface SaleContext {
     saleListCards: SaleListCard[];
@@ -148,15 +152,11 @@ export const SaleProvider: FC<Props> = ({ children }) => {
                 // If we're suspended, delete the previous to replace
                 await deleteSuspendedSaleQuery(_id);
 
-            const { data } = await axios.post(
-                SUSPEND_SALE,
-                {
-                    customerName: customerName,
-                    notes: notes,
-                    saleList: saleListCards,
-                },
-                { headers: makeAuthHeader() }
-            );
+            const data = await createSuspendedSaleQuery({
+                customerName: customerName,
+                notes: notes,
+                saleList: saleListCards,
+            });
 
             resetSaleState();
 

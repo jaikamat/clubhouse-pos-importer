@@ -12,10 +12,8 @@ import {
 } from 'semantic-ui-react';
 import styled from 'styled-components';
 import makeAuthHeader from '../utils/makeAuthHeader';
-import {
-    SaleContext,
-    SuspendedSale as SuspendedSaleT,
-} from '../context/SaleContext';
+import { SaleContext } from '../context/SaleContext';
+import { SuspendedSale as SuspendedSaleT } from '../context/getSuspendedSaleQuery';
 
 interface Props {
     id: string;

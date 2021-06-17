@@ -226,6 +226,7 @@ const DeckboxCloneForm: FC<Props> = ({ doSubmit }) => {
                                     label="Edition"
                                     options={editionDropdownOptions}
                                     component={FormikSelectField}
+                                    search
                                 />
                                 <Field
                                     name="finish"
@@ -238,9 +239,9 @@ const DeckboxCloneForm: FC<Props> = ({ doSubmit }) => {
                                 <Field
                                     name="colorsArray"
                                     label="Colors"
-                                    multiple
                                     options={sortByColorDropdownOptions}
                                     component={FormikSelectField}
+                                    multiple
                                 />
                                 <Field
                                     name="colorSpecificity"

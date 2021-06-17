@@ -10,7 +10,7 @@ import {
 } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { SaleContext } from '../context/SaleContext';
-import { SuspendedSale as SuspendedSaleT } from '../context/getSuspendedSaleQuery';
+import { SuspendedSale } from '../context/getSuspendedSaleQuery';
 import getSuspendedSalesQuery from './getSuspendedSalesQuery';
 
 interface Props {
@@ -50,7 +50,7 @@ const SuspendedSale: FC<Props> = ({
     suspendSale,
     id,
 }) => {
-    const [sales, setSales] = useState<SuspendedSaleT[]>([]);
+    const [sales, setSales] = useState<SuspendedSale[]>([]);
     const [saleID, setSaleID] = useState<string>('');
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [customerName, setCustomerName] = useState<string>('');

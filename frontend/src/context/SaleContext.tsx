@@ -9,6 +9,7 @@ import makeAuthHeader from '../utils/makeAuthHeader';
 import getSuspendedSaleQuery, { SuspendedSale } from './getSuspendedSaleQuery';
 import deleteSuspendedSaleQuery from './deleteSuspendedSaleQuery';
 import createSuspendedSaleQuery from './createSuspendedSaleQuery';
+import finishSaleQuery from './finishSaleQuery';
 
 interface Props {}
 
@@ -205,18 +206,14 @@ export const SaleProvider: FC<Props> = ({ children }) => {
             // Must delete currently suspended sale to faithfully restore inventory prior to sale
             if (!!_id) await deleteSuspendedSaleQuery(_id);
 
-            const { data } = await axios.post(
-                FINISH_SALE,
-                { cards: saleListCards },
-                { headers: makeAuthHeader() }
-            );
-
-            const saleID = data.sale_data.Sale.saleID;
+            const { sale_data } = await finishSaleQuery({
+                cards: saleListCards,
+            });
 
             createToast({
                 color: 'green',
                 header: 'Sale created in Lightspeed!',
-                message: `The id number is #${saleID}`,
+                message: `The id number is #${sale_data.Sale.saleID}`,
             });
 
             resetSaleState();

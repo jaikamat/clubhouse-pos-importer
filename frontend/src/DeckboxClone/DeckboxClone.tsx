@@ -182,7 +182,7 @@ const DeckboxClone: FC = () => {
                     <Table.Body>
                         {cards.map((card) => (
                             <DeckboxCloneRow
-                                key={`${card._id}${card.inventory.k}`}
+                                key={`${card._id}-${card.finishCondition}`}
                                 card={card}
                             />
                         ))}

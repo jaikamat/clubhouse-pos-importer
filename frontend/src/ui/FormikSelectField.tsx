@@ -9,16 +9,16 @@ type FormikFieldProps<T, O> = {
 } & Omit<FormFieldProps, 'label' | 'name' | 'options'>;
 
 /**
- * This is meant to be wrapped by a <Form /> component.
+ * This is meant to be wrapped by a <Field /> component.
  *
  * The generics are inferred by passed prop values.
  */
 function FormikSelectField<T, O>({
     label,
     options,
-    /** Injected by <Form /> */
+    /** Injected by <Field /> */
     field,
-    /** Injected by <Form /> */
+    /** Injected by <Field /> */
     form,
     ...props
 }: FormikFieldProps<T, O>) {

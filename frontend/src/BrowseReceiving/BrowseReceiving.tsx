@@ -1,50 +1,97 @@
 import React, { FC, useEffect, useState } from 'react';
-import SearchBar from '../common/SearchBar';
 import browseReceivingQuery, { Received } from './browseReceivingQuery';
 import { Grid, Typography, Box, CircularProgress } from '@material-ui/core';
 import ReceivingListItem from './ReceivingListItem';
-import Button from '../ui/Button';
+import moment from 'moment';
+import { Formik, Form as FormikForm, Field } from 'formik';
+import { Form, Input } from 'semantic-ui-react';
+import FormikSearchBar from '../ui/FormikSearchBar';
+
+interface FormValues {
+    cardName: string;
+    startDate: string;
+    endDate: string;
+}
+
+const initialFormValues: FormValues = {
+    cardName: '',
+    startDate: moment().subtract(30, 'days').format('YYYY-MM-DD'),
+    endDate: moment().format('YYYY-MM-DD'),
+};
 
 const BrowseReceiving: FC = () => {
     const [receivedList, setReceivedList] = useState<Received[]>([]);
-    const [cardName, setCardName] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const [count, setCount] = useState<number>(0);
+
+    const onSubmit = async ({ cardName, startDate, endDate }: FormValues) => {
+        setLoading(true);
+        const received = await browseReceivingQuery({
+            cardName: cardName ? cardName : null,
+            startDate,
+            endDate,
+        });
+        setLoading(false);
+        setReceivedList(received);
+    };
 
     useEffect(() => {
         (async () => {
-            setLoading(true);
-            const received = await browseReceivingQuery({
-                cardName,
-                startDate: null,
-                endDate: null,
-            });
-            setLoading(false);
-            setReceivedList(received);
+            await onSubmit(initialFormValues);
         })();
-    }, [cardName]);
-
-    const handleSearchSelect = (cardName: string) => setCardName(cardName);
-
-    // This used to reset the key of the searchbar to force a rerender via key change and state reset
-    // Hacky but gets the job done until we can refactor the search bar component
-    const handleClear = () => {
-        setCount(count + 1);
-        setCardName(null);
-    };
+    }, []);
 
     return (
         <div>
             <Box display="flex">
-                <Box pr={2}>
-                    <SearchBar
-                        handleSearchSelect={handleSearchSelect}
-                        key={count}
-                    />
+                <Box pr={2} width={1}>
+                    <Formik
+                        initialValues={initialFormValues}
+                        onSubmit={onSubmit}
+                    >
+                        {({ handleChange }) => (
+                            <FormikForm>
+                                <Form>
+                                    <Form.Group widths="4">
+                                        <Form.Field>
+                                            <Field
+                                                name="cardName"
+                                                label="Card name"
+                                                component={FormikSearchBar}
+                                            />
+                                        </Form.Field>
+                                        <Form.Field>
+                                            <label>Start date</label>
+                                            <Input
+                                                id="startDate"
+                                                name="startDate"
+                                                type="date"
+                                                onChange={handleChange}
+                                                defaultValue={
+                                                    initialFormValues.startDate
+                                                }
+                                            />
+                                        </Form.Field>
+                                        <Form.Field>
+                                            <label>End date</label>
+                                            <Input
+                                                id="endDate"
+                                                name="endDate"
+                                                type="date"
+                                                onChange={handleChange}
+                                                defaultValue={
+                                                    initialFormValues.endDate
+                                                }
+                                            />
+                                        </Form.Field>
+                                        <Form.Button type="submit" primary>
+                                            Search
+                                        </Form.Button>
+                                    </Form.Group>
+                                </Form>
+                            </FormikForm>
+                        )}
+                    </Formik>
                 </Box>
-                {cardName && (
-                    <Button onClick={handleClear}>Clear filter</Button>
-                )}
             </Box>
             <Box py={2}>
                 <Typography variant="h5">
@@ -55,13 +102,11 @@ const BrowseReceiving: FC = () => {
                 <CircularProgress />
             ) : (
                 <Grid container direction="column" spacing={2}>
-                    {receivedList.map((rl) => {
-                        return (
-                            <Grid item xs={12} md={6} key={rl._id}>
-                                <ReceivingListItem received={rl} />
-                            </Grid>
-                        );
-                    })}
+                    {receivedList.map((rl) => (
+                        <Grid item xs={12} md={6} key={rl._id}>
+                            <ReceivingListItem received={rl} />
+                        </Grid>
+                    ))}
                 </Grid>
             )}
         </div>

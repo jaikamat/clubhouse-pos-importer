@@ -33,10 +33,6 @@ export interface Received {
     created_by: ReceivedUser;
 }
 
-interface Response {
-    data: Received[];
-}
-
 interface Payload {
     cardName: string | null;
     startDate: string | null;
@@ -49,9 +45,8 @@ const browseReceivingQuery = async ({
     endDate,
 }: Payload) => {
     try {
-        const { data }: Response = await axios.get(GET_RECEIVING_LIST, {
-            // TODO: pass date params
-            params: { cardName },
+        const { data } = await axios.get<Received[]>(GET_RECEIVING_LIST, {
+            params: { cardName, startDate, endDate },
             headers: makeAuthHeader(),
         });
         return data;

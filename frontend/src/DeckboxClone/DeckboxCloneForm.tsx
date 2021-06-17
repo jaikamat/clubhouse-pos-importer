@@ -2,8 +2,10 @@ import React, { FC, SyntheticEvent, useEffect, useState } from 'react';
 import SearchBar from '../common/SearchBar';
 import { GET_SET_NAMES } from '../utils/api_resources';
 import axios from 'axios';
-import { Form, Input, Select, Dropdown, Segment } from 'semantic-ui-react';
+import { Form, Input, Dropdown, Segment } from 'semantic-ui-react';
 import makeAuthHeader from '../utils/makeAuthHeader';
+import { Formik, FormikHelpers, Form as FormikForm, Field } from 'formik';
+import FormikSelectField from '../ui/FormikSelectField';
 
 const formatDropdownOptions = [
     { key: 'qw', value: '', text: 'None' },
@@ -22,7 +24,7 @@ const formatDropdownOptions = [
     { key: 'gh', value: 'oldschool', text: 'Oldschool' },
 ];
 
-const priceFilterDropdownOptions = [
+const priceOperatorDropdownOptions = [
     { key: 'gte', value: 'gte', text: '>=' },
     { key: 'lte', value: 'lte', text: '<=' },
     { key: 'gtx', value: 'gt', text: '>' },
@@ -79,50 +81,17 @@ const frameOptions = [
     { key: 'extendedArt', value: 'showcase', text: 'Showcase' },
 ];
 
-const initialState = {
-    title: '',
-    setName: '',
-    format: '',
-    priceNum: '',
-    priceFilter: 'gte',
-    finish: '',
-    sortBy: 'price',
-    colorsArray: [],
-    sortByDirection: -1,
-    colorSpecificity: '',
-    typeLine: '',
-    setNames: [],
-    frame: '',
-};
-
 interface DropdownOption {
     key: string;
     value: string;
     text: string;
 }
 
-interface State {
-    editionDropdownOptions: DropdownOption[];
-    title: string;
-    setName: string;
-    format: string;
-    priceNum: string;
-    priceFilter: string;
-    finish: string;
-    sortBy: string;
-    colorsArray: string[];
-    sortByDirection: number;
-    colorSpecificity: string;
-    typeLine: string;
-    setNames: string[];
-    frame: string;
-}
-
 interface Response {
     data: string[];
 }
 
-interface SubmitArgument {
+export interface Filters {
     title?: string;
     setName?: string;
     format?: string;
@@ -137,212 +106,222 @@ interface SubmitArgument {
     sortBy: string;
 }
 
-interface Props {
-    handleSubmit: (v: SubmitArgument) => Promise<void>;
+interface FormValues {
+    title: string;
+    setName: string;
+    format: string;
+    price: number;
+    finish: string;
+    colorsArray: string[];
+    colorSpecificity: string;
+    typeLine: string;
+    frame: string;
+    sortByDirection: number;
+    priceOperator: string;
+    sortBy: string;
 }
 
-const DeckboxCloneForm: FC<Props> = ({ handleSubmit }) => {
-    const [state, setState] = useState<State>({
-        ...initialState,
-        editionDropdownOptions: [],
-    });
+export const initialFilters: FormValues = {
+    title: '',
+    setName: '',
+    format: '',
+    price: 0,
+    priceOperator: 'gte',
+    finish: '',
+    sortBy: 'price',
+    colorsArray: [],
+    sortByDirection: -1,
+    colorSpecificity: '',
+    typeLine: '',
+    frame: '',
+};
 
-    const handleSearchSelect = (name: string) => {
-        setState({ ...state, title: name });
+interface Props {
+    doSubmit: (v: Filters) => Promise<void>;
+}
+
+const DeckboxCloneForm: FC<Props> = ({ doSubmit }) => {
+    const [editionDropdownOptions, setEditionDropdownOptions] = useState<
+        DropdownOption[]
+    >([]);
+
+    const onSubmit = async (
+        values: FormValues,
+        {}: FormikHelpers<FormValues>
+    ) => {
+        try {
+            await doSubmit({
+                title: values.title || undefined,
+                setName: values.setName || undefined,
+                format: values.format || undefined,
+                price: Number(values.price) || undefined,
+                finish: values.finish || undefined,
+                colors:
+                    values.colorsArray.length > 0
+                        ? values.colorsArray.sort().join('')
+                        : undefined,
+                colorSpecificity: values.colorSpecificity || undefined,
+                type: values.typeLine || undefined,
+                frame: values.frame || undefined,
+                sortByDirection: values.sortByDirection,
+                priceOperator: values.priceOperator,
+                sortBy: values.sortBy,
+            });
+        } catch (err) {
+            console.log(err);
+        }
     };
-
-    // When the user blurs the search field, we need to re-set state. Otherwise it won't clear from handleSearchSelect()
-    const handleSearchBlur = (event: SyntheticEvent<Element, Event>) => {
-        const element = event.target as HTMLInputElement;
-        setState({ ...state, title: element.value });
-    };
-
-    // const handleChange = (e: SyntheticEvent, { value }) => setState({ ...state, [e.target.name]: e.target.value });
-
-    const handleDropdownChange = (
-        e: SyntheticEvent,
-        data: Record<string, string>
-    ) => setState({ ...state, [data.name]: data.value });
 
     useEffect(() => {
         (async () => {
             const { data }: Response = await axios.get(GET_SET_NAMES, {
                 headers: makeAuthHeader(),
             });
+
             const setNameOptions = data.map((d, idx) => {
                 return { key: `set${idx}`, value: d, text: d };
             });
+
             const concatWithBlankOption = [
                 { key: 'snull', value: '', text: 'None' },
             ].concat(setNameOptions);
-            setState({
-                ...state,
-                editionDropdownOptions: concatWithBlankOption,
-            });
+
+            setEditionDropdownOptions(concatWithBlankOption);
         })();
     }, []);
-
-    const {
-        title,
-        setName,
-        format,
-        priceNum,
-        priceFilter,
-        finish,
-        sortBy,
-        sortByDirection,
-        colorsArray,
-        colorSpecificity,
-        typeLine,
-        frame,
-    } = state;
-
-    // Sort the colors here and concat prior to sending to the backend
-    const colors = colorsArray.sort().join('');
 
     return (
         <Segment>
             <h3>Filters</h3>
-            <Form>
-                <Form.Group widths="4">
-                    <Form.Field>
-                        <label>Card Name</label>
-                        <SearchBar
-                            handleSearchSelect={handleSearchSelect}
-                            onBlur={handleSearchBlur}
-                        />
-                    </Form.Field>
-                    <Form.Field
-                        control={Select}
-                        label="Format"
-                        placeholder="Format"
-                        options={formatDropdownOptions}
-                        name="format"
-                        onChange={handleDropdownChange}
-                    />
-                    <Form.Field
-                        control={Select}
-                        label="Edition"
-                        placeholder="Edition"
-                        search
-                        options={state.editionDropdownOptions}
-                        name="setName"
-                        onChange={handleDropdownChange}
-                    />
-                    <Form.Field
-                        control={Select}
-                        label="Finish"
-                        placeholder="Finish"
-                        options={finishDropdownOptions}
-                        name="finish"
-                        onChange={handleDropdownChange}
-                    />
-                </Form.Group>
-                <Form.Group widths="4">
-                    <Form.Field
-                        control={Select}
-                        multiple
-                        label="Colors"
-                        placeholder="Colors"
-                        options={sortByColorDropdownOptions}
-                        name="colorsArray"
-                        onChange={handleDropdownChange}
-                    />
-
-                    <Form.Field
-                        control={Select}
-                        label="Color specificity"
-                        placeholder="Color specificity"
-                        options={colorSpecificityDropdownOptions}
-                        name="colorSpecificity"
-                        onChange={handleDropdownChange}
-                    />
-
-                    <Form.Field
-                        control={Select}
-                        label="Type Line"
-                        placeholder="Type Line"
-                        options={typeLineOptions}
-                        name="typeLine"
-                        onChange={handleDropdownChange}
-                    />
-
-                    <Form.Field
-                        control={Select}
-                        label="Frame Effects"
-                        placeholder="Effect"
-                        options={frameOptions}
-                        name="frame"
-                        onChange={handleDropdownChange}
-                    />
-
-                    <Form.Field>
-                        <label>Price Filter</label>
-                        <Input
-                            label={
-                                <Dropdown
-                                    options={priceFilterDropdownOptions}
-                                    name="priceFilter"
-                                    defaultValue="gte"
-                                    onChange={handleDropdownChange}
+            <Formik
+                initialValues={initialFilters}
+                validate={() => {}}
+                onSubmit={onSubmit}
+            >
+                {({ handleChange, setFieldValue }) => (
+                    <FormikForm>
+                        <Form>
+                            <Form.Group widths="4">
+                                <Form.Field>
+                                    <label>Card Name</label>
+                                    <SearchBar
+                                        handleSearchSelect={(value) => {
+                                            setFieldValue('title', value);
+                                        }}
+                                        // Reset form state after user blurs title
+                                        onBlur={(
+                                            event: SyntheticEvent<
+                                                Element,
+                                                Event
+                                            >
+                                        ) => {
+                                            const element = event.target as HTMLInputElement;
+                                            setFieldValue(
+                                                'title',
+                                                element.value
+                                            );
+                                        }}
+                                    />
+                                </Form.Field>
+                                <Field
+                                    name="format"
+                                    label="Format"
+                                    options={formatDropdownOptions}
+                                    component={FormikSelectField}
                                 />
-                            }
-                            placeholder="Enter a price"
-                            labelPosition="left"
-                            name="priceNum"
-                            type="number"
-                            onChange={handleDropdownChange}
-                        />
-                    </Form.Field>
-                </Form.Group>
+                                <Field
+                                    name="setName"
+                                    label="Edition"
+                                    options={editionDropdownOptions}
+                                    component={FormikSelectField}
+                                />
+                                <Field
+                                    name="finish"
+                                    label="Finish"
+                                    options={finishDropdownOptions}
+                                    component={FormikSelectField}
+                                />
+                            </Form.Group>
+                            <Form.Group widths="4">
+                                <Field
+                                    name="colorsArray"
+                                    label="Colors"
+                                    multiple
+                                    options={sortByColorDropdownOptions}
+                                    component={FormikSelectField}
+                                />
+                                <Field
+                                    name="colorSpecificity"
+                                    label="Color specificity"
+                                    options={colorSpecificityDropdownOptions}
+                                    component={FormikSelectField}
+                                />
+                                <Field
+                                    name="typeLine"
+                                    label="Type Line"
+                                    options={typeLineOptions}
+                                    component={FormikSelectField}
+                                />
+                                <Field
+                                    name="frame"
+                                    label="Frame Effects"
+                                    options={frameOptions}
+                                    component={FormikSelectField}
+                                />
 
-                <h3>{'Sort & Order'}</h3>
+                                <Form.Field>
+                                    <label>Price Filter</label>
+                                    <Input
+                                        label={
+                                            <Dropdown
+                                                options={
+                                                    priceOperatorDropdownOptions
+                                                }
+                                                name="priceOperator"
+                                                defaultValue="gte"
+                                                // TODO: this
+                                                onChange={handleChange}
+                                            />
+                                        }
+                                        placeholder="Enter a price"
+                                        labelPosition="left"
+                                        name="price"
+                                        type="number"
+                                        onChange={handleChange}
+                                    />
+                                </Form.Field>
+                            </Form.Group>
 
-                <Form.Group>
-                    <Form.Field
-                        control={Select}
-                        label="Sort By"
-                        placeholder=""
-                        options={sortByDropdownOptions}
-                        defaultValue="price"
-                        name="sortBy"
-                        onChange={handleDropdownChange}
-                    />
-                    <Form.Field
-                        control={Select}
-                        label="Order"
-                        options={sortByDirectionDropdownOptions}
-                        defaultValue={-1}
-                        name="sortByDirection"
-                        onChange={handleDropdownChange}
-                    />
-                </Form.Group>
+                            <h3>{'Sort & Order'}</h3>
 
-                <Form.Group>
-                    <Form.Button
-                        primary
-                        onClick={async () => {
-                            console.log({ title });
-                            await handleSubmit({
-                                title: title || undefined,
-                                setName: setName || undefined,
-                                format: format || undefined,
-                                price: Number(priceNum) || undefined,
-                                finish: finish || undefined,
-                                colors: colors || undefined,
-                                colorSpecificity: colorSpecificity || undefined,
-                                type: typeLine || undefined,
-                                frame: frame || undefined,
-                                sortByDirection: sortByDirection,
-                                priceOperator: priceFilter,
-                                sortBy: sortBy,
-                            });
-                        }}
-                    >
-                        Submit
-                    </Form.Button>
-                </Form.Group>
-            </Form>
+                            <Form.Group>
+                                <Field
+                                    name="sortBy"
+                                    label="Sort by"
+                                    options={sortByDropdownOptions}
+                                    component={FormikSelectField}
+                                    defaultValue={initialFilters.price}
+                                />
+                                <Field
+                                    name="sortByDirection"
+                                    label="Order"
+                                    options={sortByDirectionDropdownOptions}
+                                    component={FormikSelectField}
+                                    defaultValue={
+                                        initialFilters.sortByDirection
+                                    }
+                                />
+                            </Form.Group>
+
+                            <Form.Group>
+                                <Form.Button type="submit" primary>
+                                    Submit
+                                </Form.Button>
+                            </Form.Group>
+                        </Form>
+                    </FormikForm>
+                )}
+            </Formik>
         </Segment>
     );
 };

@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { GET_CARDS_BY_FILTER } from '../utils/api_resources';
-import DeckboxCloneForm from './DeckboxCloneForm';
+import DeckboxCloneForm, { Filters, initialFilters } from './DeckboxCloneForm';
 import DeckboxCloneRow from './DeckboxCloneRow';
 import axios from 'axios';
 import makeAuthHeader from '../utils/makeAuthHeader';
@@ -29,21 +29,6 @@ interface State {
     searchTouched: boolean;
 }
 
-interface Filters {
-    title?: string;
-    setName?: string;
-    format?: string;
-    price?: number;
-    finish?: string;
-    colors?: string;
-    sortBy?: string;
-    colorSpecificity?: string;
-    type?: string;
-    frame?: string;
-    priceOperator: string;
-    sortByDirection: number;
-}
-
 const DeckboxClone: FC = () => {
     const [state, setState] = useState<State>({
         data: [],
@@ -52,10 +37,7 @@ const DeckboxClone: FC = () => {
         numPages: 0,
         pageArray: [],
         isLoading: false,
-        cachedFilters: {
-            priceOperator: 'gte',
-            sortByDirection: -1,
-        },
+        cachedFilters: initialFilters,
         showPages: [],
         searchTouched: false, // Tracks whether the user has initially searched for the 'no results' message
     });
@@ -128,7 +110,7 @@ const DeckboxClone: FC = () => {
                 fluctuations. Consult 'New Sale' or 'Manage Inventory' for
                 up-to-date values
             </Segment>
-            <DeckboxCloneForm handleSubmit={handleSubmit} />
+            <DeckboxCloneForm doSubmit={handleSubmit} />
 
             {!!data.length && (
                 <Table celled striped compact>

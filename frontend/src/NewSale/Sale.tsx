@@ -5,7 +5,7 @@ import SearchBar from '../common/SearchBar';
 import BrowseCardList from './BrowseCardList';
 import CustomerSaleList from './CustomerSaleList';
 import PrintList from './PrintList';
-import SuspendedSale from './SuspendedSale';
+import SuspendSales from './SuspendedSale';
 import { InventoryCard } from '../utils/ScryfallCard';
 import { SaleContext } from '../context/SaleContext';
 import TotalCardsLabel from '../common/TotalCardsLabel';
@@ -91,7 +91,7 @@ const Sale: FC<Props> = () => {
                                 />
                             </Header>
                             <ButtonContainer>
-                                <SuspendedSale
+                                <SuspendSales
                                     restoreSale={restoreSale}
                                     suspendSale={suspendSale}
                                     saleListLength={saleListCards.length}

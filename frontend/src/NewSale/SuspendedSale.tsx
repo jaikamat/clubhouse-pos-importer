@@ -43,7 +43,7 @@ const CharLimit = styled.p`
     float: right;
 `;
 
-const SuspendedSale: FC<Props> = ({
+const SuspendSales: FC<Props> = ({
     restoreSale,
     deleteSuspendedSale,
     saleListLength,
@@ -263,4 +263,4 @@ const SuspendedSale: FC<Props> = ({
     );
 };
 
-export default SuspendedSale;
+export default SuspendSales;

@@ -24,7 +24,16 @@ interface Props {
 }
 
 const DeckboxCloneRow: FC<Props> = ({
-    card: { inventory, name, set_name, price, set, rarity, image_uri },
+    card: {
+        finishCondition,
+        quantityInStock,
+        name,
+        set_name,
+        price,
+        set,
+        rarity,
+        image_uri,
+    },
 }) => {
     const [state, setState] = useState<State>({
         mouseInside: false,
@@ -52,8 +61,8 @@ const DeckboxCloneRow: FC<Props> = ({
     };
 
     const { mouseInside, mouseX } = state;
-    const finish = inventory.k.split('_')[0];
-    const condition = inventory.k.split('_')[1] as Condition;
+    const finish = finishCondition.split('_')[0];
+    const condition = finishCondition.split('_')[1] as Condition;
 
     return (
         <Table.Row>
@@ -79,7 +88,7 @@ const DeckboxCloneRow: FC<Props> = ({
                 {set_name}
             </Table.Cell>
             <Table.Cell>{conditionMap[condition]}</Table.Cell>
-            <Table.Cell>{inventory.v}</Table.Cell>
+            <Table.Cell>{quantityInStock}</Table.Cell>
             <Table.Cell>
                 <Price num={price} />
             </Table.Cell>

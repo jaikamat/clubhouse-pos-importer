@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { GET_CARDS_BY_FILTER } from '../utils/api_resources';
 import makeAuthHeader from '../utils/makeAuthHeader';
+import { FinishCondition } from '../utils/ScryfallCard';
 
 export interface Filters {
     title?: string;
@@ -21,21 +22,14 @@ type Params = Filters & { page: number };
 
 export interface ResponseCard {
     _id: string;
-    border_color: string;
-    colors_string: string;
-    colors_string_length: number;
     image_uri: string;
-    inventory: {
-        k: string;
-        v: number;
-    };
-    legalities: Record<string, string>;
     name: string;
     price: number;
     rarity: string;
     set: string;
     set_name: string;
-    type_line: string;
+    finishCondition: FinishCondition;
+    quantityInStock: number;
 }
 
 interface Response {

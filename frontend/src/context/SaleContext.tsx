@@ -177,9 +177,7 @@ export const SaleProvider: FC<Props> = ({ children }) => {
     const deleteSuspendedSale = async () => {
         try {
             const { _id, name } = suspendedSale;
-            await axios.delete(`${SUSPEND_SALE}/${_id}`, {
-                headers: makeAuthHeader(),
-            });
+            await deleteSuspendedSaleQuery(_id);
 
             resetSaleState();
 
@@ -205,10 +203,7 @@ export const SaleProvider: FC<Props> = ({ children }) => {
 
         try {
             // Must delete currently suspended sale to faithfully restore inventory prior to sale
-            if (!!_id)
-                await axios.delete(`${SUSPEND_SALE}/${_id}`, {
-                    headers: makeAuthHeader(),
-                });
+            if (!!_id) await deleteSuspendedSaleQuery(_id);
 
             const { data } = await axios.post(
                 FINISH_SALE,

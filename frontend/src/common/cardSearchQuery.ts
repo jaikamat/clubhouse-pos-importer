@@ -3,10 +3,6 @@ import makeAuthHeader from '../utils/makeAuthHeader';
 import { InventoryCard, ScryfallApiCard } from '../utils/ScryfallCard';
 import { GET_CARDS_WITH_INFO } from '../utils/api_resources';
 
-interface Response {
-    data: ScryfallApiCard[];
-}
-
 interface Payload {
     cardName: string;
     inStockOnly: boolean;
@@ -18,13 +14,16 @@ interface Payload {
  */
 const cardSearchQuery = async ({ cardName, inStockOnly }: Payload) => {
     try {
-        const { data }: Response = await axios.get(GET_CARDS_WITH_INFO, {
-            params: {
-                title: cardName,
-                matchInStock: inStockOnly,
-            },
-            headers: makeAuthHeader(),
-        });
+        const { data } = await axios.get<ScryfallApiCard[]>(
+            GET_CARDS_WITH_INFO,
+            {
+                params: {
+                    title: cardName,
+                    matchInStock: inStockOnly,
+                },
+                headers: makeAuthHeader(),
+            }
+        );
 
         // Turn the raw API cards into inventory cards
         // TODO: Re-evaluate whether this is needed

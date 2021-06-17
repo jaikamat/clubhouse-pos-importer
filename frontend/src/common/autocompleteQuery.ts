@@ -1,13 +1,9 @@
 import axios from 'axios';
 import { AUTOCOMPLETE } from '../utils/api_resources';
 
-interface Response {
-    data: string[];
-}
-
 const autocompleteQuery = async (cardName: string) => {
     try {
-        const { data }: Response = await axios.get(AUTOCOMPLETE, {
+        const { data } = await axios.get<string[]>(AUTOCOMPLETE, {
             params: {
                 title: cardName,
             },

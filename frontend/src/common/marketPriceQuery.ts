@@ -1,11 +1,9 @@
 import Axios from 'axios';
 import { GET_LIVE_PRICE } from '../utils/api_resources';
 
-interface Response {
-    data: {
-        marketPrices: { foil: number; normal: number };
-        medianPrices: { foil: number; normal: number };
-    };
+interface ResponseData {
+    marketPrices: { foil: number; normal: number };
+    medianPrices: { foil: number; normal: number };
 }
 
 interface Payload {
@@ -14,7 +12,7 @@ interface Payload {
 
 const marketPriceQuery = async ({ scryfallId }: Payload) => {
     try {
-        const { data }: Response = await Axios.get(GET_LIVE_PRICE, {
+        const { data } = await Axios.get<ResponseData>(GET_LIVE_PRICE, {
             params: { scryfallId },
         });
 

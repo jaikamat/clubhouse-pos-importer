@@ -32,7 +32,7 @@ export interface ResponseCard {
     quantityInStock: number;
 }
 
-interface Response {
+interface ResponseData {
     cards: ResponseCard[];
     total: number;
 }
@@ -40,7 +40,7 @@ interface Response {
 const filteredCardsQuery = async (filters: Filters, page: number) => {
     const params: Params = { ...filters, page };
 
-    const { data } = await axios.get<Response>(GET_CARDS_BY_FILTER, {
+    const { data } = await axios.get<ResponseData>(GET_CARDS_BY_FILTER, {
         params,
         headers: makeAuthHeader(),
     });

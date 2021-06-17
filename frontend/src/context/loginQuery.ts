@@ -4,8 +4,8 @@ import makeAuthHeader from '../utils/makeAuthHeader';
 
 type ClubhouseLocation = 'ch1' | 'ch2';
 
-interface Response {
-    data: { token: string };
+interface ResponseData {
+    token: string;
 }
 
 const loginQuery = async (
@@ -14,7 +14,7 @@ const loginQuery = async (
     currentLocation: ClubhouseLocation
 ) => {
     try {
-        const { data }: Response = await axios.post(
+        const { data } = await axios.post<ResponseData>(
             LOGIN,
             {
                 username: username.toLowerCase(),

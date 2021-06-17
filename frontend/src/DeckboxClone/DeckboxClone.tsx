@@ -1,9 +1,6 @@
 import React, { FC, useState } from 'react';
-import { GET_CARDS_BY_FILTER } from '../utils/api_resources';
 import DeckboxCloneForm, { initialFilters } from './DeckboxCloneForm';
 import DeckboxCloneRow from './DeckboxCloneRow';
-import axios from 'axios';
-import makeAuthHeader from '../utils/makeAuthHeader';
 import {
     Table,
     Menu,
@@ -15,11 +12,14 @@ import {
     Container,
 } from 'semantic-ui-react';
 import _ from 'lodash';
-import { Filters } from './filteredCardsQuery';
+import filteredCardsQuery, {
+    Filters,
+    ResponseCard,
+} from './filteredCardsQuery';
 const LIMIT = 100; // Matching the backend for now
 
 interface State {
-    data: any[];
+    cards: ResponseCard[];
     count: number;
     currentPage: number;
     numPages: number;
@@ -32,7 +32,7 @@ interface State {
 
 const DeckboxClone: FC = () => {
     const [state, setState] = useState<State>({
-        data: [],
+        cards: [],
         count: 0,
         currentPage: 0,
         numPages: 0,
@@ -47,12 +47,9 @@ const DeckboxClone: FC = () => {
         try {
             setState({ ...state, isLoading: true });
 
-            const { data } = await axios.get(GET_CARDS_BY_FILTER, {
-                params: { ...filters, page },
-                headers: makeAuthHeader(),
-            });
+            const { cards, total } = await filteredCardsQuery(filters, page);
 
-            const numPages = Math.ceil(data.total / LIMIT);
+            const numPages = Math.ceil(total / LIMIT);
             const pages = _.range(1, numPages + 1);
             let showPages;
 
@@ -68,8 +65,8 @@ const DeckboxClone: FC = () => {
 
             setState({
                 ...state,
-                data: data.cards,
-                count: data.total,
+                cards: cards,
+                count: total,
                 isLoading: false,
                 numPages: numPages,
                 currentPage: page,
@@ -91,7 +88,7 @@ const DeckboxClone: FC = () => {
         setState({ ...state, currentPage: page });
     };
 
-    const { data, isLoading, currentPage, numPages, count } = state;
+    const { cards, isLoading, currentPage, numPages, count } = state;
     const showLeftPageButtons = !(currentPage === 1);
     const showRightPageButtons = !(currentPage === numPages);
 
@@ -113,7 +110,7 @@ const DeckboxClone: FC = () => {
             </Segment>
             <DeckboxCloneForm doSubmit={handleSubmit} />
 
-            {!!data.length && (
+            {!!cards.length && (
                 <Table celled striped compact>
                     <Table.Header>
                         <Table.Row>
@@ -181,10 +178,10 @@ const DeckboxClone: FC = () => {
                     </Table.Header>
 
                     <Table.Body>
-                        {data.map((d) => (
+                        {cards.map((card) => (
                             <DeckboxCloneRow
-                                {...d}
-                                key={`${d._id}${d.inventory.k}`}
+                                key={`${card._id}${card.inventory.k}`}
+                                card={card}
                             />
                         ))}
                     </Table.Body>
@@ -246,7 +243,7 @@ const DeckboxClone: FC = () => {
                 </Table>
             )}
 
-            {!data.length && (
+            {!cards.length && (
                 <Segment placeholder>
                     <Header icon>
                         <Icon name="search" />

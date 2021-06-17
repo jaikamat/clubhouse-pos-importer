@@ -17,11 +17,31 @@ export interface Filters {
     sortBy: string;
 }
 
-interface Response {
-    data: any[];
+type Params = Filters & { page: number };
+
+export interface ResponseCard {
+    _id: string;
+    border_color: string;
+    colors_string: string;
+    colors_string_length: number;
+    image_uri: string;
+    inventory: {
+        k: string;
+        v: number;
+    };
+    legalities: Record<string, string>;
+    name: string;
+    price: number;
+    rarity: string;
+    set: string;
+    set_name: string;
+    type_line: string;
 }
 
-type Params = Filters & { page: number };
+interface Response {
+    cards: ResponseCard[];
+    total: number;
+}
 
 const filteredCardsQuery = async (filters: Filters, page: number) => {
     const params: Params = { ...filters, page };

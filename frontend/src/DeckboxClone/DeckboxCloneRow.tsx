@@ -2,7 +2,7 @@ import React, { FC, useState, MouseEvent } from 'react';
 import { Table, Icon } from 'semantic-ui-react';
 import Price from '../common/Price';
 import TooltipImage from '../common/TooltipImage';
-import { FinishCondition } from '../utils/ScryfallCard';
+import { ResponseCard } from './filteredCardsQuery';
 
 const conditionMap = {
     NM: 'Near Mint',
@@ -10,21 +10,6 @@ const conditionMap = {
     MP: 'Moderate Play',
     HP: 'Heavy Play',
 };
-
-interface Inventory {
-    k: FinishCondition;
-    v: number;
-}
-
-interface Props {
-    inventory: Inventory;
-    name: string;
-    set_name: string;
-    price: number;
-    set: string;
-    rarity: string;
-    image_uri: string;
-}
 
 type Condition = keyof typeof conditionMap;
 
@@ -34,14 +19,12 @@ interface State {
     mouseY: number;
 }
 
+interface Props {
+    card: ResponseCard;
+}
+
 const DeckboxCloneRow: FC<Props> = ({
-    inventory,
-    name,
-    set_name,
-    price,
-    set,
-    rarity,
-    image_uri,
+    card: { inventory, name, set_name, price, set, rarity, image_uri },
 }) => {
     const [state, setState] = useState<State>({
         mouseInside: false,

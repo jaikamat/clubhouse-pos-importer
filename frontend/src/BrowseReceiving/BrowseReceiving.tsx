@@ -4,8 +4,9 @@ import { Grid, Typography, Box, CircularProgress } from '@material-ui/core';
 import ReceivingListItem from './ReceivingListItem';
 import moment from 'moment';
 import { Formik, Form as FormikForm, Field } from 'formik';
-import { Form, Input } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
 import FormikSearchBar from '../ui/FormikSearchBar';
+import FormikNativeDatePicker from '../ui/FormikNativeDatePicker';
 
 interface FormValues {
     cardName: string;
@@ -48,48 +49,34 @@ const BrowseReceiving: FC = () => {
                         initialValues={initialFormValues}
                         onSubmit={onSubmit}
                     >
-                        {({ handleChange }) => (
-                            <FormikForm>
-                                <Form>
-                                    <Form.Group widths="4">
-                                        <Form.Field>
-                                            <Field
-                                                name="cardName"
-                                                label="Card name"
-                                                component={FormikSearchBar}
-                                            />
-                                        </Form.Field>
-                                        <Form.Field>
-                                            <label>Start date</label>
-                                            <Input
-                                                id="startDate"
-                                                name="startDate"
-                                                type="date"
-                                                onChange={handleChange}
-                                                defaultValue={
-                                                    initialFormValues.startDate
-                                                }
-                                            />
-                                        </Form.Field>
-                                        <Form.Field>
-                                            <label>End date</label>
-                                            <Input
-                                                id="endDate"
-                                                name="endDate"
-                                                type="date"
-                                                onChange={handleChange}
-                                                defaultValue={
-                                                    initialFormValues.endDate
-                                                }
-                                            />
-                                        </Form.Field>
-                                        <Form.Button type="submit" primary>
-                                            Search
-                                        </Form.Button>
-                                    </Form.Group>
-                                </Form>
-                            </FormikForm>
-                        )}
+                        <FormikForm>
+                            <Form>
+                                <Form.Group widths="4">
+                                    <Field
+                                        name="cardName"
+                                        label="Card name"
+                                        component={FormikSearchBar}
+                                    />
+                                    <Field
+                                        name="startDate"
+                                        label="Start date"
+                                        defaultValue={
+                                            initialFormValues.startDate
+                                        }
+                                        component={FormikNativeDatePicker}
+                                    />
+                                    <Field
+                                        name="endDate"
+                                        label="End date"
+                                        defaultValue={initialFormValues.endDate}
+                                        component={FormikNativeDatePicker}
+                                    />
+                                    <Form.Button type="submit" primary>
+                                        Search
+                                    </Form.Button>
+                                </Form.Group>
+                            </Form>
+                        </FormikForm>
                     </Formik>
                 </Box>
             </Box>

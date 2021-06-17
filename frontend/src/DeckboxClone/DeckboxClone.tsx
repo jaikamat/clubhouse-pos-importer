@@ -23,7 +23,6 @@ interface State {
     count: number;
     currentPage: number;
     numPages: number;
-    pageArray: any[];
     isLoading: boolean;
     cachedFilters: Filters;
     showPages: any[];
@@ -36,7 +35,6 @@ const DeckboxClone: FC = () => {
         count: 0,
         currentPage: 0,
         numPages: 0,
-        pageArray: [],
         isLoading: false,
         cachedFilters: initialFilters,
         showPages: [],
@@ -72,23 +70,23 @@ const DeckboxClone: FC = () => {
                 currentPage: page,
                 showPages: showPages,
                 searchTouched: true,
+                // Set the filters for pagination requests later
+                cachedFilters: filters,
             });
         } catch (err) {
             console.log(err);
         }
     };
 
-    const handleSubmit = async (filters: Filters) => {
-        setState({ ...state, cachedFilters: filters }); // Set the filters for pagination requests later
-        await fetchData(filters, 1); // On submit, starting page mut always be 1
-    };
-
-    const handlePage = async (page: number) => {
-        await fetchData(state.cachedFilters, page);
-        setState({ ...state, currentPage: page });
-    };
-
-    const { cards, isLoading, currentPage, numPages, count } = state;
+    const {
+        cards,
+        isLoading,
+        currentPage,
+        numPages,
+        showPages,
+        count,
+        cachedFilters,
+    } = state;
     const showLeftPageButtons = !(currentPage === 1);
     const showRightPageButtons = !(currentPage === numPages);
 
@@ -108,8 +106,7 @@ const DeckboxClone: FC = () => {
                 fluctuations. Consult 'New Sale' or 'Manage Inventory' for
                 up-to-date values
             </Segment>
-            <DeckboxCloneForm doSubmit={handleSubmit} />
-
+            <DeckboxCloneForm doSubmit={fetchData} />
             {!!cards.length && (
                 <Table celled striped compact>
                     <Table.Header>
@@ -126,20 +123,25 @@ const DeckboxClone: FC = () => {
                                             as="a"
                                             icon
                                             onClick={() =>
-                                                handlePage(currentPage - 1)
+                                                fetchData(
+                                                    cachedFilters,
+                                                    currentPage - 1
+                                                )
                                             }
                                         >
                                             <Icon name="chevron left" />
                                         </Menu.Item>
                                     )}
-
                                     <React.Fragment>
-                                        {state.showPages.map((p) => {
+                                        {showPages.map((p) => {
                                             return (
                                                 <Menu.Item
                                                     key={`page-${p}`}
                                                     onClick={() =>
-                                                        handlePage(p)
+                                                        fetchData(
+                                                            cachedFilters,
+                                                            p
+                                                        )
                                                     }
                                                     active={currentPage === p}
                                                     disabled={currentPage === p}
@@ -150,13 +152,15 @@ const DeckboxClone: FC = () => {
                                             );
                                         })}
                                     </React.Fragment>
-
                                     {showRightPageButtons && (
                                         <Menu.Item
                                             as="a"
                                             icon
                                             onClick={() =>
-                                                handlePage(currentPage + 1)
+                                                fetchData(
+                                                    cachedFilters,
+                                                    currentPage + 1
+                                                )
                                             }
                                         >
                                             <Icon name="chevron right" />
@@ -166,7 +170,6 @@ const DeckboxClone: FC = () => {
                             </Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
-
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>Name</Table.HeaderCell>
@@ -176,7 +179,6 @@ const DeckboxClone: FC = () => {
                             <Table.HeaderCell>Price</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
-
                     <Table.Body>
                         {cards.map((card) => (
                             <DeckboxCloneRow
@@ -185,7 +187,6 @@ const DeckboxClone: FC = () => {
                             />
                         ))}
                     </Table.Body>
-
                     <Table.Footer>
                         <Table.Row>
                             <Table.HeaderCell colSpan="5">
@@ -200,20 +201,25 @@ const DeckboxClone: FC = () => {
                                             as="a"
                                             icon
                                             onClick={() =>
-                                                handlePage(currentPage - 1)
+                                                fetchData(
+                                                    cachedFilters,
+                                                    currentPage - 1
+                                                )
                                             }
                                         >
                                             <Icon name="chevron left" />
                                         </Menu.Item>
                                     )}
-
                                     <React.Fragment>
-                                        {state.showPages.map((p) => {
+                                        {showPages.map((p) => {
                                             return (
                                                 <Menu.Item
                                                     key={`page-${p}`}
                                                     onClick={() =>
-                                                        handlePage(p)
+                                                        fetchData(
+                                                            cachedFilters,
+                                                            p
+                                                        )
                                                     }
                                                     active={currentPage === p}
                                                     disabled={currentPage === p}
@@ -224,13 +230,15 @@ const DeckboxClone: FC = () => {
                                             );
                                         })}
                                     </React.Fragment>
-
                                     {showRightPageButtons && (
                                         <Menu.Item
                                             as="a"
                                             icon
                                             onClick={() =>
-                                                handlePage(currentPage + 1)
+                                                fetchData(
+                                                    cachedFilters,
+                                                    currentPage + 1
+                                                )
                                             }
                                         >
                                             <Icon name="chevron right" />
@@ -242,7 +250,6 @@ const DeckboxClone: FC = () => {
                     </Table.Footer>
                 </Table>
             )}
-
             {!cards.length && (
                 <Segment placeholder>
                     <Header icon>

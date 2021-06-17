@@ -78,7 +78,7 @@ const frameOptions: DropdownOption[] = [
     { key: 'na', value: '', text: 'None' },
     { key: 'borderless', value: 'borderless', text: 'Borderless' },
     { key: 'extendedArt', value: 'extendedArt', text: 'Extended Art' },
-    { key: 'extendedArt', value: 'showcase', text: 'Showcase' },
+    { key: 'showcase', value: 'showcase', text: 'Showcase' },
 ];
 
 interface DropdownOption {
@@ -118,7 +118,7 @@ export const initialFilters: FormValues = {
 };
 
 interface Props {
-    doSubmit: (v: Filters) => Promise<void>;
+    doSubmit: (v: Filters, page: number) => Promise<void>;
 }
 
 const DeckboxCloneForm: FC<Props> = ({ doSubmit }) => {
@@ -131,23 +131,27 @@ const DeckboxCloneForm: FC<Props> = ({ doSubmit }) => {
         {}: FormikHelpers<FormValues>
     ) => {
         try {
-            await doSubmit({
-                title: values.title || undefined,
-                setName: values.setName || undefined,
-                format: values.format || undefined,
-                price: Number(values.price) || undefined,
-                finish: values.finish || undefined,
-                colors:
-                    values.colorsArray.length > 0
-                        ? values.colorsArray.sort().join('')
-                        : undefined,
-                colorSpecificity: values.colorSpecificity || undefined,
-                type: values.typeLine || undefined,
-                frame: values.frame || undefined,
-                sortByDirection: values.sortByDirection,
-                priceOperator: values.priceOperator,
-                sortBy: values.sortBy,
-            });
+            await doSubmit(
+                {
+                    title: values.title || undefined,
+                    setName: values.setName || undefined,
+                    format: values.format || undefined,
+                    price: Number(values.price) || undefined,
+                    finish: values.finish || undefined,
+                    colors:
+                        values.colorsArray.length > 0
+                            ? values.colorsArray.sort().join('')
+                            : undefined,
+                    colorSpecificity: values.colorSpecificity || undefined,
+                    type: values.typeLine || undefined,
+                    frame: values.frame || undefined,
+                    sortByDirection: values.sortByDirection,
+                    priceOperator: values.priceOperator,
+                    sortBy: values.sortBy,
+                },
+                // Always start at page 1 after filtering
+                1
+            );
         } catch (err) {
             console.log(err);
         }

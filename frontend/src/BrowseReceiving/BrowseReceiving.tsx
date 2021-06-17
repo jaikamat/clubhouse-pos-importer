@@ -43,15 +43,17 @@ const BrowseReceiving: FC = () => {
 
     return (
         <div>
-            <Box display="flex">
-                <Box pr={2} width={1}>
-                    <Formik
-                        initialValues={initialFormValues}
-                        onSubmit={onSubmit}
-                    >
+            <Box pb={2}>
+                <Typography variant="h5">
+                    <strong>Browse Receiving</strong>
+                </Typography>
+            </Box>
+            <Box pb={2}>
+                <Formik initialValues={initialFormValues} onSubmit={onSubmit}>
+                    {({ values }) => (
                         <FormikForm>
                             <Form>
-                                <Form.Group widths="4">
+                                <Form.Group widths="6">
                                     <Field
                                         name="cardName"
                                         label="Card name"
@@ -64,26 +66,23 @@ const BrowseReceiving: FC = () => {
                                             initialFormValues.startDate
                                         }
                                         component={FormikNativeDatePicker}
+                                        max={values.endDate}
                                     />
                                     <Field
                                         name="endDate"
                                         label="End date"
                                         defaultValue={initialFormValues.endDate}
                                         component={FormikNativeDatePicker}
+                                        max={initialFormValues.endDate}
                                     />
-                                    <Form.Button type="submit" primary>
-                                        Search
-                                    </Form.Button>
                                 </Form.Group>
+                                <Form.Button type="submit" primary>
+                                    Search
+                                </Form.Button>
                             </Form>
                         </FormikForm>
-                    </Formik>
-                </Box>
-            </Box>
-            <Box py={2}>
-                <Typography variant="h5">
-                    <strong>Browse Receiving</strong>
-                </Typography>
+                    )}
+                </Formik>
             </Box>
             {loading ? (
                 <CircularProgress />

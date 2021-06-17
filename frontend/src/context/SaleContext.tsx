@@ -6,25 +6,17 @@ import { InventoryCard } from '../utils/ScryfallCard';
 import sortSaleList from '../utils/sortSaleList';
 import createToast from '../common/createToast';
 import makeAuthHeader from '../utils/makeAuthHeader';
+import getSuspendedSaleQuery, {
+    SaleListCard,
+    SuspendedSale,
+} from './getSuspendedSaleQuery';
+import deleteSuspendedSaleQuery from './deleteSuspendedSaleQuery';
 
 interface Props {}
 
 interface SuspendSaleArgs {
     customerName: string;
     notes: string;
-}
-
-export type SaleListCard = InventoryCard & {
-    finishCondition: string;
-    qtyToSell: number;
-    price: number;
-};
-
-export interface SuspendedSale {
-    _id: string;
-    name: string;
-    notes: string;
-    list: SaleListCard[];
 }
 
 export interface SaleContext {
@@ -121,22 +113,17 @@ export const SaleProvider: FC<Props> = ({ children }) => {
      */
     const restoreSale = async (id: string) => {
         try {
-            const { data }: { data: SuspendedSale } = await axios.get(
-                `${SUSPEND_SALE}/${id}`,
-                {
-                    headers: makeAuthHeader(),
-                }
-            );
+            const sale = await getSuspendedSaleQuery(id);
             // TODO: Is this going to map correctly?
             // const modeledData = data.list.map((c) => new InventoryCard(c));
-            const modeledData = data.list.map((c) => c);
+            const modeledData = sale.list.map((c) => c);
 
             setSaleListCards(modeledData);
-            setSuspendedSale(data);
+            setSuspendedSale(sale);
 
             createToast({
                 color: 'green',
-                header: `You are viewing ${data.name}'s sale`,
+                header: `You are viewing ${sale.name}'s sale`,
             });
         } catch (e) {
             console.log(e.response);
@@ -158,9 +145,8 @@ export const SaleProvider: FC<Props> = ({ children }) => {
 
         try {
             if (!!_id)
-                await axios.delete(`${SUSPEND_SALE}/${_id}`, {
-                    headers: makeAuthHeader(),
-                }); // If we're suspended, delete the previous to replace
+                // If we're suspended, delete the previous to replace
+                await deleteSuspendedSaleQuery(_id);
 
             const { data } = await axios.post(
                 SUSPEND_SALE,

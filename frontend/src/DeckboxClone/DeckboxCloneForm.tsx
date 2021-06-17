@@ -8,7 +8,7 @@ import { Formik, FormikHelpers, Form as FormikForm, Field } from 'formik';
 import FormikSelectField from '../ui/FormikSelectField';
 import FormikDropdown from '../ui/FormikDropdown';
 
-const formatDropdownOptions = [
+const formatDropdownOptions: DropdownOption[] = [
     { key: 'qw', value: '', text: 'None' },
     { key: 'we', value: 'standard', text: 'Standard' },
     { key: 'er', value: 'future', text: 'Future' },
@@ -25,30 +25,30 @@ const formatDropdownOptions = [
     { key: 'gh', value: 'oldschool', text: 'Oldschool' },
 ];
 
-const priceOperatorDropdownOptions = [
+const priceOperatorDropdownOptions: DropdownOption[] = [
     { key: 'gte', value: 'gte', text: '>=' },
     { key: 'lte', value: 'lte', text: '<=' },
     { key: 'gtx', value: 'gt', text: '>' },
     { key: 'ltx', value: 'lt', text: '<' },
 ];
 
-const finishDropdownOptions = [
+const finishDropdownOptions: DropdownOption[] = [
     { key: 'nonfoil_foil', value: '', text: 'None' },
     { key: 'nonfoil', value: 'NONFOIL', text: 'Nonfoil' },
     { key: 'foil', value: 'FOIL', text: 'Foil' },
 ];
 
-const sortByDropdownOptions = [
+const sortByDropdownOptions: DropdownOption[] = [
     { key: 'pricesort', value: 'price', text: 'Price' },
     { key: 'alphasort', value: 'name', text: 'Card Name' },
 ];
 
-const sortByDirectionDropdownOptions = [
+const sortByDirectionDropdownOptions: DropdownOption[] = [
     { key: 'descdirsort', value: 1, text: 'Ascending' },
     { key: 'ascdirsort', value: -1, text: 'Descending' },
 ];
 
-const sortByColorDropdownOptions = [
+const sortByColorDropdownOptions: DropdownOption[] = [
     { key: 'w', value: 'W', text: 'White' },
     { key: 'u', value: 'U', text: 'Blue' },
     { key: 'b', value: 'B', text: 'Black' },
@@ -56,14 +56,14 @@ const sortByColorDropdownOptions = [
     { key: 'g', value: 'G', text: 'Green' },
 ];
 
-const colorSpecificityDropdownOptions = [
+const colorSpecificityDropdownOptions: DropdownOption[] = [
     { key: 'all', value: '', text: 'None' },
     { key: 'colorless', value: 'colorless', text: 'Colorless only' },
     { key: 'mono', value: 'mono', text: 'Monocolor only' },
     { key: 'multi', value: 'multi', text: 'Multicolor only' },
 ];
 
-const typeLineOptions = [
+const typeLineOptions: DropdownOption[] = [
     { key: 'na', value: '', text: 'None' },
     { key: 'artifact', value: 'Artifact', text: 'Artifact' },
     { key: 'creature', value: 'Creature', text: 'Creature' },
@@ -75,7 +75,7 @@ const typeLineOptions = [
     { key: 'tribal', value: 'Tribal', text: 'Tribal' },
 ];
 
-const frameOptions = [
+const frameOptions: DropdownOption[] = [
     { key: 'na', value: '', text: 'None' },
     { key: 'borderless', value: 'borderless', text: 'Borderless' },
     { key: 'extendedArt', value: 'extendedArt', text: 'Extended Art' },
@@ -84,7 +84,7 @@ const frameOptions = [
 
 interface DropdownOption {
     key: string;
-    value: string;
+    value: string | number;
     text: string;
 }
 
@@ -194,11 +194,7 @@ const DeckboxCloneForm: FC<Props> = ({ doSubmit }) => {
     return (
         <Segment>
             <h3>Filters</h3>
-            <Formik
-                initialValues={initialFilters}
-                validate={() => {}}
-                onSubmit={onSubmit}
-            >
+            <Formik initialValues={initialFilters} onSubmit={onSubmit}>
                 {({ handleChange, setFieldValue }) => (
                     <FormikForm>
                         <Form>
@@ -269,7 +265,6 @@ const DeckboxCloneForm: FC<Props> = ({ doSubmit }) => {
                                     options={frameOptions}
                                     component={FormikSelectField}
                                 />
-
                                 <Form.Field>
                                     <label>Price Filter</label>
                                     <Input
@@ -291,9 +286,7 @@ const DeckboxCloneForm: FC<Props> = ({ doSubmit }) => {
                                     />
                                 </Form.Field>
                             </Form.Group>
-
                             <h3>{'Sort & Order'}</h3>
-
                             <Form.Group>
                                 <Field
                                     name="sortBy"
@@ -312,7 +305,6 @@ const DeckboxCloneForm: FC<Props> = ({ doSubmit }) => {
                                     }
                                 />
                             </Form.Group>
-
                             <Form.Group>
                                 <Form.Button type="submit" primary>
                                     Submit

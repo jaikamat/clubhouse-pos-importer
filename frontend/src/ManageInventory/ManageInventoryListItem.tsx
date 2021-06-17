@@ -1,17 +1,15 @@
 import React, { FC, useContext, useState } from 'react';
 import { Segment, Input, Button, Form, Select, Item } from 'semantic-ui-react';
-import axios from 'axios';
 import $ from 'jquery';
 import { Formik, FormikErrors, FormikHelpers } from 'formik';
 import createToast from '../common/createToast';
 import CardImage from '../common/CardImage';
-import makeAuthHeader from '../utils/makeAuthHeader';
-import { ADD_CARD_TO_INVENTORY } from '../utils/api_resources';
 import { finishes, cardConditions } from '../utils/dropdownOptions';
 import checkCardFinish from '../utils/checkCardFinish';
 import { InventoryContext } from '../context/InventoryContext';
 import { InventoryCard } from '../utils/ScryfallCard';
 import CardHeader from '../ui/CardHeader';
+import addCardToInventoryQuery from './addCardToInventoryQuery';
 
 interface Props {
     card: InventoryCard;
@@ -26,17 +24,7 @@ interface FormValues {
 type Finish = 'FOIL' | 'NONFOIL';
 
 const ManageInventoryListItem: FC<Props> = ({ card }) => {
-    const {
-        foil,
-        nonfoil,
-        name,
-        set_name,
-        set,
-        id,
-        cardImage,
-        card_faces,
-        image_uris,
-    } = card;
+    const { foil, nonfoil, name, set_name, set, id, cardImage } = card;
 
     const [selectedFinish, setSelectedFinish] = useState<Finish>(
         checkCardFinish(nonfoil, foil).selectedFinish
@@ -68,20 +56,16 @@ const ManageInventoryListItem: FC<Props> = ({ card }) => {
         { resetForm }: FormikHelpers<FormValues>
     ) => {
         try {
-            const { data } = await axios.post(
-                ADD_CARD_TO_INVENTORY,
-                {
-                    quantity: parseInt(quantity, 10),
-                    finishCondition: `${selectedFinish}_${selectedCondition}`,
-                    cardInfo: { id, name, set_name, set },
-                },
-                { headers: makeAuthHeader() }
-            );
+            const { qoh } = await addCardToInventoryQuery({
+                quantity: parseInt(quantity, 10),
+                finishCondition: `${selectedFinish}_${selectedCondition}`,
+                cardInfo: { id, name, set_name, set },
+            });
 
             // Imperatively reset the form using Formik actions
             resetForm();
 
-            changeCardQuantity(id, data.qoh);
+            changeCardQuantity(id, qoh);
 
             createToast({
                 color: 'green',

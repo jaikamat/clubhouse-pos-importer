@@ -272,6 +272,26 @@ const getCardsByFilter = async (
 
         aggregation.push({ $match: endMatch });
 
+        // Add sane inventory fields
+        aggregation.push({
+            $addFields: {
+                finishCondition: `$inventory.k`,
+                quantityInStock: `$inventory.v`,
+            },
+        });
+
+        // Final projection to curate return types
+        aggregation.push({
+            $project: {
+                border_color: 0,
+                colors_string: 0,
+                colors_string_length: 0,
+                legalities: 0,
+                type_line: 0,
+                inventory: 0,
+            },
+        });
+
         const sortByFilter = {};
         const sortByProp = sortBy;
         const sortByDirectionProp = sortByDirection;

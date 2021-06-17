@@ -1,6 +1,6 @@
 import React, { createContext, FC, useState } from 'react';
 import { InventoryCard, QOH } from '../utils/ScryfallCard';
-import cardSearchQuery from '../common/cardSearchQuery';
+import cardSearchQuery from './cardSearchQuery';
 
 interface Props {}
 

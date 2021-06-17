@@ -12,7 +12,7 @@ import TotalCardsLabel from '../common/TotalCardsLabel';
 import AllLocationInventory from '../ManageInventory/AllLocationInventory';
 import styled from 'styled-components';
 import sum from '../utils/sum';
-import cardSearchQuery from '../common/cardSearchQuery';
+import cardSearchQuery from '../context/cardSearchQuery';
 
 interface Props {}
 

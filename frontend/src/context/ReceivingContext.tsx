@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 import createToast from '../common/createToast';
 import { InventoryCard } from '../utils/ScryfallCard';
 import receivingQuery from './receivingQuery';
-import cardSearchQuery from '../common/cardSearchQuery';
+import cardSearchQuery from './cardSearchQuery';
 
 interface Props {}
 

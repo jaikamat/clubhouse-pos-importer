@@ -1,12 +1,10 @@
 import React, { FC, SyntheticEvent, useEffect, useState } from 'react';
 import SearchBar from '../common/SearchBar';
-import { GET_SET_NAMES } from '../utils/api_resources';
-import axios from 'axios';
 import { Form, Input, Segment } from 'semantic-ui-react';
-import makeAuthHeader from '../utils/makeAuthHeader';
 import { Formik, FormikHelpers, Form as FormikForm, Field } from 'formik';
 import FormikSelectField from '../ui/FormikSelectField';
 import FormikDropdown from '../ui/FormikDropdown';
+import setNameQuery from './setNameQuery';
 
 const formatDropdownOptions: DropdownOption[] = [
     { key: 'qw', value: '', text: 'None' },
@@ -86,10 +84,6 @@ interface DropdownOption {
     key: string;
     value: string | number;
     text: string;
-}
-
-interface Response {
-    data: string[];
 }
 
 export interface Filters {
@@ -175,17 +169,18 @@ const DeckboxCloneForm: FC<Props> = ({ doSubmit }) => {
 
     useEffect(() => {
         (async () => {
-            const { data }: Response = await axios.get(GET_SET_NAMES, {
-                headers: makeAuthHeader(),
-            });
+            const names = await setNameQuery();
 
-            const setNameOptions = data.map((d, idx) => {
-                return { key: `set${idx}`, value: d, text: d };
-            });
+            const setNameOptions = names.map((name, idx) => ({
+                key: `set${idx}`,
+                value: name,
+                text: name,
+            }));
 
             const concatWithBlankOption = [
                 { key: 'snull', value: '', text: 'None' },
-            ].concat(setNameOptions);
+                ...setNameOptions,
+            ];
 
             setEditionDropdownOptions(concatWithBlankOption);
         })();

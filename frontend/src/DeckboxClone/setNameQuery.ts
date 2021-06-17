@@ -2,13 +2,9 @@ import axios from 'axios';
 import { GET_SET_NAMES } from '../utils/api_resources';
 import makeAuthHeader from '../utils/makeAuthHeader';
 
-interface Response {
-    data: string[];
-}
-
 const setNameQuery = async () => {
     try {
-        const { data }: Response = await axios.get(GET_SET_NAMES, {
+        const { data } = await axios.get<string[]>(GET_SET_NAMES, {
             headers: makeAuthHeader(),
         });
 

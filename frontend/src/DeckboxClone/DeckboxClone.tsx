@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { GET_CARDS_BY_FILTER } from '../utils/api_resources';
-import DeckboxCloneForm, { Filters, initialFilters } from './DeckboxCloneForm';
+import DeckboxCloneForm, { initialFilters } from './DeckboxCloneForm';
 import DeckboxCloneRow from './DeckboxCloneRow';
 import axios from 'axios';
 import makeAuthHeader from '../utils/makeAuthHeader';
@@ -15,6 +15,7 @@ import {
     Container,
 } from 'semantic-ui-react';
 import _ from 'lodash';
+import { Filters } from './filteredCardsQuery';
 const LIMIT = 100; // Matching the backend for now
 
 interface State {

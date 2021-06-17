@@ -5,6 +5,7 @@ import { Formik, FormikHelpers, Form as FormikForm, Field } from 'formik';
 import FormikSelectField from '../ui/FormikSelectField';
 import FormikDropdown from '../ui/FormikDropdown';
 import setNameQuery from './setNameQuery';
+import { Filters } from './filteredCardsQuery';
 
 const formatDropdownOptions: DropdownOption[] = [
     { key: 'qw', value: '', text: 'None' },
@@ -84,21 +85,6 @@ interface DropdownOption {
     key: string;
     value: string | number;
     text: string;
-}
-
-export interface Filters {
-    title?: string;
-    setName?: string;
-    format?: string;
-    price?: number;
-    finish?: string;
-    colors?: string;
-    colorSpecificity?: string;
-    type?: string;
-    frame?: string;
-    sortByDirection: number;
-    priceOperator: string;
-    sortBy: string;
 }
 
 interface FormValues {

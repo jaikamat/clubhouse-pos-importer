@@ -31,17 +31,13 @@ export interface Sale {
     card_list: SaleCard[];
 }
 
-interface Response {
-    data: Sale[];
-}
-
 interface Payload {
     cardName: string;
 }
 
 const browseSalesQuery = async ({ cardName }: Payload) => {
     try {
-        const { data }: Response = await axios.get(GET_SALES_BY_TITLE, {
+        const { data } = await axios.get<Sale[]>(GET_SALES_BY_TITLE, {
             params: { cardName: cardName },
             headers: makeAuthHeader(),
         });

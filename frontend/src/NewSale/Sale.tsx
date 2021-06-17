@@ -5,14 +5,14 @@ import SearchBar from '../common/SearchBar';
 import BrowseCardList from './BrowseCardList';
 import CustomerSaleList from './CustomerSaleList';
 import PrintList from './PrintList';
-import SuspendedSale from './SuspendedSale';
+import SuspendSales from './SuspendedSale';
 import { InventoryCard } from '../utils/ScryfallCard';
 import { SaleContext } from '../context/SaleContext';
 import TotalCardsLabel from '../common/TotalCardsLabel';
 import AllLocationInventory from '../ManageInventory/AllLocationInventory';
 import styled from 'styled-components';
 import sum from '../utils/sum';
-import cardSearchQuery from '../common/cardSearchQuery';
+import cardSearchQuery from '../context/cardSearchQuery';
 
 interface Props {}
 
@@ -91,7 +91,7 @@ const Sale: FC<Props> = () => {
                                 />
                             </Header>
                             <ButtonContainer>
-                                <SuspendedSale
+                                <SuspendSales
                                     restoreSale={restoreSale}
                                     suspendSale={suspendSale}
                                     saleListLength={saleListCards.length}

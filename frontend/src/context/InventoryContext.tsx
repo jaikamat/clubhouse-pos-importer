@@ -1,12 +1,12 @@
 import React, { createContext, FC, useState } from 'react';
 import { InventoryCard, QOH } from '../utils/ScryfallCard';
-import cardSearchQuery from '../common/cardSearchQuery';
+import cardSearchQuery from './cardSearchQuery';
 
 interface Props {}
 
 interface Context {
     searchResults: InventoryCard[];
-    changeCardQuantity: (id: string, qoh: QOH) => void;
+    changeCardQuantity: (id: string, qoh: Partial<QOH>) => void;
     handleSearchSelect: (term: string) => void;
 }
 
@@ -28,7 +28,7 @@ const InventoryProvider: FC<Props> = ({ children }) => {
         setSearchResults(cards);
     };
 
-    const changeCardQuantity = (id: string, qoh: QOH) => {
+    const changeCardQuantity = (id: string, qoh: Partial<QOH>) => {
         const copiedState = [...searchResults];
         const targetIndex = copiedState.findIndex((e) => e.id === id);
         copiedState[targetIndex].qoh = qoh;

@@ -3,11 +3,6 @@ import makeAuthHeader from '../utils/makeAuthHeader';
 import { RECEIVE_CARDS } from '../utils/api_resources';
 import { Trade } from './ReceivingContext';
 
-// TODO: We should type this
-interface Response {
-    data: any;
-}
-
 interface ReceivingQueryCard {
     quantity: number;
     finishCondition: string;
@@ -27,7 +22,8 @@ interface Payload {
 
 const receivingQuery = async ({ cards }: Payload) => {
     try {
-        const { data }: Response = await axios.post(
+        // We do not expect to use the return type, so we designate it `void`
+        const { data } = await axios.post<void>(
             RECEIVE_CARDS,
             { cards },
             { headers: makeAuthHeader() }

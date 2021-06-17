@@ -6,11 +6,9 @@ interface Quantities {
     nonfoilQty: number;
 }
 
-export interface Response {
-    data: {
-        ch1: Quantities;
-        ch2: Quantities;
-    };
+export interface ResponseData {
+    ch1: Quantities;
+    ch2: Quantities;
 }
 
 interface Payload {
@@ -22,7 +20,7 @@ interface Payload {
  */
 const allLocationInventoryQuery = async ({ title }: Payload) => {
     try {
-        const { data }: Response = await axios.get(
+        const { data } = await axios.get<ResponseData>(
             GET_CARD_FROM_ALL_LOCATIONS,
             {
                 params: { title },

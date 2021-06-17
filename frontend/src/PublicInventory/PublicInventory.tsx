@@ -1,13 +1,12 @@
 import React, { FC, SyntheticEvent, useState } from 'react';
-import axios from 'axios';
 import { Grid, Segment, Header, Icon, Form, Select } from 'semantic-ui-react';
 import SearchBar from '../common/SearchBar';
-import { GET_CARDS_WITH_INFO_PUBLIC } from '../utils/api_resources';
-import { InventoryCard, ScryfallApiCard } from '../utils/ScryfallCard';
+import { InventoryCard } from '../utils/ScryfallCard';
 import { Formik } from 'formik';
 import { ClubhouseLocation } from '../context/AuthProvider';
 import styled from 'styled-components';
 import PublicCardItem from './PublicCardItem';
+import publicCardSearchQuery from './publicCardSearchQuery';
 
 interface State {
     searchResults: InventoryCard[];
@@ -59,20 +58,15 @@ const PublicInventory: FC = () => {
         location: ClubhouseLocation;
     }) => {
         try {
-            const { data }: { data: ScryfallApiCard[] } = await axios.get(
-                GET_CARDS_WITH_INFO_PUBLIC,
-                {
-                    params: {
-                        title,
-                        location,
-                        matchInStock: true,
-                    },
-                }
-            );
+            const cards = await publicCardSearchQuery({
+                title,
+                location,
+                matchInStock: true,
+            });
 
             setState({
                 ...state,
-                searchResults: data.map((c) => new InventoryCard(c)),
+                searchResults: cards,
             });
         } catch (err) {
             console.log(err);

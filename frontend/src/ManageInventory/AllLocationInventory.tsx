@@ -3,7 +3,7 @@ import { Header, Label, Loader } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { InventoryCard } from '../utils/ScryfallCard';
 import allLocationInventoryQuery, {
-    Response,
+    ResponseData,
 } from './allLocationInventoryQuery';
 
 const StyledContainer = styled('div')({
@@ -40,7 +40,7 @@ const AllLocationInventory: FC<AllLocationInventoryProps> = ({
     title,
     searchResults,
 }) => {
-    const [quantities, setQuantities] = useState<Response['data']>({
+    const [quantities, setQuantities] = useState<ResponseData>({
         ch1: { foilQty: 0, nonfoilQty: 0 },
         ch2: { foilQty: 0, nonfoilQty: 0 },
     });

@@ -1,6 +1,4 @@
 import React, { useState, useEffect, FC } from 'react';
-import axios from 'axios';
-import { SUSPEND_SALE } from '../utils/api_resources';
 import {
     Modal,
     Button,
@@ -11,11 +9,9 @@ import {
     DropdownProps,
 } from 'semantic-ui-react';
 import styled from 'styled-components';
-import makeAuthHeader from '../utils/makeAuthHeader';
-import {
-    SaleContext,
-    SuspendedSale as SuspendedSaleT,
-} from '../context/SaleContext';
+import { SaleContext } from '../context/SaleContext';
+import { SuspendedSale } from '../context/getSuspendedSaleQuery';
+import getSuspendedSalesQuery from './getSuspendedSalesQuery';
 
 interface Props {
     id: string;
@@ -47,14 +43,14 @@ const CharLimit = styled.p`
     float: right;
 `;
 
-const SuspendedSale: FC<Props> = ({
+const SuspendSales: FC<Props> = ({
     restoreSale,
     deleteSuspendedSale,
     saleListLength,
     suspendSale,
     id,
 }) => {
-    const [sales, setSales] = useState<SuspendedSaleT[]>([]);
+    const [sales, setSales] = useState<SuspendedSale[]>([]);
     const [saleID, setSaleID] = useState<string>('');
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [customerName, setCustomerName] = useState<string>('');
@@ -67,13 +63,9 @@ const SuspendedSale: FC<Props> = ({
     });
 
     const getSales = async () => {
-        const { data }: { data: SuspendedSaleT[] } = await axios.get(
-            SUSPEND_SALE,
-            {
-                headers: makeAuthHeader(),
-            }
-        );
-        setSales(data);
+        const suspendedSales = await getSuspendedSalesQuery();
+
+        setSales(suspendedSales);
     };
 
     const clearFields = () => {
@@ -271,4 +263,4 @@ const SuspendedSale: FC<Props> = ({
     );
 };
 
-export default SuspendedSale;
+export default SuspendSales;

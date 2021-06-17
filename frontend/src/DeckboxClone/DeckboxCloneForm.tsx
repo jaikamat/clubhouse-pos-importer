@@ -2,10 +2,11 @@ import React, { FC, SyntheticEvent, useEffect, useState } from 'react';
 import SearchBar from '../common/SearchBar';
 import { GET_SET_NAMES } from '../utils/api_resources';
 import axios from 'axios';
-import { Form, Input, Dropdown, Segment } from 'semantic-ui-react';
+import { Form, Input, Segment } from 'semantic-ui-react';
 import makeAuthHeader from '../utils/makeAuthHeader';
 import { Formik, FormikHelpers, Form as FormikForm, Field } from 'formik';
 import FormikSelectField from '../ui/FormikSelectField';
+import FormikDropdown from '../ui/FormikDropdown';
 
 const formatDropdownOptions = [
     { key: 'qw', value: '', text: 'None' },
@@ -273,14 +274,13 @@ const DeckboxCloneForm: FC<Props> = ({ doSubmit }) => {
                                     <label>Price Filter</label>
                                     <Input
                                         label={
-                                            <Dropdown
+                                            <Field
+                                                name="priceOperator"
                                                 options={
                                                     priceOperatorDropdownOptions
                                                 }
-                                                name="priceOperator"
+                                                component={FormikDropdown}
                                                 defaultValue="gte"
-                                                // TODO: this
-                                                onChange={handleChange}
                                             />
                                         }
                                         placeholder="Enter a price"

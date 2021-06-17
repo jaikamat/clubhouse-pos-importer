@@ -509,8 +509,8 @@ interface ReceivedCardQuery {
 
 router.get('/getReceivedCards', async (req: RequestWithUserInfo, res) => {
     const schema = Joi.object<ReceivedCardQuery>({
-        startDate: Joi.date().iso().allow(null),
-        endDate: Joi.date().iso().allow(null),
+        startDate: Joi.date().iso().required(),
+        endDate: Joi.date().iso().required(),
         cardName: Joi.string().allow(null),
     });
 
@@ -530,8 +530,8 @@ router.get('/getReceivedCards', async (req: RequestWithUserInfo, res) => {
     try {
         const message = await getCardsFromReceiving({
             location: req.currentLocation,
-            startDate: startDate ? new Date(startDate) : null,
-            endDate: endDate ? new Date(endDate) : null,
+            startDate: new Date(startDate),
+            endDate: new Date(endDate),
             cardName: cardName || null,
         });
 

@@ -4,8 +4,8 @@ import collectionFromLocation from '../lib/collectionFromLocation';
 
 interface Args {
     location: ClubhouseLocation;
-    startDate: Date | null;
-    endDate: Date | null;
+    startDate: Date;
+    endDate: Date;
     cardName: string | null;
 }
 

@@ -6,11 +6,11 @@ import createToast from '../common/createToast';
 import { ReceivingContext } from '../context/ReceivingContext';
 import { finishes, cardConditions } from '../utils/dropdownOptions';
 import checkCardFinish, { Finish } from '../utils/checkCardFinish';
-import { InventoryCard } from '../utils/ScryfallCard';
+import { ScryfallCard } from '../utils/ScryfallCard';
 import CardHeader from '../ui/CardHeader';
 
 interface Props {
-    card: InventoryCard;
+    card: ScryfallCard;
 }
 
 const ReceivingSearchItem: FC<Props> = ({ card }) => {

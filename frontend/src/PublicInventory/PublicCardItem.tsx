@@ -2,11 +2,11 @@ import React, { FC } from 'react';
 import { Image as SurImage, Label } from 'semantic-ui-react';
 import MarketPrice from '../common/MarketPrice';
 import styled from 'styled-components';
-import { InventoryCard } from '../utils/ScryfallCard';
+import { ScryfallCard } from '../utils/ScryfallCard';
 import parseQoh from '../utils/parseQoh';
 
 interface Props {
-    card: InventoryCard;
+    card: ScryfallCard;
 }
 
 // These numbers were the originally calculated px values

@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import BrowseCardItem from './BrowseCardItem';
 import { Segment, Header, Icon } from 'semantic-ui-react';
-import { InventoryCard } from '../utils/ScryfallCard';
+import { ScryfallCard } from '../utils/ScryfallCard';
 
 interface Props {
     term: string;
-    cards: InventoryCard[];
+    cards: ScryfallCard[];
 }
 
 const BrowseCardList: FC<Props> = ({ term, cards }) => {

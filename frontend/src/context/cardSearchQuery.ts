@@ -1,6 +1,6 @@
 import axios from 'axios';
 import makeAuthHeader from '../utils/makeAuthHeader';
-import { InventoryCard, ScryfallApiCard } from '../utils/ScryfallCard';
+import { ScryfallCard } from '../utils/ScryfallCard';
 import { GET_CARDS_WITH_INFO } from '../utils/api_resources';
 
 interface Payload {
@@ -14,20 +14,15 @@ interface Payload {
  */
 const cardSearchQuery = async ({ cardName, inStockOnly }: Payload) => {
     try {
-        const { data } = await axios.get<ScryfallApiCard[]>(
-            GET_CARDS_WITH_INFO,
-            {
-                params: {
-                    title: cardName,
-                    matchInStock: inStockOnly,
-                },
-                headers: makeAuthHeader(),
-            }
-        );
+        const { data } = await axios.get<ScryfallCard[]>(GET_CARDS_WITH_INFO, {
+            params: {
+                title: cardName,
+                matchInStock: inStockOnly,
+            },
+            headers: makeAuthHeader(),
+        });
 
-        // Turn the raw API cards into inventory cards
-        // TODO: Re-evaluate whether this is needed
-        return data.map((d) => new InventoryCard(d));
+        return data;
     } catch (err) {
         throw err;
     }

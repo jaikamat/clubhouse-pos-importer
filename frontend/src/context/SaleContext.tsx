@@ -1,15 +1,12 @@
 import React, { useState, createContext, FC } from 'react';
-import axios from 'axios';
 import _ from 'lodash';
-import { SUSPEND_SALE, FINISH_SALE } from '../utils/api_resources';
-import { InventoryCard } from '../utils/ScryfallCard';
 import sortSaleList from '../utils/sortSaleList';
 import createToast from '../common/createToast';
-import makeAuthHeader from '../utils/makeAuthHeader';
 import getSuspendedSaleQuery, { SuspendedSale } from './getSuspendedSaleQuery';
 import deleteSuspendedSaleQuery from './deleteSuspendedSaleQuery';
 import createSuspendedSaleQuery from './createSuspendedSaleQuery';
 import finishSaleQuery from './finishSaleQuery';
+import { ScryfallCard } from '../utils/ScryfallCard';
 
 interface Props {}
 
@@ -18,7 +15,7 @@ interface SuspendSaleArgs {
     notes: string;
 }
 
-export type SaleListCard = InventoryCard & {
+export type SaleListCard = ScryfallCard & {
     finishCondition: string;
     qtyToSell: number;
     price: number;
@@ -28,7 +25,7 @@ export interface SaleContext {
     saleListCards: SaleListCard[];
     suspendedSale: SuspendedSale;
     addToSaleList: (
-        card: InventoryCard,
+        card: ScryfallCard,
         finishCondition: string,
         qtyToSell: number,
         price: number
@@ -70,7 +67,7 @@ export const SaleProvider: FC<Props> = ({ children }) => {
      * Adds product to the sale list
      */
     const addToSaleList = (
-        card: InventoryCard,
+        card: ScryfallCard,
         finishCondition: string,
         qtyToSell: number,
         price: number
@@ -119,8 +116,7 @@ export const SaleProvider: FC<Props> = ({ children }) => {
     const restoreSale = async (id: string) => {
         try {
             const sale = await getSuspendedSaleQuery(id);
-            // TODO: Is this going to map correctly?
-            // const modeledData = data.list.map((c) => new InventoryCard(c));
+
             const modeledData = sale.list.map((c) => c);
 
             setSaleListCards(modeledData);

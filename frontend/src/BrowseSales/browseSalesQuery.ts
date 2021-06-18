@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { FinishCondition } from '../utils/ScryfallCard';
 import makeAuthHeader from '../utils/makeAuthHeader';
 import { GET_SALES_BY_TITLE } from '../utils/api_resources';
+import { SaleListCard } from '../context/SaleContext';
 
 interface SaleData {
     total: string;
@@ -10,25 +10,10 @@ interface SaleData {
     createTime: string;
 }
 
-interface SaleCard {
-    foil: boolean;
-    nonfoil: boolean;
-    id: string;
-    name: string;
-    set: string;
-    set_name: string;
-    rarity: string;
-    reserved: true;
-    finishCondition: FinishCondition;
-    price: string | number;
-    qtyToSell: string | number;
-    card_faces: string | number;
-}
-
 export interface Sale {
     _id: string;
     sale_data: SaleData;
-    card_list: SaleCard[];
+    card_list: SaleListCard[];
 }
 
 interface Payload {

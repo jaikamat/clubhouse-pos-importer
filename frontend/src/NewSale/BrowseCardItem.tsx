@@ -17,7 +17,7 @@ import $ from 'jquery';
 import _ from 'lodash';
 import CardImage from '../common/CardImage';
 import { SaleContext } from '../context/SaleContext';
-import { InventoryCard, QOH } from '../utils/ScryfallCard';
+import { ScryfallCard, QOH } from '../utils/ScryfallCard';
 import CardHeader from '../ui/CardHeader';
 
 interface ConditionOptions {
@@ -67,7 +67,7 @@ function createInitialSelectedFinish(qoh: Partial<QOH>): Finish {
 }
 
 interface Props {
-    card: InventoryCard;
+    card: ScryfallCard;
 }
 
 const BrowseCardItem: FC<Props> = ({ card }) => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import mockData from '../data/mockData';
+import mockData from '../../utils/mockData';
 import ReceivingSearchItem from '../../Receiving/ReceivingSearchItem';
 import { ReceivingProvider } from '../../context/ReceivingContext';
 

@@ -1,5 +1,5 @@
 import { SaleListCard } from '../context/SaleContext';
-import { InventoryCard } from './ScryfallCard';
+import { ScryfallCard } from './ScryfallCard';
 
 /**
  * Takes in an unordered group of cards and sorts them according to The Clubhouse's specs:
@@ -12,7 +12,7 @@ export default function sortSaleList(cards: SaleListCard[]) {
      * Main helper function that manages sort order
      * @param {Object} card
      */
-    function helpSort(card: InventoryCard) {
+    function helpSort(card: ScryfallCard) {
         let arrayConst = null;
 
         let colorsLength = null;

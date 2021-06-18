@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { InventoryCard } from '../utils/ScryfallCard';
+import { ScryfallCard } from '../utils/ScryfallCard';
 import { Label, Item, Button, Icon } from 'semantic-ui-react';
 import QohLabels from '../common/QohLabels';
 import Language from '../common/Language';
@@ -8,7 +8,7 @@ import { Finish } from '../utils/checkCardFinish';
 import styled from 'styled-components';
 
 interface Props {
-    card: InventoryCard;
+    card: ScryfallCard;
     selectedFinish: Finish;
     showMid?: boolean;
     round?: boolean;

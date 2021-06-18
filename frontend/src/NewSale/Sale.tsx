@@ -6,7 +6,7 @@ import BrowseCardList from './BrowseCardList';
 import CustomerSaleList from './CustomerSaleList';
 import PrintList from './PrintList';
 import SuspendSales from './SuspendedSale';
-import { InventoryCard } from '../utils/ScryfallCard';
+import { ScryfallCard } from '../utils/ScryfallCard';
 import { SaleContext } from '../context/SaleContext';
 import TotalCardsLabel from '../common/TotalCardsLabel';
 import AllLocationInventory from '../ManageInventory/AllLocationInventory';
@@ -37,7 +37,7 @@ const Sale: FC<Props> = () => {
         suspendSale,
     } = useContext(SaleContext);
 
-    const [searchResults, setSearchResults] = useState<InventoryCard[]>([]);
+    const [searchResults, setSearchResults] = useState<ScryfallCard[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
 
     const handleResultSelect = async (term: string) => {

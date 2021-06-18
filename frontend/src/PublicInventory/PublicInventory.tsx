@@ -1,7 +1,7 @@
 import React, { FC, SyntheticEvent, useState } from 'react';
 import { Grid, Segment, Header, Icon, Form, Select } from 'semantic-ui-react';
 import SearchBar from '../common/SearchBar';
-import { InventoryCard } from '../utils/ScryfallCard';
+import { ScryfallCard } from '../utils/ScryfallCard';
 import { Formik } from 'formik';
 import { ClubhouseLocation } from '../context/AuthProvider';
 import styled from 'styled-components';
@@ -9,7 +9,7 @@ import PublicCardItem from './PublicCardItem';
 import publicCardSearchQuery from './publicCardSearchQuery';
 
 interface State {
-    searchResults: InventoryCard[];
+    searchResults: ScryfallCard[];
     searchTerm: string;
     selectedLocation: ClubhouseLocation;
 }

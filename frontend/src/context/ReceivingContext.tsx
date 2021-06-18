@@ -2,9 +2,9 @@ import React, { useState, createContext, FC } from 'react';
 import _ from 'lodash';
 import { v4 as uuid } from 'uuid';
 import createToast from '../common/createToast';
-import { InventoryCard } from '../utils/ScryfallCard';
 import receivingQuery from './receivingQuery';
 import cardSearchQuery from './cardSearchQuery';
+import { ScryfallCard } from '../utils/ScryfallCard';
 
 interface Props {}
 
@@ -16,8 +16,9 @@ export enum Trade {
 // Customers can only receive cash or credit for their assets
 const TRADE_TYPES = { CASH: Trade.Cash, CREDIT: Trade.Credit };
 
-export type ReceivingCard = InventoryCard & {
+export type ReceivingCard = ScryfallCard & {
     uuid_key: string;
+    finishCondition: string;
     cashPrice: number | null;
     marketPrice: number | null;
     creditPrice: number | null;
@@ -25,12 +26,12 @@ export type ReceivingCard = InventoryCard & {
 };
 
 interface Context {
-    searchResults: InventoryCard[];
+    searchResults: ScryfallCard[];
     receivingList: ReceivingCard[];
     handleSearchSelect: (term: string) => void;
     addToList: (
         quantity: number,
-        card: InventoryCard,
+        card: ScryfallCard,
         meta: AddToListMeta
     ) => void;
     removeFromList: (uuid: string) => void;
@@ -62,7 +63,7 @@ interface AddToListMeta {
 export const ReceivingContext = createContext<Context>(defaultContext);
 
 const ReceivingProvider: FC<Props> = ({ children }) => {
-    const [searchResults, setSearchResults] = useState<InventoryCard[]>([]);
+    const [searchResults, setSearchResults] = useState<ScryfallCard[]>([]);
     const [receivingList, setReceivingList] = useState<ReceivingCard[]>([]);
 
     const handleSearchSelect = async (term: string) => {
@@ -79,7 +80,7 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
      */
     const addToList = (
         quantity: number,
-        card: InventoryCard,
+        card: ScryfallCard,
         { cashPrice, marketPrice, creditPrice, finishCondition }: AddToListMeta
     ) => {
         const previousState = [...receivingList];

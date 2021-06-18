@@ -7,12 +7,12 @@ import CardImage from '../common/CardImage';
 import { finishes, cardConditions } from '../utils/dropdownOptions';
 import checkCardFinish from '../utils/checkCardFinish';
 import { InventoryContext } from '../context/InventoryContext';
-import { InventoryCard } from '../utils/ScryfallCard';
+import { ScryfallCard } from '../utils/ScryfallCard';
 import CardHeader from '../ui/CardHeader';
 import addCardToInventoryQuery from './addCardToInventoryQuery';
 
 interface Props {
-    card: InventoryCard;
+    card: ScryfallCard;
 }
 
 interface FormValues {

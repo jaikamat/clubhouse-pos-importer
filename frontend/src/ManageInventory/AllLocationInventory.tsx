@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Header, Label, Loader } from 'semantic-ui-react';
 import styled from 'styled-components';
-import { InventoryCard } from '../utils/ScryfallCard';
+import { ScryfallCard } from '../utils/ScryfallCard';
 import allLocationInventoryQuery, {
     ResponseData,
 } from './allLocationInventoryQuery';
@@ -32,7 +32,7 @@ const QohLabel: FC<QohLabelProps> = ({ label, value }) => (
 
 interface AllLocationInventoryProps {
     title: string;
-    searchResults: InventoryCard[];
+    searchResults: ScryfallCard[];
 }
 
 // TODO: refetch on result set change

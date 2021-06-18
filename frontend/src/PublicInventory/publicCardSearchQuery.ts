@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { InventoryCard, ScryfallApiCard } from '../utils/ScryfallCard';
+import { ScryfallCard } from '../utils/ScryfallCard';
 import { GET_CARDS_WITH_INFO_PUBLIC } from '../utils/api_resources';
 import { ClubhouseLocation } from '../context/AuthProvider';
 
@@ -15,15 +15,14 @@ interface Params {
  */
 const publicCardSearchQuery = async (params: Params) => {
     try {
-        const { data } = await axios.get<ScryfallApiCard[]>(
+        const { data } = await axios.get<ScryfallCard[]>(
             GET_CARDS_WITH_INFO_PUBLIC,
             {
                 params,
             }
         );
 
-        // Turn the raw API cards into inventory cards
-        return data.map((d) => new InventoryCard(d));
+        return data;
     } catch (err) {
         throw err;
     }

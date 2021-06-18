@@ -82,6 +82,8 @@ export interface ScryfallApiCard {
 }
 
 /**
+ * TODO: We should return this from the API. The backend should control this data shape
+ *
  * This class wraps the Scryfall API request data and models it to something we can control.
  * Also acts as a safeguard for any future updates to Scryfall's API data model and makes
  * the code easier to maintain and debug.
@@ -107,6 +109,7 @@ export class ScryfallCard {
     public color_identity: string[];
     public promo_types: string[];
     public tcgplayer_id: number | null;
+    public qoh: Partial<QOH>;
 
     public constructor(card: ScryfallApiCard) {
         this.id = card.id;
@@ -129,29 +132,6 @@ export class ScryfallCard {
         this.cardImage = getCardImage(this);
         this.display_name = createDisplayName(this);
         this.tcgplayer_id = card.tcgplayer_id || null;
-    }
-}
-
-/**
- * Extends the Scryfall card object and adds properties we know exist in our database.
- * Models the data and makes writing cards to Mongo a more confident process.
- */
-export class InventoryCard extends ScryfallCard {
-    public qoh: Partial<QOH>;
-    public quantity: number | null;
-    public qtyToSell: number | null;
-    public finishCondition: string | null;
-    public price: number | null;
-
-    public constructor(card: ScryfallApiCard) {
-        super(card);
         this.qoh = card.qoh ? card.qoh : {};
-        // `quantity` and `qtyToSell` are redundant transaction props, unify them down the line
-        // TODO: remove quantity as it seems to be unused
-        // TODO: Never mind, it's used in Receiving briefly
-        this.quantity = card.quantity || null;
-        this.qtyToSell = card.qtyToSell || null;
-        this.finishCondition = card.finishCondition || null;
-        this.price = card.price && card.price >= 0 ? card.price : null;
     }
 }

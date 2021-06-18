@@ -1,9 +1,9 @@
 import axios from 'axios';
 import makeAuthHeader from '../utils/makeAuthHeader';
-import { ScryfallCard } from '../utils/ScryfallCard';
+import { ScryfallApiCard, ScryfallCard } from '../utils/ScryfallCard';
 import { GET_CARDS_WITH_INFO } from '../utils/api_resources';
 
-interface Payload {
+interface Params {
     cardName: string;
     inStockOnly: boolean;
 }
@@ -12,17 +12,20 @@ interface Payload {
  * Fetches cards from the DB by title when a user selects a title after querying.
  * This function merges the data (inventory quantity and card objects) from two endpoints into one array.
  */
-const cardSearchQuery = async ({ cardName, inStockOnly }: Payload) => {
+const cardSearchQuery = async ({ cardName, inStockOnly }: Params) => {
     try {
-        const { data } = await axios.get<ScryfallCard[]>(GET_CARDS_WITH_INFO, {
-            params: {
-                title: cardName,
-                matchInStock: inStockOnly,
-            },
-            headers: makeAuthHeader(),
-        });
+        const { data } = await axios.get<ScryfallApiCard[]>(
+            GET_CARDS_WITH_INFO,
+            {
+                params: {
+                    title: cardName,
+                    matchInStock: inStockOnly,
+                },
+                headers: makeAuthHeader(),
+            }
+        );
 
-        return data;
+        return data.map((d) => new ScryfallCard(d));
     } catch (err) {
         throw err;
     }

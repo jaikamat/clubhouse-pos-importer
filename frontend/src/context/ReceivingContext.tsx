@@ -1,5 +1,5 @@
 import React, { useState, createContext, FC } from 'react';
-import _ from 'lodash';
+import { sortBy } from 'lodash';
 import { v4 as uuid } from 'uuid';
 import createToast from '../common/createToast';
 import receivingQuery from './receivingQuery';
@@ -109,8 +109,7 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
      */
     const removeFromList = (uuid_key: string) => {
         const copiedState = [...receivingList];
-        _.remove(copiedState, (e) => e.uuid_key === uuid_key); // Mutates array
-        setReceivingList(copiedState);
+        setReceivingList(copiedState.filter((e) => e.uuid_key !== uuid_key));
     };
 
     /**

@@ -1,5 +1,4 @@
 import React, { useState, createContext, FC } from 'react';
-import _ from 'lodash';
 import sortSaleList from '../utils/sortSaleList';
 import createToast from '../common/createToast';
 import getSuspendedSaleQuery, { SuspendedSale } from './getSuspendedSaleQuery';

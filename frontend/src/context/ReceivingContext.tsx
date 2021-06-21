@@ -85,24 +85,23 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
     ) => {
         const previousState = [...receivingList];
 
-        // Each line-item represents one card. Use _.times() to repeat
+        // Each line-item represents one card
         const cardsToAdd: ReceivingCard[] = [...new Array(quantity)].map(() => {
-            // TODO: This is funky as hell. We have to clone() to create a new object
-            // or object.assign retains a reference to the merging object
-            return _.clone(
-                Object.assign(card, {
-                    cashPrice,
-                    marketPrice,
-                    creditPrice,
-                    finishCondition,
-                    // Set to cash if customer doesn't want credit
-                    tradeType: creditPrice === 0 ? Trade.Cash : Trade.Credit,
-                    uuid_key: uuid(),
-                })
-            );
+            const newCard: ReceivingCard = {
+                ...card,
+                cashPrice,
+                marketPrice,
+                creditPrice,
+                finishCondition,
+                // Set to cash if customer doesn't want credit
+                tradeType: creditPrice === 0 ? Trade.Cash : Trade.Credit,
+                uuid_key: uuid(),
+            };
+
+            return newCard;
         });
 
-        setReceivingList(_.sortBy([...previousState, ...cardsToAdd], 'name'));
+        setReceivingList(sortBy([...previousState, ...cardsToAdd], 'name'));
     };
 
     /**

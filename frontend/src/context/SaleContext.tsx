@@ -1,5 +1,4 @@
 import React, { useState, createContext, FC } from 'react';
-import _ from 'lodash';
 import sortSaleList from '../utils/sortSaleList';
 import createToast from '../common/createToast';
 import getSuspendedSaleQuery, { SuspendedSale } from './getSuspendedSaleQuery';
@@ -74,14 +73,12 @@ export const SaleProvider: FC<Props> = ({ children }) => {
     ) => {
         const oldState = [...saleListCards];
 
-        // TODO: is this stable? We have to use Object.assign() to preserve getter and setter methods
-        const newCard = _.clone(
-            Object.assign(card, {
-                finishCondition,
-                qtyToSell,
-                price,
-            })
-        );
+        const newCard: SaleListCard = {
+            ...card,
+            finishCondition,
+            qtyToSell,
+            price,
+        };
 
         // Need to make sure same ID's with differing conditions are separate line-items
         const idx = oldState.findIndex((el) => {

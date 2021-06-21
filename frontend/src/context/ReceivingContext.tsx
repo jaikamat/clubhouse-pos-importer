@@ -1,5 +1,5 @@
 import React, { useState, createContext, FC } from 'react';
-import _ from 'lodash';
+import { sortBy } from 'lodash';
 import { v4 as uuid } from 'uuid';
 import createToast from '../common/createToast';
 import receivingQuery from './receivingQuery';
@@ -85,24 +85,23 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
     ) => {
         const previousState = [...receivingList];
 
-        // Each line-item represents one card. Use _.times() to repeat
+        // Each line-item represents one card
         const cardsToAdd: ReceivingCard[] = [...new Array(quantity)].map(() => {
-            // TODO: This is funky as hell. We have to clone() to create a new object
-            // or object.assign retains a reference to the merging object
-            return _.clone(
-                Object.assign(card, {
-                    cashPrice,
-                    marketPrice,
-                    creditPrice,
-                    finishCondition,
-                    // Set to cash if customer doesn't want credit
-                    tradeType: creditPrice === 0 ? Trade.Cash : Trade.Credit,
-                    uuid_key: uuid(),
-                })
-            );
+            const newCard: ReceivingCard = {
+                ...card,
+                cashPrice,
+                marketPrice,
+                creditPrice,
+                finishCondition,
+                // Set to cash if customer doesn't want credit
+                tradeType: creditPrice === 0 ? Trade.Cash : Trade.Credit,
+                uuid_key: uuid(),
+            };
+
+            return newCard;
         });
 
-        setReceivingList(_.sortBy([...previousState, ...cardsToAdd], 'name'));
+        setReceivingList(sortBy([...previousState, ...cardsToAdd], 'name'));
     };
 
     /**
@@ -110,8 +109,7 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
      */
     const removeFromList = (uuid_key: string) => {
         const copiedState = [...receivingList];
-        _.remove(copiedState, (e) => e.uuid_key === uuid_key); // Mutates array
-        setReceivingList(copiedState);
+        setReceivingList(copiedState.filter((e) => e.uuid_key !== uuid_key));
     };
 
     /**
@@ -155,35 +153,15 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
         setReceivingList(newState);
     };
 
-    /** We want to filter out cards with possible `null` finishConditions, this is the target type */
-    type DefinedFinishCondition = Omit<ReceivingCard, 'finishCondition'> & {
-        finishCondition: string;
-    };
-
-    /** This allows us to filter out finishConditions that are `null` */
-    const isDefined = (card: ReceivingCard): card is DefinedFinishCondition => {
-        return card.finishCondition !== null;
-    };
-
     /**
      * Persists all passed cards to inventory
      */
     const commitToInventory = async () => {
         try {
-            const cardsToCommit = receivingList
-                .filter(isDefined)
-                .map((card) => ({
-                    quantity: 1, // Only committing one per line-item
-                    marketPrice: card.marketPrice,
-                    cashPrice: card.cashPrice,
-                    creditPrice: card.creditPrice,
-                    tradeType: card.tradeType,
-                    finishCondition: card.finishCondition,
-                    id: card.id,
-                    name: card.name,
-                    set_name: card.set_name,
-                    set: card.set,
-                }));
+            const cardsToCommit = receivingList.map((card) => ({
+                ...card,
+                quantity: 1, // Only committing one per line-item
+            }));
 
             await receivingQuery({ cards: cardsToCommit });
 

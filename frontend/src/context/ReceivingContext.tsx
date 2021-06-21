@@ -153,35 +153,23 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
         setReceivingList(newState);
     };
 
-    /** We want to filter out cards with possible `null` finishConditions, this is the target type */
-    type DefinedFinishCondition = Omit<ReceivingCard, 'finishCondition'> & {
-        finishCondition: string;
-    };
-
-    /** This allows us to filter out finishConditions that are `null` */
-    const isDefined = (card: ReceivingCard): card is DefinedFinishCondition => {
-        return card.finishCondition !== null;
-    };
-
     /**
      * Persists all passed cards to inventory
      */
     const commitToInventory = async () => {
         try {
-            const cardsToCommit = receivingList
-                .filter(isDefined)
-                .map((card) => ({
-                    quantity: 1, // Only committing one per line-item
-                    marketPrice: card.marketPrice,
-                    cashPrice: card.cashPrice,
-                    creditPrice: card.creditPrice,
-                    tradeType: card.tradeType,
-                    finishCondition: card.finishCondition,
-                    id: card.id,
-                    name: card.name,
-                    set_name: card.set_name,
-                    set: card.set,
-                }));
+            const cardsToCommit = receivingList.map((card) => ({
+                quantity: 1, // Only committing one per line-item
+                marketPrice: card.marketPrice,
+                cashPrice: card.cashPrice,
+                creditPrice: card.creditPrice,
+                tradeType: card.tradeType,
+                finishCondition: card.finishCondition,
+                id: card.id,
+                name: card.name,
+                set_name: card.set_name,
+                set: card.set,
+            }));
 
             await receivingQuery({ cards: cardsToCommit });
 

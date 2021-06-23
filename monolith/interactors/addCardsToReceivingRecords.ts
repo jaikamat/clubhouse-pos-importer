@@ -9,7 +9,7 @@ interface Args {
     location: ClubhouseLocation;
     userId: string;
     customerName: string;
-    customerContact?: string;
+    customerContact: string | null;
 }
 
 async function addCardsToReceivingRecords({

@@ -148,7 +148,7 @@ export interface ReceivingCard {
 
 export interface ReceivingBody {
     customerName: string;
-    customerContact: string;
+    customerContact: string | null;
     cards: ReceivingCard[];
 }
 

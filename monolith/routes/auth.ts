@@ -276,7 +276,7 @@ router.post('/receiveCards', (req: ReqWithReceivingCards, res, next) => {
 
     const schema = Joi.object<ReceivingBody>({
         customerName: Joi.string().min(3).max(50).required(),
-        customerContact: Joi.string().max(50),
+        customerContact: Joi.string().max(50).allow(null),
         cards: Joi.array().items(receivingCardSchema),
     });
 

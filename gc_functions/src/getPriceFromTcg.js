@@ -1,70 +1,62 @@
 const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
-const cheerio = require("cheerio");
 
 const app = express();
 app.use(cors());
 
-/**
- * Replaces dollar signs and commas and yields a numbered price
- * @param {String} price - A string of format $dd,ddd.dd
- */
-function convertPriceStr(price) {
-    const converted = Number(price.replace("$", "").replace(",", ""));
-    if (Number.isNaN(converted)) return null;
-    return converted.toFixed(2);
-}
+const scryfallEndpoint = (scryfallId) =>
+    `https://api.scryfall.com/cards/${scryfallId}`;
+
+const pricingEndpoint = (sku) =>
+    `https://mpapi.tcgplayer.com/v2/product/${sku}/pricepoints`;
 
 /**
- * Retrieves the purchase URL from a card by querying Scryfall's API
+ * Retrieves the SKU from a card by querying Scryfall's API
  * @param {String} scryfallId - a card's Scryfall ID
  */
-async function getPurchaseUrl(scryfallId) {
+async function fetchSku(scryfallId) {
     try {
-        const SCRYFALL_ID_SEARCH = "https://api.scryfall.com/cards";
-        const { data } = await axios.get(`${SCRYFALL_ID_SEARCH}/${scryfallId}`);
-        const { purchase_uris } = data;
+        const { data } = await axios.get(scryfallEndpoint(scryfallId));
 
-        if (purchase_uris.tcgplayer) return purchase_uris.tcgplayer;
-        // This is the purhase URL from Scryfall data
-        else
-            throw new Error(
-                `Purchase URI for Scryfall ID ${scryfallId} not found`
-            );
-    } catch (e) {
-        throw e;
+        if (!data.tcgplayer_id) {
+            return null;
+        }
+
+        return data.tcgplayer_id;
+    } catch (err) {
+        throw err;
     }
 }
 
-/**
- * Parses TCGplayer's card page html to retrieve the median price
- * @param {String} purchaseUrl - The TCGplayer purchase URL
- */
-async function parseTcgHtml(purchaseUrl) {
+async function fetchPrices(sku) {
+    const marketPrices = {};
+    const medianPrices = {};
+
+    if (!sku) {
+        return { marketPrices, medianPrices };
+    }
+
     try {
-        const { data } = await axios.get(purchaseUrl); // `data` is the html
-        const $ = cheerio.load(data);
-        const marketPrices = {};
-        const medianPrices = {};
+        const { data } = await axios.get(pricingEndpoint(sku));
 
-        // Capture the Market Price table and loop over its rows to capture price data
-        $(".price-point--market tbody tr").each((i, el) => {
-            const finishTxt = $(el).find("th.price-point__name").text();
-            const priceTxt = $(el).find("td.price-point__data").text();
-            marketPrices[finishTxt.toLowerCase()] = convertPriceStr(priceTxt);
-        });
+        // Need to convert prices to our app's data shape
+        const normalTcgPrices = data.find((d) => d.printingType === "Normal");
+        const foilTcgPrices = data.find((d) => d.printingType === "Foil");
 
-        // Capture the Median Price table and loop over its rows to capture price data
-        $(".price-point--listed-median tbody tr").each((i, el) => {
-            const finishTxt = $(el).find("th.price-point__name").text();
-            const priceTxt = $(el).find("td.price-point__data").text();
-            medianPrices[finishTxt.toLowerCase()] = convertPriceStr(priceTxt);
-        });
+        if (normalTcgPrices) {
+            marketPrices.normal = normalTcgPrices.marketPrice;
+            medianPrices.normal = normalTcgPrices.listedMedianPrice;
+        }
+
+        if (foilTcgPrices) {
+            marketPrices.foil = foilTcgPrices.marketPrice;
+            medianPrices.foil = foilTcgPrices.listedMedianPrice;
+        }
 
         return { marketPrices, medianPrices };
-    } catch (e) {
-        throw e;
+    } catch (err) {
+        throw err;
     }
 }
 
@@ -72,12 +64,12 @@ async function parseTcgHtml(purchaseUrl) {
 app.get("/", async (req, res, next) => {
     try {
         const { scryfallId } = req.query;
-        const purchaseUrl = await getPurchaseUrl(scryfallId);
-        const prices = await parseTcgHtml(purchaseUrl);
+        const sku = await fetchSku(scryfallId);
+        const prices = await fetchPrices(sku);
 
         res.json(prices);
-    } catch (e) {
-        next(e);
+    } catch (err) {
+        next(err);
     }
 });
 

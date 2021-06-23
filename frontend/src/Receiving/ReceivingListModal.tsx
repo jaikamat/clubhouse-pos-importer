@@ -2,7 +2,7 @@ import React, { useState, useContext, FC } from 'react';
 import { Modal, Button, Form, List, Header } from 'semantic-ui-react';
 import { ReceivingContext, Trade } from '../context/ReceivingContext';
 import Price from '../common/Price';
-import { Form as FormikForm, Formik } from 'formik';
+import { useFormik } from 'formik';
 import sum from '../utils/sum';
 
 interface Props {}
@@ -54,6 +54,12 @@ const ReceivingListModal: FC<Props> = () => {
         );
         setLoading(false);
     };
+
+    const { handleChange, handleSubmit, errors } = useFormik({
+        initialValues: initialFormValues,
+        validate,
+        onSubmit,
+    });
 
     const cashTotal = sum(
         receivingList
@@ -114,61 +120,42 @@ const ReceivingListModal: FC<Props> = () => {
                             ) : null}
                         </List>
                     </Modal.Content>
-                    <Formik
-                        initialValues={initialFormValues}
-                        onSubmit={onSubmit}
-                        validate={validate}
-                    >
-                        {({ handleChange, handleSubmit, errors }) => (
-                            <>
-                                <Modal.Content>
-                                    <FormikForm>
-                                        <Form>
-                                            <Form.Group widths="equal">
-                                                <Form.Field>
-                                                    <label>Customer name</label>
-                                                    <Form.Input
-                                                        onChange={handleChange}
-                                                        name="customerName"
-                                                        error={
-                                                            errors.customerName
-                                                        }
-                                                    />
-                                                </Form.Field>
-                                                <Form.Field>
-                                                    <label>
-                                                        Customer contact
-                                                        (optional)
-                                                    </label>
-                                                    <Form.Input
-                                                        onChange={handleChange}
-                                                        name="customerContact"
-                                                        error={
-                                                            errors.customerContact
-                                                        }
-                                                    />
-                                                </Form.Field>
-                                            </Form.Group>
-                                        </Form>
-                                    </FormikForm>
-                                </Modal.Content>
-                                <Modal.Actions>
-                                    <Button onClick={() => setShowModal(false)}>
-                                        Cancel
-                                    </Button>
-                                    <Button
-                                        color="blue"
-                                        type="submit"
-                                        loading={loading}
-                                        disabled={loading}
-                                        onClick={() => handleSubmit()}
-                                    >
-                                        Submit
-                                    </Button>
-                                </Modal.Actions>
-                            </>
-                        )}
-                    </Formik>
+                    <Modal.Content>
+                        <Form>
+                            <Form.Group widths="equal">
+                                <Form.Field>
+                                    <label>Customer name</label>
+                                    <Form.Input
+                                        onChange={handleChange}
+                                        name="customerName"
+                                        error={errors.customerName}
+                                    />
+                                </Form.Field>
+                                <Form.Field>
+                                    <label>Customer contact (optional)</label>
+                                    <Form.Input
+                                        onChange={handleChange}
+                                        name="customerContact"
+                                        error={errors.customerContact}
+                                    />
+                                </Form.Field>
+                            </Form.Group>
+                        </Form>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button onClick={() => setShowModal(false)}>
+                            Cancel
+                        </Button>
+                        <Button
+                            color="blue"
+                            type="submit"
+                            loading={loading}
+                            disabled={loading}
+                            onClick={() => handleSubmit()}
+                        >
+                            Submit
+                        </Button>
+                    </Modal.Actions>
                 </Modal>
             )}
         </>

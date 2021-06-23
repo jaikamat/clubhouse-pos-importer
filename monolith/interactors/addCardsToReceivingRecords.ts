@@ -3,12 +3,21 @@ import getDatabaseConnection from '../database';
 import { ReceivingCard } from './addCardToInventoryReceiving';
 import { ClubhouseLocation } from '../common/types';
 
-async function addCardsToReceivingRecords(
-    cards: ReceivingCard[],
-    employeeNumber: number,
-    location: ClubhouseLocation,
-    userId: string
-) {
+interface Args {
+    cards: ReceivingCard[];
+    employeeNumber: number;
+    location: ClubhouseLocation;
+    userId: string;
+    customerName: string;
+    customerContact?: string;
+}
+
+async function addCardsToReceivingRecords({
+    cards,
+    employeeNumber,
+    location,
+    userId,
+}: Args) {
     try {
         const db = await getDatabaseConnection();
 

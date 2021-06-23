@@ -301,18 +301,20 @@ router.post('/receiveCards', (req: ReqWithReceivingCards, res, next) => {
 
 router.post('/receiveCards', async (req: ReqWithReceivingCards, res) => {
     try {
-        const { cards } = req.body;
+        const { cards, customerName, customerContact } = req.body;
         const messages = await addCardToInventoryReceiving(
             cards,
             req.currentLocation
         );
 
-        await addCardsToReceivingRecords(
+        await addCardsToReceivingRecords({
             cards,
-            req.lightspeedEmployeeNumber,
-            req.currentLocation,
-            req.userId
-        );
+            employeeNumber: req.lightspeedEmployeeNumber,
+            location: req.currentLocation,
+            userId: req.userId,
+            customerName,
+            customerContact,
+        });
 
         res.status(200).send(messages);
     } catch (err) {

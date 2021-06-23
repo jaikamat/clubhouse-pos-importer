@@ -15,7 +15,7 @@ const pricingEndpoint = (sku) =>
  * Retrieves the SKU from a card by querying Scryfall's API
  * @param {String} scryfallId - a card's Scryfall ID
  */
-async function getSku(scryfallId) {
+async function fetchSku(scryfallId) {
     try {
         const { data } = await axios.get(scryfallEndpoint(scryfallId));
 
@@ -64,7 +64,7 @@ async function fetchPrices(sku) {
 app.get("/", async (req, res, next) => {
     try {
         const { scryfallId } = req.query;
-        const sku = await getSku(scryfallId);
+        const sku = await fetchSku(scryfallId);
         const prices = await fetchPrices(sku);
 
         res.json(prices);

@@ -1,5 +1,5 @@
 import React, { useState, useContext, FC } from 'react';
-import { Modal, Button, Form } from 'semantic-ui-react';
+import { Modal, Button, Form, List, Header } from 'semantic-ui-react';
 import { ReceivingContext, Trade } from '../context/ReceivingContext';
 import Price from '../common/Price';
 import { Form as FormikForm, Formik } from 'formik';
@@ -81,45 +81,38 @@ const ReceivingListModal: FC<Props> = () => {
                     closeOnDimmerClick={false}
                     open={showModal}
                     onClose={() => setShowModal(false)}
-                    style={{ marginTop: '50px' }}
                 >
                     <Modal.Header>Receiving confirmation</Modal.Header>
-                    <Modal.Content>
-                        <p>
-                            <b>
-                                Pressing 'Submit' will commit the following
-                                items to inventory:
-                            </b>
-                        </p>
-                        <ul>
+                    <Modal.Content scrolling>
+                        <Header as="h5">
+                            Pressing 'Submit' will commit the following items to
+                            inventory:
+                        </Header>
+                        <List>
                             {receivingList.map((c) => {
                                 return (
-                                    <li key={c.uuid_key}>
-                                        {c.name} | {c.set_name}(
+                                    <List.Item key={c.uuid_key}>
+                                        ● {c.name} | {c.set_name}(
                                         {c.set.toUpperCase()})
-                                    </li>
+                                    </List.Item>
                                 );
                             })}
-                        </ul>
-                        <div>
-                            <p>
-                                <b>The customer is owed: </b>
-                            </p>
-                            <ul>
-                                {cashTotal > 0 ? (
-                                    <li>
-                                        <Price num={cashTotal} /> in cold, hard
-                                        cash
-                                    </li>
-                                ) : null}
-                                {creditTotal > 0 ? (
-                                    <li>
-                                        <Price num={creditTotal} /> in store
-                                        credit
-                                    </li>
-                                ) : null}
-                            </ul>
-                        </div>
+                        </List>
+                        <Header as="h5">The customer is owed:</Header>
+                        <List>
+                            {cashTotal > 0 ? (
+                                <List.Item>
+                                    ● <Price num={cashTotal} /> in cold, hard
+                                    cash
+                                </List.Item>
+                            ) : null}
+                            {creditTotal > 0 ? (
+                                <List.Item>
+                                    ● <Price num={creditTotal} /> in store
+                                    credit
+                                </List.Item>
+                            ) : null}
+                        </List>
                     </Modal.Content>
                     <Formik
                         initialValues={initialFormValues}
@@ -131,26 +124,31 @@ const ReceivingListModal: FC<Props> = () => {
                                 <Modal.Content>
                                     <FormikForm>
                                         <Form>
-                                            <Form.Field>
-                                                <label>Customer name</label>
-                                                <Form.Input
-                                                    onChange={handleChange}
-                                                    name="customerName"
-                                                    error={errors.customerName}
-                                                />
-                                            </Form.Field>
-                                            <Form.Field>
-                                                <label>
-                                                    Customer contact (optional)
-                                                </label>
-                                                <Form.Input
-                                                    onChange={handleChange}
-                                                    name="customerContact"
-                                                    error={
-                                                        errors.customerContact
-                                                    }
-                                                />
-                                            </Form.Field>
+                                            <Form.Group widths="equal">
+                                                <Form.Field>
+                                                    <label>Customer name</label>
+                                                    <Form.Input
+                                                        onChange={handleChange}
+                                                        name="customerName"
+                                                        error={
+                                                            errors.customerName
+                                                        }
+                                                    />
+                                                </Form.Field>
+                                                <Form.Field>
+                                                    <label>
+                                                        Customer contact
+                                                        (optional)
+                                                    </label>
+                                                    <Form.Input
+                                                        onChange={handleChange}
+                                                        name="customerContact"
+                                                        error={
+                                                            errors.customerContact
+                                                        }
+                                                    />
+                                                </Form.Field>
+                                            </Form.Group>
                                         </Form>
                                     </FormikForm>
                                 </Modal.Content>

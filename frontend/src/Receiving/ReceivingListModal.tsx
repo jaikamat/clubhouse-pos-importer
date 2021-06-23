@@ -91,15 +91,14 @@ const ReceivingListModal: FC<Props> = () => {
                     <Modal.Header>Receiving confirmation</Modal.Header>
                     <Modal.Content scrolling>
                         <Header as="h5">
-                            Pressing 'Submit' will commit the following items to
-                            inventory:
+                            Committing the following cards to inventory:
                         </Header>
                         <List>
                             {receivingList.map((c) => {
                                 return (
                                     <List.Item key={c.uuid_key}>
-                                        ● {c.name} | {c.set_name}(
-                                        {c.set.toUpperCase()})
+                                        {`● ${c.name} | ${c.set_name} (
+                                        ${c.set.toUpperCase()})`}
                                     </List.Item>
                                 );
                             })}

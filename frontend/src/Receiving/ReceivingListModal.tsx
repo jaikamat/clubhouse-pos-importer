@@ -48,7 +48,10 @@ const ReceivingListModal: FC<Props> = () => {
 
     const onSubmit = async ({ customerName, customerContact }: FormValues) => {
         setLoading(true);
-        await commitToInventory(customerName, customerContact);
+        await commitToInventory(
+            customerName,
+            customerContact ? customerContact : null
+        );
         setLoading(false);
     };
 

@@ -17,6 +17,8 @@ async function addCardsToReceivingRecords({
     employeeNumber,
     location,
     userId,
+    customerName,
+    customerContact,
 }: Args) {
     try {
         const db = await getDatabaseConnection();
@@ -28,6 +30,8 @@ async function addCardsToReceivingRecords({
                 employee_number: employeeNumber,
                 received_card_list: cards,
                 created_by: userId,
+                customer_name: customerName,
+                customer_contact: customerContact,
             });
 
         console.log(`Recorded ${cards.length} received cards at ${location}`);

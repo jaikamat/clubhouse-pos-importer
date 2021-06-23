@@ -18,14 +18,20 @@ interface ReceivingQueryCard {
 
 interface Payload {
     cards: ReceivingQueryCard[];
+    customerName: string;
+    customerContact: string | null;
 }
 
-const receivingQuery = async ({ cards }: Payload) => {
+const receivingQuery = async ({
+    cards,
+    customerName,
+    customerContact,
+}: Payload) => {
     try {
         // We do not expect to use the return type, so we designate it `void`
         const { data } = await axios.post<void>(
             RECEIVE_CARDS,
-            { cards },
+            { cards, customerName, customerContact },
             { headers: makeAuthHeader() }
         );
 

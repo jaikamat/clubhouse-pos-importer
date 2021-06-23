@@ -37,7 +37,10 @@ interface Context {
     removeFromList: (uuid: string) => void;
     activeTradeType: (uuid: string, tradeType: Trade) => void;
     selectAll: (trade: Trade) => void;
-    commitToInventory: () => void;
+    commitToInventory: (
+        customerName: string,
+        customerContact: string | null
+    ) => void;
     resetSearchResults: () => void;
 }
 
@@ -156,14 +159,21 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
     /**
      * Persists all passed cards to inventory
      */
-    const commitToInventory = async () => {
+    const commitToInventory = async (
+        customerName: string,
+        customerContact: string | null
+    ) => {
         try {
             const cardsToCommit = receivingList.map((card) => ({
                 ...card,
                 quantity: 1, // Only committing one per line-item
             }));
 
-            await receivingQuery({ cards: cardsToCommit });
+            await receivingQuery({
+                cards: cardsToCommit,
+                customerName,
+                customerContact,
+            });
 
             setSearchResults([]);
             setReceivingList([]);

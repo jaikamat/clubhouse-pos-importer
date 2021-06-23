@@ -1,13 +1,11 @@
 import React, { useState, useContext, FC } from 'react';
 import { Modal, Button, Form } from 'semantic-ui-react';
-import { ReceivingContext } from '../context/ReceivingContext';
+import { ReceivingContext, Trade } from '../context/ReceivingContext';
 import Price from '../common/Price';
 import { Form as FormikForm, Formik } from 'formik';
+import sum from '../utils/sum';
 
-interface Props {
-    cashTotal: number;
-    creditTotal: number;
-}
+interface Props {}
 
 interface FormValues {
     customerName: string;
@@ -19,7 +17,30 @@ const initialFormValues: FormValues = {
     customerContact: '',
 };
 
-const ReceivingListModal: FC<Props> = ({ cashTotal, creditTotal }) => {
+// TODO: Extract and generalize this
+const validate = ({ customerName, customerContact }: FormValues) => {
+    const errors: Partial<Record<keyof FormValues, string>> = {};
+
+    if (!customerName) {
+        errors.customerName = 'Required';
+    }
+
+    if (customerName.length < 3) {
+        errors.customerName = 'Min 3 characters';
+    }
+
+    if (customerName.length > 50) {
+        errors.customerName = 'Max 50 characters';
+    }
+
+    if (customerContact.length > 50) {
+        errors.customerContact = 'Max 50 characters';
+    }
+
+    return errors;
+};
+
+const ReceivingListModal: FC<Props> = () => {
     const [loading, setLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
@@ -30,6 +51,18 @@ const ReceivingListModal: FC<Props> = ({ cashTotal, creditTotal }) => {
         await commitToInventory(customerName, customerContact);
         setLoading(false);
     };
+
+    const cashTotal = sum(
+        receivingList
+            .filter((c) => c.tradeType === Trade.Cash)
+            .map((c) => c.cashPrice || 0)
+    );
+
+    const creditTotal = sum(
+        receivingList
+            .filter((c) => c.tradeType === Trade.Credit)
+            .map((c) => c.creditPrice || 0)
+    );
 
     return (
         <>
@@ -88,20 +121,19 @@ const ReceivingListModal: FC<Props> = ({ cashTotal, creditTotal }) => {
                     <Formik
                         initialValues={initialFormValues}
                         onSubmit={onSubmit}
+                        validate={validate}
                     >
-                        {({ values, handleChange, handleSubmit }) => (
+                        {({ handleChange, handleSubmit, errors }) => (
                             <>
                                 <Modal.Content>
                                     <FormikForm>
-                                        <pre>
-                                            {JSON.stringify(values, null, 2)}
-                                        </pre>
                                         <Form>
                                             <Form.Field>
                                                 <label>Customer name</label>
                                                 <Form.Input
                                                     onChange={handleChange}
                                                     name="customerName"
+                                                    error={errors.customerName}
                                                 />
                                             </Form.Field>
                                             <Form.Field>
@@ -111,6 +143,9 @@ const ReceivingListModal: FC<Props> = ({ cashTotal, creditTotal }) => {
                                                 <Form.Input
                                                     onChange={handleChange}
                                                     name="customerContact"
+                                                    error={
+                                                        errors.customerContact
+                                                    }
                                                 />
                                             </Form.Field>
                                         </Form>

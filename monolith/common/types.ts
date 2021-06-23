@@ -146,8 +146,14 @@ export interface ReceivingCard {
     tradeType: Trade;
 }
 
+export interface ReceivingBody {
+    customerName: string;
+    customerContact: string;
+    cards: ReceivingCard[];
+}
+
 export interface ReqWithReceivingCards extends RequestWithUserInfo {
-    body: { cards: ReceivingCard[] };
+    body: ReceivingBody;
 }
 
 export interface SuspendSaleBody {

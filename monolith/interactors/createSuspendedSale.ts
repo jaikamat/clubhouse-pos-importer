@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { ClubhouseLocation } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
@@ -67,7 +68,7 @@ async function createSuspendedSale(
         await Promise.all(dbInserts);
 
         return await collection.insertOne({
-            createdAt: new Date(),
+            createdAt: moment().utc().toDate(),
             name: customerName,
             notes: notes,
             list: saleList,

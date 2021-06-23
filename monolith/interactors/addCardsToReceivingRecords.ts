@@ -2,6 +2,7 @@ import collectionFromLocation from '../lib/collectionFromLocation';
 import getDatabaseConnection from '../database';
 import { ReceivingCard } from './addCardToInventoryReceiving';
 import { ClubhouseLocation } from '../common/types';
+import moment from 'moment';
 
 interface Args {
     cards: ReceivingCard[];
@@ -26,7 +27,7 @@ async function addCardsToReceivingRecords({
         await db
             .collection(collectionFromLocation(location).receivedCards)
             .insertOne({
-                created_at: new Date(),
+                created_at: moment().utc().toDate(),
                 employee_number: employeeNumber,
                 received_card_list: cards,
                 created_by: userId,

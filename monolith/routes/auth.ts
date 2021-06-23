@@ -36,6 +36,7 @@ import {
     JoiValidation,
     PriceFilter,
     priceFilters,
+    ReceivingBody,
     ReceivingCard,
     RequestWithUserInfo,
     ReqWithFinishSaleCards,
@@ -258,7 +259,7 @@ router.get('/getSaleByTitle', async (req: RequestWithUserInfo, res) => {
  * Sanitizes card object properties so nothing funky is committed to the database
  */
 router.post('/receiveCards', (req: ReqWithReceivingCards, res, next) => {
-    const schema = Joi.object<ReceivingCard>({
+    const receivingCardSchema = Joi.object<ReceivingCard>({
         id: Joi.string().required(),
         quantity: Joi.number().integer().required(),
         name: Joi.string().required(),
@@ -273,21 +274,23 @@ router.post('/receiveCards', (req: ReqWithReceivingCards, res, next) => {
         tradeType: Joi.string().valid(Trade.Cash, Trade.Credit).required(),
     });
 
-    const { cards } = req.body;
+    const schema = Joi.object<ReceivingBody>({
+        customerName: Joi.string().min(3).max(50).required(),
+        customerContact: Joi.string().max(50).allow(null),
+        cards: Joi.array().items(receivingCardSchema),
+    });
 
     try {
-        for (let card of cards) {
-            const { error }: JoiValidation<ReceivingCard> = schema.validate(
-                card,
-                {
-                    abortEarly: false,
-                    allowUnknown: true,
-                }
-            );
-
-            if (error) {
-                return res.status(400).json(error);
+        const { error }: JoiValidation<ReceivingCard> = schema.validate(
+            req.body,
+            {
+                abortEarly: false,
+                allowUnknown: true,
             }
+        );
+
+        if (error) {
+            return res.status(400).json(error);
         }
 
         return next();
@@ -298,18 +301,20 @@ router.post('/receiveCards', (req: ReqWithReceivingCards, res, next) => {
 
 router.post('/receiveCards', async (req: ReqWithReceivingCards, res) => {
     try {
-        const { cards } = req.body;
+        const { cards, customerName, customerContact } = req.body;
         const messages = await addCardToInventoryReceiving(
             cards,
             req.currentLocation
         );
 
-        await addCardsToReceivingRecords(
+        await addCardsToReceivingRecords({
             cards,
-            req.lightspeedEmployeeNumber,
-            req.currentLocation,
-            req.userId
-        );
+            employeeNumber: req.lightspeedEmployeeNumber,
+            location: req.currentLocation,
+            userId: req.userId,
+            customerName,
+            customerContact,
+        });
 
         res.status(200).send(messages);
     } catch (err) {

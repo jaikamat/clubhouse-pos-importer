@@ -115,10 +115,7 @@ const ReceivingListTotals: FC<Props> = () => {
                                 </Statistic.Value>
                             </Statistic>
                         </div>
-                        <ReceivingListModal
-                            cashTotal={cashTotal}
-                            creditTotal={creditTotal}
-                        />
+                        <ReceivingListModal />
                     </Segment>
                 </FlexCol>
             </FlexRow>

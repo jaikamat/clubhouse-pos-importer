@@ -51,6 +51,7 @@ import {
     TypeLine,
     typeLines,
 } from '../common/types';
+import moment from 'moment';
 
 /**
  * Middleware to check for Bearer token by validating JWT
@@ -535,8 +536,8 @@ router.get('/getReceivedCards', async (req: RequestWithUserInfo, res) => {
     try {
         const message = await getCardsFromReceiving({
             location: req.currentLocation,
-            startDate: new Date(startDate),
-            endDate: new Date(endDate),
+            startDate: moment(startDate).utc().startOf('day').toDate(),
+            endDate: moment(endDate).utc().endOf('day').toDate(),
             cardName: cardName || null,
         });
 

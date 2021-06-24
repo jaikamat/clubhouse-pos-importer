@@ -165,8 +165,16 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
     ) => {
         try {
             const cardsToCommit = receivingList.map((card) => ({
-                ...card,
                 quantity: 1, // Only committing one per line-item
+                id: card.id,
+                name: card.name,
+                set_name: card.set_name,
+                finishCondition: card.finishCondition,
+                set: card.set,
+                creditPrice: card.creditPrice,
+                cashPrice: card.cashPrice,
+                marketPrice: card.marketPrice,
+                tradeType: card.tradeType,
             }));
 
             await receivingQuery({

@@ -11,12 +11,15 @@ import {
     List,
     ListItem,
     ListItemText,
+    Typography,
 } from '@material-ui/core';
-import { ReceivedCard } from './browseReceivingQuery';
+import { Received } from './browseReceivingQuery';
 import MetaData from '../ui/MetaData';
+import formatDate from '../utils/formatDate';
+import displayEmpty from '../utils/displayEmpty';
 
 interface Props {
-    receivingList: ReceivedCard[];
+    received: Received;
     onClose: () => void;
 }
 
@@ -29,59 +32,90 @@ function displayTrade(trade: Trade) {
     else if (trade === Trade.Cash) return 'Cash';
 }
 
-const ReceivingListDialog: FC<Props> = ({ receivingList, onClose }) => {
+const ReceivingListDialog: FC<Props> = ({ received, onClose }) => {
+    const {
+        received_card_list: receivingList,
+        created_at,
+        created_by,
+        customer_name,
+        customer_contact,
+    } = received;
+
     return (
-        <Dialog open onClose={onClose} maxWidth="sm" fullWidth>
-            <DialogTitle>Received cards</DialogTitle>
+        <Dialog open onClose={onClose} maxWidth="md" fullWidth>
+            <DialogTitle>
+                Received cards
+                <Typography color="textSecondary">
+                    <MetaData>
+                        <span>{formatDate(created_at)}</span>
+                        <span>Received by {created_by.username}</span>
+                        <span>Customer: {displayEmpty(customer_name)}</span>
+                        <span>
+                            Customer contact: {displayEmpty(customer_contact)}
+                        </span>
+                    </MetaData>
+                </Typography>
+            </DialogTitle>
             <DialogContent>
                 <List>
-                    {alphaSort(receivingList).map((c) => {
+                    {alphaSort(receivingList).map((card) => {
+                        const {
+                            name,
+                            set,
+                            set_name,
+                            finishCondition,
+                            tradeType,
+                            creditPrice,
+                            cashPrice,
+                            marketPrice,
+                        } = card;
+
                         return (
                             <ListItem>
                                 <ListItemText
                                     primary={
                                         <>
-                                            <span>{c.name}</span>
+                                            <span>{name}</span>
                                             <i
-                                                className={`ss ss-fw ss-${c.set}`}
+                                                className={`ss ss-fw ss-${set}`}
                                                 style={{
                                                     fontSize: '20px',
                                                 }}
                                             />
-                                            <span>({c.set_name})</span>
+                                            <span>({set_name})</span>
                                         </>
                                     }
                                     secondary={
                                         <MetaData>
                                             <span>
                                                 {displayFinishCondition(
-                                                    c.finishCondition
+                                                    finishCondition
                                                 )}
                                             </span>
                                             <span>
-                                                {displayTrade(c.tradeType)}
+                                                {displayTrade(tradeType)}
                                             </span>
-                                            {c.tradeType === Trade.Credit && (
+                                            {tradeType === Trade.Credit && (
                                                 <span>
                                                     Credit price:{' '}
-                                                    {price(c.creditPrice)}
+                                                    {price(creditPrice)}
                                                 </span>
                                             )}
-                                            {c.tradeType === Trade.Cash && (
+                                            {tradeType === Trade.Cash && (
                                                 <>
                                                     <span>
                                                         Cash price:{' '}
-                                                        {price(c.cashPrice)}
+                                                        {price(cashPrice)}
                                                     </span>
                                                     <span>
                                                         Market price:{' '}
-                                                        {price(c.marketPrice)}
+                                                        {price(marketPrice)}
                                                     </span>
                                                 </>
                                             )}
                                         </MetaData>
                                     }
-                                ></ListItemText>
+                                />
                             </ListItem>
                         );
                     })}

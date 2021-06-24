@@ -284,10 +284,7 @@ router.post('/receiveCards', (req: ReqWithReceivingCards, res, next) => {
     try {
         const { error }: JoiValidation<ReceivingCard> = schema.validate(
             req.body,
-            {
-                abortEarly: false,
-                allowUnknown: true,
-            }
+            { abortEarly: false }
         );
 
         if (error) {

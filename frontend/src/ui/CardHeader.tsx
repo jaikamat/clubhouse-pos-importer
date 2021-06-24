@@ -5,7 +5,7 @@ import QohLabels from '../common/QohLabels';
 import Language from '../common/Language';
 import MarketPrice from '../common/MarketPrice';
 import { Finish } from '../utils/checkCardFinish';
-import styled from 'styled-components';
+import SetIcon from './SetIcon';
 
 interface Props {
     card: ScryfallCard;
@@ -13,10 +13,6 @@ interface Props {
     showMid?: boolean;
     round?: boolean;
 }
-
-const SetIcon = styled('i')({
-    fontSize: '30px',
-});
 
 // TODO: remove this shim after TCG api approval and integration
 const TcgPriceButton: FC<{ tcgId: number | null }> = ({ tcgId }) => {
@@ -59,7 +55,7 @@ const CardHeader: FC<Props> = ({
     return (
         <Item.Header as="h3">
             {display_name}
-            <SetIcon className={`ss ss-fw ss-${set} ss-${rarity}`} />
+            <SetIcon set={set} rarity={rarity} />
             <Label color="grey">
                 {set_name} ({set.toUpperCase()})
             </Label>

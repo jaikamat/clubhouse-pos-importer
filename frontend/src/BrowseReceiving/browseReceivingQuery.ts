@@ -31,6 +31,8 @@ export interface Received {
     employee_number: string;
     received_card_list: ReceivedCard[];
     created_by: ReceivedUser;
+    customer_name: string | null;
+    customer_contact: string | null;
 }
 
 interface Payload {

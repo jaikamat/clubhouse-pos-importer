@@ -2,6 +2,7 @@ import React, { FC, useState, MouseEvent } from 'react';
 import { Table, Icon } from 'semantic-ui-react';
 import Price from '../common/Price';
 import TooltipImage from '../common/TooltipImage';
+import SetIcon from '../ui/SetIcon';
 import { ResponseCard } from './filteredCardsQuery';
 
 const conditionMap = {
@@ -81,10 +82,7 @@ const DeckboxCloneRow: FC<Props> = ({
                 )}
             </Table.Cell>
             <Table.Cell>
-                <i
-                    className={`ss ss-fw ss-${set} ss-${rarity}`}
-                    style={{ fontSize: '20px' }}
-                />{' '}
+                <SetIcon set={set} rarity={rarity} />
                 {set_name}
             </Table.Cell>
             <Table.Cell>{conditionMap[condition]}</Table.Cell>

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { SaleContext, SaleListCard } from '../context/SaleContext';
 import Price from '../common/Price';
 import TooltipImage from '../common/TooltipImage';
+import SetIcon from '../ui/SetIcon';
 
 interface Props {
     card: SaleListCard;
@@ -68,10 +69,7 @@ const SaleLineItem: FC<Props> = ({
                             )}
                         </span>
                     </div>
-                    <i
-                        className={`ss ss-fw ss-${set} ss-${rarity}`}
-                        style={{ fontSize: '20px' }}
-                    />
+                    <SetIcon set={set} rarity={rarity} />
                     <Label color="grey">{set.toUpperCase()}</Label>
                     <div className="line-item-price">
                         {qtyToSell}x @ <Price num={price} />

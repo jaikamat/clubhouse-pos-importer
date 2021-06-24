@@ -17,6 +17,7 @@ import { Received } from './browseReceivingQuery';
 import MetaData from '../ui/MetaData';
 import formatDate from '../utils/formatDate';
 import displayEmpty from '../utils/displayEmpty';
+import SetIcon from '../ui/SetIcon';
 
 interface Props {
     received: Received;
@@ -76,12 +77,7 @@ const ReceivingListDialog: FC<Props> = ({ received, onClose }) => {
                                     primary={
                                         <>
                                             <span>{name}</span>
-                                            <i
-                                                className={`ss ss-fw ss-${set}`}
-                                                style={{
-                                                    fontSize: '20px',
-                                                }}
-                                            />
+                                            <SetIcon set={set} />
                                             <span>({set_name})</span>
                                         </>
                                     }

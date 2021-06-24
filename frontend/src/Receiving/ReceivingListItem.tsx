@@ -8,6 +8,7 @@ import {
     Trade,
 } from '../context/ReceivingContext';
 import TooltipImage from '../common/TooltipImage';
+import SetIcon from '../ui/SetIcon';
 
 interface Props {
     card: ReceivingCard;
@@ -77,10 +78,7 @@ const ReceivingListItem: FC<Props> = ({
                             )}
                         </span>
                     </div>
-                    <i
-                        className={`ss ss-fw ss-${set} ss-${rarity}`}
-                        style={{ fontSize: '20px' }}
-                    />
+                    <SetIcon set={set} rarity={rarity} />
                     <Label color="grey">{set.toUpperCase()}</Label>
                     {finishCondition && (
                         <span>

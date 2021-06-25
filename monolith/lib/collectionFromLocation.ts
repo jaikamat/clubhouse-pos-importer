@@ -1,17 +1,4 @@
-import { ClubhouseLocation } from '../common/types';
-
-export enum Collection {
-    cardInventory = 'card_inventory',
-    salesData = 'sales_data',
-    suspendedSales = 'suspended_sales',
-    receivedCards = 'received_cards',
-    cardInventory2 = 'card_inventory_ch2',
-    salesData2 = 'sales_data_ch2',
-    suspendedSales2 = 'suspended_sales_ch2',
-    receivedCards2 = 'received_cards_ch2',
-    scryfallBulkCards = 'scryfall_bulk_cards',
-    users = 'users',
-}
+import { ClubhouseLocation, Collection } from '../common/types';
 
 interface Ch1Collection {
     cardInventory: Collection.cardInventory;

@@ -1,5 +1,5 @@
+import { Collection } from '../common/types';
 import getDatabaseConnection from '../database';
-import { Collection } from '../lib/collectionFromLocation';
 
 export interface User {
     _id: string;

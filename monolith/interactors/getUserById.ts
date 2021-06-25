@@ -1,6 +1,6 @@
 import getDatabaseConnection from '../database';
 import { ObjectID } from 'mongodb';
-import { Collection } from '../lib/collectionFromLocation';
+import { Collection } from '../common/types';
 
 export interface User {
     _id: string;

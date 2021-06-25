@@ -1,5 +1,5 @@
+import { Collection } from '../common/types';
 import getDatabaseConnection from '../database';
-import { Collection } from '../lib/collectionFromLocation';
 
 async function autocomplete(term: string) {
     try {

@@ -1,15 +1,77 @@
 import { ObjectID } from 'mongodb';
+import { ClubhouseLocation } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 
-async function getReceivingById(id, location) {
+async function getReceivingById(id: string, location: ClubhouseLocation) {
     try {
         const db = await getDatabaseConnection();
-        const doc = await db
-            .collection(collectionFromLocation(location).receivedCards)
-            .findOne({ _id: new ObjectID(id) });
+        const collection = collectionFromLocation(location).receivedCards;
 
-        return doc;
+        let aggregation = [];
+
+        const match = { _id: new ObjectID(id) };
+
+        /**
+         * We zip up bulk card data here and alias it
+         * to `scryfall_cards` for downstream use.
+         */
+        const lookup = {
+            from: 'scryfall_bulk_cards',
+            localField: 'received_card_list.id',
+            foreignField: 'id',
+            as: 'scryfall_cards',
+        };
+
+        const project = {
+            created_at: 1,
+            created_by: 1,
+            customer_name: 1,
+            customer_contact: 1,
+            /**
+             * We iterate over the previous card list and replace
+             * its entries with scryfall bulk data through `$filter`
+             * and `id` equivalence.
+             *
+             * `$filter` resolves to an array, hence wrapping in `$arrayElemAt`.
+             */
+            received_cards: {
+                $map: {
+                    input: '$received_card_list',
+                    as: 'item',
+                    in: {
+                        quantity: '$$item.quantity',
+                        marketPrice: '$$item.marketPrice',
+                        cashPrice: '$$item.cashPrice',
+                        creditPrice: '$$item.creditPrice',
+                        tradeType: '$$item.tradeType',
+                        finishCondition: '$$item.finishCondition',
+                        bulk_card_data: {
+                            $arrayElemAt: [
+                                {
+                                    $filter: {
+                                        input: '$scryfall_cards',
+                                        as: 'card',
+                                        cond: {
+                                            $eq: ['$$item.id', '$$card.id'],
+                                        },
+                                    },
+                                },
+                                0,
+                            ],
+                        },
+                    },
+                },
+            },
+        };
+
+        aggregation.push({ $match: match });
+        aggregation.push({ $lookup: lookup });
+        aggregation.push({ $project: project });
+
+        const doc = await db.collection(collection).aggregate(aggregation);
+
+        return doc.toArray();
     } catch (e) {
         throw e;
     }

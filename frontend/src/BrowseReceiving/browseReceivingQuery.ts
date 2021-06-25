@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { FinishCondition } from '../utils/ScryfallCard';
 import makeAuthHeader from '../utils/makeAuthHeader';
-import { GET_RECEIVING_LIST } from '../utils/api_resources';
+import { RECEIVING } from '../utils/api_resources';
 import { Trade } from '../context/ReceivingContext';
 import { ClubhouseLocation } from '../context/AuthProvider';
 
@@ -47,7 +47,7 @@ const browseReceivingQuery = async ({
     endDate,
 }: Payload) => {
     try {
-        const { data } = await axios.get<Received[]>(GET_RECEIVING_LIST, {
+        const { data } = await axios.get<Received[]>(RECEIVING, {
             params: { cardName, startDate, endDate },
             headers: makeAuthHeader(),
         });

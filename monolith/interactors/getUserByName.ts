@@ -1,4 +1,5 @@
 import getDatabaseConnection from '../database';
+import { Collection } from '../lib/collectionFromLocation';
 
 export interface User {
     _id: string;
@@ -12,7 +13,7 @@ export default async function getUserByName(username: string): Promise<User> {
     try {
         const db = await getDatabaseConnection();
 
-        const user: User = await db.collection('users').findOne({
+        const user: User = await db.collection(Collection.users).findOne({
             username,
         });
 

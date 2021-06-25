@@ -12,20 +12,43 @@ async function getReceivingById(id: string, location: ClubhouseLocation) {
 
         const match = { _id: new ObjectID(id) };
 
+        const addFields = {
+            created_at: {
+                $toDate: '$_id',
+            },
+            /** Convert to ObjectId for proper $lookup types */
+            user_id: {
+                $toObjectId: '$created_by',
+            },
+        };
+
         /**
          * We zip up bulk card data here and alias it
          * to `scryfall_cards` for downstream use.
          */
-        const lookup = {
+        const bulkLookup = {
             from: 'scryfall_bulk_cards',
             localField: 'received_card_list.id',
             foreignField: 'id',
             as: 'scryfall_cards',
         };
 
+        /**
+         * Join users into the aggregation and replace created_by with user entity
+         */
+        const userLookup = {
+            from: collectionFromLocation(location).users,
+            localField: 'user_id',
+            foreignField: '_id',
+            as: 'created_by',
+        };
+
         const project = {
             created_at: 1,
-            created_by: 1,
+            created_by: {
+                /** $lookup resolves to an array, grab first element */
+                $arrayElemAt: ['$created_by', 0],
+            },
             customer_name: 1,
             customer_contact: 1,
             /**
@@ -66,7 +89,9 @@ async function getReceivingById(id: string, location: ClubhouseLocation) {
         };
 
         aggregation.push({ $match: match });
-        aggregation.push({ $lookup: lookup });
+        aggregation.push({ $addFields: addFields });
+        aggregation.push({ $lookup: bulkLookup });
+        aggregation.push({ $lookup: userLookup });
         aggregation.push({ $project: project });
 
         const doc = await db.collection(collection).aggregate(aggregation);

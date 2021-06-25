@@ -1,9 +1,10 @@
 import getDatabaseConnection from '../database';
+import { Collection } from '../lib/collectionFromLocation';
 
 async function autocomplete(term: string) {
     try {
         const db = await getDatabaseConnection();
-        const collection = db.collection('scryfall_bulk_cards');
+        const collection = db.collection(Collection.scryfallBulkCards);
 
         const results: { name: string }[] = await collection
             .aggregate([

@@ -1,7 +1,9 @@
 import { ObjectID } from 'mongodb';
 import { ClubhouseLocation } from '../common/types';
 import getDatabaseConnection from '../database';
-import collectionFromLocation from '../lib/collectionFromLocation';
+import collectionFromLocation, {
+    Collection,
+} from '../lib/collectionFromLocation';
 
 async function getReceivingById(id: string, location: ClubhouseLocation) {
     try {
@@ -27,7 +29,7 @@ async function getReceivingById(id: string, location: ClubhouseLocation) {
          * to `scryfall_cards` for downstream use.
          */
         const bulkLookup = {
-            from: 'scryfall_bulk_cards',
+            from: Collection.scryfallBulkCards,
             localField: 'received_card_list.id',
             foreignField: 'id',
             as: 'scryfall_cards',

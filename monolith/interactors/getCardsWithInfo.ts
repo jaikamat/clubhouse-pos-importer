@@ -1,6 +1,8 @@
 import { ClubhouseLocation } from '../common/types';
 import getDatabaseConnection from '../database';
-import collectionFromLocation from '../lib/collectionFromLocation';
+import collectionFromLocation, {
+    Collection,
+} from '../lib/collectionFromLocation';
 
 async function getCardsWithInfo(
     title: string,
@@ -80,7 +82,7 @@ async function getCardsWithInfo(
         if (matchInStock) pipeline.push(inventoryMatch);
 
         return await db
-            .collection('scryfall_bulk_cards')
+            .collection(Collection.scryfallBulkCards)
             .aggregate(pipeline)
             .toArray();
     } catch (err) {

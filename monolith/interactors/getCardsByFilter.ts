@@ -1,6 +1,8 @@
 import { ClubhouseLocation } from '../common/types';
 import getDatabaseConnection from '../database';
-import collectionFromLocation from '../lib/collectionFromLocation';
+import collectionFromLocation, {
+    Collection,
+} from '../lib/collectionFromLocation';
 import { GetCardsByFilterQuery } from '../routes/auth';
 const LIMIT = 100;
 
@@ -62,7 +64,7 @@ const getCardsByFilter = async (
         // Attach bulk card information
         aggregation.push({
             $lookup: {
-                from: 'scryfall_bulk_cards',
+                from: Collection.scryfallBulkCards,
                 localField: '_id',
                 foreignField: 'id',
                 as: 'bulk_match',

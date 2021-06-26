@@ -31,7 +31,7 @@ export interface Received {
     _id: string;
     created_at: string;
     employee_number: string;
-    received_card_list: ReceivedCard[];
+    received_cards: ReceivedCard[];
     created_by: ReceivedUser;
     customer_name: string | null;
     customer_contact: string | null;

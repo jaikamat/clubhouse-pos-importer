@@ -13,21 +13,22 @@ import {
     ListItemText,
     Typography,
 } from '@material-ui/core';
-import { Received } from './browseReceivingQuery';
 import MetaData from '../ui/MetaData';
 import formatDate from '../utils/formatDate';
 import displayEmpty from '../utils/displayEmpty';
 import SetIcon from '../ui/SetIcon';
-import receivedByIdQuery from './receivedByIdQuery';
+import receivedByIdQuery, { Received } from './receivedByIdQuery';
 
 interface Props {
     receivedId: string;
-    received: Received;
     onClose: () => void;
 }
 
-function alphaSort<T extends { name: string }>(arr: T[]) {
-    return [...arr].sort((a, b) => a.name.localeCompare(b.name));
+// TODO: This isn't working...
+function alphaSort<T extends { bulk_card_data: { name: string } }>(arr: T[]) {
+    return [...arr].sort((a, b) =>
+        a.bulk_card_data.name.localeCompare(b.bulk_card_data.name)
+    );
 }
 
 function displayTrade(trade: Trade) {
@@ -35,31 +36,42 @@ function displayTrade(trade: Trade) {
     else if (trade === Trade.Cash) return 'Cash';
 }
 
-// TODO: implement receivedById query here on mount
-const ReceivingListDialog: FC<Props> = ({ receivedId, received, onClose }) => {
+const ReceivingListDialog: FC<Props> = ({ receivedId, onClose }) => {
     const [loading, setLoading] = useState<boolean>(false);
-    const [data, setData] = useState<any>('');
-
-    const {
-        received_card_list: receivingList,
-        created_at,
-        created_by,
-        customer_name,
-        customer_contact,
-    } = received;
+    const [received, setReceived] = useState<Received | null>(null);
 
     useEffect(() => {
         (async () => {
             try {
                 setLoading(true);
                 const data = await receivedByIdQuery(receivedId);
-                setData(data);
+                setReceived(data);
                 setLoading(false);
             } catch (err) {
                 console.log(err);
             }
         })();
     }, []);
+
+    if (!received || loading)
+        return (
+            <Dialog open onClose={onClose} maxWidth="md" fullWidth>
+                <DialogTitle>Received cards</DialogTitle>
+                <DialogContent>
+                    <div>LOADING...</div>
+                </DialogContent>
+            </Dialog>
+        );
+
+    const {
+        received_cards: receivingList,
+        created_at,
+        created_by,
+        customer_name,
+        customer_contact,
+    } = received;
+
+    console.log({ received });
 
     return (
         <Dialog open onClose={onClose} maxWidth="md" fullWidth>
@@ -77,20 +89,17 @@ const ReceivingListDialog: FC<Props> = ({ receivedId, received, onClose }) => {
                 </Typography>
             </DialogTitle>
             <DialogContent>
-                {loading && <div>LOADING...</div>}
-                <pre>{JSON.stringify({ data }, null, 2)}</pre>
                 <List>
                     {alphaSort(receivingList).map((card) => {
                         const {
-                            name,
-                            set,
-                            set_name,
                             finishCondition,
                             tradeType,
                             creditPrice,
                             cashPrice,
                             marketPrice,
                         } = card;
+
+                        const { name, set, set_name } = card.bulk_card_data;
 
                         return (
                             <ListItem>

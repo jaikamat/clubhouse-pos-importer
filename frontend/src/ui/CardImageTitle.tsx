@@ -1,6 +1,6 @@
 import { makeStyles, Tooltip } from '@material-ui/core';
 import { FC } from 'react';
-import TooltipImage from '../common/TooltipImage';
+import { Image } from 'semantic-ui-react';
 
 interface Props {
     cardImage: string;
@@ -10,15 +10,20 @@ const useStyles = makeStyles({
     transparentBackground: {
         backgroundColor: 'transparent',
     },
+    borderRounded: {
+        borderRadius: '7px 7px 7px 7px',
+    },
 });
 
 const CardImageTitle: FC<Props> = ({ cardImage, children }) => {
-    const { transparentBackground } = useStyles();
+    const { transparentBackground, borderRounded } = useStyles();
 
     return (
         <Tooltip
             placement="bottom-start"
-            title={<TooltipImage image_uri={cardImage} />}
+            title={
+                <Image className={borderRounded} size="small" src={cardImage} />
+            }
             classes={{
                 tooltip: transparentBackground,
             }}

@@ -7,6 +7,7 @@ import { Formik, Form as FormikForm, Field } from 'formik';
 import { Form } from 'semantic-ui-react';
 import FormikSearchBar from '../ui/FormikSearchBar';
 import FormikNativeDatePicker from '../ui/FormikNativeDatePicker';
+import Loading from '../ui/Loading';
 
 interface FormValues {
     cardName: string;
@@ -85,7 +86,7 @@ const BrowseReceiving: FC = () => {
                 </Formik>
             </Box>
             {loading ? (
-                <CircularProgress />
+                <Loading />
             ) : (
                 <Grid container direction="column" spacing={2}>
                     {receivedList.map((rl) => (

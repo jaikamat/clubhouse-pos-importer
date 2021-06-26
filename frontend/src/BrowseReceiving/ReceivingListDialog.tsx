@@ -18,6 +18,7 @@ import formatDate from '../utils/formatDate';
 import displayEmpty from '../utils/displayEmpty';
 import SetIcon from '../ui/SetIcon';
 import receivedByIdQuery, { Received } from './receivedByIdQuery';
+import Loading from '../ui/Loading';
 
 interface Props {
     receivedId: string;
@@ -38,14 +39,14 @@ function displayTrade(trade: Trade) {
 
 const ReceivingListDialog: FC<Props> = ({ receivedId, onClose }) => {
     const [loading, setLoading] = useState<boolean>(false);
-    const [received, setReceived] = useState<Received | null>(null);
+    const [data, setData] = useState<Received | null>(null);
 
     useEffect(() => {
         (async () => {
             try {
                 setLoading(true);
                 const data = await receivedByIdQuery(receivedId);
-                setReceived(data);
+                setData(data);
                 setLoading(false);
             } catch (err) {
                 console.log(err);
@@ -53,15 +54,16 @@ const ReceivingListDialog: FC<Props> = ({ receivedId, onClose }) => {
         })();
     }, []);
 
-    if (!received || loading)
+    if (!data || loading) {
         return (
             <Dialog open onClose={onClose} maxWidth="md" fullWidth>
                 <DialogTitle>Received cards</DialogTitle>
                 <DialogContent>
-                    <div>LOADING...</div>
+                    <Loading />
                 </DialogContent>
             </Dialog>
         );
+    }
 
     const {
         received_cards: receivingList,
@@ -69,9 +71,7 @@ const ReceivingListDialog: FC<Props> = ({ receivedId, onClose }) => {
         created_by,
         customer_name,
         customer_contact,
-    } = received;
-
-    console.log({ received });
+    } = data;
 
     return (
         <Dialog open onClose={onClose} maxWidth="md" fullWidth>

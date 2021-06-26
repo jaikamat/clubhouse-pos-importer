@@ -3,7 +3,6 @@ import { Image } from 'semantic-ui-react';
 
 interface Props {
     image_uri: string;
-    posX?: number;
 }
 
 const TooltipImage: FC<Props> = ({ image_uri }) => {

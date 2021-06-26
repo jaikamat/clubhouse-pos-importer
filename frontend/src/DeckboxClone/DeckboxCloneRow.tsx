@@ -36,7 +36,9 @@ const DeckboxCloneRow: FC<Props> = ({
     return (
         <Table.Row>
             <Table.Cell>
-                <CardImageTitle name={name} cardImage={image_uri} />
+                <CardImageTitle cardImage={image_uri}>
+                    <span style={{ cursor: 'help' }}>{name} </span>
+                </CardImageTitle>
                 {finish === 'FOIL' && <Icon name="star" color="blue" />}
             </Table.Cell>
             <Table.Cell>

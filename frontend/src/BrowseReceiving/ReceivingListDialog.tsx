@@ -118,9 +118,14 @@ const ReceivingListDialog: FC<Props> = ({ receivedId, onClose }) => {
                                     primary={
                                         <>
                                             <CardImageTitle
-                                                name={name}
                                                 cardImage={cardImage}
-                                            />
+                                            >
+                                                <span
+                                                    style={{ cursor: 'help' }}
+                                                >
+                                                    {name}{' '}
+                                                </span>
+                                            </CardImageTitle>
                                             <SetIcon
                                                 set={set}
                                                 rarity={rarity}

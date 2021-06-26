@@ -3,7 +3,6 @@ import { FC } from 'react';
 import TooltipImage from '../common/TooltipImage';
 
 interface Props {
-    name: string;
     cardImage: string;
 }
 
@@ -13,7 +12,7 @@ const useStyles = makeStyles({
     },
 });
 
-const CardImageTitle: FC<Props> = ({ cardImage, name }) => {
+const CardImageTitle: FC<Props> = ({ cardImage, children }) => {
     const { transparentBackground } = useStyles();
 
     return (
@@ -24,7 +23,7 @@ const CardImageTitle: FC<Props> = ({ cardImage, name }) => {
                 tooltip: transparentBackground,
             }}
         >
-            <span style={{ cursor: 'help' }}>{name} </span>
+            <span>{children}</span>
         </Tooltip>
     );
 };

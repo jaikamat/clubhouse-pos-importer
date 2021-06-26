@@ -7,7 +7,7 @@ import {
     Trade,
 } from '../context/ReceivingContext';
 import SetIcon from '../ui/SetIcon';
-import CardImageTitle from '../ui/CardImageTitle';
+import CardImageTooltip from '../ui/CardImageTooltip';
 
 interface Props {
     card: ReceivingCard;
@@ -38,11 +38,11 @@ const ReceivingListItem: FC<Props> = ({
             <Grid verticalAlign="middle">
                 <Grid.Column tablet={16} computer={11}>
                     <div>
-                        <CardImageTitle cardImage={cardImage}>
+                        <CardImageTooltip cardImage={cardImage}>
                             <Header as="h4" style={{ cursor: 'help' }}>
                                 {display_name}
                             </Header>
-                        </CardImageTitle>
+                        </CardImageTooltip>
                     </div>
                     <SetIcon set={set} rarity={rarity} />
                     <Label color="grey">{set.toUpperCase()}</Label>

@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Table, Icon } from 'semantic-ui-react';
 import Price from '../common/Price';
-import CardImageTitle from '../ui/CardImageTitle';
+import CardImageTooltip from '../ui/CardImageTooltip';
 import SetIcon from '../ui/SetIcon';
 import { ResponseCard } from './filteredCardsQuery';
 
@@ -36,9 +36,9 @@ const DeckboxCloneRow: FC<Props> = ({
     return (
         <Table.Row>
             <Table.Cell>
-                <CardImageTitle cardImage={image_uri}>
+                <CardImageTooltip cardImage={image_uri}>
                     <span style={{ cursor: 'help' }}>{name} </span>
-                </CardImageTitle>
+                </CardImageTooltip>
                 {finish === 'FOIL' && <Icon name="star" color="blue" />}
             </Table.Cell>
             <Table.Cell>

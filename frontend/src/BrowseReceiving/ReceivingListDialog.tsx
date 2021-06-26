@@ -19,7 +19,7 @@ import displayEmpty from '../utils/displayEmpty';
 import SetIcon from '../ui/SetIcon';
 import receivedByIdQuery, { Received } from './receivedByIdQuery';
 import Loading from '../ui/Loading';
-import CardImageTitle from '../ui/CardImageTitle';
+import CardImageTooltip from '../ui/CardImageTooltip';
 import { ScryfallCard } from '../utils/ScryfallCard';
 
 interface Props {
@@ -117,7 +117,7 @@ const ReceivingListDialog: FC<Props> = ({ receivedId, onClose }) => {
                                 <ListItemText
                                     primary={
                                         <>
-                                            <CardImageTitle
+                                            <CardImageTooltip
                                                 cardImage={cardImage}
                                             >
                                                 <span
@@ -125,7 +125,7 @@ const ReceivingListDialog: FC<Props> = ({ receivedId, onClose }) => {
                                                 >
                                                     {name}{' '}
                                                 </span>
-                                            </CardImageTitle>
+                                            </CardImageTooltip>
                                             <SetIcon
                                                 set={set}
                                                 rarity={rarity}

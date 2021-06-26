@@ -15,7 +15,7 @@ const useStyles = makeStyles({
     },
 });
 
-const CardImageTitle: FC<Props> = ({ cardImage, children }) => {
+const CardImageTooltip: FC<Props> = ({ cardImage, children }) => {
     const { transparentBackground, borderRounded } = useStyles();
 
     return (
@@ -33,4 +33,4 @@ const CardImageTitle: FC<Props> = ({ cardImage, children }) => {
     );
 };
 
-export default CardImageTitle;
+export default CardImageTooltip;

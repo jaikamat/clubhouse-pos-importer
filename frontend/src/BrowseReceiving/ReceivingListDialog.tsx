@@ -104,7 +104,13 @@ const ReceivingListDialog: FC<Props> = ({ receivedId, onClose }) => {
                             card.bulk_card_data
                         );
 
-                        const { set, set_name, rarity } = modeledCard;
+                        const {
+                            name,
+                            cardImage,
+                            set,
+                            set_name,
+                            rarity,
+                        } = modeledCard;
 
                         return (
                             <ListItem>
@@ -112,7 +118,8 @@ const ReceivingListDialog: FC<Props> = ({ receivedId, onClose }) => {
                                     primary={
                                         <>
                                             <CardImageTitle
-                                                card={modeledCard}
+                                                name={name}
+                                                cardImage={cardImage}
                                             />
                                             <SetIcon
                                                 set={set}

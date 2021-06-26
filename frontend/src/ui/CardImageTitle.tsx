@@ -1,25 +1,31 @@
-import { Tooltip, withStyles } from '@material-ui/core';
+import { makeStyles, Tooltip } from '@material-ui/core';
 import { FC } from 'react';
 import TooltipImage from '../common/TooltipImage';
-import { ScryfallCard } from '../utils/ScryfallCard';
 
 interface Props {
-    card: ScryfallCard;
+    name: string;
+    cardImage: string;
 }
 
-const StyledTooltip = withStyles({
-    tooltip: {
+const useStyles = makeStyles({
+    transparentBackground: {
         backgroundColor: 'transparent',
     },
-})(Tooltip);
+});
 
-const CardImageTitle: FC<Props> = ({ card }) => {
-    const { cardImage, name } = card;
+const CardImageTitle: FC<Props> = ({ cardImage, name }) => {
+    const { transparentBackground } = useStyles();
 
     return (
-        <StyledTooltip title={<TooltipImage image_uri={cardImage} />}>
+        <Tooltip
+            placement="bottom-start"
+            title={<TooltipImage image_uri={cardImage} />}
+            classes={{
+                tooltip: transparentBackground,
+            }}
+        >
             <span style={{ cursor: 'help' }}>{name} </span>
-        </StyledTooltip>
+        </Tooltip>
     );
 };
 

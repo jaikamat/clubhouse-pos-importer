@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import browseReceivingQuery, { Received } from './browseReceivingQuery';
-import { Grid, Typography, Box, CircularProgress } from '@material-ui/core';
+import { Grid, Typography, Box } from '@material-ui/core';
 import ReceivingListItem from './ReceivingListItem';
 import moment from 'moment';
 import { Formik, Form as FormikForm, Field } from 'formik';

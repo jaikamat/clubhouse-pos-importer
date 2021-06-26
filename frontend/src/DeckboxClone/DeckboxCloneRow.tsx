@@ -76,10 +76,10 @@ const DeckboxCloneRow: FC<Props> = ({
                 >
                     {name}{' '}
                 </span>
-                {finish === 'FOIL' && <Icon name="star" color="blue" />}
                 {mouseInside && (
                     <TooltipImage image_uri={image_uri} posX={mouseX} />
                 )}
+                {finish === 'FOIL' && <Icon name="star" color="blue" />}
             </Table.Cell>
             <Table.Cell>
                 <SetIcon set={set} rarity={rarity} />

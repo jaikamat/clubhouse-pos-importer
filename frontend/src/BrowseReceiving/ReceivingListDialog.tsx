@@ -19,13 +19,14 @@ import displayEmpty from '../utils/displayEmpty';
 import SetIcon from '../ui/SetIcon';
 import receivedByIdQuery, { Received } from './receivedByIdQuery';
 import Loading from '../ui/Loading';
+import CardImageTitle from '../ui/CardImageTitle';
+import { ScryfallCard } from '../utils/ScryfallCard';
 
 interface Props {
     receivedId: string;
     onClose: () => void;
 }
 
-// TODO: This isn't working...
 function alphaSort<T extends { bulk_card_data: { name: string } }>(arr: T[]) {
     return [...arr].sort((a, b) =>
         a.bulk_card_data.name.localeCompare(b.bulk_card_data.name)
@@ -99,15 +100,24 @@ const ReceivingListDialog: FC<Props> = ({ receivedId, onClose }) => {
                             marketPrice,
                         } = card;
 
-                        const { name, set, set_name } = card.bulk_card_data;
+                        const modeledCard = new ScryfallCard(
+                            card.bulk_card_data
+                        );
+
+                        const { set, set_name, rarity } = modeledCard;
 
                         return (
                             <ListItem>
                                 <ListItemText
                                     primary={
                                         <>
-                                            <span>{name}</span>
-                                            <SetIcon set={set} />
+                                            <CardImageTitle
+                                                card={modeledCard}
+                                            />
+                                            <SetIcon
+                                                set={set}
+                                                rarity={rarity}
+                                            />
                                             <span>({set_name})</span>
                                         </>
                                     }

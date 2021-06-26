@@ -46,8 +46,7 @@ async function getReceivingById(id: string, location: ClubhouseLocation) {
         const project = {
             created_at: 1,
             created_by: {
-                /** $lookup resolves to an array, grab first element */
-                $arrayElemAt: ['$created_by', 0],
+                $first: '$created_by',
             },
             customer_name: 1,
             customer_contact: 1,
@@ -70,18 +69,15 @@ async function getReceivingById(id: string, location: ClubhouseLocation) {
                         tradeType: '$$item.tradeType',
                         finishCondition: '$$item.finishCondition',
                         bulk_card_data: {
-                            $arrayElemAt: [
-                                {
-                                    $filter: {
-                                        input: '$scryfall_cards',
-                                        as: 'card',
-                                        cond: {
-                                            $eq: ['$$item.id', '$$card.id'],
-                                        },
+                            $first: {
+                                $filter: {
+                                    input: '$scryfall_cards',
+                                    as: 'card',
+                                    cond: {
+                                        $eq: ['$$item.id', '$$card.id'],
                                     },
                                 },
-                                0,
-                            ],
+                            },
                         },
                     },
                 },
@@ -94,9 +90,12 @@ async function getReceivingById(id: string, location: ClubhouseLocation) {
         aggregation.push({ $lookup: userLookup });
         aggregation.push({ $project: project });
 
-        const doc = await db.collection(collection).aggregate(aggregation);
+        const doc = await db
+            .collection(collection)
+            .aggregate(aggregation)
+            .toArray();
 
-        return doc.toArray();
+        return doc[0]; // Return first element of array
     } catch (e) {
         throw e;
     }

@@ -46,7 +46,7 @@ const ReceivingListItem: FC<Props> = ({ received }) => {
         <>
             {dialogOpen && (
                 <ReceivingListDialog
-                    received={received}
+                    receivedId={received._id}
                     onClose={() => setDialogOpen(false)}
                 />
             )}

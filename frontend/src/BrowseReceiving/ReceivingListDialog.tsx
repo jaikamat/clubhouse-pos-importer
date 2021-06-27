@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Trade } from '../context/ReceivingContext';
 import displayFinishCondition from '../utils/finishCondition';
 import { price } from '../utils/price';
@@ -13,19 +13,24 @@ import {
     ListItemText,
     Typography,
 } from '@material-ui/core';
-import { Received } from './browseReceivingQuery';
 import MetaData from '../ui/MetaData';
 import formatDate from '../utils/formatDate';
 import displayEmpty from '../utils/displayEmpty';
 import SetIcon from '../ui/SetIcon';
+import receivedByIdQuery, { Received } from './receivedByIdQuery';
+import Loading from '../ui/Loading';
+import CardImageTooltip from '../ui/CardImageTooltip';
+import { ScryfallCard } from '../utils/ScryfallCard';
 
 interface Props {
-    received: Received;
+    receivedId: string;
     onClose: () => void;
 }
 
-function alphaSort<T extends { name: string }>(arr: T[]) {
-    return [...arr].sort((a, b) => a.name.localeCompare(b.name));
+function alphaSort<T extends { bulk_card_data: { name: string } }>(arr: T[]) {
+    return [...arr].sort((a, b) =>
+        a.bulk_card_data.name.localeCompare(b.bulk_card_data.name)
+    );
 }
 
 function displayTrade(trade: Trade) {
@@ -33,14 +38,41 @@ function displayTrade(trade: Trade) {
     else if (trade === Trade.Cash) return 'Cash';
 }
 
-const ReceivingListDialog: FC<Props> = ({ received, onClose }) => {
+const ReceivingListDialog: FC<Props> = ({ receivedId, onClose }) => {
+    const [loading, setLoading] = useState<boolean>(false);
+    const [data, setData] = useState<Received | null>(null);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                setLoading(true);
+                const data = await receivedByIdQuery(receivedId);
+                setData(data);
+                setLoading(false);
+            } catch (err) {
+                console.log(err);
+            }
+        })();
+    }, []);
+
+    if (!data || loading) {
+        return (
+            <Dialog open onClose={onClose} maxWidth="md" fullWidth>
+                <DialogTitle>Received cards</DialogTitle>
+                <DialogContent>
+                    <Loading />
+                </DialogContent>
+            </Dialog>
+        );
+    }
+
     const {
-        received_card_list: receivingList,
+        received_cards: receivingList,
         created_at,
         created_by,
         customer_name,
         customer_contact,
-    } = received;
+    } = data;
 
     return (
         <Dialog open onClose={onClose} maxWidth="md" fullWidth>
@@ -61,9 +93,6 @@ const ReceivingListDialog: FC<Props> = ({ received, onClose }) => {
                 <List>
                     {alphaSort(receivingList).map((card) => {
                         const {
-                            name,
-                            set,
-                            set_name,
                             finishCondition,
                             tradeType,
                             creditPrice,
@@ -71,13 +100,36 @@ const ReceivingListDialog: FC<Props> = ({ received, onClose }) => {
                             marketPrice,
                         } = card;
 
+                        const modeledCard = new ScryfallCard(
+                            card.bulk_card_data
+                        );
+
+                        const {
+                            name,
+                            cardImage,
+                            set,
+                            set_name,
+                            rarity,
+                        } = modeledCard;
+
                         return (
                             <ListItem>
                                 <ListItemText
                                     primary={
                                         <>
-                                            <span>{name}</span>
-                                            <SetIcon set={set} />
+                                            <CardImageTooltip
+                                                cardImage={cardImage}
+                                            >
+                                                <span
+                                                    style={{ cursor: 'help' }}
+                                                >
+                                                    {name}{' '}
+                                                </span>
+                                            </CardImageTooltip>
+                                            <SetIcon
+                                                set={set}
+                                                rarity={rarity}
+                                            />
                                             <span>({set_name})</span>
                                         </>
                                     }

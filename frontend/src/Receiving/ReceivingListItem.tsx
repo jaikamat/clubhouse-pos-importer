@@ -1,22 +1,17 @@
-import React, { useState, useContext, FC, MouseEvent } from 'react';
+import React, { useState, useContext, FC } from 'react';
 import { Button, Label, Icon, Grid, Segment, Header } from 'semantic-ui-react';
-import styled from 'styled-components';
 import Price from '../common/Price';
 import {
     ReceivingCard,
     ReceivingContext,
     Trade,
 } from '../context/ReceivingContext';
-import TooltipImage from '../common/TooltipImage';
 import SetIcon from '../ui/SetIcon';
+import CardImageTooltip from '../ui/CardImageTooltip';
 
 interface Props {
     card: ReceivingCard;
 }
-
-const BoldHelp = styled.b`
-    cursor: help;
-`;
 
 // Defines whether it uses cash or credit for trade types
 const TRADE_TYPE = { CASH: 'CASH', CREDIT: 'CREDIT' };
@@ -36,47 +31,18 @@ const ReceivingListItem: FC<Props> = ({
 }) => {
     const { CASH, CREDIT } = TRADE_TYPE;
     const [hovered, setHovered] = useState(false);
-    const [mouseInside, setMouseInside] = useState(false);
-    const [mousePos, setMousePos] = useState<{ X?: number }>({});
     const { removeFromList, activeTradeType } = useContext(ReceivingContext);
-
-    const mouseEnter = (e: MouseEvent<HTMLElement>) => {
-        const node = e.target as HTMLElement;
-        const rect = node.getBoundingClientRect();
-        const X = Math.round(e.clientX - rect.x) + 30;
-        setMouseInside(true);
-        setMousePos({ X });
-    };
-
-    const mouseMove = (e: MouseEvent<HTMLElement>) => {
-        const node = e.target as HTMLElement;
-        const rect = node.getBoundingClientRect();
-        const X = Math.round(e.clientX - rect.x) + 30;
-        setMousePos({ X });
-    };
-
-    const mouseLeave = () => setMouseInside(false);
 
     return (
         <Segment>
             <Grid verticalAlign="middle">
                 <Grid.Column tablet={16} computer={11}>
                     <div>
-                        <BoldHelp
-                            onMouseEnter={mouseEnter}
-                            onMouseMove={mouseMove}
-                            onMouseLeave={mouseLeave}
-                        >
-                            <Header as="h4">{display_name}</Header>
-                        </BoldHelp>
-                        <span>
-                            {mouseInside && (
-                                <TooltipImage
-                                    image_uri={cardImage}
-                                    posX={mousePos.X}
-                                />
-                            )}
-                        </span>
+                        <CardImageTooltip cardImage={cardImage}>
+                            <Header as="h4" style={{ cursor: 'help' }}>
+                                {display_name}
+                            </Header>
+                        </CardImageTooltip>
                     </div>
                     <SetIcon set={set} rarity={rarity} />
                     <Label color="grey">{set.toUpperCase()}</Label>

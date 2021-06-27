@@ -1,18 +1,13 @@
-import React, { useState, useContext, FC, MouseEvent } from 'react';
+import React, { useState, useContext, FC } from 'react';
 import { Button, Grid, Header, Label, Segment } from 'semantic-ui-react';
-import styled from 'styled-components';
 import { SaleContext, SaleListCard } from '../context/SaleContext';
 import Price from '../common/Price';
-import TooltipImage from '../common/TooltipImage';
 import SetIcon from '../ui/SetIcon';
+import CardImageTooltip from '../ui/CardImageTooltip';
 
 interface Props {
     card: SaleListCard;
 }
-
-const BoldHelp = styled.b`
-    cursor: help;
-`;
 
 const SaleLineItem: FC<Props> = ({
     card: {
@@ -27,47 +22,18 @@ const SaleLineItem: FC<Props> = ({
     },
 }) => {
     const [hovered, setHovered] = useState(false);
-    const [mouseInside, setMouseInside] = useState<boolean>(false);
-    const [mousePos, setMousePos] = useState<{ X?: number }>({});
     const { removeFromSaleList } = useContext(SaleContext);
-
-    const mouseEnter = (e: MouseEvent<HTMLElement>) => {
-        const node = e.target as HTMLElement;
-        const rect = node.getBoundingClientRect();
-        const X = Math.round(e.clientX - rect.x) + 30;
-        setMouseInside(true);
-        setMousePos({ X });
-    };
-
-    const mouseMove = (e: MouseEvent<HTMLElement>) => {
-        const node = e.target as HTMLElement;
-        const rect = node.getBoundingClientRect();
-        const X = Math.round(e.clientX - rect.x) + 30;
-        setMousePos({ X });
-    };
-
-    const mouseLeave = (e: MouseEvent) => setMouseInside(false);
 
     return (
         <Segment>
             <Grid verticalAlign="middle">
                 <Grid.Column tablet={16} computer={11}>
                     <div>
-                        <BoldHelp
-                            onMouseEnter={mouseEnter}
-                            onMouseMove={mouseMove}
-                            onMouseLeave={mouseLeave}
-                        >
-                            <Header as="h4">{display_name}</Header>
-                        </BoldHelp>
-                        <span>
-                            {mouseInside && (
-                                <TooltipImage
-                                    image_uri={cardImage}
-                                    posX={mousePos.X}
-                                />
-                            )}
-                        </span>
+                        <CardImageTooltip cardImage={cardImage}>
+                            <Header as="h4" style={{ cursor: 'help' }}>
+                                {display_name}
+                            </Header>
+                        </CardImageTooltip>
                     </div>
                     <SetIcon set={set} rarity={rarity} />
                     <Label color="grey">{set.toUpperCase()}</Label>

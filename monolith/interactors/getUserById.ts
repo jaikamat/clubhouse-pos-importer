@@ -1,5 +1,6 @@
 import getDatabaseConnection from '../database';
 import { ObjectID } from 'mongodb';
+import { Collection } from '../common/types';
 
 export interface User {
     _id: string;
@@ -13,7 +14,7 @@ export default async function getUserById(id: string): Promise<User> {
     try {
         const db = await getDatabaseConnection();
 
-        const user: User = await db.collection('users').findOne({
+        const user: User = await db.collection(Collection.users).findOne({
             _id: new ObjectID(id),
         });
 

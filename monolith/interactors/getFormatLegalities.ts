@@ -1,6 +1,6 @@
-import collectionFromLocation from '../lib/collectionFromLocation';
 import getDatabaseConnection from '../database';
-import { ClubhouseLocation } from '../common/types';
+import { ClubhouseLocation, Collection } from '../common/types';
+import collectionFromLocation from '../lib/collectionFromLocation';
 
 async function getFormatLegalities(location: ClubhouseLocation) {
     try {
@@ -49,7 +49,7 @@ async function getFormatLegalities(location: ClubhouseLocation) {
         // Create a join on the card ID to get current format legality
         agg.push({
             $lookup: {
-                from: 'scryfall_bulk_cards',
+                from: Collection.scryfallBulkCards,
                 localField: 'id',
                 foreignField: 'id',
                 as: 'joined_card',

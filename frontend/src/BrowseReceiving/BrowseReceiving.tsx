@@ -1,12 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
 import browseReceivingQuery, { Received } from './browseReceivingQuery';
-import { Grid, Typography, Box, CircularProgress } from '@material-ui/core';
+import { Grid, Typography, Box } from '@material-ui/core';
 import ReceivingListItem from './ReceivingListItem';
 import moment from 'moment';
 import { Formik, Form as FormikForm, Field } from 'formik';
 import { Form } from 'semantic-ui-react';
 import FormikSearchBar from '../ui/FormikSearchBar';
 import FormikNativeDatePicker from '../ui/FormikNativeDatePicker';
+import Loading from '../ui/Loading';
 
 interface FormValues {
     cardName: string;
@@ -85,7 +86,7 @@ const BrowseReceiving: FC = () => {
                 </Formik>
             </Box>
             {loading ? (
-                <CircularProgress />
+                <Loading />
             ) : (
                 <Grid container direction="column" spacing={2}>
                     {receivedList.map((rl) => (

@@ -52,6 +52,7 @@ import {
     typeLines,
 } from '../common/types';
 import moment from 'moment';
+import getReceivingById from '../interactors/getReceivingById';
 
 /**
  * Middleware to check for Bearer token by validating JWT
@@ -61,7 +62,7 @@ import moment from 'moment';
 router.use(async (req: RequestWithUserInfo, res, next) => {
     let token = req.headers['authorization']; // Express headers converted to lowercase
 
-    if (token.startsWith('Bearer ')) {
+    if (token && token.startsWith('Bearer ')) {
         token = token.slice(7, token.length);
     }
 
@@ -284,10 +285,7 @@ router.post('/receiveCards', (req: ReqWithReceivingCards, res, next) => {
     try {
         const { error }: JoiValidation<ReceivingCard> = schema.validate(
             req.body,
-            {
-                abortEarly: false,
-                allowUnknown: true,
-            }
+            { abortEarly: false }
         );
 
         if (error) {
@@ -545,6 +543,18 @@ router.get('/getReceivedCards', async (req: RequestWithUserInfo, res) => {
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
+    }
+});
+
+router.get('/getReceivedCards/:id', async (req: RequestWithUserInfo, res) => {
+    const { id } = req.params;
+
+    try {
+        const message = await getReceivingById(id, req.currentLocation);
+        res.status(200).send(message);
+    } catch (err) {
+        console.error(new Error(err));
+        res.status(500).send(err.message);
     }
 });
 

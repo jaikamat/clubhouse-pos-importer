@@ -1,13 +1,12 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, SyntheticEvent, useEffect, useState } from 'react';
 import browseReceivingQuery, { Received } from './browseReceivingQuery';
 import { Grid, Typography, Box } from '@material-ui/core';
 import ReceivingListItem from './ReceivingListItem';
 import moment from 'moment';
-import { Formik, Form as FormikForm, Field } from 'formik';
-import { Form } from 'semantic-ui-react';
-import FormikSearchBar from '../ui/FormikSearchBar';
-import FormikNativeDatePicker from '../ui/FormikNativeDatePicker';
+import { useFormik } from 'formik';
+import { Form, Input } from 'semantic-ui-react';
 import Loading from '../ui/Loading';
+import SearchBar from '../common/SearchBar';
 
 interface FormValues {
     cardName: string;
@@ -19,6 +18,11 @@ const initialFormValues: FormValues = {
     cardName: '',
     startDate: moment().subtract(30, 'days').format('YYYY-MM-DD'),
     endDate: moment().format('YYYY-MM-DD'),
+};
+
+// Not validations needed for now
+const validate = () => {
+    return {};
 };
 
 const BrowseReceiving: FC = () => {
@@ -36,12 +40,19 @@ const BrowseReceiving: FC = () => {
         setReceivedList(received);
     };
 
+    const { handleChange, values, setFieldValue, handleSubmit } = useFormik({
+        initialValues: initialFormValues,
+        validate,
+        onSubmit,
+    });
+
     useEffect(() => {
         (async () => {
             await onSubmit(initialFormValues);
         })();
     }, []);
 
+    // TODO: Extract relevant inputs for hook use
     return (
         <div>
             <Box pb={2}>
@@ -50,40 +61,54 @@ const BrowseReceiving: FC = () => {
                 </Typography>
             </Box>
             <Box pb={2}>
-                <Formik initialValues={initialFormValues} onSubmit={onSubmit}>
-                    {({ values }) => (
-                        <FormikForm>
-                            <Form>
-                                <Form.Group widths="6">
-                                    <Field
-                                        name="cardName"
-                                        label="Card name"
-                                        component={FormikSearchBar}
-                                    />
-                                    <Field
-                                        name="startDate"
-                                        label="Start date"
-                                        defaultValue={
-                                            initialFormValues.startDate
-                                        }
-                                        component={FormikNativeDatePicker}
-                                        max={values.endDate}
-                                    />
-                                    <Field
-                                        name="endDate"
-                                        label="End date"
-                                        defaultValue={initialFormValues.endDate}
-                                        component={FormikNativeDatePicker}
-                                        max={initialFormValues.endDate}
-                                    />
-                                </Form.Group>
-                                <Form.Button type="submit" primary>
-                                    Search
-                                </Form.Button>
-                            </Form>
-                        </FormikForm>
-                    )}
-                </Formik>
+                <Form>
+                    <Form.Group widths="6">
+                        <Form.Field>
+                            <label>Card name</label>
+                            <SearchBar
+                                handleSearchSelect={(value) => {
+                                    setFieldValue('cardName', value);
+                                }}
+                                // Reset form state after user blurs cardName
+                                onBlur={(
+                                    event: SyntheticEvent<Element, Event>
+                                ) => {
+                                    const element = event.target as HTMLInputElement;
+                                    setFieldValue('cardName', element.value);
+                                }}
+                            />
+                        </Form.Field>
+                        <Form.Field>
+                            <label>Start date</label>
+                            <Input
+                                id="startDate"
+                                name="startDate"
+                                type="date"
+                                onChange={handleChange}
+                                defaultValue={initialFormValues.startDate}
+                                max={values.endDate}
+                            />
+                        </Form.Field>
+                        <Form.Field>
+                            <label>End date</label>
+                            <Input
+                                id="endDate"
+                                name="endDate"
+                                type="date"
+                                onChange={handleChange}
+                                defaultValue={initialFormValues.endDate}
+                                max={initialFormValues.endDate}
+                            />
+                        </Form.Field>
+                    </Form.Group>
+                    <Form.Button
+                        type="submit"
+                        onClick={() => handleSubmit()}
+                        primary
+                    >
+                        Search
+                    </Form.Button>
+                </Form>
             </Box>
             {loading ? (
                 <Loading />

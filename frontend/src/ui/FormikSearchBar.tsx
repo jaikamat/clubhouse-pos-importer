@@ -1,7 +1,7 @@
 import { Form, FormFieldProps } from 'semantic-ui-react';
 import { FieldConfig, FormikProps } from 'formik';
 import SearchBar from '../common/SearchBar';
-import { SyntheticEvent } from 'react';
+import { FC, SyntheticEvent } from 'react';
 
 type FormikFieldProps<T> = {
     field: FieldConfig;
@@ -37,5 +37,30 @@ function FormikSearchBar<T>({
         </Form.Field>
     );
 }
+
+interface FormSearchBarProps {
+    label: string;
+    onChange: (value: string) => void;
+}
+
+export const FormSearchBar: FC<FormSearchBarProps> = ({ label, onChange }) => {
+    return (
+        <Form.Field>
+            <label>{label}</label>
+            <SearchBar
+                handleSearchSelect={(value) => {
+                    onChange(value);
+                    // setFieldValue('cardName', value);
+                }}
+                // Reset form state after user blurs cardName
+                onBlur={(event: SyntheticEvent<Element, Event>) => {
+                    const element = event.target as HTMLInputElement;
+                    onChange(element.value);
+                    // setFieldValue('cardName', element.value);
+                }}
+            />
+        </Form.Field>
+    );
+};
 
 export default FormikSearchBar;

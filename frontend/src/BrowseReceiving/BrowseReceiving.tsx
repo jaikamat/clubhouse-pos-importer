@@ -1,12 +1,13 @@
-import React, { FC, SyntheticEvent, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import browseReceivingQuery, { Received } from './browseReceivingQuery';
 import { Grid, Typography, Box } from '@material-ui/core';
 import ReceivingListItem from './ReceivingListItem';
 import moment from 'moment';
 import { useFormik } from 'formik';
-import { Form, Input } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
 import Loading from '../ui/Loading';
-import SearchBar from '../common/SearchBar';
+import { FormSearchBar } from '../ui/FormikSearchBar';
+import { FormNativeDatePicker } from '../ui/FormikNativeDatePicker';
 
 interface FormValues {
     cardName: string;
@@ -63,43 +64,24 @@ const BrowseReceiving: FC = () => {
             <Box pb={2}>
                 <Form>
                     <Form.Group widths="6">
-                        <Form.Field>
-                            <label>Card name</label>
-                            <SearchBar
-                                handleSearchSelect={(value) => {
-                                    setFieldValue('cardName', value);
-                                }}
-                                // Reset form state after user blurs cardName
-                                onBlur={(
-                                    event: SyntheticEvent<Element, Event>
-                                ) => {
-                                    const element = event.target as HTMLInputElement;
-                                    setFieldValue('cardName', element.value);
-                                }}
-                            />
-                        </Form.Field>
-                        <Form.Field>
-                            <label>Start date</label>
-                            <Input
-                                id="startDate"
-                                name="startDate"
-                                type="date"
-                                onChange={handleChange}
-                                defaultValue={initialFormValues.startDate}
-                                max={values.endDate}
-                            />
-                        </Form.Field>
-                        <Form.Field>
-                            <label>End date</label>
-                            <Input
-                                id="endDate"
-                                name="endDate"
-                                type="date"
-                                onChange={handleChange}
-                                defaultValue={initialFormValues.endDate}
-                                max={initialFormValues.endDate}
-                            />
-                        </Form.Field>
+                        <FormSearchBar
+                            label="Card name"
+                            onChange={(v) => setFieldValue('cardName', v)}
+                        />
+                        <FormNativeDatePicker
+                            label="Start date"
+                            name="startDate"
+                            defaultValue={initialFormValues.startDate}
+                            handleChange={handleChange}
+                            max={values.endDate}
+                        />
+                        <FormNativeDatePicker
+                            label="End date"
+                            name="endDate"
+                            defaultValue={initialFormValues.endDate}
+                            handleChange={handleChange}
+                            max={initialFormValues.endDate}
+                        />
                     </Form.Group>
                     <Form.Button
                         type="submit"

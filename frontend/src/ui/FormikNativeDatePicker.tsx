@@ -1,5 +1,6 @@
 import { Form, FormFieldProps, Input } from 'semantic-ui-react';
-import { FieldConfig, FormikProps } from 'formik';
+import { FieldConfig, FormikBag, FormikProps } from 'formik';
+import { ChangeEvent, FC } from 'react';
 
 type FormikFieldProps<T> = {
     field: FieldConfig;
@@ -40,5 +41,38 @@ function FormikNativeDatePicker<T>({
         </Form.Field>
     );
 }
+
+interface FormNativeDatePickerProps {
+    label: string;
+    name: string;
+    defaultValue: string;
+    handleChange: (e: ChangeEvent) => void;
+    min?: string;
+    max?: string;
+}
+
+export const FormNativeDatePicker: FC<FormNativeDatePickerProps> = ({
+    label,
+    name,
+    defaultValue,
+    handleChange,
+    min,
+    max,
+}) => {
+    return (
+        <Form.Field>
+            <label>{label}</label>
+            <Input
+                id={name}
+                name={name}
+                type="date"
+                onChange={handleChange}
+                defaultValue={defaultValue}
+                min={min}
+                max={max}
+            />
+        </Form.Field>
+    );
+};
 
 export default FormikNativeDatePicker;

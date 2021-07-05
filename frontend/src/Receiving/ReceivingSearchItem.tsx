@@ -119,7 +119,7 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
         return validateQty || validateTradeTypes;
     };
 
-    const { image_uris, card_faces, cardImage } = card;
+    const { cardImage } = card;
 
     return (
         <Segment>
@@ -136,8 +136,9 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
                         />
                         <Item.Description>
                             <Form>
-                                <Form.Group widths="12">
+                                <Form.Group widths="equal">
                                     <Form.Field
+                                        fluid
                                         control={Input}
                                         type="number"
                                         label="Quantity"
@@ -149,6 +150,7 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
                                         className="receiving-quantity"
                                     />
                                     <Form.Field
+                                        fluid
                                         label="Credit Price"
                                         name="creditInput"
                                         control={Input}
@@ -160,6 +162,7 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
                                         className="receiving-credit"
                                     />
                                     <Form.Field
+                                        fluid
                                         label="Cash Price"
                                         name="cashInput"
                                         control={Input}
@@ -171,6 +174,7 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
                                         className="receiving-cash"
                                     />
                                     <Form.Field
+                                        fluid
                                         label="Market Price"
                                         name="marketPriceInput"
                                         control={Input}
@@ -183,8 +187,9 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
                                         className="receiving-market"
                                     />
                                 </Form.Group>
-                                <Form.Group widths="12">
+                                <Form.Group widths="equal">
                                     <Form.Field
+                                        fluid
                                         label="Finish"
                                         control={Select}
                                         value={selectedFinish}
@@ -193,6 +198,7 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
                                         onChange={handleFinishChange}
                                     />
                                     <Form.Field
+                                        fluid
                                         label="Condition"
                                         control={Select}
                                         value={selectedCondition}

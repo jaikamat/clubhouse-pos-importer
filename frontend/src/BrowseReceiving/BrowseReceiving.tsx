@@ -6,8 +6,8 @@ import moment from 'moment';
 import { useFormik } from 'formik';
 import { Form } from 'semantic-ui-react';
 import Loading from '../ui/Loading';
-import { FormSearchBar } from '../ui/FormikSearchBar';
-import { FormNativeDatePicker } from '../ui/FormikNativeDatePicker';
+import { FormikSearchBar } from '../ui/FormikSearchBar';
+import { FormikNativeDatePicker } from '../ui/FormikNativeDatePicker';
 
 interface FormValues {
     cardName: string;
@@ -53,7 +53,6 @@ const BrowseReceiving: FC = () => {
         })();
     }, []);
 
-    // TODO: Extract relevant inputs for hook use
     return (
         <div>
             <Box pb={2}>
@@ -64,18 +63,18 @@ const BrowseReceiving: FC = () => {
             <Box pb={2}>
                 <Form>
                     <Form.Group widths="6">
-                        <FormSearchBar
+                        <FormikSearchBar
                             label="Card name"
                             onChange={(v) => setFieldValue('cardName', v)}
                         />
-                        <FormNativeDatePicker
+                        <FormikNativeDatePicker
                             label="Start date"
                             name="startDate"
                             defaultValue={initialFormValues.startDate}
                             handleChange={handleChange}
                             max={values.endDate}
                         />
-                        <FormNativeDatePicker
+                        <FormikNativeDatePicker
                             label="End date"
                             name="endDate"
                             defaultValue={initialFormValues.endDate}

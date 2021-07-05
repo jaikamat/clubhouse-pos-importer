@@ -1,49 +1,16 @@
-import { Form, FormFieldProps } from 'semantic-ui-react';
-import { FieldConfig, FormikProps } from 'formik';
+import { Form } from 'semantic-ui-react';
 import SearchBar from '../common/SearchBar';
 import { FC, SyntheticEvent } from 'react';
 
-type FormikFieldProps<T> = {
-    field: FieldConfig;
-    form: FormikProps<T>;
-    label: string;
-} & Omit<FormFieldProps, 'label' | 'name'>;
-
-/**
- * This is meant to be wrapped by a <Field /> component.
- *
- * The generics are inferred by passed prop values.
- */
-function FormikSearchBar<T>({
-    label,
-    /** Injected by <Field /> */
-    field,
-    /** Injected by <Field /> */
-    form,
-}: FormikFieldProps<T>) {
-    return (
-        <Form.Field>
-            <label>{label}</label>
-            <SearchBar
-                handleSearchSelect={(value) => {
-                    form.setFieldValue(field.name, value);
-                }}
-                // Reset form state after user blurs cardName
-                onBlur={(event: SyntheticEvent<Element, Event>) => {
-                    const element = event.target as HTMLInputElement;
-                    form.setFieldValue(field.name, element.value);
-                }}
-            />
-        </Form.Field>
-    );
-}
-
-interface FormSearchBarProps {
+interface FormikSearchBarProps {
     label: string;
     onChange: (value: string) => void;
 }
 
-export const FormSearchBar: FC<FormSearchBarProps> = ({ label, onChange }) => {
+export const FormikSearchBar: FC<FormikSearchBarProps> = ({
+    label,
+    onChange,
+}) => {
     return (
         <Form.Field>
             <label>{label}</label>

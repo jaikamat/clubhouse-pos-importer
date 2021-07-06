@@ -21,7 +21,7 @@ const initialFormValues: FormValues = {
     endDate: moment().format('YYYY-MM-DD'),
 };
 
-// Not validations needed for now
+// No validations needed for now
 const validate = () => {
     return {};
 };

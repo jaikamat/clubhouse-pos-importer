@@ -17,13 +17,11 @@ export const FormikSearchBar: FC<FormikSearchBarProps> = ({
             <SearchBar
                 handleSearchSelect={(value) => {
                     onChange(value);
-                    // setFieldValue('cardName', value);
                 }}
                 // Reset form state after user blurs cardName
                 onBlur={(event: SyntheticEvent<Element, Event>) => {
                     const element = event.target as HTMLInputElement;
                     onChange(element.value);
-                    // setFieldValue('cardName', element.value);
                 }}
             />
         </Form.Field>

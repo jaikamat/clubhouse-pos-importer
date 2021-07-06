@@ -1,33 +1,25 @@
-import { FormFieldProps, Dropdown } from 'semantic-ui-react';
-import { FieldConfig, FormikProps } from 'formik';
+import { FormFieldProps, Dropdown, DropdownProps } from 'semantic-ui-react';
 import { SyntheticEvent } from 'react';
 
-type FormikFieldProps<T, O> = {
-    field: FieldConfig;
-    form: FormikProps<T>;
-    label: string;
-    options: O[];
-} & Omit<FormFieldProps, 'label' | 'name' | 'options'>;
+type FormikDropdownFieldProps<T> = {
+    name: string;
+    onChange: (value: DropdownProps['value']) => void;
+    options: T[];
+} & Omit<FormFieldProps, 'name' | 'options' | 'onChange'>;
 
-/**
- * This is meant to be wrapped by a <Field /> component.
- *
- * The generics are inferred by passed prop values.
- */
-function FormikDropdown<T, O>({
+function FormikDropdown<T>({
+    label,
+    name,
+    onChange,
     options,
-    /** Injected by <Field /> */
-    field,
-    /** Injected by <Field /> */
-    form,
     ...props
-}: FormikFieldProps<T, O>) {
+}: FormikDropdownFieldProps<T>) {
     return (
         <Dropdown
             options={options}
-            name={field.name}
-            onChange={(_: SyntheticEvent, data) => {
-                form.setFieldValue(field.name, data.value);
+            name={name}
+            onChange={(_: SyntheticEvent, data: DropdownProps) => {
+                onChange(data.value);
             }}
             {...props}
         />

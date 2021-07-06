@@ -5,6 +5,7 @@ type FormSelectFieldProps<T> = {
     name: string;
     onChange: (value: string) => void;
     options: T[];
+    error?: string;
 } & Omit<FormFieldProps, 'label' | 'name' | 'options' | 'onChange'>;
 
 function FormikSelectField<T>({
@@ -12,10 +13,12 @@ function FormikSelectField<T>({
     name,
     options,
     onChange,
+    error,
     ...props
 }: FormSelectFieldProps<T>) {
     return (
         <Form.Field
+            error={error}
             control={Select}
             label={label}
             placeholder={label}

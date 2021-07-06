@@ -1,15 +1,16 @@
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
 import createToast from '../common/createToast';
-import { Form, Button, Segment, Select } from 'semantic-ui-react';
+import { Form, Button, Segment } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
 import { ClubhouseLocation, useAuthContext } from '../context/AuthProvider';
 import styled from 'styled-components';
-import { Formik } from 'formik';
+import { useFormik } from 'formik';
+import FormikSelectField from '../ui/FormikSelectField';
 
 interface FormValues {
     username: string;
     password: string;
-    location: ClubhouseLocation;
+    location: ClubhouseLocation | null;
 }
 
 const LoginContainer = styled.div`
@@ -26,13 +27,47 @@ const FormContainer = styled(Segment)`
 const initialFormValues: FormValues = {
     username: '',
     password: '',
-    location: 'ch1',
+    location: null,
+};
+
+const locationDropdownOptions = [
+    {
+        key: 'beaverton',
+        text: 'Beaverton',
+        value: 'ch1',
+    },
+    {
+        key: 'hillsboro',
+        text: 'Hillsboro',
+        value: 'ch2',
+    },
+];
+
+// No validations needed for now
+const validate = ({ username, password, location }: FormValues) => {
+    const errors: Partial<Record<keyof FormValues, string>> = {};
+
+    if (!username) {
+        errors.username = 'Required';
+    }
+
+    if (!password) {
+        errors.password = 'Required';
+    }
+
+    if (!location) {
+        errors.location = 'Please select a location';
+    }
+
+    return errors;
 };
 
 const Login = () => {
     const { loggedIn, handleLogin } = useAuthContext();
 
     const onSubmit = async ({ username, password, location }: FormValues) => {
+        if (!location) return;
+
         const data = await handleLogin(username, password, location);
 
         if (data.token) {
@@ -50,80 +85,62 @@ const Login = () => {
         }
     };
 
+    const {
+        handleChange,
+        handleSubmit,
+        setFieldValue,
+        errors,
+        isSubmitting,
+    } = useFormik({
+        initialValues: initialFormValues,
+        validate,
+        onSubmit,
+        validateOnChange: false,
+    });
+
     if (loggedIn) return <Redirect to="/manage-inventory" />;
 
     return (
         <LoginContainer>
-            <Formik initialValues={initialFormValues} onSubmit={onSubmit}>
-                {({ values, handleSubmit, setFieldValue, isSubmitting }) => (
-                    <FormContainer raised loading={isSubmitting}>
-                        <Form>
-                            <Form.Field>
-                                <Form.Input
-                                    className="username-input"
-                                    placeholder="Username"
-                                    label="Username"
-                                    value={values.username}
-                                    onChange={(_, { value }) =>
-                                        setFieldValue('username', value)
-                                    }
-                                />
-                            </Form.Field>
-                            <Form.Field>
-                                <Form.Input
-                                    className="password-input"
-                                    placeholder="Password"
-                                    type="password"
-                                    label="Password"
-                                    value={values.password}
-                                    onChange={(_, { value }) =>
-                                        setFieldValue('password', value)
-                                    }
-                                />
-                            </Form.Field>
-                            <Form.Field
-                                label="Location"
-                                control={Select}
-                                value={values.location}
-                                placeholder="Select location"
-                                options={[
-                                    {
-                                        key: 'beaverton',
-                                        text: 'Beaverton (The OG)',
-                                        value: 'ch1',
-                                    },
-                                    {
-                                        key: 'hillsboro',
-                                        text: 'Hillsboro',
-                                        value: 'ch2',
-                                    },
-                                ]}
-                                onChange={(
-                                    _: SyntheticEvent,
-                                    { value }: { value: ClubhouseLocation }
-                                ) => {
-                                    setFieldValue('location', value);
-                                }}
-                            />
-                            <Button
-                                primary
-                                fluid
-                                floated="right"
-                                type="submit"
-                                onClick={() => handleSubmit()}
-                                className="login-btn"
-                                disabled={
-                                    !values.username ||
-                                    !values.password ||
-                                    !values.location
-                                }
-                            >
-                                Submit
-                            </Button>
-                        </Form>
-                    </FormContainer>
-                )}
-            </Formik>
+            <FormContainer raised loading={isSubmitting}>
+                <Form>
+                    <Form.Field>
+                        <label>Username</label>
+                        <Form.Input
+                            error={errors.username}
+                            onChange={handleChange}
+                            name="username"
+                        />
+                    </Form.Field>
+                    <Form.Field>
+                        <label>Password</label>
+                        <Form.Input
+                            error={errors.password}
+                            type="password"
+                            onChange={handleChange}
+                            name="password"
+                        />
+                    </Form.Field>
+                    <FormikSelectField
+                        error={errors.location}
+                        label="Location"
+                        name="location"
+                        placeholder="Select location"
+                        options={locationDropdownOptions}
+                        onChange={(v) => {
+                            setFieldValue('location', v);
+                        }}
+                    />
+                    <Button
+                        primary
+                        fluid
+                        type="submit"
+                        onClick={() => handleSubmit()}
+                    >
+                        Submit
+                    </Button>
+                </Form>
+            </FormContainer>
         </LoginContainer>
     );
 };

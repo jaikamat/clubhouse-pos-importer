@@ -4,7 +4,7 @@ import { Form, Button, Segment } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
 import { ClubhouseLocation, useAuthContext } from '../context/AuthProvider';
 import styled from 'styled-components';
-import { useFormik } from 'formik';
+import { FormikErrors, useFormik } from 'formik';
 import FormikSelectField from '../ui/FormikSelectField';
 
 interface FormValues {
@@ -45,7 +45,7 @@ const locationDropdownOptions = [
 
 // No validations needed for now
 const validate = ({ username, password, location }: FormValues) => {
-    const errors: Partial<Record<keyof FormValues, string>> = {};
+    const errors: FormikErrors<FormValues> = {};
 
     if (!username) {
         errors.username = 'Required';

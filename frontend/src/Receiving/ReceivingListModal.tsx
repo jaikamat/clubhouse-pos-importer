@@ -2,7 +2,7 @@ import React, { useState, useContext, FC } from 'react';
 import { Modal, Button, Form, List, Header } from 'semantic-ui-react';
 import { ReceivingContext, Trade } from '../context/ReceivingContext';
 import Price from '../common/Price';
-import { useFormik } from 'formik';
+import { FormikErrors, useFormik } from 'formik';
 import sum from '../utils/sum';
 
 interface Props {}
@@ -19,7 +19,7 @@ const initialFormValues: FormValues = {
 
 // TODO: Extract and generalize this
 const validate = ({ customerName, customerContact }: FormValues) => {
-    const errors: Partial<Record<keyof FormValues, string>> = {};
+    const errors: FormikErrors<FormValues> = {};
 
     if (!customerName) {
         errors.customerName = 'Required';

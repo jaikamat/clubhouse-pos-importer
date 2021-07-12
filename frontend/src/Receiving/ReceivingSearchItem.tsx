@@ -95,8 +95,6 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
             duration: 2000,
         });
 
-        // TODO: reset the form imperatively
-
         // Highlight the input after successful card add
         $('#searchBar').focus().select();
     };
@@ -110,7 +108,10 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
     } = useFormik({
         initialValues,
         validate,
-        onSubmit: handleInventoryAdd,
+        onSubmit: (v, { resetForm }) => {
+            handleInventoryAdd(v);
+            resetForm();
+        },
         validateOnMount: true,
     });
 

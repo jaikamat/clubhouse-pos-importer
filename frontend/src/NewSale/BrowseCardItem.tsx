@@ -195,6 +195,7 @@ const BrowseCardItem: FC<Props> = ({ card }) => {
                                         step={0.5}
                                     />
                                     <Form.Button
+                                        type="submit"
                                         label="Add to sale?"
                                         control={Button}
                                         primary

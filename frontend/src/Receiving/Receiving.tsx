@@ -1,13 +1,14 @@
 import React, { FC, useContext, useEffect } from 'react';
 import SearchBar from '../common/SearchBar';
 import ReceivingSearchItem from './ReceivingSearchItem';
-import { Header, Grid, Divider } from 'semantic-ui-react';
+import { Header, Divider, Grid } from 'semantic-ui-react';
 import { ReceivingContext } from '../context/ReceivingContext';
 import DefaultPlaceholder from './DefaultPlaceholder';
 import ReceivingList from './ReceivingList';
 import TotalCardsLabel from '../common/TotalCardsLabel';
 import styled from 'styled-components';
 import AllLocationInventory from '../ManageInventory/AllLocationInventory';
+import { Grid as MUIGrid } from '@material-ui/core';
 
 interface Props {}
 
@@ -33,6 +34,7 @@ const Receiving: FC<Props> = () => {
         <>
             <SearchBar handleSearchSelect={handleSearchSelect} />
             <br />
+
             <Grid stackable={true}>
                 <Grid.Row>
                     <Grid.Column width="10">
@@ -54,9 +56,13 @@ const Receiving: FC<Props> = () => {
                             "So many cards, so little time."
                         </DefaultPlaceholder>
 
-                        {searchResults.map((card) => (
-                            <ReceivingSearchItem key={card.id} card={card} />
-                        ))}
+                        <MUIGrid container spacing={2}>
+                            {searchResults.map((card) => (
+                                <MUIGrid item xs={12} key={card.id}>
+                                    <ReceivingSearchItem card={card} />
+                                </MUIGrid>
+                            ))}
+                        </MUIGrid>
                     </Grid.Column>
                     <Grid.Column width="6">
                         <Header as="h2" style={{ display: 'inline-block' }}>

@@ -10,6 +10,7 @@ import { ScryfallCard } from '../utils/ScryfallCard';
 import CardHeader from '../ui/CardHeader';
 import { FormikErrors, useFormik } from 'formik';
 import FormikSelectField from '../ui/FormikSelectField';
+import { Box, Paper } from '@material-ui/core';
 
 interface Props {
     card: ScryfallCard;
@@ -118,123 +119,130 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
     const { cardImage } = card;
 
     return (
-        <Segment>
-            <Item.Group divided>
-                <Item>
-                    <Item.Image size="small">
-                        <CardImage image={cardImage} />
-                    </Item.Image>
-                    <Item.Content>
-                        <CardHeader
-                            card={card}
-                            selectedFinish={values.selectedFinish}
-                            showMid
-                        />
-                        <Item.Description>
-                            <Form>
-                                <Form.Group widths="equal">
-                                    <Form.Field
-                                        fluid
-                                        control={Input}
-                                        type="number"
-                                        label="Quantity"
-                                        value={values.quantity}
-                                        onChange={(
-                                            _: any,
-                                            { value }: { value: string }
-                                        ) => {
-                                            const castVal = parseInt(value);
-                                            setFieldValue(
-                                                'quantity',
-                                                Math.min(
-                                                    castVal < 0 ? 0 : castVal,
-                                                    50
-                                                )
-                                            );
-                                        }}
-                                        onFocus={(
-                                            e: ChangeEvent<HTMLInputElement>
-                                        ) => e.target.select()}
-                                    />
-                                    <Form.Field
-                                        fluid
-                                        label="Credit Price"
-                                        name="creditPrice"
-                                        control={Input}
-                                        type="number"
-                                        value={values.creditPrice}
-                                        onChange={handleChange}
-                                        onFocus={handleFocus}
-                                        step="0.25"
-                                    />
-                                    <Form.Field
-                                        fluid
-                                        label="Cash Price"
-                                        name="cashPrice"
-                                        control={Input}
-                                        type="number"
-                                        value={values.cashPrice}
-                                        onChange={handleChange}
-                                        onFocus={handleFocus}
-                                        step="0.25"
-                                    />
-                                    <Form.Field
-                                        fluid
-                                        label="Market Price"
-                                        name="marketPrice"
-                                        control={Input}
-                                        type="number"
-                                        value={values.marketPrice}
-                                        onChange={handleChange}
-                                        onFocus={handleFocus}
-                                        step="0.25"
-                                        disabled={!values.cashPrice}
-                                    />
-                                </Form.Group>
-                                <Form.Group widths="equal">
-                                    <FormikSelectField
-                                        label="Finish"
-                                        name="selectedFinish"
-                                        options={finishes}
-                                        defaultValue={
-                                            initialValues.selectedFinish
-                                        }
-                                        onChange={(v) => {
-                                            setFieldValue('selectedFinish', v);
-                                        }}
-                                        disabled={finishDisabled}
-                                    />
-                                    <FormikSelectField
-                                        label="Condition"
-                                        name="selectedCondition"
-                                        options={cardConditions}
-                                        defaultValue={
-                                            initialValues.selectedCondition
-                                        }
-                                        onChange={(v) => {
-                                            setFieldValue(
-                                                'selectedCondition',
-                                                v
-                                            );
-                                        }}
-                                    />
-                                    <Form.Button
-                                        type="submit"
-                                        label="Add to List?"
-                                        control={Button}
-                                        primary
-                                        disabled={!isValid}
-                                        onClick={() => handleSubmit()}
-                                    >
-                                        Add
-                                    </Form.Button>
-                                </Form.Group>
-                            </Form>
-                        </Item.Description>
-                    </Item.Content>
-                </Item>
-            </Item.Group>
-        </Segment>
+        <Paper variant="outlined">
+            <Box p={2}>
+                <Item.Group divided>
+                    <Item>
+                        <Item.Image size="small">
+                            <CardImage image={cardImage} />
+                        </Item.Image>
+                        <Item.Content>
+                            <CardHeader
+                                card={card}
+                                selectedFinish={values.selectedFinish}
+                                showMid
+                            />
+                            <Item.Description>
+                                <Form>
+                                    <Form.Group widths="equal">
+                                        <Form.Field
+                                            fluid
+                                            control={Input}
+                                            type="number"
+                                            label="Quantity"
+                                            value={values.quantity}
+                                            onChange={(
+                                                _: any,
+                                                { value }: { value: string }
+                                            ) => {
+                                                const castVal = parseInt(value);
+                                                setFieldValue(
+                                                    'quantity',
+                                                    Math.min(
+                                                        castVal < 0
+                                                            ? 0
+                                                            : castVal,
+                                                        50
+                                                    )
+                                                );
+                                            }}
+                                            onFocus={(
+                                                e: ChangeEvent<HTMLInputElement>
+                                            ) => e.target.select()}
+                                        />
+                                        <Form.Field
+                                            fluid
+                                            label="Credit Price"
+                                            name="creditPrice"
+                                            control={Input}
+                                            type="number"
+                                            value={values.creditPrice}
+                                            onChange={handleChange}
+                                            onFocus={handleFocus}
+                                            step="0.25"
+                                        />
+                                        <Form.Field
+                                            fluid
+                                            label="Cash Price"
+                                            name="cashPrice"
+                                            control={Input}
+                                            type="number"
+                                            value={values.cashPrice}
+                                            onChange={handleChange}
+                                            onFocus={handleFocus}
+                                            step="0.25"
+                                        />
+                                        <Form.Field
+                                            fluid
+                                            label="Market Price"
+                                            name="marketPrice"
+                                            control={Input}
+                                            type="number"
+                                            value={values.marketPrice}
+                                            onChange={handleChange}
+                                            onFocus={handleFocus}
+                                            step="0.25"
+                                            disabled={!values.cashPrice}
+                                        />
+                                    </Form.Group>
+                                    <Form.Group widths="equal">
+                                        <FormikSelectField
+                                            label="Finish"
+                                            name="selectedFinish"
+                                            options={finishes}
+                                            defaultValue={
+                                                initialValues.selectedFinish
+                                            }
+                                            onChange={(v) => {
+                                                setFieldValue(
+                                                    'selectedFinish',
+                                                    v
+                                                );
+                                            }}
+                                            disabled={finishDisabled}
+                                        />
+                                        <FormikSelectField
+                                            label="Condition"
+                                            name="selectedCondition"
+                                            options={cardConditions}
+                                            defaultValue={
+                                                initialValues.selectedCondition
+                                            }
+                                            onChange={(v) => {
+                                                setFieldValue(
+                                                    'selectedCondition',
+                                                    v
+                                                );
+                                            }}
+                                        />
+                                        <Form.Button
+                                            type="submit"
+                                            label="Add to List?"
+                                            control={Button}
+                                            primary
+                                            disabled={!isValid}
+                                            onClick={() => handleSubmit()}
+                                        >
+                                            Add
+                                        </Form.Button>
+                                    </Form.Group>
+                                </Form>
+                            </Item.Description>
+                        </Item.Content>
+                    </Item>
+                </Item.Group>
+            </Box>
+        </Paper>
     );
 };
 

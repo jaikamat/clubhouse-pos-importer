@@ -1,5 +1,5 @@
 import React, { useContext, FC, ChangeEvent } from 'react';
-import { Segment, Form, Input, Button, Item } from 'semantic-ui-react';
+import { Form, Input, Button, Item } from 'semantic-ui-react';
 import $ from 'jquery';
 import _ from 'lodash';
 import CardImage from '../common/CardImage';

@@ -43,7 +43,6 @@ const locationDropdownOptions = [
     },
 ];
 
-// No validations needed for now
 const validate = ({ username, password, location }: FormValues) => {
     const errors: FormikErrors<FormValues> = {};
 

@@ -89,6 +89,7 @@ const ManageInventoryListItem: FC<Props> = ({ card }) => {
         initialValues: initialFormValues,
         validate,
         onSubmit,
+        validateOnMount: true,
     });
 
     return (

@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import BrowseCardItem from './BrowseCardItem';
 import { Segment, Header, Icon } from 'semantic-ui-react';
 import { ScryfallCard } from '../utils/ScryfallCard';
+import { Grid } from '@material-ui/core';
 
 interface Props {
     term: string;
@@ -38,11 +39,15 @@ const BrowseCardList: FC<Props> = ({ term, cards }) => {
     }
 
     return (
-        <>
+        <Grid container spacing={2}>
             {cards.map((card) => {
-                return <BrowseCardItem key={card.id} card={card} />;
+                return (
+                    <Grid item xs={12} key={card.id}>
+                        <BrowseCardItem card={card} />
+                    </Grid>
+                );
             })}
-        </>
+        </Grid>
     );
 };
 

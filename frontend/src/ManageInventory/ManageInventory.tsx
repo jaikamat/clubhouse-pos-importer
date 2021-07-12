@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import AllLocationInventory from './AllLocationInventory';
 import { InventoryContext } from '../context/InventoryContext';
 import ManageInventoryListItem from './ManageInventoryListItem';
+import { Grid } from '@material-ui/core';
 
 const HeaderContainer = styled('div')({
     display: 'flex',
@@ -41,9 +42,13 @@ export default function ManageInventory() {
                     </Header>
                 </Segment>
             )}
-            {searchResults.map((card) => (
-                <ManageInventoryListItem key={card.id} card={card} />
-            ))}
+            <Grid container spacing={2}>
+                {searchResults.map((card) => (
+                    <Grid item xs={12} key={card.id}>
+                        <ManageInventoryListItem card={card} />
+                    </Grid>
+                ))}
+            </Grid>
         </>
     );
 }

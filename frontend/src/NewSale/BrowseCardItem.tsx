@@ -62,8 +62,6 @@ const BrowseCardItem: FC<Props> = ({ card }) => {
     }: FormValues) => {
         addToSaleList(card, selectedFinishCondition, quantityToSell, price);
 
-        // TODO: Clear whole sale context state when a sate completes
-
         // Highlight the input after successful card add
         $('#searchBar').focus().select();
     };
@@ -129,7 +127,6 @@ const BrowseCardItem: FC<Props> = ({ card }) => {
                             round
                         />
                         <Item.Description>
-                            <pre>{JSON.stringify({ values }, null, 2)}</pre>
                             <Form>
                                 <Form.Group>
                                     <FormikSelectField

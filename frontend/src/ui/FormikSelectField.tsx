@@ -1,36 +1,31 @@
 import { Form, Select, FormFieldProps } from 'semantic-ui-react';
-import { FieldConfig, FormikProps } from 'formik';
 
-type FormikFieldProps<T, O> = {
-    field: FieldConfig;
-    form: FormikProps<T>;
+type FormSelectFieldProps<T> = {
     label: string;
-    options: O[];
-} & Omit<FormFieldProps, 'label' | 'name' | 'options'>;
+    name: string;
+    onChange: (value: string) => void;
+    options: T[];
+    error?: string;
+} & Omit<FormFieldProps, 'label' | 'name' | 'options' | 'onChange'>;
 
-/**
- * This is meant to be wrapped by a <Field /> component.
- *
- * The generics are inferred by passed prop values.
- */
-function FormikSelectField<T, O>({
+function FormikSelectField<T>({
     label,
+    name,
     options,
-    /** Injected by <Field /> */
-    field,
-    /** Injected by <Field /> */
-    form,
+    onChange,
+    error,
     ...props
-}: FormikFieldProps<T, O>) {
+}: FormSelectFieldProps<T>) {
     return (
         <Form.Field
+            error={error}
             control={Select}
             label={label}
             placeholder={label}
             options={options}
-            name={field.name}
+            name={name}
             onChange={(_: any, { value }: { value: string }) => {
-                form.setFieldValue(field.name, value);
+                onChange(value);
             }}
             {...props}
         />

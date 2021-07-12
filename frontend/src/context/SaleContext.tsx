@@ -1,4 +1,5 @@
 import React, { useState, createContext, FC } from 'react';
+import $ from 'jquery';
 import sortSaleList from '../utils/sortSaleList';
 import createToast from '../common/createToast';
 import getSuspendedSaleQuery, { SuspendedSale } from './getSuspendedSaleQuery';
@@ -6,6 +7,7 @@ import deleteSuspendedSaleQuery from './deleteSuspendedSaleQuery';
 import createSuspendedSaleQuery from './createSuspendedSaleQuery';
 import finishSaleQuery from './finishSaleQuery';
 import { ScryfallCard } from '../utils/ScryfallCard';
+import cardSearchQuery from './cardSearchQuery';
 
 interface Props {}
 
@@ -22,7 +24,10 @@ export type SaleListCard = ScryfallCard & {
 
 export interface SaleContext {
     saleListCards: SaleListCard[];
+    searchResults: ScryfallCard[];
+    searchTerm: string;
     suspendedSale: SuspendedSale;
+    handleResultSelect: (term: string) => void;
     addToSaleList: (
         card: ScryfallCard,
         finishCondition: string,
@@ -46,7 +51,10 @@ const defaultSuspendedSale: SuspendedSale = {
 
 export const SaleContext = createContext<SaleContext>({
     saleListCards: [],
+    searchResults: [],
+    searchTerm: '',
     suspendedSale: defaultSuspendedSale,
+    handleResultSelect: () => null,
     addToSaleList: () => null,
     removeFromSaleList: () => null,
     restoreSale: () => null,
@@ -58,9 +66,28 @@ export const SaleContext = createContext<SaleContext>({
 
 export const SaleProvider: FC<Props> = ({ children }) => {
     const [saleListCards, setSaleListCards] = useState<SaleListCard[]>([]);
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [searchResults, setSearchResults] = useState<ScryfallCard[]>([]);
     const [suspendedSale, setSuspendedSale] = useState<SuspendedSale>(
         defaultSuspendedSale
     );
+
+    /**
+     * Executes after a user selects an autocompleted suggestion
+     */
+    const handleResultSelect = async (term: string) => {
+        const cards = await cardSearchQuery({
+            cardName: term,
+            inStockOnly: true,
+        });
+
+        setSearchResults(cards);
+        setSearchTerm(term);
+
+        if (cards.length === 0) {
+            $('#searchBar').focus().select();
+        }
+    };
 
     /**
      * Adds product to the sale list
@@ -223,6 +250,8 @@ export const SaleProvider: FC<Props> = ({ children }) => {
 
     const resetSaleState = () => {
         setSaleListCards([]);
+        setSearchResults([]);
+        setSearchTerm('');
         setSuspendedSale(defaultSuspendedSale);
     };
 
@@ -230,7 +259,10 @@ export const SaleProvider: FC<Props> = ({ children }) => {
         <SaleContext.Provider
             value={{
                 saleListCards,
+                searchTerm,
+                searchResults,
                 suspendedSale,
+                handleResultSelect,
                 addToSaleList,
                 removeFromSaleList,
                 restoreSale,

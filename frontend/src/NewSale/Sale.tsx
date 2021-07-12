@@ -1,18 +1,15 @@
-import React, { useState, useContext, FC } from 'react';
-import $ from 'jquery';
+import React, { useContext, FC } from 'react';
 import { Grid, Header, Divider } from 'semantic-ui-react';
 import SearchBar from '../common/SearchBar';
 import BrowseCardList from './BrowseCardList';
 import CustomerSaleList from './CustomerSaleList';
 import PrintList from './PrintList';
 import SuspendSales from './SuspendedSale';
-import { ScryfallCard } from '../utils/ScryfallCard';
 import { SaleContext } from '../context/SaleContext';
 import TotalCardsLabel from '../common/TotalCardsLabel';
 import AllLocationInventory from '../ManageInventory/AllLocationInventory';
 import styled from 'styled-components';
 import sum from '../utils/sum';
-import cardSearchQuery from '../context/cardSearchQuery';
 
 interface Props {}
 
@@ -31,28 +28,14 @@ const ButtonContainer = styled('div')({
 const Sale: FC<Props> = () => {
     const {
         saleListCards,
+        searchTerm,
+        searchResults,
+        handleResultSelect,
         suspendedSale,
         restoreSale,
         deleteSuspendedSale,
         suspendSale,
     } = useContext(SaleContext);
-
-    const [searchResults, setSearchResults] = useState<ScryfallCard[]>([]);
-    const [searchTerm, setSearchTerm] = useState<string>('');
-
-    const handleResultSelect = async (term: string) => {
-        const cards = await cardSearchQuery({
-            cardName: term,
-            inStockOnly: true,
-        });
-
-        setSearchResults(cards);
-        setSearchTerm(term);
-
-        if (cards.length === 0) {
-            $('#searchBar').focus().select();
-        }
-    };
 
     return (
         <>

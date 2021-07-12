@@ -3,11 +3,11 @@ import browseReceivingQuery, { Received } from './browseReceivingQuery';
 import { Grid, Typography, Box } from '@material-ui/core';
 import ReceivingListItem from './ReceivingListItem';
 import moment from 'moment';
-import { Formik, Form as FormikForm, Field } from 'formik';
+import { useFormik } from 'formik';
 import { Form } from 'semantic-ui-react';
-import FormikSearchBar from '../ui/FormikSearchBar';
-import FormikNativeDatePicker from '../ui/FormikNativeDatePicker';
 import Loading from '../ui/Loading';
+import { FormikSearchBar } from '../ui/FormikSearchBar';
+import { FormikNativeDatePicker } from '../ui/FormikNativeDatePicker';
 
 interface FormValues {
     cardName: string;
@@ -19,6 +19,11 @@ const initialFormValues: FormValues = {
     cardName: '',
     startDate: moment().subtract(30, 'days').format('YYYY-MM-DD'),
     endDate: moment().format('YYYY-MM-DD'),
+};
+
+// No validations needed for now
+const validate = () => {
+    return {};
 };
 
 const BrowseReceiving: FC = () => {
@@ -36,6 +41,12 @@ const BrowseReceiving: FC = () => {
         setReceivedList(received);
     };
 
+    const { handleChange, values, setFieldValue, handleSubmit } = useFormik({
+        initialValues: initialFormValues,
+        validate,
+        onSubmit,
+    });
+
     useEffect(() => {
         (async () => {
             await onSubmit(initialFormValues);
@@ -50,40 +61,35 @@ const BrowseReceiving: FC = () => {
                 </Typography>
             </Box>
             <Box pb={2}>
-                <Formik initialValues={initialFormValues} onSubmit={onSubmit}>
-                    {({ values }) => (
-                        <FormikForm>
-                            <Form>
-                                <Form.Group widths="6">
-                                    <Field
-                                        name="cardName"
-                                        label="Card name"
-                                        component={FormikSearchBar}
-                                    />
-                                    <Field
-                                        name="startDate"
-                                        label="Start date"
-                                        defaultValue={
-                                            initialFormValues.startDate
-                                        }
-                                        component={FormikNativeDatePicker}
-                                        max={values.endDate}
-                                    />
-                                    <Field
-                                        name="endDate"
-                                        label="End date"
-                                        defaultValue={initialFormValues.endDate}
-                                        component={FormikNativeDatePicker}
-                                        max={initialFormValues.endDate}
-                                    />
-                                </Form.Group>
-                                <Form.Button type="submit" primary>
-                                    Search
-                                </Form.Button>
-                            </Form>
-                        </FormikForm>
-                    )}
-                </Formik>
+                <Form>
+                    <Form.Group widths="6">
+                        <FormikSearchBar
+                            label="Card name"
+                            onChange={(v) => setFieldValue('cardName', v)}
+                        />
+                        <FormikNativeDatePicker
+                            label="Start date"
+                            name="startDate"
+                            defaultValue={initialFormValues.startDate}
+                            handleChange={handleChange}
+                            max={values.endDate}
+                        />
+                        <FormikNativeDatePicker
+                            label="End date"
+                            name="endDate"
+                            defaultValue={initialFormValues.endDate}
+                            handleChange={handleChange}
+                            max={initialFormValues.endDate}
+                        />
+                    </Form.Group>
+                    <Form.Button
+                        type="submit"
+                        onClick={() => handleSubmit()}
+                        primary
+                    >
+                        Search
+                    </Form.Button>
+                </Form>
             </Box>
             {loading ? (
                 <Loading />

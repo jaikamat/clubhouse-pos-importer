@@ -2,7 +2,7 @@ import React, { FC, SyntheticEvent, useState } from 'react';
 import { Grid, Segment, Header, Icon, Form, Select } from 'semantic-ui-react';
 import SearchBar from '../common/SearchBar';
 import { ScryfallCard } from '../utils/ScryfallCard';
-import { Formik } from 'formik';
+import { FormikErrors, useFormik } from 'formik';
 import { ClubhouseLocation } from '../context/AuthProvider';
 import styled from 'styled-components';
 import PublicCardItem from './PublicCardItem';
@@ -46,6 +46,16 @@ const locationOptions = [
     { key: 'hillsboro', text: 'CH Hillsboro', value: 'ch2' },
 ];
 
+const validate = ({ searchTerm }: FormValues) => {
+    let errors: FormikErrors<FormValues> = {};
+
+    if (!searchTerm) {
+        errors.searchTerm = 'error';
+    }
+
+    return errors;
+};
+
 const PublicInventory: FC = () => {
     const [state, setState] = useState<State>(initialState);
     const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
@@ -73,56 +83,54 @@ const PublicInventory: FC = () => {
         }
     };
 
+    const onSubmit = async ({ searchTerm, selectedLocation }: FormValues) => {
+        await fetchCards({
+            title: searchTerm,
+            location: selectedLocation,
+        });
+
+        setFormSubmitted(true);
+    };
+
+    const { values, handleSubmit, setFieldValue, isSubmitting } = useFormik({
+        initialValues: initialFormState,
+        validate,
+        onSubmit,
+    });
+
     return (
         <>
-            <Formik
-                onSubmit={async ({
-                    searchTerm,
-                    selectedLocation,
-                }: FormValues) => {
-                    await fetchCards({
-                        title: searchTerm,
-                        location: selectedLocation,
-                    });
-
-                    setFormSubmitted(true);
-                }}
-                initialValues={initialFormState}
-            >
-                {({ values, handleSubmit, setFieldValue, isSubmitting }) => (
-                    <Form>
-                        <StyledFormGroup widths="5">
-                            <Form.Field>
-                                <label>Card search</label>
-                                <SearchBar
-                                    handleSearchSelect={(value) =>
-                                        setFieldValue('searchTerm', value)
-                                    }
-                                />
-                            </Form.Field>
-                            <Form.Field
-                                label="Store location"
-                                control={Select}
-                                value={values.selectedLocation}
-                                options={locationOptions}
-                                onChange={(
-                                    _: SyntheticEvent,
-                                    { value }: { value: ClubhouseLocation }
-                                ) => setFieldValue('selectedLocation', value)}
-                            />
-                            <Form.Button
-                                type="submit"
-                                primary
-                                disabled={!values.searchTerm}
-                                loading={isSubmitting}
-                                onClick={() => handleSubmit()}
-                            >
-                                Search
-                            </Form.Button>
-                        </StyledFormGroup>
-                    </Form>
-                )}
-            </Formik>
+            <Form>
+                <StyledFormGroup widths="5">
+                    <Form.Field>
+                        <label>Card search</label>
+                        <SearchBar
+                            handleSearchSelect={(value) =>
+                                setFieldValue('searchTerm', value)
+                            }
+                        />
+                    </Form.Field>
+                    <Form.Field
+                        label="Store location"
+                        control={Select}
+                        value={values.selectedLocation}
+                        options={locationOptions}
+                        onChange={(
+                            _: SyntheticEvent,
+                            { value }: { value: ClubhouseLocation }
+                        ) => setFieldValue('selectedLocation', value)}
+                    />
+                    <Form.Button
+                        type="submit"
+                        primary
+                        disabled={!values.searchTerm}
+                        loading={isSubmitting}
+                        onClick={() => handleSubmit()}
+                    >
+                        Search
+                    </Form.Button>
+                </StyledFormGroup>
+            </Form>
             <br />
             <Grid stackable={true}>
                 <Grid.Column>

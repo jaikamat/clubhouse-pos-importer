@@ -7,7 +7,7 @@ import { HashRouter } from 'react-router-dom';
 import 'semantic-ui-css/semantic.min.css';
 
 ReactDOM.render(
-    <HashRouter basename='/'>
+    <HashRouter basename="/">
         <App />
     </HashRouter>,
     document.getElementById('root')

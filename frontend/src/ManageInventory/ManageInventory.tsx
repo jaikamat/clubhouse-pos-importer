@@ -1,16 +1,11 @@
 import React, { useContext } from 'react';
 import SearchBar from '../common/SearchBar';
 import { Segment, Header, Icon, Divider } from 'semantic-ui-react';
-import styled from 'styled-components';
 import AllLocationInventory from './AllLocationInventory';
 import { InventoryContext } from '../context/InventoryContext';
 import ManageInventoryListItem from './ManageInventoryListItem';
 import { Grid } from '@material-ui/core';
-
-const HeaderContainer = styled('div')({
-    display: 'flex',
-    justifyContent: 'space-between',
-});
+import { HeaderText } from '../ui/Typography';
 
 export default function ManageInventory() {
     const { searchResults, handleSearchSelect } = useContext(InventoryContext);
@@ -19,17 +14,15 @@ export default function ManageInventory() {
         <>
             <SearchBar handleSearchSelect={handleSearchSelect} />
             <br />
-            <HeaderContainer>
-                <Header as="h2">Manage Inventory</Header>
+            <Grid container justify="space-between">
+                <HeaderText>Manage Inventory</HeaderText>
                 {searchResults.length > 0 && (
-                    <div>
-                        <AllLocationInventory
-                            searchResults={searchResults}
-                            title={searchResults[0].name}
-                        />
-                    </div>
+                    <AllLocationInventory
+                        searchResults={searchResults}
+                        title={searchResults[0].name}
+                    />
                 )}
-            </HeaderContainer>
+            </Grid>
             <Divider />
             {!searchResults.length && (
                 <Segment placeholder>

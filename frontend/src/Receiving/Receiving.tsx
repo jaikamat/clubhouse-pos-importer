@@ -1,21 +1,16 @@
 import React, { FC, useContext, useEffect } from 'react';
 import SearchBar from '../common/SearchBar';
 import ReceivingSearchItem from './ReceivingSearchItem';
-import { Header, Divider } from 'semantic-ui-react';
+import { Divider } from 'semantic-ui-react';
 import { ReceivingContext } from '../context/ReceivingContext';
 import DefaultPlaceholder from './DefaultPlaceholder';
 import ReceivingList from './ReceivingList';
 import TotalCardsLabel from '../common/TotalCardsLabel';
-import styled from 'styled-components';
 import AllLocationInventory from '../ManageInventory/AllLocationInventory';
 import { Grid } from '@material-ui/core';
+import { HeaderText } from '../ui/Typography';
 
 interface Props {}
-
-const HeaderContainer = styled('div')({
-    display: 'flex',
-    justifyContent: 'space-between',
-});
 
 const Receiving: FC<Props> = () => {
     const {
@@ -36,17 +31,15 @@ const Receiving: FC<Props> = () => {
             <br />
             <Grid container spacing={2}>
                 <Grid item xs={12} lg={8}>
-                    <HeaderContainer>
-                        <Header as="h2">Card Search</Header>
+                    <Grid container justify="space-between">
+                        <HeaderText>Card Search</HeaderText>
                         {searchResults.length > 0 && (
-                            <div>
-                                <AllLocationInventory
-                                    searchResults={searchResults}
-                                    title={searchResults[0].name}
-                                />
-                            </div>
+                            <AllLocationInventory
+                                searchResults={searchResults}
+                                title={searchResults[0].name}
+                            />
                         )}
-                    </HeaderContainer>
+                    </Grid>
                     <Divider />
                     <DefaultPlaceholder active={!searchResults.length}>
                         "So many cards, so little time."
@@ -60,14 +53,10 @@ const Receiving: FC<Props> = () => {
                     </Grid>
                 </Grid>
                 <Grid item xs={12} lg={4}>
-                    <HeaderContainer>
-                        <Header as="h2" style={{ display: 'inline-block' }}>
-                            Buylist
-                            <TotalCardsLabel
-                                listLength={receivingList.length}
-                            />
-                        </Header>
-                    </HeaderContainer>
+                    <Grid container justify="space-between">
+                        <HeaderText>Buylist</HeaderText>
+                        <TotalCardsLabel listLength={receivingList.length} />
+                    </Grid>
                     <Divider />
                     <DefaultPlaceholder active={!receivingList.length}>
                         "If you receive it, they will come."

@@ -1,6 +1,6 @@
 import React, { useContext, FC, ChangeEvent } from 'react';
 import $ from 'jquery';
-import { Segment, Input, Button, Form, Item } from 'semantic-ui-react';
+import { Input, Button, Form, Item } from 'semantic-ui-react';
 import CardImage from '../common/CardImage';
 import createToast from '../common/createToast';
 import { ReceivingContext } from '../context/ReceivingContext';

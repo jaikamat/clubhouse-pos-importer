@@ -8,6 +8,7 @@ import { Form } from 'semantic-ui-react';
 import Loading from '../ui/Loading';
 import { FormikSearchBar } from '../ui/FormikSearchBar';
 import { FormikNativeDatePicker } from '../ui/FormikNativeDatePicker';
+import { HeaderText } from '../ui/Typography';
 
 interface FormValues {
     cardName: string;
@@ -56,9 +57,7 @@ const BrowseReceiving: FC = () => {
     return (
         <div>
             <Box pb={2}>
-                <Typography variant="h5">
-                    <strong>Browse Receiving</strong>
-                </Typography>
+                <HeaderText>Browse Receiving</HeaderText>
             </Box>
             <Box pb={2}>
                 <Form>

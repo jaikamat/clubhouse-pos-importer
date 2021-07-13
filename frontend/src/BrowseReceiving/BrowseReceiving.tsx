@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import browseReceivingQuery, { Received } from './browseReceivingQuery';
-import { Grid, Typography, Box } from '@material-ui/core';
+import { Grid, Box } from '@material-ui/core';
 import ReceivingListItem from './ReceivingListItem';
 import moment from 'moment';
 import { useFormik } from 'formik';
@@ -8,7 +8,7 @@ import { Form } from 'semantic-ui-react';
 import Loading from '../ui/Loading';
 import { FormikSearchBar } from '../ui/FormikSearchBar';
 import { FormikNativeDatePicker } from '../ui/FormikNativeDatePicker';
-import { HeaderText } from '../ui/Typography';
+import { HeaderText, SectionText } from '../ui/Typography';
 
 interface FormValues {
     cardName: string;
@@ -59,6 +59,7 @@ const BrowseReceiving: FC = () => {
             <Box pb={2}>
                 <HeaderText>Browse Receiving</HeaderText>
             </Box>
+            <SectionText>Filters</SectionText>
             <Box pb={2}>
                 <Form>
                     <Form.Group widths="6">
@@ -93,13 +94,16 @@ const BrowseReceiving: FC = () => {
             {loading ? (
                 <Loading />
             ) : (
-                <Grid container direction="column" spacing={2}>
-                    {receivedList.map((rl) => (
-                        <Grid item xs={12} md={6} key={rl._id}>
-                            <ReceivingListItem received={rl} />
-                        </Grid>
-                    ))}
-                </Grid>
+                <>
+                    <SectionText>Results</SectionText>
+                    <Grid container direction="column" spacing={2}>
+                        {receivedList.map((rl) => (
+                            <Grid item xs={12} md={6} key={rl._id}>
+                                <ReceivingListItem received={rl} />
+                            </Grid>
+                        ))}
+                    </Grid>
+                </>
             )}
         </div>
     );

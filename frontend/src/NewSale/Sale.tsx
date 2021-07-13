@@ -1,5 +1,5 @@
 import React, { useContext, FC } from 'react';
-import { Grid, Header, Divider } from 'semantic-ui-react';
+import { Header, Divider } from 'semantic-ui-react';
 import SearchBar from '../common/SearchBar';
 import BrowseCardList from './BrowseCardList';
 import CustomerSaleList from './CustomerSaleList';
@@ -10,6 +10,7 @@ import TotalCardsLabel from '../common/TotalCardsLabel';
 import AllLocationInventory from '../ManageInventory/AllLocationInventory';
 import styled from 'styled-components';
 import sum from '../utils/sum';
+import { Grid } from '@material-ui/core';
 
 interface Props {}
 
@@ -41,57 +42,48 @@ const Sale: FC<Props> = () => {
         <>
             <SearchBar handleSearchSelect={handleResultSelect} />
             <br />
-            <Grid stackable={true}>
-                <Grid.Row>
-                    <Grid.Column width="11">
-                        <HeaderContainer>
-                            <Header as="h2">Inventory</Header>
-                            {searchResults.length > 0 && (
-                                <AllLocationInventory
-                                    searchResults={searchResults}
-                                    title={searchResults[0].name}
-                                />
-                            )}
-                        </HeaderContainer>
-
-                        <Divider />
-
-                        <BrowseCardList
-                            term={searchTerm}
-                            cards={searchResults}
-                        />
-                    </Grid.Column>
-                    <Grid.Column width="5">
-                        <HeaderContainer>
-                            <Header as="h2" id="sale-header">
-                                {suspendedSale.name === ''
-                                    ? 'Sale Items'
-                                    : `${suspendedSale.name}'s Items`}
-                                <TotalCardsLabel
-                                    listLength={sum(
-                                        saleListCards.map((c) => c.qtyToSell)
-                                    )}
-                                />
-                            </Header>
-                            <ButtonContainer>
-                                <SuspendSales
-                                    restoreSale={restoreSale}
-                                    suspendSale={suspendSale}
-                                    saleListLength={saleListCards.length}
-                                    deleteSuspendedSale={deleteSuspendedSale}
-                                    id={suspendedSale._id}
-                                />
-                                {saleListCards.length > 0 && (
-                                    <PrintList saleListCards={saleListCards} />
+            <Grid container spacing={2}>
+                <Grid item xs={12} lg={8}>
+                    <HeaderContainer>
+                        <Header as="h2">Inventory</Header>
+                        {searchResults.length > 0 && (
+                            <AllLocationInventory
+                                searchResults={searchResults}
+                                title={searchResults[0].name}
+                            />
+                        )}
+                    </HeaderContainer>
+                    <Divider />
+                    <BrowseCardList term={searchTerm} cards={searchResults} />
+                </Grid>
+                <Grid item xs={12} lg={4}>
+                    <HeaderContainer>
+                        <Header as="h2" id="sale-header">
+                            {suspendedSale.name === ''
+                                ? 'Sale Items'
+                                : `${suspendedSale.name}'s Items`}
+                            <TotalCardsLabel
+                                listLength={sum(
+                                    saleListCards.map((c) => c.qtyToSell)
                                 )}
-                            </ButtonContainer>
-                        </HeaderContainer>
-
-                        <Divider />
-
-                        <CustomerSaleList saleList={saleListCards} />
-                    </Grid.Column>
-                </Grid.Row>
+                            />
+                        </Header>
+                        <ButtonContainer>
+                            <SuspendSales
+                                restoreSale={restoreSale}
+                                suspendSale={suspendSale}
+                                saleListLength={saleListCards.length}
+                                deleteSuspendedSale={deleteSuspendedSale}
+                                id={suspendedSale._id}
+                            />
+                            {saleListCards.length > 0 && (
+                                <PrintList saleListCards={saleListCards} />
+                            )}
+                        </ButtonContainer>
+                    </HeaderContainer>
+                    <Divider />
+                    <CustomerSaleList saleList={saleListCards} />
+                </Grid>
             </Grid>
         </>
     );

@@ -6,7 +6,7 @@ import moment from 'moment';
 import { useFormik } from 'formik';
 import { Form } from 'semantic-ui-react';
 import Loading from '../ui/Loading';
-import { FormikSearchBar } from '../ui/FormikSearchBar';
+import { FormikControlledSearchBar } from '../ui/FormikSearchBar';
 import { FormikNativeDatePicker } from '../ui/FormikNativeDatePicker';
 import { HeaderText, SectionText } from '../ui/Typography';
 
@@ -63,8 +63,9 @@ const BrowseReceiving: FC = () => {
             <Box pb={2}>
                 <Form>
                     <Form.Group widths="6">
-                        <FormikSearchBar
+                        <FormikControlledSearchBar
                             label="Card name"
+                            value={values.cardName}
                             onChange={(v) => setFieldValue('cardName', v)}
                         />
                         <FormikNativeDatePicker

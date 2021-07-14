@@ -1,7 +1,9 @@
 import React, { FC, useState } from 'react';
 import {
     AppBar,
+    Box,
     Drawer,
+    Grid,
     IconButton,
     makeStyles,
     Toolbar,
@@ -11,10 +13,13 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { ClubhouseLocation, useAuthContext } from '../context/AuthProvider';
 import NavLinks from './NavLinks';
 import { Link as RouterLink } from 'react-router-dom';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import { version } from '../../package.json';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, typography }) => ({
     title: {
         flexGrow: 1,
+        fontWeight: typography.fontWeightBold,
     },
     list: {
         width: 250,
@@ -39,14 +44,16 @@ const NavBar: FC<{}> = () => {
     return (
         <AppBar>
             <Toolbar>
-                <IconButton
-                    edge="start"
-                    color="inherit"
-                    className={menuButton}
-                    onClick={() => setDrawerOpen(true)}
-                >
-                    <MenuIcon />
-                </IconButton>
+                {loggedIn && (
+                    <IconButton
+                        edge="start"
+                        color="inherit"
+                        className={menuButton}
+                        onClick={() => setDrawerOpen(true)}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                )}
                 <Typography
                     color="inherit"
                     component={RouterLink}
@@ -54,8 +61,7 @@ const NavBar: FC<{}> = () => {
                     className={title}
                     to="/"
                 >
-                    Clubhouse Collection{' '}
-                    {getClubhouseLocationName(currentLocation)}
+                    Clubhouse Collection
                 </Typography>
                 <Typography
                     color="inherit"
@@ -70,9 +76,39 @@ const NavBar: FC<{}> = () => {
                     open={drawerOpen}
                     onClose={() => setDrawerOpen(false)}
                 >
-                    <div className={list} onClick={() => setDrawerOpen(false)}>
-                        <NavLinks />
-                    </div>
+                    <Box
+                        py={2}
+                        display="flex"
+                        flexDirection="column"
+                        justifyContent="space-between"
+                        height={1}
+                    >
+                        <div>
+                            <Grid
+                                container
+                                direction="row"
+                                alignItems="center"
+                                justify="center"
+                            >
+                                <LocationOnIcon color="primary" />
+                                <Typography color="primary" variant="h6">
+                                    {getClubhouseLocationName(currentLocation)}
+                                </Typography>
+                            </Grid>
+                            <Typography color="textSecondary" align="center">
+                                Logged in as {currentUser}
+                            </Typography>
+                            <div
+                                className={list}
+                                onClick={() => setDrawerOpen(false)}
+                            >
+                                <NavLinks />
+                            </div>
+                        </div>
+                        <Typography color="textSecondary" align="center">
+                            Version {version}
+                        </Typography>
+                    </Box>
                 </Drawer>
             </Toolbar>
         </AppBar>

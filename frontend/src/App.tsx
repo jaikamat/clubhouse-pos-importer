@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import Header from './Header/Header';
 import AuthProvider from './context/AuthProvider';
 import { Switch, Route } from 'react-router-dom';
@@ -17,7 +17,8 @@ import InventoryProvider from './context/InventoryContext';
 import AdminRoute from './AuthenticatedRoute';
 import Home from './LandingPage/Home';
 import BrowseReceiving from './BrowseReceiving/BrowseReceiving';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core';
+import { Box, createMuiTheme, ThemeProvider } from '@material-ui/core';
+import NavBar from './Header/NavBar';
 
 const ContentContainer = styled.div`
     padding-top: 75px;
@@ -39,10 +40,16 @@ const theme = createMuiTheme({
 });
 
 const App: FC = () => {
+    const [showBar, setShowBar] = useState<boolean>(false);
+
     return (
         <AuthProvider>
             <ThemeProvider theme={theme}>
                 <Header />
+                {showBar && <NavBar />}
+                <Box pt={10}>
+                    <button onClick={() => setShowBar(!showBar)}>Switch</button>
+                </Box>
                 <Switch>
                     <Route exact path="/" component={Home} />
                     <BackgroundColor>

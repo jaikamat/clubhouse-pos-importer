@@ -62,6 +62,9 @@ const ControlledSearchBar: FC<Props> = ({ value, onChange, onBlur }) => {
         }
     };
 
+    const onFocus = (e: React.MouseEvent<HTMLElement, MouseEvent>) =>
+        (e.target as HTMLInputElement).select();
+
     return (
         <Search
             value={internalValue}
@@ -72,7 +75,7 @@ const ControlledSearchBar: FC<Props> = ({ value, onChange, onBlur }) => {
             placeholder="Enter a card title"
             selectFirstResult={true}
             id="searchBar"
-            onFocus={(e) => (e.target as HTMLInputElement).select()}
+            onFocus={onFocus}
             onBlur={onBlur} // Used to clear state in the Browse Inventory feature
         />
     );

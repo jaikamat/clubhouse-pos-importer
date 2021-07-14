@@ -4,7 +4,7 @@ import { FormikHelpers, useFormik } from 'formik';
 import FormSelectField from '../ui/FormikSelectField';
 import setNameQuery from './setNameQuery';
 import { Filters } from './filteredCardsQuery';
-import { FormikControlledSearchBar } from '../ui/FormikSearchBar';
+import FormikControlledSearchBar from '../ui/FormikControlledSearchBar';
 import FormikDropdown from '../ui/FormikDropdown';
 
 const formatDropdownOptions: DropdownOption[] = [

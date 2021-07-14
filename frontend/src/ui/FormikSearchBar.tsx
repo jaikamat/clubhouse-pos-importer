@@ -16,7 +16,7 @@ const FormikSearchBar: FC<FormikSearchBarProps> = ({ label, onChange }) => {
                 handleSearchSelect={(value) => {
                     onChange(value);
                 }}
-                // Reset form state after user blurs cardName
+                // Set form state to current value after blur (useful for partial name searches)
                 onBlur={(event: SyntheticEvent<Element, Event>) => {
                     const element = event.target as HTMLInputElement;
                     onChange(element.value);
@@ -43,7 +43,7 @@ export const FormikControlledSearchBar: FC<FormikControlledSearchBarProps> = ({
             <ControlledSearchBar
                 value={value}
                 onChange={onChange}
-                // Reset form state after user blurs cardName
+                // Set form state to current value after blur (useful for partial name searches)
                 onBlur={(event: SyntheticEvent<Element, Event>) => {
                     const element = event.target as HTMLInputElement;
                     onChange(element.value);

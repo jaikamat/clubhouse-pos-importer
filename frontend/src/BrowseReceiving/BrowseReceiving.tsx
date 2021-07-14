@@ -6,7 +6,7 @@ import moment from 'moment';
 import { useFormik } from 'formik';
 import { Form } from 'semantic-ui-react';
 import Loading from '../ui/Loading';
-import { FormikControlledSearchBar } from '../ui/FormikSearchBar';
+import FormikControlledSearchBar from '../ui/FormikControlledSearchBar';
 import { FormikNativeDatePicker } from '../ui/FormikNativeDatePicker';
 import { HeaderText, SectionText } from '../ui/Typography';
 

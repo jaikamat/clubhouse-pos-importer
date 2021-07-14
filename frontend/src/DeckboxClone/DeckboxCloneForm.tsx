@@ -4,7 +4,7 @@ import { FormikHelpers, useFormik } from 'formik';
 import FormSelectField from '../ui/FormikSelectField';
 import setNameQuery from './setNameQuery';
 import { Filters } from './filteredCardsQuery';
-import FormikSearchBar from '../ui/FormikSearchBar';
+import { FormikControlledSearchBar } from '../ui/FormikSearchBar';
 import FormikDropdown from '../ui/FormikDropdown';
 
 const formatDropdownOptions: DropdownOption[] = [
@@ -181,7 +181,7 @@ const DeckboxCloneForm: FC<Props> = ({ doSubmit }) => {
         })();
     }, []);
 
-    const { handleChange, setFieldValue, handleSubmit } = useFormik({
+    const { handleChange, setFieldValue, handleSubmit, values } = useFormik({
         initialValues: initialFilters,
         validate,
         onSubmit,
@@ -193,8 +193,9 @@ const DeckboxCloneForm: FC<Props> = ({ doSubmit }) => {
 
             <Form>
                 <Form.Group widths="4">
-                    <FormikSearchBar
+                    <FormikControlledSearchBar
                         label="Card name"
+                        value={values.title}
                         onChange={(v) => setFieldValue('title', v)}
                     />
                     <FormSelectField

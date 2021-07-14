@@ -3,13 +3,15 @@ import BrowseCardItem from './BrowseCardItem';
 import { Segment, Header, Icon } from 'semantic-ui-react';
 import { ScryfallCard } from '../utils/ScryfallCard';
 import { Grid } from '@material-ui/core';
+import Loading from '../ui/Loading';
 
 interface Props {
+    loading: boolean;
     term: string;
     cards: ScryfallCard[];
 }
 
-const BrowseCardList: FC<Props> = ({ term, cards }) => {
+const BrowseCardList: FC<Props> = ({ loading, term, cards }) => {
     // Creates text to notify the user of zero-result searches
     const searchNotification = () => {
         if (term && !cards.length) {
@@ -26,6 +28,10 @@ const BrowseCardList: FC<Props> = ({ term, cards }) => {
             </p>
         );
     };
+
+    if (loading) {
+        return <Loading />;
+    }
 
     if (cards.length === 0) {
         return (

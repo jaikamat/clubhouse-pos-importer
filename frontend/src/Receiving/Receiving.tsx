@@ -1,18 +1,20 @@
-import React, { FC, useContext, useEffect } from 'react';
-import SearchBar from '../common/SearchBar';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import ReceivingSearchItem from './ReceivingSearchItem';
-import { Divider } from 'semantic-ui-react';
+import { Divider, Header, Icon, Segment } from 'semantic-ui-react';
 import { ReceivingContext } from '../context/ReceivingContext';
-import DefaultPlaceholder from './DefaultPlaceholder';
 import ReceivingList from './ReceivingList';
 import TotalCardsLabel from '../common/TotalCardsLabel';
 import AllLocationInventory from '../ManageInventory/AllLocationInventory';
 import { Grid } from '@material-ui/core';
 import { HeaderText } from '../ui/Typography';
+import ControlledSearchBar from '../common/ControlledSearchBar';
+import Loading from '../ui/Loading';
 
 interface Props {}
 
 const Receiving: FC<Props> = () => {
+    const [term, setTerm] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
     const {
         searchResults,
         receivingList,
@@ -25,9 +27,19 @@ const Receiving: FC<Props> = () => {
         return () => resetSearchResults();
     }, []);
 
+    useEffect(() => {
+        if (term) {
+            (async () => {
+                setLoading(true);
+                await handleSearchSelect(term);
+                setLoading(false);
+            })();
+        }
+    }, [term]);
+
     return (
         <>
-            <SearchBar handleSearchSelect={handleSearchSelect} />
+            <ControlledSearchBar value={term} onChange={(v) => setTerm(v)} />
             <br />
             <Grid container spacing={2}>
                 <Grid item xs={12} lg={8}>
@@ -41,16 +53,25 @@ const Receiving: FC<Props> = () => {
                         )}
                     </Grid>
                     <Divider />
-                    <DefaultPlaceholder active={!searchResults.length}>
-                        "So many cards, so little time."
-                    </DefaultPlaceholder>
-                    <Grid container spacing={2}>
-                        {searchResults.map((card) => (
-                            <Grid item xs={12} key={card.id}>
-                                <ReceivingSearchItem card={card} />
-                            </Grid>
-                        ))}
-                    </Grid>
+                    {!loading && !searchResults.length && (
+                        <Segment placeholder>
+                            <Header icon>
+                                <Icon name="search" />
+                                <em>"So many cards, so little time."</em>
+                            </Header>
+                        </Segment>
+                    )}
+                    {loading ? (
+                        <Loading />
+                    ) : (
+                        <Grid container spacing={2}>
+                            {searchResults.map((card) => (
+                                <Grid item xs={12} key={card.id}>
+                                    <ReceivingSearchItem card={card} />
+                                </Grid>
+                            ))}
+                        </Grid>
+                    )}
                 </Grid>
                 <Grid item xs={12} lg={4}>
                     <Grid container justify="space-between">
@@ -58,9 +79,14 @@ const Receiving: FC<Props> = () => {
                         <TotalCardsLabel listLength={receivingList.length} />
                     </Grid>
                     <Divider />
-                    <DefaultPlaceholder active={!receivingList.length}>
-                        "If you receive it, they will come."
-                    </DefaultPlaceholder>
+                    {!receivingList.length && (
+                        <Segment placeholder>
+                            <Header icon>
+                                <Icon name="search" />
+                                <em>"If you receive it, they will come."</em>
+                            </Header>
+                        </Segment>
+                    )}
                     <ReceivingList cards={receivingList} />
                 </Grid>
             </Grid>

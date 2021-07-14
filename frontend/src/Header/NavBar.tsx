@@ -16,10 +16,15 @@ import { Link as RouterLink } from 'react-router-dom';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import { version } from '../../package.json';
 
-const useStyles = makeStyles(({ spacing, typography }) => ({
+const useStyles = makeStyles(({ spacing, typography, palette }) => ({
     title: {
         flexGrow: 1,
+    },
+    menuLinkText: {
         fontWeight: typography.fontWeightBold,
+        '&:hover': {
+            color: palette.common.white,
+        },
     },
     list: {
         width: 250,
@@ -38,8 +43,7 @@ const getClubhouseLocationName = (location: ClubhouseLocation | null) => {
 const NavBar: FC<{}> = () => {
     const { loggedIn, currentLocation, currentUser } = useAuthContext();
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
-
-    const { title, list, menuButton } = useStyles();
+    const { title, list, menuButton, menuLinkText } = useStyles();
 
     return (
         <AppBar>
@@ -54,17 +58,20 @@ const NavBar: FC<{}> = () => {
                         <MenuIcon />
                     </IconButton>
                 )}
+                <div className={title}>
+                    <Typography
+                        color="inherit"
+                        className={menuLinkText}
+                        component={RouterLink}
+                        variant="h6"
+                        to="/"
+                    >
+                        Clubhouse Collection
+                    </Typography>
+                </div>
                 <Typography
                     color="inherit"
-                    component={RouterLink}
-                    variant="h6"
-                    className={title}
-                    to="/"
-                >
-                    Clubhouse Collection
-                </Typography>
-                <Typography
-                    color="inherit"
+                    className={menuLinkText}
                     component={RouterLink}
                     variant="button"
                     to="/public-inventory"

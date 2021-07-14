@@ -10,9 +10,11 @@ const TotalCardsLabel: FC<Props> = ({ listLength }) => {
     if (listLength === 0) return null;
 
     return (
-        <Label color="grey">
-            {listLength} {pluralize(listLength, 'card')}
-        </Label>
+        <div>
+            <Label color="grey">
+                {listLength} {pluralize(listLength, 'card')}
+            </Label>
+        </div>
     );
 };
 

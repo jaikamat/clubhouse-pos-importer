@@ -5,9 +5,10 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { HashRouter } from 'react-router-dom';
 import 'semantic-ui-css/semantic.min.css';
+import '@fontsource/roboto';
 
 ReactDOM.render(
-    <HashRouter basename='/'>
+    <HashRouter basename="/">
         <App />
     </HashRouter>,
     document.getElementById('root')

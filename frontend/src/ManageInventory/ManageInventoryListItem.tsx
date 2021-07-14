@@ -1,5 +1,5 @@
 import React, { FC, useContext, useState } from 'react';
-import { Segment, Input, Button, Form, Select, Item } from 'semantic-ui-react';
+import { Input, Button, Form, Select, Item } from 'semantic-ui-react';
 import $ from 'jquery';
 import { FormikErrors, FormikHelpers, useFormik } from 'formik';
 import createToast from '../common/createToast';
@@ -10,6 +10,7 @@ import { InventoryContext } from '../context/InventoryContext';
 import { ScryfallCard } from '../utils/ScryfallCard';
 import CardHeader from '../ui/CardHeader';
 import addCardToInventoryQuery from './addCardToInventoryQuery';
+import { Box, Paper } from '@material-ui/core';
 
 interface Props {
     card: ScryfallCard;
@@ -89,91 +90,99 @@ const ManageInventoryListItem: FC<Props> = ({ card }) => {
         initialValues: initialFormValues,
         validate,
         onSubmit,
+        validateOnMount: true,
     });
 
     return (
-        <Segment>
-            <Item.Group divided>
-                <Item>
-                    <Item.Image size="tiny">
-                        <CardImage image={cardImage} hover />
-                    </Item.Image>
-                    <Item.Content>
-                        <CardHeader
-                            card={card}
-                            selectedFinish={selectedFinish}
-                            round
-                        />
-                        <Item.Description>
-                            <Form>
-                                <Form.Group>
-                                    <Form.Field
-                                        control={Input}
-                                        type="number"
-                                        label="Quantity"
-                                        value={values.quantity}
-                                        onChange={(
-                                            _: any,
-                                            { value }: { value: number }
-                                        ) => setFieldValue('quantity', value)}
-                                        onFocus={() => {
-                                            if (+values.quantity === 0) {
-                                                setFieldValue('quantity', '');
+        <Paper variant="outlined">
+            <Box p={2}>
+                <Item.Group divided>
+                    <Item>
+                        <Item.Image size="tiny">
+                            <CardImage image={cardImage} hover />
+                        </Item.Image>
+                        <Item.Content>
+                            <CardHeader
+                                card={card}
+                                selectedFinish={selectedFinish}
+                                round
+                            />
+                            <Item.Description>
+                                <Form>
+                                    <Form.Group>
+                                        <Form.Field
+                                            control={Input}
+                                            type="number"
+                                            label="Quantity"
+                                            value={values.quantity}
+                                            onChange={(
+                                                _: any,
+                                                { value }: { value: number }
+                                            ) =>
+                                                setFieldValue('quantity', value)
                                             }
-                                        }}
-                                    />
-                                    <Form.Field
-                                        label="Finish"
-                                        control={Select}
-                                        value={values.selectedFinish}
-                                        options={finishes}
-                                        disabled={
-                                            checkCardFinish(nonfoil, foil)
-                                                .finishDisabled
-                                        }
-                                        onChange={(
-                                            _: any,
-                                            { value }: { value: Finish }
-                                        ) => {
-                                            setSelectedFinish(value);
-                                            setFieldValue(
-                                                'selectedFinish',
-                                                value
-                                            );
-                                        }}
-                                    />
-                                    <Form.Field
-                                        label="Condition"
-                                        control={Select}
-                                        value={values.selectedCondition}
-                                        options={cardConditions}
-                                        onChange={(
-                                            _: any,
-                                            { value }: { value: string }
-                                        ) =>
-                                            setFieldValue(
-                                                'selectedCondition',
-                                                value
-                                            )
-                                        }
-                                    />
-                                    <Form.Button
-                                        label="Add to Inventory?"
-                                        control={Button}
-                                        primary
-                                        disabled={!isValid || isSubmitting}
-                                        onClick={() => handleSubmit()}
-                                        loading={isSubmitting}
-                                    >
-                                        Submit
-                                    </Form.Button>
-                                </Form.Group>
-                            </Form>
-                        </Item.Description>
-                    </Item.Content>
-                </Item>
-            </Item.Group>
-        </Segment>
+                                            onFocus={() => {
+                                                if (+values.quantity === 0) {
+                                                    setFieldValue(
+                                                        'quantity',
+                                                        ''
+                                                    );
+                                                }
+                                            }}
+                                        />
+                                        <Form.Field
+                                            label="Finish"
+                                            control={Select}
+                                            value={values.selectedFinish}
+                                            options={finishes}
+                                            disabled={
+                                                checkCardFinish(nonfoil, foil)
+                                                    .finishDisabled
+                                            }
+                                            onChange={(
+                                                _: any,
+                                                { value }: { value: Finish }
+                                            ) => {
+                                                setSelectedFinish(value);
+                                                setFieldValue(
+                                                    'selectedFinish',
+                                                    value
+                                                );
+                                            }}
+                                        />
+                                        <Form.Field
+                                            label="Condition"
+                                            control={Select}
+                                            value={values.selectedCondition}
+                                            options={cardConditions}
+                                            onChange={(
+                                                _: any,
+                                                { value }: { value: string }
+                                            ) =>
+                                                setFieldValue(
+                                                    'selectedCondition',
+                                                    value
+                                                )
+                                            }
+                                        />
+                                        <Form.Button
+                                            label="Add to Inventory?"
+                                            control={Button}
+                                            primary
+                                            disabled={!isValid || isSubmitting}
+                                            onClick={() => handleSubmit()}
+                                            loading={isSubmitting}
+                                        >
+                                            Submit
+                                        </Form.Button>
+                                    </Form.Group>
+                                </Form>
+                            </Item.Description>
+                        </Item.Content>
+                    </Item>
+                </Item.Group>
+            </Box>
+        </Paper>
     );
 };
 

@@ -1,8 +1,9 @@
 import React, { FC, useState } from 'react';
 import SearchBar from '../common/SearchBar';
 import SalesList from './SalesList';
-import { Header, Divider } from 'semantic-ui-react';
+import { Divider } from 'semantic-ui-react';
 import browseSalesQuery, { Sale } from './browseSalesQuery';
+import { HeaderText } from '../ui/Typography';
 
 const BrowseSales: FC = () => {
     const [salesList, setSalesList] = useState<Sale[]>([]);
@@ -18,8 +19,8 @@ const BrowseSales: FC = () => {
     return (
         <div>
             <SearchBar handleSearchSelect={handleSearchSelect} />
-
-            <Header as="h2">Browse Sales</Header>
+            <br />
+            <HeaderText>Browse Sales</HeaderText>
             <Divider />
 
             <span>

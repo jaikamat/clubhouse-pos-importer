@@ -1,6 +1,5 @@
-import React, { useContext, FC } from 'react';
+import React, { useContext, FC, useState, useEffect } from 'react';
 import { Divider } from 'semantic-ui-react';
-import SearchBar from '../common/SearchBar';
 import BrowseCardList from './BrowseCardList';
 import CustomerSaleList from './CustomerSaleList';
 import PrintList from './PrintList';
@@ -11,10 +10,13 @@ import AllLocationInventory from '../ManageInventory/AllLocationInventory';
 import sum from '../utils/sum';
 import { Box, Grid } from '@material-ui/core';
 import { HeaderText } from '../ui/Typography';
+import ControlledSearchBar from '../common/ControlledSearchBar';
 
 interface Props {}
 
 const Sale: FC<Props> = () => {
+    const [term, setTerm] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
     const {
         saleListCards,
         searchTerm,
@@ -26,9 +28,19 @@ const Sale: FC<Props> = () => {
         suspendSale,
     } = useContext(SaleContext);
 
+    useEffect(() => {
+        if (term) {
+            (async () => {
+                setLoading(true);
+                await handleResultSelect(term);
+                setLoading(false);
+            })();
+        }
+    }, [term]);
+
     return (
         <>
-            <SearchBar handleSearchSelect={handleResultSelect} />
+            <ControlledSearchBar value={term} onChange={(v) => setTerm(v)} />
             <br />
             <Grid container spacing={2}>
                 <Grid item xs={12} lg={8}>
@@ -42,7 +54,11 @@ const Sale: FC<Props> = () => {
                         )}
                     </Grid>
                     <Divider />
-                    <BrowseCardList term={searchTerm} cards={searchResults} />
+                    <BrowseCardList
+                        loading={loading}
+                        term={searchTerm}
+                        cards={searchResults}
+                    />
                 </Grid>
                 <Grid item xs={12} lg={4}>
                     <Grid container justify="space-between">

@@ -1,12 +1,12 @@
 import React, { FC, SyntheticEvent, useState } from 'react';
 import { Grid, Segment, Header, Icon, Form, Select } from 'semantic-ui-react';
-import SearchBar from '../common/SearchBar';
 import { ScryfallCard } from '../utils/ScryfallCard';
 import { FormikErrors, useFormik } from 'formik';
 import { ClubhouseLocation } from '../context/AuthProvider';
 import styled from 'styled-components';
 import PublicCardItem from './PublicCardItem';
 import publicCardSearchQuery from './publicCardSearchQuery';
+import ControlledSearchBar from '../common/ControlledSearchBar';
 
 interface State {
     searchResults: ScryfallCard[];
@@ -104,8 +104,9 @@ const PublicInventory: FC = () => {
                 <StyledFormGroup widths="5">
                     <Form.Field>
                         <label>Card search</label>
-                        <SearchBar
-                            handleSearchSelect={(value) =>
+                        <ControlledSearchBar
+                            value={values.searchTerm}
+                            onChange={(value) =>
                                 setFieldValue('searchTerm', value)
                             }
                         />

@@ -18,7 +18,7 @@ interface Props {
     card: ResponseCard;
 }
 
-const DeckboxCloneRow: FC<Props> = ({
+const BrowseInventoryRow: FC<Props> = ({
     card: {
         finishCondition,
         quantityInStock,
@@ -54,4 +54,4 @@ const DeckboxCloneRow: FC<Props> = ({
     );
 };
 
-export default DeckboxCloneRow;
+export default BrowseInventoryRow;

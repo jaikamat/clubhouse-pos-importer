@@ -1,6 +1,6 @@
 import { Form } from 'semantic-ui-react';
 import { FC, SyntheticEvent } from 'react';
-import ControlledSearchBar from '../common/ControlledSearchBar';
+import ControlledSearchBar from './ControlledSearchBar';
 
 interface FormikControlledSearchBarProps {
     label: string;

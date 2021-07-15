@@ -38,7 +38,7 @@ function displayTrade(trade: Trade) {
     else if (trade === Trade.Cash) return 'Cash';
 }
 
-const ReceivingListDialog: FC<Props> = ({ receivedId, onClose }) => {
+const BrowseReceivingListDialog: FC<Props> = ({ receivedId, onClose }) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [data, setData] = useState<Received | null>(null);
 
@@ -178,4 +178,4 @@ const ReceivingListDialog: FC<Props> = ({ receivedId, onClose }) => {
     );
 };
 
-export default ReceivingListDialog;
+export default BrowseReceivingListDialog;

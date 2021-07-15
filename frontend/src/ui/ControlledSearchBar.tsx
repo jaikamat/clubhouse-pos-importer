@@ -2,7 +2,7 @@ import React, { FC, SyntheticEvent, useCallback, useState } from 'react';
 import { Search, SearchProps, SearchResultData } from 'semantic-ui-react';
 import _ from 'lodash';
 import $ from 'jquery';
-import autocompleteQuery from './autocompleteQuery';
+import autocompleteQuery from '../common/autocompleteQuery';
 
 interface Props {
     value: string;

@@ -10,7 +10,7 @@ import {
     Grid,
     Typography,
 } from '@material-ui/core';
-import ReceivingListDialog from './ReceivingListDialog';
+import BrowseReceivingListDialog from './BrowseReceivingListDialog';
 import { sum } from 'lodash';
 import { getPrice } from '../common/Price';
 import MetaData from '../ui/MetaData';
@@ -21,7 +21,7 @@ interface Props {
     received: Received;
 }
 
-const ReceivingListItem: FC<Props> = ({ received }) => {
+const BrowseReceivingItem: FC<Props> = ({ received }) => {
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
     const {
         received_card_list,
@@ -45,7 +45,7 @@ const ReceivingListItem: FC<Props> = ({ received }) => {
     return (
         <>
             {dialogOpen && (
-                <ReceivingListDialog
+                <BrowseReceivingListDialog
                     receivedId={received._id}
                     onClose={() => setDialogOpen(false)}
                 />
@@ -110,4 +110,4 @@ const ReceivingListItem: FC<Props> = ({ received }) => {
     );
 };
 
-export default ReceivingListItem;
+export default BrowseReceivingItem;

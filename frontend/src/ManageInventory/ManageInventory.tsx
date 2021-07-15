@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Segment, Header, Icon, Divider } from 'semantic-ui-react';
-import AllLocationInventory from './AllLocationInventory';
+import TotalStoreInventory from './TotalStoreInventory';
 import { InventoryContext } from '../context/InventoryContext';
 import ManageInventoryListItem from './ManageInventoryListItem';
 import { Grid } from '@material-ui/core';
 import { HeaderText } from '../ui/Typography';
-import ControlledSearchBar from '../common/ControlledSearchBar';
+import ControlledSearchBar from '../ui/ControlledSearchBar';
 import Loading from '../ui/Loading';
 
 export default function ManageInventory() {
@@ -30,7 +30,7 @@ export default function ManageInventory() {
             <Grid container justify="space-between">
                 <HeaderText>Manage Inventory</HeaderText>
                 {searchResults.length > 0 && (
-                    <AllLocationInventory
+                    <TotalStoreInventory
                         searchResults={searchResults}
                         title={searchResults[0].name}
                     />

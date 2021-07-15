@@ -16,7 +16,7 @@ interface Props {
 // Defines whether it uses cash or credit for trade types
 const TRADE_TYPE = { CASH: 'CASH', CREDIT: 'CREDIT' };
 
-const ReceivingListItem: FC<Props> = ({
+const ReceivingCartItem: FC<Props> = ({
     card: {
         display_name,
         set,
@@ -104,4 +104,4 @@ const ReceivingListItem: FC<Props> = ({
     );
 };
 
-export default ReceivingListItem;
+export default ReceivingCartItem;

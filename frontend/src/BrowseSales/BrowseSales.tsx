@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
-import SalesList from './SalesList';
+import BrowseSalesList from './BrowseSalesList';
 import { Divider } from 'semantic-ui-react';
 import browseSalesQuery, { Sale } from './browseSalesQuery';
 import { HeaderText } from '../ui/Typography';
-import ControlledSearchBar from '../common/ControlledSearchBar';
+import ControlledSearchBar from '../ui/ControlledSearchBar';
 import Loading from '../ui/Loading';
 import { Typography } from '@material-ui/core';
 
@@ -44,7 +44,7 @@ const BrowseSales: FC = () => {
                         </Typography>
                     )}
 
-                    <SalesList list={salesList} />
+                    <BrowseSalesList list={salesList} />
                 </>
             )}
         </div>

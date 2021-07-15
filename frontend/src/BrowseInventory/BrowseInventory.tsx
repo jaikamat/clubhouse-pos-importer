@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
-import DeckboxCloneForm, { initialFilters } from './DeckboxCloneForm';
-import DeckboxCloneRow from './DeckboxCloneRow';
+import BrowseInventoryForm, { initialFilters } from './BrowseInventoryForm';
+import BrowseInventoryRow from './BrowseInventoryRow';
 import {
     Table,
     Menu,
@@ -29,7 +29,7 @@ interface State {
     searchTouched: boolean;
 }
 
-const DeckboxClone: FC = () => {
+const BrowseInventory: FC = () => {
     const [state, setState] = useState<State>({
         cards: [],
         count: 0,
@@ -106,7 +106,7 @@ const DeckboxClone: FC = () => {
                 fluctuations. Consult 'New Sale' or 'Manage Inventory' for
                 up-to-date values
             </Segment>
-            <DeckboxCloneForm doSubmit={fetchData} />
+            <BrowseInventoryForm doSubmit={fetchData} />
             {!!cards.length && (
                 <Table celled striped compact>
                     <Table.Header>
@@ -181,7 +181,7 @@ const DeckboxClone: FC = () => {
                     </Table.Header>
                     <Table.Body>
                         {cards.map((card) => (
-                            <DeckboxCloneRow
+                            <BrowseInventoryRow
                                 key={`${card._id}-${card.finishCondition}`}
                                 card={card}
                             />
@@ -264,4 +264,4 @@ const DeckboxClone: FC = () => {
     );
 };
 
-export default DeckboxClone;
+export default BrowseInventory;

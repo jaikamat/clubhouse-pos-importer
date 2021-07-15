@@ -4,9 +4,9 @@ import { ScryfallCard } from '../utils/ScryfallCard';
 import { FormikErrors, useFormik } from 'formik';
 import { ClubhouseLocation } from '../context/AuthProvider';
 import styled from 'styled-components';
-import PublicCardItem from './PublicCardItem';
+import PublicCard from './PublicCard';
 import publicCardSearchQuery from './publicCardSearchQuery';
-import ControlledSearchBar from '../common/ControlledSearchBar';
+import ControlledSearchBar from '../ui/ControlledSearchBar';
 
 interface State {
     searchResults: ScryfallCard[];
@@ -147,7 +147,7 @@ const PublicInventory: FC = () => {
                     {state.searchResults.length > 0 ? (
                         <GridContainer>
                             {state.searchResults.map((c) => (
-                                <PublicCardItem key={c.id} card={c} />
+                                <PublicCard key={c.id} card={c} />
                             ))}
                         </GridContainer>
                     ) : (

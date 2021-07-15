@@ -7,7 +7,7 @@ interface Props {
     saleList: SaleListCard[];
 }
 
-const SalePriceTotal: FC<Props> = ({ saleList }) => {
+const SaleCartPriceTotal: FC<Props> = ({ saleList }) => {
     const total = sum(saleList.map((c) => c.qtyToSell * Number(c.price)));
 
     return (
@@ -17,4 +17,4 @@ const SalePriceTotal: FC<Props> = ({ saleList }) => {
     );
 };
 
-export default SalePriceTotal;
+export default SaleCartPriceTotal;

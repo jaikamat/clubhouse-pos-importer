@@ -2,12 +2,12 @@ import React, { FC, useContext, useEffect, useState } from 'react';
 import ReceivingSearchItem from './ReceivingSearchItem';
 import { Divider, Header, Icon, Segment } from 'semantic-ui-react';
 import { ReceivingContext } from '../context/ReceivingContext';
-import ReceivingList from './ReceivingList';
+import ReceivingCart from './ReceivingCart';
 import TotalCardsLabel from '../common/TotalCardsLabel';
-import AllLocationInventory from '../ManageInventory/AllLocationInventory';
+import TotalStoreInventory from '../ManageInventory/TotalStoreInventory';
 import { Grid } from '@material-ui/core';
 import { HeaderText } from '../ui/Typography';
-import ControlledSearchBar from '../common/ControlledSearchBar';
+import ControlledSearchBar from '../ui/ControlledSearchBar';
 import Loading from '../ui/Loading';
 
 interface Props {}
@@ -46,7 +46,7 @@ const Receiving: FC<Props> = () => {
                     <Grid container justify="space-between">
                         <HeaderText>Card Search</HeaderText>
                         {searchResults.length > 0 && (
-                            <AllLocationInventory
+                            <TotalStoreInventory
                                 searchResults={searchResults}
                                 title={searchResults[0].name}
                             />
@@ -87,7 +87,7 @@ const Receiving: FC<Props> = () => {
                             </Header>
                         </Segment>
                     )}
-                    <ReceivingList cards={receivingList} />
+                    <ReceivingCart cards={receivingList} />
                 </Grid>
             </Grid>
         </>

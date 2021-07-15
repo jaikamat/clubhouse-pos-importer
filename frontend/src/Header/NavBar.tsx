@@ -34,6 +34,7 @@ const useStyles = makeStyles(({ spacing, typography, palette }) => ({
     },
 }));
 
+// TODO: This information needs to be populated on the backend via a collection of shop entities
 const getClubhouseLocationName = (location: ClubhouseLocation | null) => {
     if (location === 'ch1') return 'Beaverton';
     if (location === 'ch2') return 'Hillsboro';

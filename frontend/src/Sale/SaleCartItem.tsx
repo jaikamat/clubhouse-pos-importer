@@ -9,7 +9,7 @@ interface Props {
     card: SaleListCard;
 }
 
-const SaleLineItem: FC<Props> = ({
+const SaleCartItem: FC<Props> = ({
     card: {
         display_name,
         set,
@@ -64,4 +64,4 @@ const SaleLineItem: FC<Props> = ({
     );
 };
 
-export default SaleLineItem;
+export default SaleCartItem;

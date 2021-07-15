@@ -51,7 +51,7 @@ interface Props {
     card: ScryfallCard;
 }
 
-const BrowseCardItem: FC<Props> = ({ card }) => {
+const SaleSearchCard: FC<Props> = ({ card }) => {
     const { addToSaleList } = useContext(SaleContext);
 
     const conditionSelectOptions = createConditionOptions(card.qoh, card.id);
@@ -222,4 +222,4 @@ const BrowseCardItem: FC<Props> = ({ card }) => {
     );
 };
 
-export default BrowseCardItem;
+export default SaleSearchCard;

@@ -1,16 +1,16 @@
 import React, { useContext, FC, useState, useEffect } from 'react';
 import { Divider } from 'semantic-ui-react';
-import BrowseCardList from './BrowseCardList';
-import CustomerSaleList from './CustomerSaleList';
+import BrowseCardList from './SaleSearchCardList';
+import SaleCartList from './SaleCartList';
 import PrintList from './PrintList';
-import SuspendSales from './SuspendedSale';
+import SuspendSaleButton from './SuspendSaleButton';
 import { SaleContext } from '../context/SaleContext';
 import TotalCardsLabel from '../common/TotalCardsLabel';
-import AllLocationInventory from '../ManageInventory/AllLocationInventory';
+import TotalStoreInventory from '../ManageInventory/TotalStoreInventory';
 import sum from '../utils/sum';
 import { Box, Grid } from '@material-ui/core';
 import { HeaderText } from '../ui/Typography';
-import ControlledSearchBar from '../common/ControlledSearchBar';
+import ControlledSearchBar from '../ui/ControlledSearchBar';
 
 interface Props {}
 
@@ -47,7 +47,7 @@ const Sale: FC<Props> = () => {
                     <Grid container justify="space-between">
                         <HeaderText>Inventory</HeaderText>
                         {searchResults.length > 0 && (
-                            <AllLocationInventory
+                            <TotalStoreInventory
                                 searchResults={searchResults}
                                 title={searchResults[0].name}
                             />
@@ -75,7 +75,7 @@ const Sale: FC<Props> = () => {
                             />
                         </Box>
                         <Box display="flex">
-                            <SuspendSales
+                            <SuspendSaleButton
                                 restoreSale={restoreSale}
                                 suspendSale={suspendSale}
                                 saleListLength={saleListCards.length}
@@ -88,7 +88,7 @@ const Sale: FC<Props> = () => {
                         </Box>
                     </Grid>
                     <Divider />
-                    <CustomerSaleList saleList={saleListCards} />
+                    <SaleCartList saleList={saleListCards} />
                 </Grid>
             </Grid>
         </>

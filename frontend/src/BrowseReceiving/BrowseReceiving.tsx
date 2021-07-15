@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import browseReceivingQuery, { Received } from './browseReceivingQuery';
 import { Grid, Box } from '@material-ui/core';
-import ReceivingListItem from './ReceivingListItem';
+import BrowseReceivingItem from './BrowseReceivingItem';
 import moment from 'moment';
 import { useFormik } from 'formik';
 import { Form } from 'semantic-ui-react';
@@ -100,7 +100,7 @@ const BrowseReceiving: FC = () => {
                     <Grid container direction="column" spacing={2}>
                         {receivedList.map((rl) => (
                             <Grid item xs={12} md={6} key={rl._id}>
-                                <ReceivingListItem received={rl} />
+                                <BrowseReceivingItem received={rl} />
                             </Grid>
                         ))}
                     </Grid>

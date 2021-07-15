@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import BrowseCardItem from './BrowseCardItem';
+import SaleSearchCard from './SaleSearchCard';
 import { Segment, Header, Icon } from 'semantic-ui-react';
 import { ScryfallCard } from '../utils/ScryfallCard';
 import { Grid } from '@material-ui/core';
@@ -49,7 +49,7 @@ const BrowseCardList: FC<Props> = ({ loading, term, cards }) => {
             {cards.map((card) => {
                 return (
                     <Grid item xs={12} key={card.id}>
-                        <BrowseCardItem card={card} />
+                        <SaleSearchCard card={card} />
                     </Grid>
                 );
             })}

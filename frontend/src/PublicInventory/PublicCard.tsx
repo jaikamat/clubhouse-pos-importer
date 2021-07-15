@@ -57,7 +57,7 @@ const Image = styled(SurImage)({
     borderRadius: '15px',
 });
 
-const PublicCardItem: FC<Props> = ({ card }) => {
+const PublicCard: FC<Props> = ({ card }) => {
     const { id, cardImage } = card;
     const [foilQty, nonfoilQty] = parseQoh(card.qoh);
 
@@ -98,4 +98,4 @@ const PublicCardItem: FC<Props> = ({ card }) => {
     );
 };
 
-export default PublicCardItem;
+export default PublicCard;

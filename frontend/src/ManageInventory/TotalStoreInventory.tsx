@@ -30,16 +30,13 @@ const QohLabel: FC<QohLabelProps> = ({ label, value }) => (
     </Label>
 );
 
-interface AllLocationInventoryProps {
+interface Props {
     title: string;
     searchResults: ScryfallCard[];
 }
 
 // TODO: refetch on result set change
-const AllLocationInventory: FC<AllLocationInventoryProps> = ({
-    title,
-    searchResults,
-}) => {
+const TotalStoreInventory: FC<Props> = ({ title, searchResults }) => {
     const [quantities, setQuantities] = useState<ResponseData>({
         ch1: { foilQty: 0, nonfoilQty: 0 },
         ch2: { foilQty: 0, nonfoilQty: 0 },
@@ -97,4 +94,4 @@ const AllLocationInventory: FC<AllLocationInventoryProps> = ({
     );
 };
 
-export default AllLocationInventory;
+export default TotalStoreInventory;

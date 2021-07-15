@@ -8,7 +8,7 @@ interface Props {
     sale: Sale;
 }
 
-const SalesListItem: FC<Props> = ({ sale }) => {
+const BrowseSalesItem: FC<Props> = ({ sale }) => {
     const { card_list, sale_data } = sale;
 
     const quantitySold = sum(card_list.map((c) => Number(c.qtyToSell)));
@@ -22,4 +22,4 @@ const SalesListItem: FC<Props> = ({ sale }) => {
     );
 };
 
-export default SalesListItem;
+export default BrowseSalesItem;

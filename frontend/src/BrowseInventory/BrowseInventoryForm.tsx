@@ -126,7 +126,7 @@ interface Props {
     doSubmit: (v: Filters, page: number) => Promise<void>;
 }
 
-const DeckboxCloneForm: FC<Props> = ({ doSubmit }) => {
+const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
     const [editionDropdownOptions, setEditionDropdownOptions] = useState<
         DropdownOption[]
     >([]);
@@ -296,4 +296,4 @@ const DeckboxCloneForm: FC<Props> = ({ doSubmit }) => {
     );
 };
 
-export default DeckboxCloneForm;
+export default BrowseInventoryForm;

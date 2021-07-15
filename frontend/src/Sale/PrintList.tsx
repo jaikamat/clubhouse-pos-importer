@@ -4,7 +4,7 @@ import { Button, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import Price from '../common/Price';
 import { SaleListCard } from '../context/SaleContext';
-import SalePriceTotal from './SalePriceTotal';
+import SaleCartPriceTotal from './SaleCartPriceTotal';
 
 interface Props {
     saleListCards: SaleListCard[];
@@ -55,7 +55,8 @@ const PrintList: FC<Props> = ({ saleListCards }) => {
                 </ul>
                 <span>
                     <b>
-                        Subtotal: <SalePriceTotal saleList={saleListCards} />
+                        Subtotal:{' '}
+                        <SaleCartPriceTotal saleList={saleListCards} />
                     </b>
                 </span>
             </PrintWrapper>

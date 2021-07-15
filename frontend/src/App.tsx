@@ -2,10 +2,10 @@ import React, { FC } from 'react';
 import AuthProvider from './context/AuthProvider';
 import { Switch, Route } from 'react-router-dom';
 import ManageInventory from './ManageInventory/ManageInventory';
-import Sale from './NewSale/Sale';
+import Sale from './Sale/Sale';
 import BrowseSales from './BrowseSales/BrowseSales';
 import PublicInventory from './PublicInventory/PublicInventory';
-import DeckboxClone from './DeckboxClone/DeckboxClone';
+import BrowseInventory from './BrowseInventory/BrowseInventory';
 import Login from './Login/Login';
 import Logout from './Logout/Logout';
 import Receiving from './Receiving/Receiving';
@@ -16,7 +16,7 @@ import AdminRoute from './AuthenticatedRoute';
 import Home from './LandingPage/Home';
 import BrowseReceiving from './BrowseReceiving/BrowseReceiving';
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core';
-import NavBar from './Header/NavBar';
+import NavBar from './NavBar/NavBar';
 
 const useStyles = makeStyles(({ spacing }) => ({
     contentContainer: {
@@ -68,7 +68,7 @@ const App: FC = () => {
                                 <BrowseSales />
                             </AdminRoute>
                             <AdminRoute exact path="/browse-inventory">
-                                <DeckboxClone />
+                                <BrowseInventory />
                             </AdminRoute>
                             <AdminRoute exact path="/browse-receiving">
                                 <BrowseReceiving />

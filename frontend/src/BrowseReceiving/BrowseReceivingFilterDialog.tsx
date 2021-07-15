@@ -29,13 +29,22 @@ const validate = () => {
 
 const BrowseReceivingFilterDialog: FC<Props> = ({ onSubmit, filters }) => {
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+
+    const onDialogOpen = () => setDialogOpen(true);
+    const onDialogClose = () => setDialogOpen(false);
+
     const { handleChange, values, setFieldValue, handleSubmit } = useFormik({
         initialValues: filters,
         validate,
         onSubmit: async (v: FormValues) => {
             await onSubmit(v);
-            setDialogOpen(false);
+            onDialogClose();
         },
+        /**
+         * Formik will not update `initialValues` from externally-controlled sources (ie. props) if changed,
+         * even if the component is unmounted. We have to flip this switch to initialize with updated prop values
+         */
+        enableReinitialize: true,
     });
 
     return (
@@ -44,17 +53,12 @@ const BrowseReceivingFilterDialog: FC<Props> = ({ onSubmit, filters }) => {
                 disableElevation
                 variant="contained"
                 color="primary"
-                onClick={() => setDialogOpen(true)}
+                onClick={onDialogOpen}
             >
                 Filter
             </Button>
             {dialogOpen && (
-                <Dialog
-                    open
-                    onClose={() => setDialogOpen(false)}
-                    maxWidth="sm"
-                    fullWidth
-                >
+                <Dialog open onClose={onDialogClose} maxWidth="sm" fullWidth>
                     <DialogTitle>Receiving search</DialogTitle>
                     <DialogContent>
                         <Form>
@@ -80,10 +84,7 @@ const BrowseReceivingFilterDialog: FC<Props> = ({ onSubmit, filters }) => {
                         </Form>
                     </DialogContent>
                     <DialogActions>
-                        <Button
-                            variant="outlined"
-                            onClick={() => setDialogOpen(false)}
-                        >
+                        <Button variant="outlined" onClick={onDialogClose}>
                             Cancel
                         </Button>
                         <Button

@@ -8,6 +8,7 @@ import { HeaderText, SectionText } from '../ui/Typography';
 import BrowseReceivingFilterDialog, {
     FormValues,
 } from './BrowseReceivingFilterDialog';
+import Placeholder from '../ui/Placeholder';
 
 interface Filters {
     cardName: string;
@@ -95,6 +96,10 @@ const BrowseReceiving: FC = () => {
                 </Grid>
                 {loading ? (
                     <Loading />
+                ) : receivedList.length === 0 ? (
+                    <Grid item xs={12}>
+                        <Placeholder>No results</Placeholder>
+                    </Grid>
                 ) : (
                     receivedList.map((rl) => (
                         <Grid item xs={12} key={rl._id}>

@@ -98,7 +98,7 @@ const NavLinks: FC<{}> = () => {
                 <ListItemIcon>
                     <ExitToAppIcon color="primary" />
                 </ListItemIcon>
-                Log out
+                Log Out
             </ListItem>
         </List>
     );

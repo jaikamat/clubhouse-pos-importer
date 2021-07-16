@@ -53,6 +53,7 @@ import {
 } from '../common/types';
 import moment from 'moment';
 import getReceivingById from '../interactors/getReceivingById';
+import getSalesReport from '../interactors/getSalesReport';
 
 /**
  * Middleware to check for Bearer token by validating JWT
@@ -551,6 +552,42 @@ router.get('/getReceivedCards/:id', async (req: RequestWithUserInfo, res) => {
 
     try {
         const message = await getReceivingById(id, req.currentLocation);
+        res.status(200).send(message);
+    } catch (err) {
+        console.error(new Error(err));
+        res.status(500).send(err.message);
+    }
+});
+
+interface SalesReportQuery {
+    startDate: string | null;
+    endDate: string | null;
+}
+
+router.get('/getSalesReport', async (req: RequestWithUserInfo, res) => {
+    const schema = Joi.object<SalesReportQuery>({
+        startDate: Joi.date().iso().required(),
+        endDate: Joi.date().iso().required(),
+    });
+
+    const { error, value }: JoiValidation<SalesReportQuery> = schema.validate(
+        req.query,
+        { abortEarly: false }
+    );
+
+    if (error) {
+        return res.status(400).json(error);
+    }
+
+    const { startDate, endDate } = value;
+
+    try {
+        const message = await getSalesReport({
+            location: req.currentLocation,
+            startDate: moment(startDate).utc().startOf('day').toDate(),
+            endDate: moment(endDate).utc().startOf('day').toDate(),
+        });
+
         res.status(200).send(message);
     } catch (err) {
         console.error(new Error(err));

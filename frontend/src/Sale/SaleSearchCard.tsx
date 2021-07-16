@@ -9,6 +9,7 @@ import CardHeader from '../ui/CardHeader';
 import { FormikErrors, useFormik } from 'formik';
 import FormikSelectField from '../ui/FormikSelectField';
 import { Box, Paper } from '@material-ui/core';
+import roundPrice from '../utils/roundPrice';
 
 interface ConditionOptions {
     text: string;
@@ -47,6 +48,8 @@ interface FormValues {
     selectedFinishCondition: keyof QOH;
 }
 
+const handleFocus = (e: ChangeEvent<HTMLInputElement>) => e.target.select();
+
 interface Props {
     card: ScryfallCard;
 }
@@ -56,12 +59,19 @@ const SaleSearchCard: FC<Props> = ({ card }) => {
 
     const conditionSelectOptions = createConditionOptions(card.qoh, card.id);
 
-    const handleAddToSale = ({
+    const onSubmit = ({
         selectedFinishCondition,
         quantityToSell,
         price,
     }: FormValues) => {
-        addToSaleList(card, selectedFinishCondition, quantityToSell, price);
+        const roundedPrice = roundPrice(price);
+
+        addToSaleList(
+            card,
+            selectedFinishCondition,
+            quantityToSell,
+            roundedPrice
+        );
 
         // Highlight the input after successful card add
         $('#searchBar').focus().select();
@@ -102,10 +112,16 @@ const SaleSearchCard: FC<Props> = ({ card }) => {
         return errors;
     };
 
-    const { handleSubmit, setFieldValue, values, isValid } = useFormik({
+    const {
+        handleChange,
+        handleSubmit,
+        setFieldValue,
+        values,
+        isValid,
+    } = useFormik({
         initialValues: initialFormValues,
         validate,
-        onSubmit: handleAddToSale,
+        onSubmit,
         validateOnMount: true,
     });
 
@@ -178,28 +194,17 @@ const SaleSearchCard: FC<Props> = ({ card }) => {
                                                     castVal
                                                 );
                                             }}
-                                            onFocus={(
-                                                e: ChangeEvent<HTMLInputElement>
-                                            ) => e.target.select()}
+                                            onFocus={handleFocus}
                                         />
                                         <Form.Field
+                                            label="Price"
+                                            name="price"
                                             control={Input}
                                             type="number"
-                                            label="Price"
                                             value={values.price}
-                                            onChange={(
-                                                _: any,
-                                                { value }: { value: string }
-                                            ) => {
-                                                const castVal = parseFloat(
-                                                    value
-                                                );
-                                                setFieldValue('price', castVal);
-                                            }}
-                                            onFocus={(
-                                                e: ChangeEvent<HTMLInputElement>
-                                            ) => e.target.select()}
-                                            step={0.5}
+                                            onChange={handleChange}
+                                            onFocus={handleFocus}
+                                            step="0.5"
                                         />
                                         <Form.Button
                                             type="submit"

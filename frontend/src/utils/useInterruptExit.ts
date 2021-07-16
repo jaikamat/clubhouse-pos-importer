@@ -35,7 +35,7 @@ const useInterruptExit = (initial: boolean) => {
         };
     }, [showPrompt]);
 
-    return [showPrompt, setShowPrompt] as const;
+    return { showPrompt, setShowPrompt };
 };
 
 export default useInterruptExit;

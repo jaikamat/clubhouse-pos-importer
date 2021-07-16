@@ -15,7 +15,7 @@ import useInterruptExit from '../utils/useInterruptExit';
 interface Props {}
 
 const Receiving: FC<Props> = () => {
-    const [showPrompt, setShowPrompt] = useInterruptExit(false);
+    const { setShowPrompt } = useInterruptExit(false);
     const [term, setTerm] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const {

@@ -9,10 +9,13 @@ import { Grid } from '@material-ui/core';
 import { HeaderText } from '../ui/Typography';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
 import Loading from '../ui/Loading';
+import { Prompt } from 'react-router';
+import useInterruptExit from '../utils/useInterruptExit';
 
 interface Props {}
 
 const Receiving: FC<Props> = () => {
+    const { setShowPrompt } = useInterruptExit(false);
     const [term, setTerm] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const {
@@ -22,10 +25,23 @@ const Receiving: FC<Props> = () => {
         resetSearchResults,
     } = useContext(ReceivingContext);
 
-    // Reset the search results on componentDidUnmount to clear store
+    /**
+     * Reset the search results on unmount to clear store
+     */
     useEffect(() => {
         return () => resetSearchResults();
     }, []);
+
+    /**
+     * Maintains whether or not we show the exit prompt on tab close or refresh
+     */
+    useEffect(() => {
+        if (receivingList.length > 0) {
+            setShowPrompt(true);
+        } else {
+            setShowPrompt(false);
+        }
+    }, [receivingList]);
 
     useEffect(() => {
         if (term) {
@@ -39,6 +55,10 @@ const Receiving: FC<Props> = () => {
 
     return (
         <>
+            <Prompt
+                message="You have items in your list. Are you sure you wish to leave?"
+                when={receivingList.length > 0}
+            />
             <ControlledSearchBar value={term} onChange={(v) => setTerm(v)} />
             <br />
             <Grid container spacing={2}>

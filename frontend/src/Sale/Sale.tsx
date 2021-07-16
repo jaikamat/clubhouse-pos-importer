@@ -11,10 +11,13 @@ import sum from '../utils/sum';
 import { Box, Grid } from '@material-ui/core';
 import { HeaderText } from '../ui/Typography';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
+import useInterruptExit from '../utils/useInterruptExit';
+import { Prompt } from 'react-router';
 
 interface Props {}
 
 const Sale: FC<Props> = () => {
+    const { setShowPrompt } = useInterruptExit(false);
     const [term, setTerm] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const {
@@ -28,6 +31,17 @@ const Sale: FC<Props> = () => {
         suspendSale,
     } = useContext(SaleContext);
 
+    /**
+     * Maintains whether or not we show the exit prompt on tab close or refresh
+     */
+    useEffect(() => {
+        if (saleListCards.length > 0) {
+            setShowPrompt(true);
+        } else {
+            setShowPrompt(false);
+        }
+    }, [saleListCards]);
+
     useEffect(() => {
         if (term) {
             (async () => {
@@ -40,6 +54,10 @@ const Sale: FC<Props> = () => {
 
     return (
         <>
+            <Prompt
+                message="You have items in your list. Are you sure you wish to leave?"
+                when={saleListCards.length > 0}
+            />
             <ControlledSearchBar value={term} onChange={(v) => setTerm(v)} />
             <br />
             <Grid container spacing={2}>

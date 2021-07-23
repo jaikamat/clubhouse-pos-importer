@@ -42,7 +42,7 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
         };
 
         const sort = { count: -1 };
-        const limit = 30;
+        const limit = 100;
 
         const facet = {
             countByPrinting: [

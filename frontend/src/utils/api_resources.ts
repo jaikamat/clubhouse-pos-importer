@@ -29,6 +29,7 @@ export const RECEIVING = `${getPrefix()}/auth/getReceivedCards`;
 export const GET_ALL_SALES = `${getPrefix()}/auth/allSales`;
 export const GET_CARDS_WITH_INFO_PUBLIC = `${getPrefix()}/getCardsWithInfo`;
 export const GET_CARDS_WITH_INFO = `${getPrefix()}/auth/getCardsWithInfo`;
+export const GET_REPORT = `${getPrefix()}/auth/getSalesReport`;
 export const AUTOCOMPLETE = `${getPrefix()}/autocomplete`;
 export const SCRYFALL_SEARCH = 'https://api.scryfall.com/cards/search';
 export const GET_LIVE_PRICE = `https://us-central1-clubhouse-collection.cloudfunctions.net/getPriceFromTcg${env}`;

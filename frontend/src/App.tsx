@@ -17,6 +17,7 @@ import Home from './LandingPage/Home';
 import BrowseReceiving from './BrowseReceiving/BrowseReceiving';
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core';
 import NavBar from './NavBar/NavBar';
+import Reporting from './Reporting/Reporting';
 
 const useStyles = makeStyles(({ spacing }) => ({
     contentContainer: {
@@ -77,6 +78,11 @@ const App: FC = () => {
                                 exact
                                 path="/public-inventory"
                                 component={PublicInventory}
+                            />
+                            <Route
+                                exact
+                                path="/reporting"
+                                component={Reporting}
                             />
                             <Route exact path="/login" component={Login} />
                             <Route exact path="/logout" component={Logout} />

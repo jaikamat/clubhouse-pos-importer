@@ -8,6 +8,7 @@ import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
 
 const NavLinks: FC<{}> = () => {
     const { pathname } = useLocation();
@@ -86,6 +87,18 @@ const NavLinks: FC<{}> = () => {
                     <ViewListIcon color="primary" />
                 </ListItemIcon>
                 Browse Receiving
+            </ListItem>
+            <ListItem
+                button
+                component={RouterLink}
+                to="/reporting"
+                selected={pathname === '/reporting'}
+                replace
+            >
+                <ListItemIcon>
+                    <EqualizerIcon color="primary" />
+                </ListItemIcon>
+                Reporting (Beta)
             </ListItem>
             <Divider />
             <ListItem

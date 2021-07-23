@@ -1,11 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import moment from 'moment';
 import Loading from '../ui/Loading';
 import reportingQuery, { ResponseData } from './reportingQuery';
+import ReportingList from './ReportingList';
+import { Box, Grid, MenuItem, Select } from '@material-ui/core';
+import { HeaderText, SectionText } from '../ui/Typography';
 
 interface SearchDates {
     startDate: string;
     endDate: string;
+}
+
+enum RangeName {
+    ALL_TIME = 'All time',
+    LAST_MONTH = 'Last 30 days',
 }
 
 const allTimeDates: SearchDates = {
@@ -21,6 +29,7 @@ const lastMonthDates: SearchDates = {
 const Reporting = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [report, setReport] = useState<ResponseData | null>(null);
+    const [searchName, setSearchName] = useState<RangeName>(RangeName.ALL_TIME);
     const [searchDates, setSearchDates] = useState<SearchDates>(allTimeDates);
 
     useEffect(() => {
@@ -30,20 +39,59 @@ const Reporting = () => {
             setLoading(false);
             setReport(data);
         })();
-    }, [searchDates]);
+    }, [searchName, searchDates]);
+
+    const onChange = (e: ChangeEvent<{ value: unknown }>) => {
+        if (e.target.value === RangeName.ALL_TIME) {
+            setSearchName(RangeName.ALL_TIME);
+            setSearchDates(allTimeDates);
+        } else if (e.target.value === RangeName.LAST_MONTH) {
+            setSearchName(RangeName.LAST_MONTH);
+            setSearchDates(lastMonthDates);
+        } else {
+            throw new Error('Range selection not found');
+        }
+    };
 
     return (
         <div>
-            <button onClick={() => setSearchDates(allTimeDates)}>
-                All time
-            </button>
-            <button onClick={() => setSearchDates(lastMonthDates)}>
-                last 30 days
-            </button>
-            {loading ? (
+            <Box
+                pb={2}
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+            >
+                <HeaderText>Reporting</HeaderText>
+                <Select value={searchName} onChange={onChange}>
+                    <MenuItem value={RangeName.ALL_TIME}>All time</MenuItem>
+                    <MenuItem value={RangeName.LAST_MONTH}>
+                        Last 30 days
+                    </MenuItem>
+                </Select>
+            </Box>
+            {loading || !report ? (
                 <Loading />
             ) : (
-                <pre>{JSON.stringify(report, null, 2)}</pre>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={6}>
+                        <SectionText>Cards sold by name</SectionText>
+                        <ReportingList
+                            cards={report.countByCardName.map((d) => ({
+                                count: d.count,
+                                name: d.card_title,
+                            }))}
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <SectionText>Cards sold by single printing</SectionText>
+                        <ReportingList
+                            cards={report.countByPrinting.map((d) => ({
+                                count: d.count,
+                                name: d.card_title,
+                            }))}
+                        />
+                    </Grid>
+                </Grid>
             )}
         </div>
     );

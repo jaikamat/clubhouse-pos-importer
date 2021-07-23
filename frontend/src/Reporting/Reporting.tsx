@@ -2,7 +2,6 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import moment from 'moment';
 import Loading from '../ui/Loading';
 import reportingQuery, { ResponseData } from './reportingQuery';
-import ReportingList from './ReportingList';
 import {
     Box,
     Grid,
@@ -115,7 +114,7 @@ const Reporting = () => {
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <SectionText>
-                            Top cards sold by single printing
+                            Top cards sold by a single printing
                         </SectionText>
                         <TableContainer component={Paper} variant="outlined">
                             <Table size="small">

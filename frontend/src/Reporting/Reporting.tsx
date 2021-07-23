@@ -3,8 +3,21 @@ import moment from 'moment';
 import Loading from '../ui/Loading';
 import reportingQuery, { ResponseData } from './reportingQuery';
 import ReportingList from './ReportingList';
-import { Box, Grid, MenuItem, Select } from '@material-ui/core';
+import {
+    Box,
+    Grid,
+    MenuItem,
+    Paper,
+    Select,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+} from '@material-ui/core';
 import { HeaderText, SectionText } from '../ui/Typography';
+import { uniqueId } from 'lodash';
 
 interface SearchDates {
     startDate: string;
@@ -74,22 +87,66 @@ const Reporting = () => {
             ) : (
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={6}>
-                        <SectionText>Cards sold by name</SectionText>
-                        <ReportingList
-                            cards={report.countByCardName.map((d) => ({
-                                count: d.count,
-                                name: d.card_title,
-                            }))}
-                        />
+                        <SectionText>Top cards sold by name</SectionText>
+                        <TableContainer component={Paper} variant="outlined">
+                            <Table size="small">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>
+                                            <b>Quantity sold</b>
+                                        </TableCell>
+                                        <TableCell>
+                                            <b>Card name</b>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {report.countByCardName.map((c) => (
+                                        <TableRow key={uniqueId()}>
+                                            <TableCell>{c.count}</TableCell>
+                                            <TableCell>
+                                                {c.card_title}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <SectionText>Cards sold by single printing</SectionText>
-                        <ReportingList
-                            cards={report.countByPrinting.map((d) => ({
-                                count: d.count,
-                                name: d.card_title,
-                            }))}
-                        />
+                        <SectionText>
+                            Top cards sold by single printing
+                        </SectionText>
+                        <TableContainer component={Paper} variant="outlined">
+                            <Table size="small">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>
+                                            <b>Quantity sold</b>
+                                        </TableCell>
+                                        <TableCell>
+                                            <b>Card name</b>
+                                        </TableCell>
+                                        <TableCell>
+                                            <b>Set name</b>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {report.countByPrinting.map((c) => (
+                                        <TableRow key={uniqueId()}>
+                                            <TableCell>{c.count}</TableCell>
+                                            <TableCell>
+                                                {c.card_title}
+                                            </TableCell>
+                                            <TableCell>
+                                                {c.card_metadata.set_name}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                     </Grid>
                 </Grid>
             )}

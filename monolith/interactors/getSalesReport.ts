@@ -1,4 +1,4 @@
-import { ClubhouseLocation } from '../common/types';
+import { ClubhouseLocation, Collection } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 
@@ -53,6 +53,19 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
                 {
                     $addFields: {
                         scryfall_id: '$_id',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: Collection.scryfallBulkCards,
+                        localField: 'scryfall_id',
+                        foreignField: 'id',
+                        as: 'card_metadata',
+                    },
+                },
+                {
+                    $addFields: {
+                        card_metadata: { $first: '$card_metadata' },
                     },
                 },
                 { $project: { _id: 0 } }, // Suppress _id we used in $group

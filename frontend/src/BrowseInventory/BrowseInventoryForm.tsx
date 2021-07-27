@@ -204,109 +204,105 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
         <Segment>
             <h3>Filters</h3>
 
-            <Form>
-                <FormikControlledSearchBar
-                    label="Card name"
-                    value={values.title}
-                    onChange={(v) => setFieldValue('title', v)}
-                />
-                <MUIFormikDropdown
-                    name="format"
-                    label="Format"
-                    options={formatDropdownOptions}
-                    value={values.format}
-                    onChange={(v) => setFieldValue('format', v)}
-                />
-                <MUIFormikDropdown
-                    name="setName"
-                    label="Edition"
-                    options={editionDropdownOptions}
-                    value={values.setName}
-                    onChange={(v) => setFieldValue('setName', v)}
-                />
-                <MUIFormikDropdown
-                    name="finish"
-                    label="Finish"
-                    options={finishDropdownOptions}
-                    value={values.finish}
-                    onChange={(v) => setFieldValue('finish', v)}
-                />
+            {/* <Form> */}
+            <FormikControlledSearchBar
+                label="Card name"
+                value={values.title}
+                onChange={(v) => setFieldValue('title', v)}
+            />
+            <MUIFormikDropdown
+                name="format"
+                label="Format"
+                options={formatDropdownOptions}
+                value={values.format}
+                onChange={(v) => setFieldValue('format', v)}
+            />
+            <MUIFormikDropdown
+                name="setName"
+                label="Edition"
+                options={editionDropdownOptions}
+                value={values.setName}
+                onChange={(v) => setFieldValue('setName', v)}
+            />
+            <MUIFormikDropdown
+                name="finish"
+                label="Finish"
+                options={finishDropdownOptions}
+                value={values.finish}
+                onChange={(v) => setFieldValue('finish', v)}
+            />
 
-                <MUIFormikMultiSelect
-                    name="colorsArray"
-                    label="Colors"
-                    options={sortByColorDropdownOptions}
-                    value={values.colorsArray}
-                    onChange={(v) => setFieldValue('colorsArray', v)}
+            <MUIFormikMultiSelect
+                name="colorsArray"
+                label="Colors"
+                options={sortByColorDropdownOptions}
+                value={values.colorsArray}
+                onChange={(v) => setFieldValue('colorsArray', v)}
+            />
+            <MUIFormikDropdown
+                name="colorSpecificity"
+                label="Color specificity"
+                options={colorSpecificityDropdownOptions}
+                value={values.colorSpecificity}
+                onChange={(v) => setFieldValue('colorSpecificity', v)}
+            />
+            <MUIFormikDropdown
+                name="typeLine"
+                label="Type Line"
+                options={typeLineOptions}
+                value={values.typeLine}
+                onChange={(v) => setFieldValue('typeLine', v)}
+            />
+            <MUIFormikDropdown
+                name="frame"
+                label="Frame Effects"
+                options={frameOptions}
+                value={values.frame}
+                onChange={(v) => setFieldValue('frame', v)}
+            />
+            <MUIFormikDropdown
+                name="priceOperator"
+                label="Price operator"
+                options={priceOperatorDropdownOptions}
+                value={values.priceOperator}
+                onChange={(v) => setFieldValue('priceOperator', v)}
+                defaultValue="gte"
+            />
+            {/* TODO: extract this as a text input */}
+            <Form.Field>
+                <label>Price Filter</label>
+                <Input
+                    placeholder="Enter a price"
+                    labelPosition="left"
+                    name="price"
+                    type="number"
+                    onChange={handleChange}
                 />
-                <MUIFormikDropdown
-                    name="colorSpecificity"
-                    label="Color specificity"
-                    options={colorSpecificityDropdownOptions}
-                    value={values.colorSpecificity}
-                    onChange={(v) => setFieldValue('colorSpecificity', v)}
-                />
-                <MUIFormikDropdown
-                    name="typeLine"
-                    label="Type Line"
-                    options={typeLineOptions}
-                    value={values.typeLine}
-                    onChange={(v) => setFieldValue('typeLine', v)}
-                />
-                <MUIFormikDropdown
-                    name="frame"
-                    label="Frame Effects"
-                    options={frameOptions}
-                    value={values.frame}
-                    onChange={(v) => setFieldValue('frame', v)}
-                />
-                <MUIFormikDropdown
-                    name="priceOperator"
-                    label="Price operator"
-                    options={priceOperatorDropdownOptions}
-                    value={values.priceOperator}
-                    onChange={(v) => setFieldValue('priceOperator', v)}
-                    defaultValue="gte"
-                />
-                {/* TODO: extract this as a text input */}
-                <Form.Field>
-                    <label>Price Filter</label>
-                    <Input
-                        placeholder="Enter a price"
-                        labelPosition="left"
-                        name="price"
-                        type="number"
-                        onChange={handleChange}
-                    />
-                </Form.Field>
+            </Form.Field>
 
-                <h3>{'Sort & Order'}</h3>
+            <h3>{'Sort & Order'}</h3>
 
-                <MUIFormikDropdown
-                    name="sortBy"
-                    label="Sort by"
-                    options={sortByDropdownOptions}
-                    defaultValue={initialFilters.price}
-                    value={values.sortBy}
-                    onChange={(v) => setFieldValue('sortBy', v)}
-                />
-                <MUIFormikDropdown
-                    name="sortByDirection"
-                    label="Order"
-                    options={sortByDirectionDropdownOptions}
-                    defaultValue={initialFilters.sortByDirection}
-                    value={values.sortByDirection.toString()}
-                    onChange={(v) => setFieldValue('sortByDirection', v)}
-                />
+            <MUIFormikDropdown
+                name="sortBy"
+                label="Sort by"
+                options={sortByDropdownOptions}
+                defaultValue={initialFilters.price}
+                value={values.sortBy}
+                onChange={(v) => setFieldValue('sortBy', v)}
+            />
+            <MUIFormikDropdown
+                name="sortByDirection"
+                label="Order"
+                options={sortByDirectionDropdownOptions}
+                defaultValue={initialFilters.sortByDirection}
+                value={values.sortByDirection.toString()}
+                onChange={(v) => setFieldValue('sortByDirection', v)}
+            />
 
-                <Form.Button
-                    type="submit"
-                    onClick={() => handleSubmit()}
-                    primary
-                >
-                    Submit
-                </Form.Button>
-            </Form>
+            <Form.Button type="submit" onClick={() => handleSubmit()} primary>
+                Submit
+            </Form.Button>
+            {/* </Form> */}
         </Segment>
     );
 };

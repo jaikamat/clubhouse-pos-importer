@@ -1,4 +1,3 @@
-import { Form } from 'semantic-ui-react';
 import { FC, SyntheticEvent } from 'react';
 import ControlledSearchBar from './ControlledSearchBar';
 
@@ -14,20 +13,17 @@ export const FormikControlledSearchBar: FC<FormikControlledSearchBarProps> = ({
     onChange,
 }) => {
     return (
-        <Form.Field>
-            <label>{label}</label>
-            <ControlledSearchBar
-                value={value}
-                onChange={(value) => {
-                    onChange(value);
-                }}
-                // Reset form state after user blurs cardName
-                onBlur={(event: SyntheticEvent<Element, Event>) => {
-                    const element = event.target as HTMLInputElement;
-                    onChange(element.value);
-                }}
-            />
-        </Form.Field>
+        <ControlledSearchBar
+            value={value}
+            onChange={(value) => {
+                onChange(value);
+            }}
+            // Reset form state after user blurs cardName
+            onBlur={(event: SyntheticEvent<Element, Event>) => {
+                const element = event.target as HTMLInputElement;
+                onChange(element.value);
+            }}
+        />
     );
 };
 

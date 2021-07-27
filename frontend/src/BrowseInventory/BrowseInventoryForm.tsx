@@ -260,19 +260,18 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
                     value={values.frame}
                     onChange={(v) => setFieldValue('frame', v)}
                 />
+                <MUIFormikDropdown
+                    name="priceOperator"
+                    label="Price operator"
+                    options={priceOperatorDropdownOptions}
+                    value={values.priceOperator}
+                    onChange={(v) => setFieldValue('priceOperator', v)}
+                    defaultValue="gte"
+                />
+                {/* TODO: extract this as a text input */}
                 <Form.Field>
                     <label>Price Filter</label>
                     <Input
-                        label={
-                            <FormikDropdown
-                                name="priceOperator"
-                                options={priceOperatorDropdownOptions}
-                                onChange={(v) =>
-                                    setFieldValue('priceOperator', v)
-                                }
-                                defaultValue="gte"
-                            />
-                        }
                         placeholder="Enter a price"
                         labelPosition="left"
                         name="price"

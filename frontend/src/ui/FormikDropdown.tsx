@@ -64,7 +64,7 @@ export function MUIFormikDropdown({
     const { formControl } = useStyles();
 
     return (
-        <FormControl className={formControl} variant="outlined">
+        <FormControl className={formControl} variant="outlined" size="small">
             <InputLabel>{label}</InputLabel>
             <Select
                 label={label}
@@ -103,7 +103,7 @@ export function MUIFormikMultiSelect({
     const { formControl } = useStyles();
 
     return (
-        <FormControl className={formControl} variant="outlined">
+        <FormControl className={formControl} variant="outlined" size="small">
             <InputLabel>{label}</InputLabel>
             <Select
                 label={label}

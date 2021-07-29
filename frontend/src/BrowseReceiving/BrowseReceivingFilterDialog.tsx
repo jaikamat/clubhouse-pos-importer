@@ -5,9 +5,9 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    Grid,
 } from '@material-ui/core';
 import { useFormik } from 'formik';
-import { Form } from 'semantic-ui-react';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
 import FormikNativeDatePicker from '../ui/FormikNativeDatePicker';
 
@@ -61,26 +61,36 @@ const BrowseReceivingFilterDialog: FC<Props> = ({ onSubmit, filters }) => {
                 <Dialog open onClose={onDialogClose} maxWidth="sm" fullWidth>
                     <DialogTitle>Receiving search</DialogTitle>
                     <DialogContent>
-                        <Form>
-                            <ControlledSearchBar
-                                value={values.cardName}
-                                onChange={(v) => setFieldValue('cardName', v)}
-                            />
-                            <FormikNativeDatePicker
-                                label="Start date"
-                                name="startDate"
-                                defaultValue={filters.startDate}
-                                handleChange={handleChange}
-                                max={values.endDate}
-                            />
-                            <FormikNativeDatePicker
-                                label="End date"
-                                name="endDate"
-                                defaultValue={filters.endDate}
-                                handleChange={handleChange}
-                                max={filters.endDate}
-                            />
-                        </Form>
+                        <form>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <ControlledSearchBar
+                                        value={values.cardName}
+                                        onChange={(v) =>
+                                            setFieldValue('cardName', v)
+                                        }
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <FormikNativeDatePicker
+                                        label="Start date"
+                                        name="startDate"
+                                        defaultValue={filters.startDate}
+                                        handleChange={handleChange}
+                                        max={values.endDate}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <FormikNativeDatePicker
+                                        label="End date"
+                                        name="endDate"
+                                        defaultValue={filters.endDate}
+                                        handleChange={handleChange}
+                                        max={filters.endDate}
+                                    />
+                                </Grid>
+                            </Grid>
+                        </form>
                     </DialogContent>
                     <DialogActions>
                         <Button variant="outlined" onClick={onDialogClose}>

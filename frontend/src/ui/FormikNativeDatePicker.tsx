@@ -1,5 +1,5 @@
-import { Form, Input } from 'semantic-ui-react';
 import { ChangeEvent, FC } from 'react';
+import { FormControl, TextField } from '@material-ui/core';
 
 interface FormikNativeDatePickerProps {
     label: string;
@@ -19,18 +19,24 @@ export const FormikNativeDatePicker: FC<FormikNativeDatePickerProps> = ({
     max,
 }) => {
     return (
-        <Form.Field>
-            <label>{label}</label>
-            <Input
+        <FormControl fullWidth>
+            <TextField
                 id={name}
+                label={label}
                 name={name}
+                size="small"
+                variant="outlined"
                 type="date"
                 onChange={handleChange}
                 defaultValue={defaultValue}
-                min={min}
-                max={max}
+                InputProps={{
+                    inputProps: {
+                        min,
+                        max,
+                    },
+                }}
             />
-        </Form.Field>
+        </FormControl>
     );
 };
 

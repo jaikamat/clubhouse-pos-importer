@@ -1,28 +1,23 @@
-import React, {
-    ChangeEvent,
-    FC,
-    SyntheticEvent,
-    useCallback,
-    useState,
-} from 'react';
+import React, { ChangeEvent, FC, useCallback, useState } from 'react';
 import _ from 'lodash';
 import $ from 'jquery';
 import autocompleteQuery from '../common/autocompleteQuery';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Autocomplete, {
+    AutocompleteChangeReason,
+} from '@material-ui/lab/Autocomplete';
 import { TextField } from '@material-ui/core';
+
+export type Option = { title: string };
 
 interface Props {
     value: string;
-    onChange: (result: string) => void;
-    onBlur?: (event: SyntheticEvent, data: any) => void;
+    onChange: (result: Option | null) => void;
 }
 
-type Option = { title: string };
-
-const ControlledSearchBar: FC<Props> = ({ value, onChange, onBlur }) => {
+const ControlledSearchBar: FC<Props> = ({ value, onChange }) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [results, setResults] = useState<Option[]>([]);
-    const [internalValue, setInternalValue] = useState<Option | undefined>();
+    const [internalValue, setInternalValue] = useState<Option | null>(null);
 
     const fetchResults = async (v: string) => {
         setLoading(true);
@@ -48,15 +43,23 @@ const ControlledSearchBar: FC<Props> = ({ value, onChange, onBlur }) => {
         await debouncedFetch(val);
     };
 
-    const handleResultSelect = async (_: ChangeEvent<{}>, result: any) => {
+    const handleResultSelect = async (
+        _: ChangeEvent<{}>,
+        value: Option | null,
+        reason: AutocompleteChangeReason
+    ) => {
+        // If the user clears the input, then we need to reset the state
+        if (reason === 'clear') onChange(null);
+
         // This line is a hacky way to get around the fact that if we just select(), then
         // when the user manually clicks the first (or any) result in the resultlist, it does not select,
         // presumably because there is some collision between selecting the resultList element and focusing the input
         setTimeout(() => $('#searchBar').select(), 10);
+
         try {
             setLoading(true);
-            setInternalValue(result.title);
-            await onChange(result.title);
+            setInternalValue(value);
+            await onChange(value);
             setLoading(false);
         } catch (e) {
             console.log(e);
@@ -83,7 +86,6 @@ const ControlledSearchBar: FC<Props> = ({ value, onChange, onBlur }) => {
                     size="small"
                 />
             )}
-            // onBlur={onBlur} // Used to clear state in the Browse Inventory feature
         />
     );
 };

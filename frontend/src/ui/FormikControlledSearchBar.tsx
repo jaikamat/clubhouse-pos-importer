@@ -1,10 +1,10 @@
 import { FC, SyntheticEvent } from 'react';
-import ControlledSearchBar from './ControlledSearchBar';
+import ControlledSearchBar, { Option } from './ControlledSearchBar';
 
 interface FormikControlledSearchBarProps {
     label: string;
     value: string;
-    onChange: (value: string) => void;
+    onChange: (value: Option | null) => void;
 }
 
 export const FormikControlledSearchBar: FC<FormikControlledSearchBarProps> = ({
@@ -12,19 +12,7 @@ export const FormikControlledSearchBar: FC<FormikControlledSearchBarProps> = ({
     value,
     onChange,
 }) => {
-    return (
-        <ControlledSearchBar
-            value={value}
-            onChange={(value) => {
-                onChange(value);
-            }}
-            // Reset form state after user blurs cardName
-            onBlur={(event: SyntheticEvent<Element, Event>) => {
-                const element = event.target as HTMLInputElement;
-                onChange(element.value);
-            }}
-        />
-    );
+    return <ControlledSearchBar value={value} onChange={onChange} />;
 };
 
 export default FormikControlledSearchBar;

@@ -1,13 +1,15 @@
-import React, { FC, SyntheticEvent, useState } from 'react';
-import { Grid, Segment, Header, Icon, Form, Select } from 'semantic-ui-react';
+import React, { FC, useState } from 'react';
+import { Grid, Segment, Header, Icon } from 'semantic-ui-react';
 import { ScryfallCard } from '../utils/ScryfallCard';
 import { FormikErrors, useFormik } from 'formik';
 import { ClubhouseLocation } from '../context/AuthProvider';
 import styled from 'styled-components';
 import PublicCard from './PublicCard';
 import publicCardSearchQuery from './publicCardSearchQuery';
-import SearchBar from '../ui/SearchBar';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
+import ControlledDropdown from '../ui/ControlledDropdown';
+import Button from '../ui/Button';
+import { Grid as MUIGrid } from '@material-ui/core';
 
 interface State {
     searchResults: ScryfallCard[];
@@ -25,10 +27,6 @@ const GridContainer = styled('div')({
     gridGap: '20px',
     gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
     justifyItems: 'center',
-});
-
-const StyledFormGroup = styled(Form.Group)({
-    alignItems: 'flex-end',
 });
 
 const initialState: State = {
@@ -101,36 +99,33 @@ const PublicInventory: FC = () => {
 
     return (
         <>
-            <Form>
-                <StyledFormGroup widths="5">
-                    <Form.Field>
-                        <label>Card search</label>
-                        <ControlledSearchBar
-                            value={values.searchTerm}
-                            onChange={(v) => setFieldValue('searchTerm', v)}
-                        />
-                    </Form.Field>
-                    <Form.Field
-                        label="Store location"
-                        control={Select}
+            <MUIGrid container spacing={2} alignItems="center">
+                <MUIGrid item xs={12} md={4}>
+                    <ControlledSearchBar
+                        value={values.searchTerm}
+                        onChange={(v) => setFieldValue('searchTerm', v)}
+                    />
+                </MUIGrid>
+                <MUIGrid item xs={12} md={4}>
+                    <ControlledDropdown
+                        name="storeLocation"
                         value={values.selectedLocation}
                         options={locationOptions}
-                        onChange={(
-                            _: SyntheticEvent,
-                            { value }: { value: ClubhouseLocation }
-                        ) => setFieldValue('selectedLocation', value)}
+                        onChange={(v) => setFieldValue('selectedLocation', v)}
                     />
-                    <Form.Button
+                </MUIGrid>
+                <MUIGrid item xs={12} md={4}>
+                    <Button
                         type="submit"
                         primary
-                        disabled={!values.searchTerm}
-                        loading={isSubmitting}
+                        disabled={!values.searchTerm || isSubmitting}
                         onClick={() => handleSubmit()}
                     >
                         Search
-                    </Form.Button>
-                </StyledFormGroup>
-            </Form>
+                    </Button>
+                </MUIGrid>
+            </MUIGrid>
+
             <br />
             <Grid stackable={true}>
                 <Grid.Column>

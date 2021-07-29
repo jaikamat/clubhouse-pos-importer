@@ -3,7 +3,7 @@ import { Form, Input, Segment } from 'semantic-ui-react';
 import { FormikHelpers, useFormik } from 'formik';
 import setNameQuery from './setNameQuery';
 import { Filters } from './filteredCardsQuery';
-import FormikControlledSearchBar from '../ui/FormikControlledSearchBar';
+import ControlledSearchBar from '../ui/ControlledSearchBar';
 import {
     DropdownOption,
     MUIFormikDropdown,
@@ -205,7 +205,7 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
             <h3>Filters</h3>
 
             {/* <Form> */}
-            <FormikControlledSearchBar
+            <ControlledSearchBar
                 label="Card name"
                 value={values.title}
                 onChange={(v) => setFieldValue('title', v ? v.title : '')}

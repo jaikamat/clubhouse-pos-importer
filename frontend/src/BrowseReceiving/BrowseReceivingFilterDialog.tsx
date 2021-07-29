@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import { useFormik } from 'formik';
 import { Form } from 'semantic-ui-react';
-import FormikControlledSearchBar from '../ui/FormikControlledSearchBar';
+import ControlledSearchBar from '../ui/ControlledSearchBar';
 import FormikNativeDatePicker from '../ui/FormikNativeDatePicker';
 
 export interface FormValues {
@@ -62,7 +62,7 @@ const BrowseReceivingFilterDialog: FC<Props> = ({ onSubmit, filters }) => {
                     <DialogTitle>Receiving search</DialogTitle>
                     <DialogContent>
                         <Form>
-                            <FormikControlledSearchBar
+                            <ControlledSearchBar
                                 label="Card name"
                                 value={values.cardName}
                                 onChange={(v) => setFieldValue('cardName', v)}

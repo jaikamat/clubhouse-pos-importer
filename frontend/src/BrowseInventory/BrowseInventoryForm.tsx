@@ -4,7 +4,7 @@ import { FormikHelpers, useFormik } from 'formik';
 import setNameQuery from './setNameQuery';
 import { Filters } from './filteredCardsQuery';
 import FormikControlledSearchBar from '../ui/FormikControlledSearchBar';
-import FormikDropdown, {
+import {
     DropdownOption,
     MUIFormikDropdown,
     MUIFormikMultiSelect,
@@ -208,7 +208,7 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
             <FormikControlledSearchBar
                 label="Card name"
                 value={values.title}
-                onChange={(v) => setFieldValue('title', v)}
+                onChange={(v) => setFieldValue('title', v ? v.title : '')}
             />
             <MUIFormikDropdown
                 name="format"

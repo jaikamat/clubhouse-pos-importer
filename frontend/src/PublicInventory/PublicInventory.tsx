@@ -106,8 +106,8 @@ const PublicInventory: FC = () => {
                         <label>Card search</label>
                         <ControlledSearchBar
                             value={values.searchTerm}
-                            onChange={(value) =>
-                                setFieldValue('searchTerm', value)
+                            onChange={(v) =>
+                                setFieldValue('searchTerm', v ? v.title : '')
                             }
                         />
                     </Form.Field>

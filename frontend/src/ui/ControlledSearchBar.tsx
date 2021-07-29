@@ -10,6 +10,7 @@ import { TextField } from '@material-ui/core';
 export type Option = { title: string };
 
 interface Props {
+    // TODO: This should be of type Option rather than string
     value: string;
     onChange: (result: Option | null) => void;
 }
@@ -66,7 +67,6 @@ const ControlledSearchBar: FC<Props> = ({ value, onChange }) => {
         }
     };
 
-    // TODO: onFocus and onBlur
     return (
         <Autocomplete
             id="searchBar"

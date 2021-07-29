@@ -58,7 +58,10 @@ const Sale: FC<Props> = () => {
                 message="You have items in your list. Are you sure you wish to leave?"
                 when={saleListCards.length > 0}
             />
-            <ControlledSearchBar value={term} onChange={(v) => setTerm(v)} />
+            <ControlledSearchBar
+                value={term}
+                onChange={(v) => setTerm(v ? v.title : '')}
+            />
             <br />
             <Grid container spacing={2}>
                 <Grid item xs={12} lg={8}>

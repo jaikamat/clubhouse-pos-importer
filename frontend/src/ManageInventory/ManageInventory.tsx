@@ -25,7 +25,10 @@ export default function ManageInventory() {
 
     return (
         <>
-            <ControlledSearchBar value={term} onChange={(v) => setTerm(v)} />
+            <ControlledSearchBar
+                value={term}
+                onChange={(v) => setTerm(v ? v.title : '')}
+            />
             <br />
             <Grid container justify="space-between">
                 <HeaderText>Manage Inventory</HeaderText>

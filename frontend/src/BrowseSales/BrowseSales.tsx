@@ -29,7 +29,10 @@ const BrowseSales: FC = () => {
 
     return (
         <div>
-            <ControlledSearchBar value={term} onChange={(v) => setTerm(v)} />
+            <ControlledSearchBar
+                value={term}
+                onChange={(v) => setTerm(v ? v.title : '')}
+            />
             <br />
             <HeaderText>Browse Sales</HeaderText>
             <Divider />

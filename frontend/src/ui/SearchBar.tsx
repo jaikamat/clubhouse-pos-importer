@@ -15,7 +15,7 @@ interface Props {
     onChange: (result: Option | null) => void;
 }
 
-const ControlledSearchBar: FC<Props> = ({ value, onChange }) => {
+const SearchBar: FC<Props> = ({ value, onChange }) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [results, setResults] = useState<Option[]>([]);
     const [internalValue, setInternalValue] = useState<Option | null>(null);
@@ -90,4 +90,4 @@ const ControlledSearchBar: FC<Props> = ({ value, onChange }) => {
     );
 };
 
-export default ControlledSearchBar;
+export default SearchBar;

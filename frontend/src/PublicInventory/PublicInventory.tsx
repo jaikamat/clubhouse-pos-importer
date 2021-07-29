@@ -6,7 +6,7 @@ import { ClubhouseLocation } from '../context/AuthProvider';
 import styled from 'styled-components';
 import PublicCard from './PublicCard';
 import publicCardSearchQuery from './publicCardSearchQuery';
-import ControlledSearchBar from '../ui/ControlledSearchBar';
+import SearchBar from '../ui/SearchBar';
 
 interface State {
     searchResults: ScryfallCard[];
@@ -104,7 +104,7 @@ const PublicInventory: FC = () => {
                 <StyledFormGroup widths="5">
                     <Form.Field>
                         <label>Card search</label>
-                        <ControlledSearchBar
+                        <SearchBar
                             value={values.searchTerm}
                             onChange={(v) =>
                                 setFieldValue('searchTerm', v ? v.title : '')

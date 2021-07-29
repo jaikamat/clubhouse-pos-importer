@@ -1,5 +1,5 @@
 import { FC, SyntheticEvent } from 'react';
-import ControlledSearchBar, { Option } from './ControlledSearchBar';
+import SearchBar, { Option } from './SearchBar';
 
 interface FormikControlledSearchBarProps {
     label: string;
@@ -12,7 +12,7 @@ export const FormikControlledSearchBar: FC<FormikControlledSearchBarProps> = ({
     value,
     onChange,
 }) => {
-    return <ControlledSearchBar value={value} onChange={onChange} />;
+    return <SearchBar value={value} onChange={onChange} />;
 };
 
 export default FormikControlledSearchBar;

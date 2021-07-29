@@ -10,7 +10,7 @@ import TotalStoreInventory from '../ManageInventory/TotalStoreInventory';
 import sum from '../utils/sum';
 import { Box, Grid } from '@material-ui/core';
 import { HeaderText } from '../ui/Typography';
-import ControlledSearchBar from '../ui/ControlledSearchBar';
+import SearchBar from '../ui/SearchBar';
 import useInterruptExit from '../utils/useInterruptExit';
 import { Prompt } from 'react-router';
 
@@ -58,7 +58,7 @@ const Sale: FC<Props> = () => {
                 message="You have items in your list. Are you sure you wish to leave?"
                 when={saleListCards.length > 0}
             />
-            <ControlledSearchBar
+            <SearchBar
                 value={term}
                 onChange={(v) => setTerm(v ? v.title : '')}
             />

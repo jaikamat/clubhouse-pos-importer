@@ -3,7 +3,7 @@ import BrowseSalesList from './BrowseSalesList';
 import { Divider } from 'semantic-ui-react';
 import browseSalesQuery, { Sale } from './browseSalesQuery';
 import { HeaderText } from '../ui/Typography';
-import ControlledSearchBar from '../ui/ControlledSearchBar';
+import SearchBar from '../ui/SearchBar';
 import Loading from '../ui/Loading';
 import { Typography } from '@material-ui/core';
 
@@ -29,7 +29,7 @@ const BrowseSales: FC = () => {
 
     return (
         <div>
-            <ControlledSearchBar
+            <SearchBar
                 value={term}
                 onChange={(v) => setTerm(v ? v.title : '')}
             />

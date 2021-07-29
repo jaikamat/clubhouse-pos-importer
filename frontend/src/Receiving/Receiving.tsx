@@ -7,7 +7,7 @@ import TotalCardsLabel from '../common/TotalCardsLabel';
 import TotalStoreInventory from '../ManageInventory/TotalStoreInventory';
 import { Grid } from '@material-ui/core';
 import { HeaderText } from '../ui/Typography';
-import ControlledSearchBar from '../ui/ControlledSearchBar';
+import SearchBar from '../ui/SearchBar';
 import Loading from '../ui/Loading';
 import { Prompt } from 'react-router';
 import useInterruptExit from '../utils/useInterruptExit';
@@ -59,7 +59,7 @@ const Receiving: FC<Props> = () => {
                 message="You have items in your list. Are you sure you wish to leave?"
                 when={receivingList.length > 0}
             />
-            <ControlledSearchBar
+            <SearchBar
                 value={term}
                 onChange={(v) => setTerm(v ? v.title : '')}
             />

@@ -206,9 +206,8 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
 
             {/* <Form> */}
             <ControlledSearchBar
-                label="Card name"
                 value={values.title}
-                onChange={(v) => setFieldValue('title', v ? v.title : '')}
+                onChange={(v) => setFieldValue('title', v)}
             />
             <MUIFormikDropdown
                 name="format"

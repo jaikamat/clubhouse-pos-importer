@@ -6,6 +6,7 @@ import { HeaderText } from '../ui/Typography';
 import SearchBar from '../ui/SearchBar';
 import Loading from '../ui/Loading';
 import { Typography } from '@material-ui/core';
+import ControlledSearchBar from '../ui/ControlledSearchBar';
 
 const BrowseSales: FC = () => {
     const [term, setTerm] = useState<string>('');
@@ -29,10 +30,7 @@ const BrowseSales: FC = () => {
 
     return (
         <div>
-            <SearchBar
-                value={term}
-                onChange={(v) => setTerm(v ? v.title : '')}
-            />
+            <ControlledSearchBar value={term} onChange={(v) => setTerm(v)} />
             <br />
             <HeaderText>Browse Sales</HeaderText>
             <Divider />

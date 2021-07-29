@@ -63,7 +63,6 @@ const BrowseReceivingFilterDialog: FC<Props> = ({ onSubmit, filters }) => {
                     <DialogContent>
                         <Form>
                             <ControlledSearchBar
-                                label="Card name"
                                 value={values.cardName}
                                 onChange={(v) => setFieldValue('cardName', v)}
                             />

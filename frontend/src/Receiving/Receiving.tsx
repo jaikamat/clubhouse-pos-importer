@@ -11,6 +11,7 @@ import SearchBar from '../ui/SearchBar';
 import Loading from '../ui/Loading';
 import { Prompt } from 'react-router';
 import useInterruptExit from '../utils/useInterruptExit';
+import ControlledSearchBar from '../ui/ControlledSearchBar';
 
 interface Props {}
 
@@ -59,10 +60,7 @@ const Receiving: FC<Props> = () => {
                 message="You have items in your list. Are you sure you wish to leave?"
                 when={receivingList.length > 0}
             />
-            <SearchBar
-                value={term}
-                onChange={(v) => setTerm(v ? v.title : '')}
-            />
+            <ControlledSearchBar value={term} onChange={(v) => setTerm(v)} />
             <br />
             <Grid container spacing={2}>
                 <Grid item xs={12} lg={8}>

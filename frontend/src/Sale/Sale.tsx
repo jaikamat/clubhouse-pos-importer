@@ -13,6 +13,7 @@ import { HeaderText } from '../ui/Typography';
 import SearchBar from '../ui/SearchBar';
 import useInterruptExit from '../utils/useInterruptExit';
 import { Prompt } from 'react-router';
+import ControlledSearchBar from '../ui/ControlledSearchBar';
 
 interface Props {}
 
@@ -58,10 +59,7 @@ const Sale: FC<Props> = () => {
                 message="You have items in your list. Are you sure you wish to leave?"
                 when={saleListCards.length > 0}
             />
-            <SearchBar
-                value={term}
-                onChange={(v) => setTerm(v ? v.title : '')}
-            />
+            <ControlledSearchBar value={term} onChange={(v) => setTerm(v)} />
             <br />
             <Grid container spacing={2}>
                 <Grid item xs={12} lg={8}>

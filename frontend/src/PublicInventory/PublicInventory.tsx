@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import PublicCard from './PublicCard';
 import publicCardSearchQuery from './publicCardSearchQuery';
 import SearchBar from '../ui/SearchBar';
+import ControlledSearchBar from '../ui/ControlledSearchBar';
 
 interface State {
     searchResults: ScryfallCard[];
@@ -104,11 +105,9 @@ const PublicInventory: FC = () => {
                 <StyledFormGroup widths="5">
                     <Form.Field>
                         <label>Card search</label>
-                        <SearchBar
+                        <ControlledSearchBar
                             value={values.searchTerm}
-                            onChange={(v) =>
-                                setFieldValue('searchTerm', v ? v.title : '')
-                            }
+                            onChange={(v) => setFieldValue('searchTerm', v)}
                         />
                     </Form.Field>
                     <Form.Field

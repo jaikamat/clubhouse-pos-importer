@@ -1,18 +1,21 @@
-import { FC, SyntheticEvent } from 'react';
-import SearchBar, { Option } from './SearchBar';
+import { FC } from 'react';
+import SearchBar from './SearchBar';
 
 interface ControlledSearchBarProps {
-    label: string;
     value: string;
-    onChange: (value: Option | null) => void;
+    onChange: (value: string) => void;
 }
 
 export const ControlledSearchBar: FC<ControlledSearchBarProps> = ({
-    label,
     value,
     onChange,
 }) => {
-    return <SearchBar value={value} onChange={onChange} />;
+    return (
+        <SearchBar
+            value={value ? { title: value } : null}
+            onChange={(v) => (v ? onChange(v.title) : onChange(''))}
+        />
+    );
 };
 
 export default ControlledSearchBar;

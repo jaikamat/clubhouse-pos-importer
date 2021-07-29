@@ -10,15 +10,14 @@ import { TextField } from '@material-ui/core';
 export type Option = { title: string };
 
 interface Props {
-    // TODO: This should be of type Option rather than string
-    value: string;
+    value: Option | null;
     onChange: (result: Option | null) => void;
 }
 
 const SearchBar: FC<Props> = ({ value, onChange }) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [results, setResults] = useState<Option[]>([]);
-    const [internalValue, setInternalValue] = useState<Option | null>(null);
+    const [internalValue, setInternalValue] = useState<Option | null>(value);
 
     const fetchResults = async (v: string) => {
         setLoading(true);
@@ -50,7 +49,10 @@ const SearchBar: FC<Props> = ({ value, onChange }) => {
         reason: AutocompleteChangeReason
     ) => {
         // If the user clears the input, then we need to reset the state
-        if (reason === 'clear') onChange(null);
+        if (reason === 'clear') {
+            onChange(null);
+            return;
+        }
 
         // This line is a hacky way to get around the fact that if we just select(), then
         // when the user manually clicks the first (or any) result in the resultlist, it does not select,

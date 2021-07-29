@@ -3,7 +3,6 @@ import BrowseSalesList from './BrowseSalesList';
 import { Divider } from 'semantic-ui-react';
 import browseSalesQuery, { Sale } from './browseSalesQuery';
 import { HeaderText } from '../ui/Typography';
-import SearchBar from '../ui/SearchBar';
 import Loading from '../ui/Loading';
 import { Grid, Typography } from '@material-ui/core';
 import ControlledSearchBar from '../ui/ControlledSearchBar';

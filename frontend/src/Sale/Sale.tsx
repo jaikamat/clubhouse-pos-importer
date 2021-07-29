@@ -10,7 +10,6 @@ import TotalStoreInventory from '../ManageInventory/TotalStoreInventory';
 import sum from '../utils/sum';
 import { Box, Grid } from '@material-ui/core';
 import { HeaderText } from '../ui/Typography';
-import SearchBar from '../ui/SearchBar';
 import useInterruptExit from '../utils/useInterruptExit';
 import { Prompt } from 'react-router';
 import ControlledSearchBar from '../ui/ControlledSearchBar';

@@ -61,8 +61,8 @@ const BrowseReceiving: FC = () => {
             <Box pb={2}>
                 <HeaderText>Browse Receiving</HeaderText>
             </Box>
-            <Grid container justify="space-between" md={12} lg={6} spacing={2}>
-                <Grid item alignItems="center" xs={12}>
+            <Grid container justify="space-between" spacing={2}>
+                <Grid item alignItems="center" md={12} lg={6}>
                     <Box
                         display="flex"
                         justifyContent="space-between"

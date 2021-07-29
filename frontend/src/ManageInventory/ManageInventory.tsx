@@ -5,7 +5,6 @@ import { InventoryContext } from '../context/InventoryContext';
 import ManageInventoryListItem from './ManageInventoryListItem';
 import { Grid } from '@material-ui/core';
 import { HeaderText } from '../ui/Typography';
-import SearchBar from '../ui/SearchBar';
 import Loading from '../ui/Loading';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
 

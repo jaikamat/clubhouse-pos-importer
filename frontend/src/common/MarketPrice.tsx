@@ -12,13 +12,6 @@ const LabelStyle = styled(Label)`
             : null} !important;
 `;
 
-interface Response {
-    data: {
-        marketPrices: { foil: number; normal: number };
-        medianPrices: { foil: number; normal: number };
-    };
-}
-
 type Finish = 'FOIL' | 'NONFOIL';
 
 interface Props {

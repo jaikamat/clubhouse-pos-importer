@@ -34,12 +34,6 @@ function FormikDropdown<T>({
     );
 }
 
-const useStyles = makeStyles(() => ({
-    formControl: {
-        minWidth: '100%',
-    },
-}));
-
 export interface DropdownOption {
     key: string;
     value: string | number;
@@ -61,10 +55,8 @@ export function MUIFormikDropdown({
     options,
     ...props
 }: MUIFormikDropdownFieldProps) {
-    const { formControl } = useStyles();
-
     return (
-        <FormControl className={formControl} variant="outlined" size="small">
+        <FormControl variant="outlined" size="small" fullWidth>
             <InputLabel>{label}</InputLabel>
             <Select
                 label={label}
@@ -100,10 +92,8 @@ export function MUIFormikMultiSelect({
     options,
     ...props
 }: MUIFormikMultiSelectFieldProps) {
-    const { formControl } = useStyles();
-
     return (
-        <FormControl className={formControl} variant="outlined" size="small">
+        <FormControl variant="outlined" size="small" fullWidth>
             <InputLabel>{label}</InputLabel>
             <Select
                 label={label}

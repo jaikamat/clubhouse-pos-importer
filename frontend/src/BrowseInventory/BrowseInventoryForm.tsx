@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Form, Input, Segment } from 'semantic-ui-react';
 import { FormikHelpers, useFormik } from 'formik';
 import setNameQuery from './setNameQuery';
 import { Filters } from './filteredCardsQuery';
@@ -9,6 +8,8 @@ import {
     MUIFormikDropdown,
     MUIFormikMultiSelect,
 } from '../ui/FormikDropdown';
+import { FormControl, Paper, TextField, withStyles } from '@material-ui/core';
+import Button from '../ui/Button';
 
 const formatDropdownOptions: DropdownOption[] = [
     { key: 'qw', value: '', text: 'None' },
@@ -123,6 +124,12 @@ interface Props {
     doSubmit: (v: Filters, page: number) => Promise<void>;
 }
 
+const FormContainer = withStyles(({ spacing }) => ({
+    root: {
+        padding: spacing(2),
+    },
+}))(Paper);
+
 const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
     const [editionDropdownOptions, setEditionDropdownOptions] = useState<
         DropdownOption[]
@@ -201,10 +208,8 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
     });
 
     return (
-        <Segment>
+        <FormContainer variant="outlined">
             <h3>Filters</h3>
-
-            {/* <Form> */}
             <ControlledSearchBar
                 value={values.title}
                 onChange={(v) => setFieldValue('title', v)}
@@ -230,7 +235,6 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
                 value={values.finish}
                 onChange={(v) => setFieldValue('finish', v)}
             />
-
             <MUIFormikMultiSelect
                 name="colorsArray"
                 label="Colors"
@@ -267,20 +271,18 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
                 onChange={(v) => setFieldValue('priceOperator', v)}
                 defaultValue="gte"
             />
-            {/* TODO: extract this as a text input */}
-            <Form.Field>
-                <label>Price Filter</label>
-                <Input
+            <FormControl fullWidth>
+                <TextField
+                    label="Price filter"
+                    variant="outlined"
+                    size="small"
                     placeholder="Enter a price"
-                    labelPosition="left"
                     name="price"
                     type="number"
                     onChange={handleChange}
                 />
-            </Form.Field>
-
+            </FormControl>
             <h3>{'Sort & Order'}</h3>
-
             <MUIFormikDropdown
                 name="sortBy"
                 label="Sort by"
@@ -297,12 +299,10 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
                 value={values.sortByDirection.toString()}
                 onChange={(v) => setFieldValue('sortByDirection', v)}
             />
-
-            <Form.Button type="submit" onClick={() => handleSubmit()} primary>
+            <Button type="submit" onClick={() => handleSubmit()} primary>
                 Submit
-            </Form.Button>
-            {/* </Form> */}
-        </Segment>
+            </Button>
+        </FormContainer>
     );
 };
 

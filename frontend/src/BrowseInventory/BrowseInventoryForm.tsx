@@ -3,11 +3,8 @@ import { FormikHelpers, useFormik } from 'formik';
 import setNameQuery from './setNameQuery';
 import { Filters } from './filteredCardsQuery';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
-import {
-    DropdownOption,
-    MUIFormikDropdown,
-    MUIFormikMultiSelect,
-} from '../ui/FormikDropdown';
+import ControlledDropdown, { DropdownOption } from '../ui/ControlledDropdown';
+import ControlledMultiSelect from '../ui/ControlledMultiSelect';
 import {
     FormControl,
     Grid,
@@ -225,7 +222,7 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <MUIFormikDropdown
+                    <ControlledDropdown
                         name="format"
                         label="Format"
                         options={formatDropdownOptions}
@@ -234,7 +231,7 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <MUIFormikDropdown
+                    <ControlledDropdown
                         name="setName"
                         label="Edition"
                         options={editionDropdownOptions}
@@ -243,7 +240,7 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <MUIFormikDropdown
+                    <ControlledDropdown
                         name="finish"
                         label="Finish"
                         options={finishDropdownOptions}
@@ -252,7 +249,7 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <MUIFormikMultiSelect
+                    <ControlledMultiSelect
                         name="colorsArray"
                         label="Colors"
                         options={sortByColorDropdownOptions}
@@ -261,7 +258,7 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <MUIFormikDropdown
+                    <ControlledDropdown
                         name="colorSpecificity"
                         label="Color specificity"
                         options={colorSpecificityDropdownOptions}
@@ -270,7 +267,7 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <MUIFormikDropdown
+                    <ControlledDropdown
                         name="typeLine"
                         label="Type Line"
                         options={typeLineOptions}
@@ -279,7 +276,7 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <MUIFormikDropdown
+                    <ControlledDropdown
                         name="frame"
                         label="Frame Effects"
                         options={frameOptions}
@@ -288,7 +285,7 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <MUIFormikDropdown
+                    <ControlledDropdown
                         name="priceOperator"
                         label="Price operator"
                         options={priceOperatorDropdownOptions}
@@ -315,7 +312,7 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
             <SectionText>{'Sort & Order'}</SectionText>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                    <MUIFormikDropdown
+                    <ControlledDropdown
                         name="sortBy"
                         label="Sort by"
                         options={sortByDropdownOptions}
@@ -325,7 +322,7 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <MUIFormikDropdown
+                    <ControlledDropdown
                         name="sortByDirection"
                         label="Order"
                         options={sortByDirectionDropdownOptions}

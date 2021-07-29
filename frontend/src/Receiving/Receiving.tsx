@@ -60,7 +60,14 @@ const Receiving: FC<Props> = () => {
                 message="You have items in your list. Are you sure you wish to leave?"
                 when={receivingList.length > 0}
             />
-            <ControlledSearchBar value={term} onChange={(v) => setTerm(v)} />
+            <Grid container>
+                <Grid item xs={12} md={4}>
+                    <ControlledSearchBar
+                        value={term}
+                        onChange={(v) => setTerm(v)}
+                    />
+                </Grid>
+            </Grid>
             <br />
             <Grid container spacing={2}>
                 <Grid item xs={12} lg={8}>

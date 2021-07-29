@@ -5,7 +5,7 @@ import browseSalesQuery, { Sale } from './browseSalesQuery';
 import { HeaderText } from '../ui/Typography';
 import SearchBar from '../ui/SearchBar';
 import Loading from '../ui/Loading';
-import { Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
 
 const BrowseSales: FC = () => {
@@ -30,7 +30,14 @@ const BrowseSales: FC = () => {
 
     return (
         <div>
-            <ControlledSearchBar value={term} onChange={(v) => setTerm(v)} />
+            <Grid container>
+                <Grid item xs={12} md={4}>
+                    <ControlledSearchBar
+                        value={term}
+                        onChange={(v) => setTerm(v)}
+                    />
+                </Grid>
+            </Grid>
             <br />
             <HeaderText>Browse Sales</HeaderText>
             <Divider />

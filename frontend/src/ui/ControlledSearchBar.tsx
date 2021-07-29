@@ -63,13 +63,11 @@ const ControlledSearchBar: FC<Props> = ({ value, onChange, onBlur }) => {
         }
     };
 
-    const onFocus = (e: React.MouseEvent<HTMLElement, MouseEvent>) =>
-        (e.target as HTMLInputElement).select();
-
     // TODO: onFocus and onBlur
     return (
         <Autocomplete
             id="searchBar"
+            selectOnFocus
             value={internalValue}
             onInputChange={handleSearchChange}
             onChange={handleResultSelect}
@@ -85,7 +83,6 @@ const ControlledSearchBar: FC<Props> = ({ value, onChange, onBlur }) => {
                     size="small"
                 />
             )}
-            // onFocus={onFocus}
             // onBlur={onBlur} // Used to clear state in the Browse Inventory feature
         />
     );

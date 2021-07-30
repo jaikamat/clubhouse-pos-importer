@@ -291,7 +291,6 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
                         options={priceOperatorDropdownOptions}
                         value={values.priceOperator}
                         onChange={(v) => setFieldValue('priceOperator', v)}
-                        defaultValue="gte"
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -316,7 +315,6 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
                         name="sortBy"
                         label="Sort by"
                         options={sortByDropdownOptions}
-                        defaultValue={initialFilters.price}
                         value={values.sortBy}
                         onChange={(v) => setFieldValue('sortBy', v)}
                     />
@@ -326,7 +324,6 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
                         name="sortByDirection"
                         label="Order"
                         options={sortByDirectionDropdownOptions}
-                        defaultValue={initialFilters.sortByDirection}
                         value={values.sortByDirection.toString()}
                         onChange={(v) => setFieldValue('sortByDirection', v)}
                     />

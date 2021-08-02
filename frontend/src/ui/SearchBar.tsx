@@ -94,6 +94,7 @@ const SearchBar: FC<Props> = ({ value, onChange }) => {
             placeholder="Enter a card title"
             closeIcon={null}
             popupIcon={<SearchIcon />}
+            noOptionsText="No results found"
             classes={{
                 popupIndicatorOpen: classes.popupIndicatorOpen,
             }}

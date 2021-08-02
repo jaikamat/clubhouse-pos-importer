@@ -79,6 +79,7 @@ const SearchBar: FC<Props> = ({ value, onChange }) => {
             loading={loading}
             options={results}
             getOptionLabel={(o) => o.title}
+            getOptionSelected={(o, v) => o.title === v.title}
             placeholder="Enter a card title"
             renderInput={(params) => (
                 <TextField

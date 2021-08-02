@@ -5,9 +5,19 @@ import autocompleteQuery from '../common/autocompleteQuery';
 import Autocomplete, {
     AutocompleteChangeReason,
 } from '@material-ui/lab/Autocomplete';
-import { TextField } from '@material-ui/core';
+import { TextField, makeStyles } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
 
 export type Option = { title: string };
+
+const useStyles = makeStyles({
+    /*
+     * Prevents the option-list icon from rotating 180 degrees to preserve orientation of custom icon
+     */
+    popupIndicatorOpen: {
+        transform: 'rotate(0deg)',
+    },
+});
 
 interface Props {
     value: Option | null;
@@ -15,6 +25,7 @@ interface Props {
 }
 
 const SearchBar: FC<Props> = ({ value, onChange }) => {
+    const classes = useStyles();
     const [loading, setLoading] = useState<boolean>(false);
     const [results, setResults] = useState<Option[]>([]);
     const [internalValue, setInternalValue] = useState<Option | null>(value);
@@ -81,6 +92,11 @@ const SearchBar: FC<Props> = ({ value, onChange }) => {
             getOptionLabel={(o) => o.title}
             getOptionSelected={(o, v) => o.title === v.title}
             placeholder="Enter a card title"
+            closeIcon={null}
+            popupIcon={<SearchIcon />}
+            classes={{
+                popupIndicatorOpen: classes.popupIndicatorOpen,
+            }}
             renderInput={(params) => (
                 <TextField
                     {...params}

@@ -1,11 +1,19 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Form, Input, Segment } from 'semantic-ui-react';
 import { FormikHelpers, useFormik } from 'formik';
-import FormSelectField from '../ui/FormikSelectField';
 import setNameQuery from './setNameQuery';
 import { Filters } from './filteredCardsQuery';
-import FormikControlledSearchBar from '../ui/FormikControlledSearchBar';
-import FormikDropdown from '../ui/FormikDropdown';
+import ControlledSearchBar from '../ui/ControlledSearchBar';
+import ControlledDropdown, { DropdownOption } from '../ui/ControlledDropdown';
+import ControlledMultiSelect from '../ui/ControlledMultiSelect';
+import {
+    FormControl,
+    Grid,
+    Paper,
+    TextField,
+    withStyles,
+} from '@material-ui/core';
+import Button from '../ui/Button';
+import { SectionText } from '../ui/Typography';
 
 const formatDropdownOptions: DropdownOption[] = [
     { key: 'qw', value: '', text: 'None' },
@@ -48,11 +56,11 @@ const sortByDirectionDropdownOptions: DropdownOption[] = [
 ];
 
 const sortByColorDropdownOptions: DropdownOption[] = [
-    { key: 'w', value: 'W', text: 'White' },
-    { key: 'u', value: 'U', text: 'Blue' },
-    { key: 'b', value: 'B', text: 'Black' },
-    { key: 'r', value: 'R', text: 'Red' },
-    { key: 'g', value: 'G', text: 'Green' },
+    { key: 'w', value: 'White', text: 'White' },
+    { key: 'u', value: 'Blue', text: 'Blue' },
+    { key: 'b', value: 'Black', text: 'Black' },
+    { key: 'r', value: 'Red', text: 'Red' },
+    { key: 'g', value: 'Green', text: 'Green' },
 ];
 
 const colorSpecificityDropdownOptions: DropdownOption[] = [
@@ -80,12 +88,6 @@ const frameOptions: DropdownOption[] = [
     { key: 'extendedArt', value: 'extendedArt', text: 'Extended Art' },
     { key: 'showcase', value: 'showcase', text: 'Showcase' },
 ];
-
-interface DropdownOption {
-    key: string;
-    value: string | number;
-    text: string;
-}
 
 interface FormValues {
     title: string;
@@ -126,6 +128,12 @@ interface Props {
     doSubmit: (v: Filters, page: number) => Promise<void>;
 }
 
+const FormContainer = withStyles(({ spacing }) => ({
+    root: {
+        padding: spacing(2),
+    },
+}))(Paper);
+
 const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
     const [editionDropdownOptions, setEditionDropdownOptions] = useState<
         DropdownOption[]
@@ -145,7 +153,23 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
                     finish: values.finish || undefined,
                     colors:
                         values.colorsArray.length > 0
-                            ? values.colorsArray.sort().join('')
+                            ? values.colorsArray
+                                  .map((c) => {
+                                      const colorsMap: Record<
+                                          string,
+                                          string
+                                      > = {
+                                          White: 'W',
+                                          Blue: 'U',
+                                          Black: 'B',
+                                          Red: 'R',
+                                          Green: 'G',
+                                      };
+
+                                      return colorsMap[c];
+                                  })
+                                  .sort()
+                                  .join('')
                             : undefined,
                     colorSpecificity: values.colorSpecificity || undefined,
                     type: values.typeLine || undefined,
@@ -188,111 +212,128 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
     });
 
     return (
-        <Segment>
-            <h3>Filters</h3>
-
-            <Form>
-                <Form.Group widths="4">
-                    <FormikControlledSearchBar
-                        label="Card name"
+        <FormContainer variant="outlined">
+            <SectionText>Filters</SectionText>
+            <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                    <ControlledSearchBar
                         value={values.title}
                         onChange={(v) => setFieldValue('title', v)}
                     />
-                    <FormSelectField
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <ControlledDropdown
                         name="format"
                         label="Format"
                         options={formatDropdownOptions}
+                        value={values.format}
                         onChange={(v) => setFieldValue('format', v)}
                     />
-                    <FormSelectField
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <ControlledDropdown
                         name="setName"
                         label="Edition"
                         options={editionDropdownOptions}
+                        value={values.setName}
                         onChange={(v) => setFieldValue('setName', v)}
-                        search
                     />
-                    <FormSelectField
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <ControlledDropdown
                         name="finish"
                         label="Finish"
                         options={finishDropdownOptions}
+                        value={values.finish}
                         onChange={(v) => setFieldValue('finish', v)}
                     />
-                </Form.Group>
-                <Form.Group widths="4">
-                    <FormSelectField
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <ControlledMultiSelect
                         name="colorsArray"
                         label="Colors"
                         options={sortByColorDropdownOptions}
+                        value={values.colorsArray}
                         onChange={(v) => setFieldValue('colorsArray', v)}
-                        multiple
                     />
-                    <FormSelectField
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <ControlledDropdown
                         name="colorSpecificity"
                         label="Color specificity"
                         options={colorSpecificityDropdownOptions}
+                        value={values.colorSpecificity}
                         onChange={(v) => setFieldValue('colorSpecificity', v)}
                     />
-                    <FormSelectField
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <ControlledDropdown
                         name="typeLine"
                         label="Type Line"
                         options={typeLineOptions}
+                        value={values.typeLine}
                         onChange={(v) => setFieldValue('typeLine', v)}
                     />
-                    <FormSelectField
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <ControlledDropdown
                         name="frame"
                         label="Frame Effects"
                         options={frameOptions}
+                        value={values.frame}
                         onChange={(v) => setFieldValue('frame', v)}
                     />
-                    <Form.Field>
-                        <label>Price Filter</label>
-                        <Input
-                            label={
-                                <FormikDropdown
-                                    name="priceOperator"
-                                    options={priceOperatorDropdownOptions}
-                                    onChange={(v) =>
-                                        setFieldValue('priceOperator', v)
-                                    }
-                                    defaultValue="gte"
-                                />
-                            }
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <ControlledDropdown
+                        name="priceOperator"
+                        label="Price operator"
+                        options={priceOperatorDropdownOptions}
+                        value={values.priceOperator}
+                        onChange={(v) => setFieldValue('priceOperator', v)}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <FormControl fullWidth>
+                        <TextField
+                            label="Price filter"
+                            variant="outlined"
+                            size="small"
                             placeholder="Enter a price"
-                            labelPosition="left"
                             name="price"
                             type="number"
                             onChange={handleChange}
                         />
-                    </Form.Field>
-                </Form.Group>
-                <h3>{'Sort & Order'}</h3>
-                <Form.Group>
-                    <FormSelectField
+                    </FormControl>
+                </Grid>
+            </Grid>
+            <br />
+            <SectionText>{'Sort & Order'}</SectionText>
+            <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                    <ControlledDropdown
                         name="sortBy"
                         label="Sort by"
                         options={sortByDropdownOptions}
-                        defaultValue={initialFilters.price}
+                        value={values.sortBy}
                         onChange={(v) => setFieldValue('sortBy', v)}
                     />
-                    <FormSelectField
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <ControlledDropdown
                         name="sortByDirection"
                         label="Order"
                         options={sortByDirectionDropdownOptions}
-                        defaultValue={initialFilters.sortByDirection}
+                        value={values.sortByDirection.toString()}
                         onChange={(v) => setFieldValue('sortByDirection', v)}
                     />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Button
-                        type="submit"
-                        onClick={() => handleSubmit()}
-                        primary
-                    >
-                        Submit
-                    </Form.Button>
-                </Form.Group>
-            </Form>
-        </Segment>
+                </Grid>
+            </Grid>
+            <br />
+            <Button type="submit" onClick={() => handleSubmit()} primary>
+                Submit
+            </Button>
+        </FormContainer>
     );
 };
 

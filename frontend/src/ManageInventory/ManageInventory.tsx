@@ -5,8 +5,8 @@ import { InventoryContext } from '../context/InventoryContext';
 import ManageInventoryListItem from './ManageInventoryListItem';
 import { Grid } from '@material-ui/core';
 import { HeaderText } from '../ui/Typography';
-import ControlledSearchBar from '../ui/ControlledSearchBar';
 import Loading from '../ui/Loading';
+import ControlledSearchBar from '../ui/ControlledSearchBar';
 
 export default function ManageInventory() {
     const [term, setTerm] = useState<string>('');
@@ -25,7 +25,14 @@ export default function ManageInventory() {
 
     return (
         <>
-            <ControlledSearchBar value={term} onChange={(v) => setTerm(v)} />
+            <Grid container>
+                <Grid item xs={12} md={4}>
+                    <ControlledSearchBar
+                        value={term}
+                        onChange={(v) => setTerm(v)}
+                    />
+                </Grid>
+            </Grid>
             <br />
             <Grid container justify="space-between">
                 <HeaderText>Manage Inventory</HeaderText>

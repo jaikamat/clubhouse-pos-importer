@@ -1,33 +1,14 @@
 import React, { useState, useContext, FC } from 'react';
-import { Segment, Statistic, Button, Modal } from 'semantic-ui-react';
-import styled from 'styled-components';
+import { Button, Modal } from 'semantic-ui-react';
 import Price from '../common/Price';
 import CashReport from './CashReport';
 import printCashReport from './printCashReport';
 import ReceivingListModal from './ReceivingListModal';
 import { ReceivingContext, Trade } from '../context/ReceivingContext';
 import sum from '../utils/sum';
+import { Box, Grid, Paper, Typography } from '@material-ui/core';
 
 interface Props {}
-
-const FlexRow = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-`;
-
-const FlexCol = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    min-height: 100px;
-`;
-
-const StatisticColor = styled(Statistic.Label)`
-    color: gray !important;
-`;
 
 const ReceivingListTotals: FC<Props> = () => {
     const { Cash, Credit } = Trade;
@@ -55,71 +36,90 @@ const ReceivingListTotals: FC<Props> = () => {
     );
 
     return (
-        <Segment>
-            <FlexRow>
-                <FlexCol>
-                    <Button.Group>
-                        <Button
-                            id="select-all-cash"
-                            onClick={() => selectAll(Trade.Cash)}
-                        >
-                            Select all cash
-                        </Button>
-                        <Button.Or />
-                        <Button
-                            id="select-all-credit"
-                            onClick={() => selectAll(Trade.Credit)}
-                        >
-                            Select all credit
-                        </Button>
-                    </Button.Group>
-                    <Modal
-                        open={showCashModal}
-                        trigger={
+        <Paper variant="outlined">
+            <Box p={2}>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} justify="space-between">
+                        <Button.Group fluid>
                             <Button
-                                color={cashTotal > 0 ? 'green' : undefined}
-                                disabled={cashTotal === 0}
-                                onClick={openCashModal}
+                                id="select-all-cash"
+                                onClick={() => selectAll(Trade.Cash)}
                             >
-                                Generate cash report
+                                Select all cash
                             </Button>
-                        }
-                    >
-                        <Modal.Content>
-                            <CashReport receivingList={receivingList} />
-                        </Modal.Content>
-                        <Modal.Actions>
+                            <Button.Or />
                             <Button
-                                onClick={handlePrintCashReport}
-                                color="blue"
+                                id="select-all-credit"
+                                onClick={() => selectAll(Trade.Credit)}
                             >
-                                Print Report
+                                Select all credit
                             </Button>
-                            <Button onClick={closeCashModal}>Cancel</Button>
-                        </Modal.Actions>
-                    </Modal>
-                </FlexCol>
-                <FlexCol>
-                    <Segment>
-                        <div>
-                            <Statistic size="mini">
-                                <StatisticColor>Cash Due</StatisticColor>
-                                <Statistic.Value id="cash-total">
+                        </Button.Group>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Modal
+                            open={showCashModal}
+                            trigger={
+                                <Button
+                                    floated="right"
+                                    color={cashTotal > 0 ? 'green' : undefined}
+                                    disabled={cashTotal === 0}
+                                    onClick={openCashModal}
+                                >
+                                    Generate cash report
+                                </Button>
+                            }
+                        >
+                            <Modal.Content>
+                                <CashReport receivingList={receivingList} />
+                            </Modal.Content>
+                            <Modal.Actions>
+                                <Button
+                                    onClick={handlePrintCashReport}
+                                    color="blue"
+                                >
+                                    Print Report
+                                </Button>
+                                <Button onClick={closeCashModal}>Cancel</Button>
+                            </Modal.Actions>
+                        </Modal>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Box
+                            display="flex"
+                            justifyContent="space-between"
+                            alignItems="center"
+                        >
+                            <Typography>CASH DUE</Typography>
+
+                            <Typography variant="h6">
+                                <b>
                                     <Price num={cashTotal} />
-                                </Statistic.Value>
-                            </Statistic>
-                            <Statistic size="mini">
-                                <StatisticColor>Credit Due</StatisticColor>
-                                <Statistic.Value id="credit-total">
+                                </b>
+                            </Typography>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Box
+                            display="flex"
+                            justifyContent="space-between"
+                            alignItems="center"
+                        >
+                            <Typography>CREDIT DUE</Typography>
+
+                            <Typography variant="h6">
+                                <b>
                                     <Price num={creditTotal} />
-                                </Statistic.Value>
-                            </Statistic>
-                        </div>
+                                </b>
+                            </Typography>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12}>
                         <ReceivingListModal />
-                    </Segment>
-                </FlexCol>
-            </FlexRow>
-        </Segment>
+                    </Grid>
+                </Grid>
+            </Box>
+        </Paper>
     );
 };
 

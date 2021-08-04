@@ -115,6 +115,7 @@ const Receiving: FC<Props> = () => {
                         </Placeholder>
                     )}
                     <ReceivingCart cards={receivingList} />
+                    <br />
                     {receivingList.length > 0 && <ReceivingListTotals />}
                 </Grid>
             </Grid>

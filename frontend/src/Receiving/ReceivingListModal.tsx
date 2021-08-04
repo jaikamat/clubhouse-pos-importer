@@ -76,6 +76,7 @@ const ReceivingListModal: FC<Props> = () => {
     return (
         <>
             <Button
+                fluid
                 color="blue"
                 disabled={receivingList.length === 0}
                 onClick={() => setShowModal(true)}

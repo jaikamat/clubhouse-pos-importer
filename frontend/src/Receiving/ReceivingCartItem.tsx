@@ -1,5 +1,4 @@
-import React, { useState, useContext, FC } from 'react';
-import { Button, Icon } from 'semantic-ui-react';
+import React, { useContext, FC } from 'react';
 import Price from '../common/Price';
 import {
     ReceivingCard,
@@ -8,8 +7,11 @@ import {
 } from '../context/ReceivingContext';
 import SetIcon from '../ui/SetIcon';
 import CardImageTooltip from '../ui/CardImageTooltip';
-import { ListItem, Grid, Typography, Box } from '@material-ui/core';
+import { ListItem, Grid, Typography, Box, IconButton } from '@material-ui/core';
 import Chip from '../common/Chip';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import CreditCardIcon from '@material-ui/icons/CreditCard';
+import CloseIcon from '@material-ui/icons/Close';
 
 interface Props {
     card: ReceivingCard;
@@ -32,7 +34,6 @@ const ReceivingCartItem: FC<Props> = ({
     },
 }) => {
     const { CASH, CREDIT } = TRADE_TYPE;
-    const [hovered, setHovered] = useState(false);
     const { removeFromList, activeTradeType } = useContext(ReceivingContext);
 
     return (
@@ -71,35 +72,26 @@ const ReceivingCartItem: FC<Props> = ({
                     </div>
                 </Grid>
                 <Grid item>
-                    <Button
-                        compact
-                        active={tradeType === CASH}
-                        color={tradeType === CASH ? 'blue' : undefined}
+                    <IconButton
+                        color={tradeType === CASH ? 'primary' : undefined}
                         onClick={() => activeTradeType(uuid_key, Trade.Cash)}
                         disabled={cashPrice === 0}
-                        icon
                     >
-                        <Icon name="dollar sign"></Icon>
-                    </Button>
-                    <Button
-                        compact
-                        active={tradeType === CREDIT}
-                        color={tradeType === CREDIT ? 'blue' : undefined}
+                        <AttachMoneyIcon />
+                    </IconButton>
+                    <IconButton
+                        color={tradeType === CREDIT ? 'primary' : undefined}
                         onClick={() => activeTradeType(uuid_key, Trade.Credit)}
                         disabled={creditPrice === 0}
-                        icon
                     >
-                        <Icon name="credit card outline"></Icon>
-                    </Button>
-                    <Button
-                        compact
-                        icon="cancel"
-                        circular
+                        <CreditCardIcon />
+                    </IconButton>
+                    <IconButton
                         onClick={() => removeFromList(uuid_key)}
-                        onMouseOver={() => setHovered(true)}
-                        onMouseOut={() => setHovered(false)}
-                        color={hovered ? 'red' : undefined}
-                    />
+                        color="secondary"
+                    >
+                        <CloseIcon />
+                    </IconButton>
                 </Grid>
             </Grid>
         </ListItem>

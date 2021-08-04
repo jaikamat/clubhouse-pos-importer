@@ -1,4 +1,4 @@
-import { List, Paper } from '@material-ui/core';
+import { Divider, List, Paper } from '@material-ui/core';
 import React, { FC } from 'react';
 import { ReceivingCard } from '../context/ReceivingContext';
 import ReceivingCartItem from './ReceivingCartItem';
@@ -13,8 +13,11 @@ const ReceivingCart: FC<Props> = ({ cards }) => {
         <>
             {cards.length > 0 && (
                 <List component={Paper} variant="outlined">
-                    {cards.map((card) => (
-                        <ReceivingCartItem card={card} />
+                    {cards.map((card, idx, arr) => (
+                        <>
+                            <ReceivingCartItem card={card} />
+                            {idx !== arr.length - 1 && <Divider />}
+                        </>
                     ))}
                 </List>
             )}

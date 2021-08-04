@@ -1,5 +1,5 @@
 import React, { useState, useContext, FC } from 'react';
-import { Button, Label, Icon, Header } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 import Price from '../common/Price';
 import {
     ReceivingCard,
@@ -8,7 +8,8 @@ import {
 } from '../context/ReceivingContext';
 import SetIcon from '../ui/SetIcon';
 import CardImageTooltip from '../ui/CardImageTooltip';
-import { ListItem, Grid } from '@material-ui/core';
+import { ListItem, Grid, Typography, Box } from '@material-ui/core';
+import Chip from '../common/Chip';
 
 interface Props {
     card: ReceivingCard;
@@ -38,15 +39,15 @@ const ReceivingCartItem: FC<Props> = ({
         <ListItem>
             <Grid container alignItems="center" justify="space-between">
                 <Grid item>
-                    <div>
-                        <CardImageTooltip cardImage={cardImage}>
-                            <Header as="h4" style={{ cursor: 'help' }}>
+                    <CardImageTooltip cardImage={cardImage}>
+                        <Box display="flex" alignItems="center">
+                            <Typography variant="h6" style={{ cursor: 'help' }}>
                                 {display_name}
-                            </Header>
-                        </CardImageTooltip>
-                    </div>
-                    <SetIcon set={set} rarity={rarity} />
-                    <Label color="grey">{set.toUpperCase()}</Label>
+                            </Typography>
+                            <SetIcon set={set} rarity={rarity} />
+                            <Chip size="small" label={set.toUpperCase()} />
+                        </Box>
+                    </CardImageTooltip>
                     {finishCondition && (
                         <span>
                             {finishCondition.split('_')[1]} {' | '}

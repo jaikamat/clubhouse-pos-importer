@@ -1,6 +1,14 @@
+import {
+    Table,
+    TableCell,
+    TableHead,
+    TableBody,
+    TableRow,
+    Paper,
+    TableContainer,
+} from '@material-ui/core';
 import React, { FC } from 'react';
 import BrowseSalesItem from './BrowseSalesItem';
-import { Table } from 'semantic-ui-react';
 import { Sale } from './browseSalesQuery';
 
 interface Props {
@@ -9,21 +17,22 @@ interface Props {
 
 const BrowseSalesList: FC<Props> = ({ list }) => {
     return (
-        <Table celled unstackable compact>
-            <Table.Header>
-                <Table.Row>
-                    <Table.HeaderCell>Sale ID</Table.HeaderCell>
-                    <Table.HeaderCell>Date of Sale</Table.HeaderCell>
-                    <Table.HeaderCell>Quantity Sold</Table.HeaderCell>
-                </Table.Row>
-            </Table.Header>
-
-            <Table.Body>
-                {list.map((sale) => (
-                    <BrowseSalesItem sale={sale} />
-                ))}
-            </Table.Body>
-        </Table>
+        <TableContainer component={Paper} variant="outlined">
+            <Table size="small">
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Sale ID</TableCell>
+                        <TableCell>Date of Sale</TableCell>
+                        <TableCell>Quantity Sold</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {list.map((sale) => (
+                        <BrowseSalesItem sale={sale} />
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
     );
 };
 

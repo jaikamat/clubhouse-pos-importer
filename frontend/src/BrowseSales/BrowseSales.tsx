@@ -3,7 +3,7 @@ import BrowseSalesList from './BrowseSalesList';
 import browseSalesQuery, { Sale } from './browseSalesQuery';
 import { HeaderText } from '../ui/Typography';
 import Loading from '../ui/Loading';
-import { Grid, Typography, Divider } from '@material-ui/core';
+import { Grid, Typography, Divider, Box } from '@material-ui/core';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
 
 const BrowseSales: FC = () => {
@@ -44,12 +44,13 @@ const BrowseSales: FC = () => {
                 <Loading />
             ) : (
                 <>
-                    {term !== '' && (
-                        <Typography>
-                            {salesList.length} results for <em>{term}</em>
-                        </Typography>
-                    )}
-
+                    <Box py={2}>
+                        {term !== '' && (
+                            <Typography>
+                                {salesList.length} results for <em>{term}</em>
+                            </Typography>
+                        )}
+                    </Box>
                     <BrowseSalesList list={salesList} />
                 </>
             )}

@@ -1,12 +1,11 @@
 import React, { FC, Fragment } from 'react';
 import SaleCartItem from './SaleCartItem';
-import { Segment, Header } from 'semantic-ui-react';
 import SaleCartPriceTotal from './SaleCartPriceTotal';
 import FinishSale from './FinishSale';
 import { SaleListCard } from '../context/SaleContext';
 import AddIcon from '@material-ui/icons/Add';
 import Placeholder from '../ui/Placeholder';
-import { List, Paper, Divider } from '@material-ui/core';
+import { List, Paper, Divider, Box, Typography } from '@material-ui/core';
 
 interface Props {
     saleList: SaleListCard[];
@@ -33,13 +32,25 @@ const SaleCartList: FC<Props> = ({ saleList }) => {
                     </Fragment>
                 ))}
             </List>
-            <Segment clearing>
-                <Header floated="left">
-                    <Header sub>Subtotal</Header>
-                    <SaleCartPriceTotal saleList={saleList} />
-                </Header>
-                <FinishSale />
-            </Segment>
+            <br />
+            <Paper variant="outlined">
+                <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    p={2}
+                >
+                    <div>
+                        <Typography variant="body2">SUBTOTAL</Typography>
+                        <Typography variant="h6">
+                            <b>
+                                <SaleCartPriceTotal saleList={saleList} />
+                            </b>
+                        </Typography>
+                    </div>
+                    <FinishSale />
+                </Box>
+            </Paper>
         </>
     );
 };

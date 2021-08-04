@@ -1,10 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 import BrowseSalesList from './BrowseSalesList';
-import { Divider } from 'semantic-ui-react';
 import browseSalesQuery, { Sale } from './browseSalesQuery';
 import { HeaderText } from '../ui/Typography';
 import Loading from '../ui/Loading';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography, Divider } from '@material-ui/core';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
 
 const BrowseSales: FC = () => {

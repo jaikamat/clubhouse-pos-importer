@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react';
-import { Label } from 'semantic-ui-react';
 import { Received } from './browseReceivingQuery';
 import pluralize from '../utils/pluralize';
 import formatDate from '../utils/formatDate';
@@ -16,6 +15,7 @@ import { getPrice } from '../common/Price';
 import MetaData from '../ui/MetaData';
 import { Trade } from '../context/ReceivingContext';
 import displayEmpty from '../utils/displayEmpty';
+import Chip from '../common/Chip';
 
 interface Props {
     received: Received;
@@ -83,24 +83,20 @@ const BrowseReceivingItem: FC<Props> = ({ received }) => {
                                 </Typography>
                             </Grid>
                             <Grid item>
-                                <Label
-                                    color={cashPrice > 0 ? 'blue' : undefined}
-                                    image
-                                >
-                                    Cash:
-                                    <Label.Detail>
-                                        {getPrice(cashPrice)}
-                                    </Label.Detail>
-                                </Label>
-                                <Label
-                                    color={creditPrice > 0 ? 'blue' : undefined}
-                                    image
-                                >
-                                    Credit:
-                                    <Label.Detail>
-                                        {getPrice(creditPrice)}
-                                    </Label.Detail>
-                                </Label>
+                                <Chip
+                                    size="small"
+                                    label={`Cash: ${getPrice(cashPrice)}`}
+                                    color={
+                                        cashPrice > 0 ? 'primary' : undefined
+                                    }
+                                />
+                                <Chip
+                                    size="small"
+                                    label={`Cash: ${getPrice(creditPrice)}`}
+                                    color={
+                                        creditPrice > 0 ? 'primary' : undefined
+                                    }
+                                />
                             </Grid>
                         </Grid>
                     </CardContent>

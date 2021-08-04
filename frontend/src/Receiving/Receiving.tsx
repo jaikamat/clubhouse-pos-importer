@@ -12,6 +12,7 @@ import useInterruptExit from '../utils/useInterruptExit';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
 import Placeholder from '../ui/Placeholder';
 import SearchIcon from '@material-ui/icons/Search';
+import ReceivingListTotals from './ReceivingListTotals';
 
 interface Props {}
 
@@ -114,6 +115,7 @@ const Receiving: FC<Props> = () => {
                         </Placeholder>
                     )}
                     <ReceivingCart cards={receivingList} />
+                    {receivingList.length > 0 && <ReceivingListTotals />}
                 </Grid>
             </Grid>
         </>

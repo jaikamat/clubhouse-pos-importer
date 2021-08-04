@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { Box, makeStyles, Paper, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(({ typography, spacing }) => ({
@@ -10,21 +10,27 @@ const useStyles = makeStyles(({ typography, spacing }) => ({
         backgroundColor: 'transparent',
     },
     flexContainer: {
-        minHeight: spacing(20),
+        minHeight: spacing(25),
     },
 }));
 
-const Placeholder: FC = ({ children }) => {
+interface Props {
+    icon?: ReactNode;
+}
+
+const Placeholder: FC<Props> = ({ icon, children }) => {
     const { font, container, flexContainer } = useStyles();
 
     return (
         <Paper variant="outlined" className={container}>
             <Box
                 display="flex"
+                flexDirection="column"
                 justifyContent="center"
                 alignItems="center"
                 className={flexContainer}
             >
+                {icon && icon}
                 <Typography variant="h6" className={font}>
                     {children}
                 </Typography>

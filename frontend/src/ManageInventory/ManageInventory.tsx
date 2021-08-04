@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Segment, Header, Icon, Divider } from 'semantic-ui-react';
 import TotalStoreInventory from './TotalStoreInventory';
 import { InventoryContext } from '../context/InventoryContext';
 import ManageInventoryListItem from './ManageInventoryListItem';
@@ -7,6 +6,8 @@ import { Grid } from '@material-ui/core';
 import { HeaderText } from '../ui/Typography';
 import Loading from '../ui/Loading';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
+import Placeholder from '../ui/Placeholder';
+import SearchIcon from '@material-ui/icons/Search';
 
 export default function ManageInventory() {
     const [term, setTerm] = useState<string>('');
@@ -43,21 +44,20 @@ export default function ManageInventory() {
                     />
                 )}
             </Grid>
-            <Divider />
+            <br />
             {loading ? (
                 <Loading />
             ) : (
                 <>
                     {!searchResults.length && (
-                        <Segment placeholder>
-                            <Header icon>
-                                <Icon name="search" />
-                                <em>
-                                    "For the first time in his life, Grakk felt
-                                    a little warm and fuzzy inside."
-                                </em>
-                            </Header>
-                        </Segment>
+                        <Placeholder
+                            icon={<SearchIcon style={{ fontSize: 80 }} />}
+                        >
+                            <em>
+                                "For the first time in his life, Grakk felt a
+                                little warm and fuzzy inside."
+                            </em>
+                        </Placeholder>
                     )}
                     <Grid container spacing={2}>
                         {searchResults.map((card) => (

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Popup } from 'semantic-ui-react';
+import { Tooltip, Typography } from '@material-ui/core';
 import InventoryChip from '../ui/InventoryChip';
 import displayFinishCondition from '../utils/finishCondition';
 import parseQoh from '../utils/parseQoh';
@@ -38,12 +38,17 @@ const LabelWithPopup: FC<LabelWithPopupProps> = ({
     label,
     popupLineItems,
 }) => (
-    <Popup
-        content={popupLineItems.map((msg) => (
-            <div>{msg}</div>
+    <Tooltip
+        title={popupLineItems.map((item) => (
+            <Typography key={Math.random()} variant="body2">
+                {item}
+            </Typography>
         ))}
-        trigger={<InventoryChip quantity={quantity} label={label} />}
-    />
+        arrow
+        placement="top"
+    >
+        <InventoryChip quantity={quantity} label={label} />
+    </Tooltip>
 );
 
 // This component parses the `qoh` object from mongo into something more presentable

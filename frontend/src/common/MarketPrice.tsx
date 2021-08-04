@@ -1,16 +1,6 @@
 import React, { useState, useEffect, FC } from 'react';
-import { Label, Icon } from 'semantic-ui-react';
-import styled from 'styled-components';
+import Chip from './Chip';
 import marketPriceQuery from './marketPriceQuery';
-
-const LabelStyle = styled(Label)`
-    background-color: ${(props) =>
-        !!props.foil ? '#ffcfdf' : null} !important;
-    background-image: ${(props) =>
-        !!props.foil
-            ? 'linear-gradient(90deg, #ffcfdf 0%, #b0f3f1 74%)'
-            : null} !important;
-`;
 
 type Finish = 'FOIL' | 'NONFOIL';
 
@@ -58,36 +48,40 @@ const MarketPrice: FC<Props> = ({ id, finish, round, showMid = true }) => {
         })();
     }, [id, finish]);
 
-    const loader = (
-        <span>
-            Loading <Icon loading name="spinner" />
-        </span>
-    );
+    const loader = <span>Loading...</span>;
 
     return (
         <>
-            <LabelStyle foil={isFoil}>
-                {loading ? (
-                    loader
-                ) : (
-                    <span>
-                        Mkt.{' '}
-                        {round
-                            ? displayPrice(
-                                  market ? roundNearestStep(market) : null
-                              )
-                            : displayPrice(market)}
-                    </span>
-                )}
-            </LabelStyle>
-            {showMid && (
-                <LabelStyle foil={isFoil}>
-                    {loading ? (
+            <Chip
+                size="small"
+                foil={isFoil}
+                label={
+                    loading ? (
                         loader
                     ) : (
-                        <span>Mid. {displayPrice(median)}</span>
-                    )}
-                </LabelStyle>
+                        <span>
+                            Mkt.{' '}
+                            {round
+                                ? displayPrice(
+                                      market ? roundNearestStep(market) : null
+                                  )
+                                : displayPrice(market)}
+                        </span>
+                    )
+                }
+            />
+            {showMid && (
+                <Chip
+                    size="small"
+                    foil={isFoil}
+                    label={
+                        loading ? (
+                            loader
+                        ) : (
+                            <span>Mid. {displayPrice(median)}</span>
+                        )
+                    }
+                />
             )}
         </>
     );

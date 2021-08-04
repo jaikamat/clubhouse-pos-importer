@@ -1,6 +1,4 @@
-import React, { FC } from 'react';
-import { Label } from 'semantic-ui-react';
-import { LanguageCode } from '../utils/ScryfallCard';
+import { LanguageCode } from './ScryfallCard';
 
 const LANG_CODES: Record<LanguageCode, string> = {
     en: 'English',
@@ -21,14 +19,9 @@ const LANG_CODES: Record<LanguageCode, string> = {
     sa: 'Sanskrit',
     px: 'Phyrexian',
 };
-interface Props {
-    languageCode: LanguageCode;
+
+function language(languageCode: LanguageCode): string {
+    return LANG_CODES[languageCode];
 }
 
-const Language: FC<Props> = ({ languageCode }) => (
-    <Label image color="grey">
-        {LANG_CODES[languageCode]}
-    </Label>
-);
-
-export default Language;
+export default language;

@@ -1,11 +1,13 @@
 import React, { FC } from 'react';
 import { ScryfallCard } from '../utils/ScryfallCard';
-import { Label, Item, Button, Icon } from 'semantic-ui-react';
+import { Label, Item } from 'semantic-ui-react';
 import QohLabels from '../common/QohLabels';
 import Language from '../common/Language';
 import MarketPrice from '../common/MarketPrice';
 import { Finish } from '../utils/checkCardFinish';
 import SetIcon from './SetIcon';
+import Button from './Button';
+import { Link } from '@material-ui/core';
 
 interface Props {
     card: ScryfallCard;
@@ -19,19 +21,11 @@ const TcgPriceButton: FC<{ tcgId: number | null }> = ({ tcgId }) => {
     const tcgUrl = `https://www.tcgplayer.com/product/${tcgId}`;
 
     return (
-        <Button
-            icon
-            disabled={!tcgId}
-            color="twitter"
-            labelPosition="right"
-            size="mini"
-            as="a"
-            href={tcgUrl}
-            target="_blank"
-        >
-            {!tcgId ? 'Link unavailable' : 'View on TCG'}
-            <Icon name="external share" />
-        </Button>
+        <Link href={tcgUrl} target="_blank">
+            <Button primary disabled={!tcgId} size="small">
+                {!tcgId ? 'Link unavailable' : 'View on TCG'}
+            </Button>
+        </Link>
     );
 };
 

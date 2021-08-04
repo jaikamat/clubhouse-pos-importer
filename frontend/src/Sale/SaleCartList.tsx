@@ -1,9 +1,11 @@
 import React, { FC } from 'react';
 import SaleCartItem from './SaleCartItem';
-import { Segment, Header, Icon } from 'semantic-ui-react';
+import { Segment, Header } from 'semantic-ui-react';
 import SaleCartPriceTotal from './SaleCartPriceTotal';
 import FinishSale from './FinishSale';
 import { SaleListCard } from '../context/SaleContext';
+import AddIcon from '@material-ui/icons/Add';
+import Placeholder from '../ui/Placeholder';
 
 interface Props {
     saleList: SaleListCard[];
@@ -12,12 +14,9 @@ interface Props {
 const SaleCartList: FC<Props> = ({ saleList }) => {
     if (saleList.length === 0) {
         return (
-            <Segment placeholder>
-                <Header icon>
-                    <Icon name="plus" />
-                    <em>"Give them what they need"</em>
-                </Header>
-            </Segment>
+            <Placeholder icon={<AddIcon style={{ fontSize: 80 }} />}>
+                <em>"Give them what they need"</em>
+            </Placeholder>
         );
     }
 

@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Grid, Segment, Header, Icon } from 'semantic-ui-react';
+import { Grid, Header } from 'semantic-ui-react';
 import { ScryfallCard } from '../utils/ScryfallCard';
 import { FormikErrors, useFormik } from 'formik';
 import { ClubhouseLocation } from '../context/AuthProvider';
@@ -10,6 +10,8 @@ import ControlledSearchBar from '../ui/ControlledSearchBar';
 import ControlledDropdown from '../ui/ControlledDropdown';
 import Button from '../ui/Button';
 import { Grid as MUIGrid } from '@material-ui/core';
+import Placeholder from '../ui/Placeholder';
+import SearchIcon from '@material-ui/icons/Search';
 
 interface State {
     searchResults: ScryfallCard[];
@@ -145,16 +147,15 @@ const PublicInventory: FC = () => {
                             ))}
                         </GridContainer>
                     ) : (
-                        <Segment placeholder>
-                            <Header icon>
-                                <Icon name="search" />
-                                {formSubmitted ? (
-                                    <span>No cards found in stock</span>
-                                ) : (
-                                    <span>Search for a card</span>
-                                )}
-                            </Header>
-                        </Segment>
+                        <Placeholder
+                            icon={<SearchIcon style={{ fontSize: 80 }} />}
+                        >
+                            {formSubmitted ? (
+                                <span>No cards found in stock</span>
+                            ) : (
+                                <span>Search for a card</span>
+                            )}
+                        </Placeholder>
                     )}
                 </Grid.Column>
             </Grid>

@@ -1,16 +1,17 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
 import ReceivingSearchItem from './ReceivingSearchItem';
-import { Divider, Header, Icon, Segment } from 'semantic-ui-react';
 import { ReceivingContext } from '../context/ReceivingContext';
 import ReceivingCart from './ReceivingCart';
 import TotalCardsLabel from '../common/TotalCardsLabel';
 import TotalStoreInventory from '../ManageInventory/TotalStoreInventory';
-import { Grid } from '@material-ui/core';
+import { Grid, Divider } from '@material-ui/core';
 import { HeaderText } from '../ui/Typography';
 import Loading from '../ui/Loading';
 import { Prompt } from 'react-router';
 import useInterruptExit from '../utils/useInterruptExit';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
+import Placeholder from '../ui/Placeholder';
+import SearchIcon from '@material-ui/icons/Search';
 
 interface Props {}
 
@@ -79,14 +80,13 @@ const Receiving: FC<Props> = () => {
                             />
                         )}
                     </Grid>
-                    <Divider />
+                    <br />
                     {!loading && !searchResults.length && (
-                        <Segment placeholder>
-                            <Header icon>
-                                <Icon name="search" />
-                                <em>"So many cards, so little time."</em>
-                            </Header>
-                        </Segment>
+                        <Placeholder
+                            icon={<SearchIcon style={{ fontSize: 80 }} />}
+                        >
+                            <em>"So many cards, so little time."</em>
+                        </Placeholder>
                     )}
                     {loading ? (
                         <Loading />
@@ -105,14 +105,13 @@ const Receiving: FC<Props> = () => {
                         <HeaderText>Buylist</HeaderText>
                         <TotalCardsLabel listLength={receivingList.length} />
                     </Grid>
-                    <Divider />
+                    <br />
                     {!receivingList.length && (
-                        <Segment placeholder>
-                            <Header icon>
-                                <Icon name="search" />
-                                <em>"If you receive it, they will come."</em>
-                            </Header>
-                        </Segment>
+                        <Placeholder
+                            icon={<SearchIcon style={{ fontSize: 80 }} />}
+                        >
+                            <em>"If you receive it, they will come."</em>
+                        </Placeholder>
                     )}
                     <ReceivingCart cards={receivingList} />
                 </Grid>

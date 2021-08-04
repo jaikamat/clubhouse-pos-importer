@@ -8,7 +8,6 @@ import {
     Dimmer,
     Loader,
     Segment,
-    Header,
     Container,
 } from 'semantic-ui-react';
 import _ from 'lodash';
@@ -16,6 +15,9 @@ import filteredCardsQuery, {
     Filters,
     ResponseCard,
 } from './filteredCardsQuery';
+import Placeholder from '../ui/Placeholder';
+import SearchIcon from '@material-ui/icons/Search';
+
 const LIMIT = 100; // Matching the backend for now
 
 interface State {
@@ -250,15 +252,13 @@ const BrowseInventory: FC = () => {
                     </Table.Footer>
                 </Table>
             )}
+            <br />
             {!cards.length && (
-                <Segment placeholder>
-                    <Header icon>
-                        <Icon name="search" />
-                        {state.searchTouched
-                            ? 'No results found'
-                            : 'Use the filters to browse inventory'}
-                    </Header>
-                </Segment>
+                <Placeholder icon={<SearchIcon style={{ fontSize: 80 }} />}>
+                    {state.searchTouched
+                        ? 'No results found'
+                        : 'Use the filters to browse inventory'}
+                </Placeholder>
             )}
         </Container>
     );

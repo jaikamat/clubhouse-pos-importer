@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
 import { ScryfallCard } from '../utils/ScryfallCard';
-import { Label, Item } from 'semantic-ui-react';
 import QohLabels from '../common/QohLabels';
-import Language from '../common/Language';
 import MarketPrice from '../common/MarketPrice';
 import { Finish } from '../utils/checkCardFinish';
 import SetIcon from './SetIcon';
 import Button from './Button';
-import { Link } from '@material-ui/core';
+import { Box, Link, Typography, withStyles } from '@material-ui/core';
+import Chip from '../common/Chip';
+import language from '../utils/Language';
 
 interface Props {
     card: ScryfallCard;
@@ -29,6 +29,12 @@ const TcgPriceButton: FC<{ tcgId: number | null }> = ({ tcgId }) => {
     );
 };
 
+const SubheaderContainer = withStyles({
+    '& div': {
+        marginRight: 5,
+    },
+})(Box);
+
 const CardHeader: FC<Props> = ({
     card,
     selectedFinish,
@@ -47,22 +53,29 @@ const CardHeader: FC<Props> = ({
     } = card;
 
     return (
-        <Item.Header as="h3">
-            {display_name}
-            <SetIcon set={set} rarity={rarity} />
-            <Label color="grey">
-                {set_name} ({set.toUpperCase()})
-            </Label>
-            <QohLabels inventoryQty={qoh} />
-            <MarketPrice
-                id={id}
-                finish={selectedFinish}
-                showMid={showMid}
-                round={round}
-            />
-            <Language languageCode={lang} />
-            <TcgPriceButton tcgId={tcgplayer_id} />
-        </Item.Header>
+        <Box>
+            <Box display="flex" alignItems="center">
+                <Typography variant="h6">
+                    <b>{display_name}</b>
+                </Typography>
+                <SetIcon set={set} rarity={rarity} />
+            </Box>
+            <SubheaderContainer>
+                <Chip
+                    size="small"
+                    label={`${set_name} (${set.toUpperCase()})`}
+                />
+                <QohLabels inventoryQty={qoh} />
+                <MarketPrice
+                    id={id}
+                    finish={selectedFinish}
+                    showMid={showMid}
+                    round={round}
+                />
+                <Chip size="small" label={`${language(lang)}`} />
+                <TcgPriceButton tcgId={tcgplayer_id} />
+            </SubheaderContainer>
+        </Box>
     );
 };
 

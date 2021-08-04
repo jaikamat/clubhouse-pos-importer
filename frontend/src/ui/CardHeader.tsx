@@ -7,6 +7,7 @@ import SetIcon from './SetIcon';
 import Button from './Button';
 import { Box, Link, Typography, withStyles } from '@material-ui/core';
 import language from '../utils/Language';
+import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 
 interface Props {
     card: ScryfallCard;
@@ -19,10 +20,18 @@ interface Props {
 const TcgPriceButton: FC<{ tcgId: number | null }> = ({ tcgId }) => {
     const tcgUrl = `https://www.tcgplayer.com/product/${tcgId}`;
 
+    if (!tcgId) {
+        return (
+            <Button disabled size="small">
+                TCG Link unavailable
+            </Button>
+        );
+    }
+
     return (
-        <Link href={tcgUrl} target="_blank">
-            <Button primary disabled={!tcgId} size="small">
-                {!tcgId ? 'Link unavailable' : 'View on TCG'}
+        <Link href={tcgUrl} target="_blank" underline="none">
+            <Button size="small">
+                View on TCG <OpenInNewIcon fontSize="small" />
             </Button>
         </Link>
     );

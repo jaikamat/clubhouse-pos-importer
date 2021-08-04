@@ -83,6 +83,7 @@ const SearchBar: FC<Props> = ({ value, onChange }) => {
     return (
         <Autocomplete
             id="searchBar"
+            autoHighlight
             selectOnFocus
             value={internalValue}
             onInputChange={handleSearchChange}

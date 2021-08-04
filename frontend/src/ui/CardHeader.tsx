@@ -6,7 +6,6 @@ import { Finish } from '../utils/checkCardFinish';
 import SetIcon from './SetIcon';
 import Button from './Button';
 import { Box, Link, Typography, withStyles } from '@material-ui/core';
-import Chip from '../common/Chip';
 import language from '../utils/Language';
 
 interface Props {
@@ -29,11 +28,13 @@ const TcgPriceButton: FC<{ tcgId: number | null }> = ({ tcgId }) => {
     );
 };
 
-const SubheaderContainer = withStyles({
-    '& div': {
-        marginRight: 5,
+const SubheaderContainer = withStyles(({ spacing }) => ({
+    root: {
+        '& > div': {
+            marginRight: spacing(1),
+        },
     },
-})(Box);
+}))(Box);
 
 const CardHeader: FC<Props> = ({
     card,
@@ -61,10 +62,9 @@ const CardHeader: FC<Props> = ({
                 <SetIcon set={set} rarity={rarity} />
             </Box>
             <SubheaderContainer>
-                <Chip
-                    size="small"
-                    label={`${set_name} (${set.toUpperCase()})`}
-                />
+                <Typography variant="body2">
+                    {set_name} ({set.toUpperCase()}) - {language(lang)}
+                </Typography>
                 <QohLabels inventoryQty={qoh} />
                 <MarketPrice
                     id={id}
@@ -72,7 +72,6 @@ const CardHeader: FC<Props> = ({
                     showMid={showMid}
                     round={round}
                 />
-                <Chip size="small" label={`${language(lang)}`} />
                 <TcgPriceButton tcgId={tcgplayer_id} />
             </SubheaderContainer>
         </Box>

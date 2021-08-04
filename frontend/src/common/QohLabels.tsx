@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
-import { Label, Popup } from 'semantic-ui-react';
+import { Popup } from 'semantic-ui-react';
+import InventoryChip from '../ui/InventoryChip';
 import displayFinishCondition from '../utils/finishCondition';
 import parseQoh from '../utils/parseQoh';
 import { QOH } from '../utils/ScryfallCard';
@@ -41,12 +42,7 @@ const LabelWithPopup: FC<LabelWithPopupProps> = ({
         content={popupLineItems.map((msg) => (
             <div>{msg}</div>
         ))}
-        trigger={
-            <Label color={quantity > 0 ? 'blue' : undefined} image>
-                {label}
-                <Label.Detail>{quantity}</Label.Detail>
-            </Label>
-        }
+        trigger={<InventoryChip quantity={quantity} label={label} />}
     />
 );
 

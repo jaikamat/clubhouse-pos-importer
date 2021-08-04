@@ -1,5 +1,5 @@
 import React, { useState, useContext, FC } from 'react';
-import { Button, Label, Icon, Grid, Segment, Header } from 'semantic-ui-react';
+import { Button, Label, Icon, Header } from 'semantic-ui-react';
 import Price from '../common/Price';
 import {
     ReceivingCard,
@@ -8,6 +8,7 @@ import {
 } from '../context/ReceivingContext';
 import SetIcon from '../ui/SetIcon';
 import CardImageTooltip from '../ui/CardImageTooltip';
+import { ListItem, Grid } from '@material-ui/core';
 
 interface Props {
     card: ReceivingCard;
@@ -34,9 +35,9 @@ const ReceivingCartItem: FC<Props> = ({
     const { removeFromList, activeTradeType } = useContext(ReceivingContext);
 
     return (
-        <Segment>
-            <Grid verticalAlign="middle">
-                <Grid.Column tablet={16} computer={11}>
+        <ListItem>
+            <Grid container alignItems="center" justify="space-between">
+                <Grid item>
                     <div>
                         <CardImageTooltip cardImage={cardImage}>
                             <Header as="h4" style={{ cursor: 'help' }}>
@@ -67,8 +68,8 @@ const ReceivingCartItem: FC<Props> = ({
                             </b>
                         </span>
                     </div>
-                </Grid.Column>
-                <Grid.Column tablet={16} computer={5} textAlign="right">
+                </Grid>
+                <Grid item>
                     <Button
                         compact
                         active={tradeType === CASH}
@@ -98,9 +99,9 @@ const ReceivingCartItem: FC<Props> = ({
                         onMouseOut={() => setHovered(false)}
                         color={hovered ? 'red' : undefined}
                     />
-                </Grid.Column>
+                </Grid>
             </Grid>
-        </Segment>
+        </ListItem>
     );
 };
 

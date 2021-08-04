@@ -4,7 +4,7 @@ import { ReceivingContext } from '../context/ReceivingContext';
 import ReceivingCart from './ReceivingCart';
 import TotalCardsLabel from '../common/TotalCardsLabel';
 import TotalStoreInventory from '../ManageInventory/TotalStoreInventory';
-import { Grid, Divider } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { HeaderText } from '../ui/Typography';
 import Loading from '../ui/Loading';
 import { Prompt } from 'react-router';

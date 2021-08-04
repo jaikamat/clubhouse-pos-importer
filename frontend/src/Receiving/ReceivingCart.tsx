@@ -1,5 +1,5 @@
+import { List, Paper } from '@material-ui/core';
 import React, { FC } from 'react';
-import { Segment } from 'semantic-ui-react';
 import { ReceivingCard } from '../context/ReceivingContext';
 import ReceivingCartItem from './ReceivingCartItem';
 import ReceivingListTotals from './ReceivingListTotals';
@@ -12,11 +12,11 @@ const ReceivingCart: FC<Props> = ({ cards }) => {
     return (
         <>
             {cards.length > 0 && (
-                <Segment.Group>
+                <List component={Paper} variant="outlined">
                     {cards.map((card) => (
                         <ReceivingCartItem card={card} />
                     ))}
-                </Segment.Group>
+                </List>
             )}
             {cards.length > 0 && <ReceivingListTotals />}
         </>

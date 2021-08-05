@@ -18,6 +18,7 @@ import BrowseReceiving from './BrowseReceiving/BrowseReceiving';
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core';
 import NavBar from './NavBar/NavBar';
 import Reporting from './Reporting/Reporting';
+import BulkInventory from './BulkInventory/BulkInventory';
 
 const useStyles = makeStyles(({ spacing }) => ({
     contentContainer: {
@@ -73,6 +74,9 @@ const App: FC = () => {
                             </AdminRoute>
                             <AdminRoute exact path="/browse-receiving">
                                 <BrowseReceiving />
+                            </AdminRoute>
+                            <AdminRoute exact path="/bulk-add">
+                                <BulkInventory />
                             </AdminRoute>
                             <Route
                                 exact

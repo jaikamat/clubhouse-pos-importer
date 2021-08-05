@@ -9,6 +9,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
+import QueueIcon from '@material-ui/icons/Queue';
 
 const NavLinks: FC<{}> = () => {
     const { pathname } = useLocation();
@@ -26,6 +27,18 @@ const NavLinks: FC<{}> = () => {
                     <AddIcon color="primary" />
                 </ListItemIcon>
                 Manage Inventory
+            </ListItem>
+            <ListItem
+                button
+                component={RouterLink}
+                to="/bulk-add"
+                selected={pathname === '/bulk-add'}
+                replace
+            >
+                <ListItemIcon>
+                    <QueueIcon color="primary" />
+                </ListItemIcon>
+                Bulk Inventory
             </ListItem>
             <ListItem
                 button

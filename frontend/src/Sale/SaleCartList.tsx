@@ -5,7 +5,7 @@ import FinishSale from './FinishSale';
 import { SaleListCard } from '../context/SaleContext';
 import AddIcon from '@material-ui/icons/Add';
 import Placeholder from '../ui/Placeholder';
-import { List, Paper, Divider, Box, Typography } from '@material-ui/core';
+import { List, Paper, Divider, Box, Grid, Typography } from '@material-ui/core';
 
 interface Props {
     saleList: SaleListCard[];
@@ -34,21 +34,28 @@ const SaleCartList: FC<Props> = ({ saleList }) => {
             </List>
             <br />
             <Paper variant="outlined">
-                <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    p={2}
-                >
-                    <div>
-                        <Typography variant="body2">SUBTOTAL</Typography>
-                        <Typography variant="h6">
-                            <b>
-                                <SaleCartPriceTotal saleList={saleList} />
-                            </b>
-                        </Typography>
-                    </div>
-                    <FinishSale />
+                <Box p={2}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <Box
+                                display="flex"
+                                justifyContent="space-between"
+                                alignItems="center"
+                            >
+                                <Typography>SUBTOTAL</Typography>
+                                <Typography variant="h6">
+                                    <b>
+                                        <SaleCartPriceTotal
+                                            saleList={saleList}
+                                        />
+                                    </b>
+                                </Typography>
+                            </Box>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <FinishSale />
+                        </Grid>
+                    </Grid>
                 </Box>
             </Paper>
         </>

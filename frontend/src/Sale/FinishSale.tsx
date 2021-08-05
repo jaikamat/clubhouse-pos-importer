@@ -15,7 +15,7 @@ const FinishSale: FC<Props> = () => {
     };
 
     const modalTrigger = (
-        <Button floated="right" primary onClick={() => setShowModal(true)}>
+        <Button fluid primary onClick={() => setShowModal(true)}>
             Finalize sale
         </Button>
     );

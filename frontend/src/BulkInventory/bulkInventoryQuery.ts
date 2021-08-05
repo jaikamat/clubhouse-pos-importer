@@ -2,7 +2,7 @@ import axios from 'axios';
 import makeAuthHeader from '../utils/makeAuthHeader';
 import { GET_BULK_CARDS } from '../utils/api_resources';
 
-interface BulkCard {
+export interface BulkCard {
     scryfall_id: string;
     name: string;
     display_name: string;

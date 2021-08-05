@@ -27,6 +27,7 @@ export default interface ScryfallCard {
     nonfoil: boolean;
     oversized: boolean;
     promo: boolean;
+    promo_types: string[];
     reprint: boolean;
     variation: boolean;
     set: string;

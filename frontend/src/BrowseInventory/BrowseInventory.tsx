@@ -2,7 +2,6 @@ import React, { FC, useState } from 'react';
 import BrowseInventoryForm, { initialFilters } from './BrowseInventoryForm';
 import BrowseInventoryRow from './BrowseInventoryRow';
 import {
-    Table,
     Menu,
     Icon,
     Dimmer,
@@ -17,6 +16,16 @@ import filteredCardsQuery, {
 } from './filteredCardsQuery';
 import Placeholder from '../ui/Placeholder';
 import SearchIcon from '@material-ui/icons/Search';
+import {
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableFooter,
+    TableHead,
+    TableRow,
+} from '@material-ui/core';
 
 const LIMIT = 100; // Matching the backend for now
 
@@ -110,147 +119,158 @@ const BrowseInventory: FC = () => {
             </Segment>
             <BrowseInventoryForm doSubmit={fetchData} />
             {!!cards.length && (
-                <Table celled striped compact>
-                    <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell colSpan="5">
-                                <Menu floated>
-                                    <Menu.Item>
-                                        Viewing page {currentPage} of {numPages}
-                                    </Menu.Item>
-                                </Menu>
-                                <Menu floated="right">
-                                    {showLeftPageButtons && (
-                                        <Menu.Item
-                                            as="a"
-                                            icon
-                                            onClick={() =>
-                                                fetchData(
-                                                    cachedFilters,
-                                                    currentPage - 1
-                                                )
-                                            }
-                                        >
-                                            <Icon name="chevron left" />
+                <TableContainer component={Paper} variant="outlined">
+                    <Table size="small">
+                        <TableHead>
+                            <TableRow>
+                                <TableHead>
+                                    <Menu floated>
+                                        <Menu.Item>
+                                            Viewing page {currentPage} of{' '}
+                                            {numPages}
                                         </Menu.Item>
-                                    )}
-                                    <React.Fragment>
-                                        {showPages.map((p) => {
-                                            return (
-                                                <Menu.Item
-                                                    key={`page-${p}`}
-                                                    onClick={() =>
-                                                        fetchData(
-                                                            cachedFilters,
-                                                            p
-                                                        )
-                                                    }
-                                                    active={currentPage === p}
-                                                    disabled={currentPage === p}
-                                                    as="a"
-                                                >
-                                                    {p}
-                                                </Menu.Item>
-                                            );
-                                        })}
-                                    </React.Fragment>
-                                    {showRightPageButtons && (
-                                        <Menu.Item
-                                            as="a"
-                                            icon
-                                            onClick={() =>
-                                                fetchData(
-                                                    cachedFilters,
-                                                    currentPage + 1
-                                                )
-                                            }
-                                        >
-                                            <Icon name="chevron right" />
+                                    </Menu>
+                                    <Menu floated="right">
+                                        {showLeftPageButtons && (
+                                            <Menu.Item
+                                                as="a"
+                                                icon
+                                                onClick={() =>
+                                                    fetchData(
+                                                        cachedFilters,
+                                                        currentPage - 1
+                                                    )
+                                                }
+                                            >
+                                                <Icon name="chevron left" />
+                                            </Menu.Item>
+                                        )}
+                                        <React.Fragment>
+                                            {showPages.map((p) => {
+                                                return (
+                                                    <Menu.Item
+                                                        key={`page-${p}`}
+                                                        onClick={() =>
+                                                            fetchData(
+                                                                cachedFilters,
+                                                                p
+                                                            )
+                                                        }
+                                                        active={
+                                                            currentPage === p
+                                                        }
+                                                        disabled={
+                                                            currentPage === p
+                                                        }
+                                                        as="a"
+                                                    >
+                                                        {p}
+                                                    </Menu.Item>
+                                                );
+                                            })}
+                                        </React.Fragment>
+                                        {showRightPageButtons && (
+                                            <Menu.Item
+                                                as="a"
+                                                icon
+                                                onClick={() =>
+                                                    fetchData(
+                                                        cachedFilters,
+                                                        currentPage + 1
+                                                    )
+                                                }
+                                            >
+                                                <Icon name="chevron right" />
+                                            </Menu.Item>
+                                        )}
+                                    </Menu>
+                                </TableHead>
+                            </TableRow>
+                        </TableHead>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Name</TableCell>
+                                <TableCell>Edition</TableCell>
+                                <TableCell>Condition</TableCell>
+                                <TableCell>Qty</TableCell>
+                                <TableCell>Price</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {cards.map((card) => (
+                                <BrowseInventoryRow
+                                    key={`${card._id}-${card.finishCondition}`}
+                                    card={card}
+                                />
+                            ))}
+                        </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TableCell>
+                                    <Menu floated>
+                                        <Menu.Item>
+                                            Total results: {count}
                                         </Menu.Item>
-                                    )}
-                                </Menu>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell>Name</Table.HeaderCell>
-                            <Table.HeaderCell>Edition</Table.HeaderCell>
-                            <Table.HeaderCell>Condition</Table.HeaderCell>
-                            <Table.HeaderCell>Qty</Table.HeaderCell>
-                            <Table.HeaderCell>Price</Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                        {cards.map((card) => (
-                            <BrowseInventoryRow
-                                key={`${card._id}-${card.finishCondition}`}
-                                card={card}
-                            />
-                        ))}
-                    </Table.Body>
-                    <Table.Footer>
-                        <Table.Row>
-                            <Table.HeaderCell colSpan="5">
-                                <Menu floated>
-                                    <Menu.Item>
-                                        Total results: {count}
-                                    </Menu.Item>
-                                </Menu>
-                                <Menu floated="right">
-                                    {showLeftPageButtons && (
-                                        <Menu.Item
-                                            as="a"
-                                            icon
-                                            onClick={() =>
-                                                fetchData(
-                                                    cachedFilters,
-                                                    currentPage - 1
-                                                )
-                                            }
-                                        >
-                                            <Icon name="chevron left" />
-                                        </Menu.Item>
-                                    )}
-                                    <React.Fragment>
-                                        {showPages.map((p) => {
-                                            return (
-                                                <Menu.Item
-                                                    key={`page-${p}`}
-                                                    onClick={() =>
-                                                        fetchData(
-                                                            cachedFilters,
-                                                            p
-                                                        )
-                                                    }
-                                                    active={currentPage === p}
-                                                    disabled={currentPage === p}
-                                                    as="a"
-                                                >
-                                                    {p}
-                                                </Menu.Item>
-                                            );
-                                        })}
-                                    </React.Fragment>
-                                    {showRightPageButtons && (
-                                        <Menu.Item
-                                            as="a"
-                                            icon
-                                            onClick={() =>
-                                                fetchData(
-                                                    cachedFilters,
-                                                    currentPage + 1
-                                                )
-                                            }
-                                        >
-                                            <Icon name="chevron right" />
-                                        </Menu.Item>
-                                    )}
-                                </Menu>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Footer>
-                </Table>
+                                    </Menu>
+                                    <Menu floated="right">
+                                        {showLeftPageButtons && (
+                                            <Menu.Item
+                                                as="a"
+                                                icon
+                                                onClick={() =>
+                                                    fetchData(
+                                                        cachedFilters,
+                                                        currentPage - 1
+                                                    )
+                                                }
+                                            >
+                                                <Icon name="chevron left" />
+                                            </Menu.Item>
+                                        )}
+                                        <React.Fragment>
+                                            {showPages.map((p) => {
+                                                return (
+                                                    <Menu.Item
+                                                        key={`page-${p}`}
+                                                        onClick={() =>
+                                                            fetchData(
+                                                                cachedFilters,
+                                                                p
+                                                            )
+                                                        }
+                                                        active={
+                                                            currentPage === p
+                                                        }
+                                                        disabled={
+                                                            currentPage === p
+                                                        }
+                                                        as="a"
+                                                    >
+                                                        {p}
+                                                    </Menu.Item>
+                                                );
+                                            })}
+                                        </React.Fragment>
+                                        {showRightPageButtons && (
+                                            <Menu.Item
+                                                as="a"
+                                                icon
+                                                onClick={() =>
+                                                    fetchData(
+                                                        cachedFilters,
+                                                        currentPage + 1
+                                                    )
+                                                }
+                                            >
+                                                <Icon name="chevron right" />
+                                            </Menu.Item>
+                                        )}
+                                    </Menu>
+                                </TableCell>
+                            </TableRow>
+                        </TableFooter>
+                    </Table>
+                </TableContainer>
             )}
             <br />
             {!cards.length && (

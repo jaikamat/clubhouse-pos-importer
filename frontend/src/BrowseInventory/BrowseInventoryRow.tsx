@@ -1,9 +1,10 @@
+import { TableCell, TableRow } from '@material-ui/core';
 import React, { FC } from 'react';
-import { Table, Icon } from 'semantic-ui-react';
 import Price from '../common/Price';
 import CardImageTooltip from '../ui/CardImageTooltip';
 import SetIcon from '../ui/SetIcon';
 import { ResponseCard } from './filteredCardsQuery';
+import StarIcon from '@material-ui/icons/Star';
 
 const conditionMap = {
     NM: 'Near Mint',
@@ -34,23 +35,29 @@ const BrowseInventoryRow: FC<Props> = ({
     const condition = finishCondition.split('_')[1] as Condition;
 
     return (
-        <Table.Row>
-            <Table.Cell>
+        <TableRow>
+            <TableCell>
                 <CardImageTooltip cardImage={image_uri}>
                     <span style={{ cursor: 'help' }}>{name} </span>
                 </CardImageTooltip>
-                {finish === 'FOIL' && <Icon name="star" color="blue" />}
-            </Table.Cell>
-            <Table.Cell>
+                {finish === 'FOIL' && (
+                    <StarIcon
+                        fontSize="small"
+                        color="primary"
+                        style={{ verticalAlign: 'middle' }}
+                    />
+                )}
+            </TableCell>
+            <TableCell>
                 <SetIcon set={set} rarity={rarity} />
                 {set_name}
-            </Table.Cell>
-            <Table.Cell>{conditionMap[condition]}</Table.Cell>
-            <Table.Cell>{quantityInStock}</Table.Cell>
-            <Table.Cell>
+            </TableCell>
+            <TableCell>{conditionMap[condition]}</TableCell>
+            <TableCell>{quantityInStock}</TableCell>
+            <TableCell>
                 <Price num={price} />
-            </Table.Cell>
-        </Table.Row>
+            </TableCell>
+        </TableRow>
     );
 };
 

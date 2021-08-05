@@ -1,29 +1,40 @@
+import { makeStyles } from '@material-ui/core';
 import React, { FC, useState } from 'react';
-import { Image } from 'semantic-ui-react';
-import styled from 'styled-components';
+import clsx from 'clsx';
 
 interface Props {
     image: string;
     hover?: boolean;
 }
 
-const StyledImage = styled(Image)({
-    boxShadow: '2px 2px 5px 0 rgba(0,0,0,.25)',
-    zIndex: 10,
-    transition: 'all .2s ease-in-out',
-});
+const useStyles = makeStyles(({ zIndex }) => ({
+    imageStyle: {
+        boxShadow: '2px 2px 5px 0 rgba(0,0,0,.25)',
+        zIndex: zIndex.appBar,
+        transition: 'all .2s ease-in-out',
+    },
+    hoveredStyle: {
+        transform: 'scale(1.75)',
+    },
+}));
 
 const CardImage: FC<Props> = ({ image, hover }) => {
+    const { imageStyle, hoveredStyle } = useStyles();
     const [hovered, setHovered] = useState<boolean>(false);
 
+    const onHover = (val: boolean) => {
+        if (!hover) return;
+        setHovered(val);
+    };
+
     return (
-        <StyledImage
+        <img
             src={image}
-            onMouseOver={() => (hover ? setHovered(true) : null)}
-            onMouseOut={() => (hover ? setHovered(false) : null)}
-            style={{
-                transform: `${hovered ? 'scale(1.75)' : 'scale(1)'}`,
-            }}
+            className={clsx(imageStyle, {
+                [hoveredStyle]: hovered,
+            })}
+            onMouseOver={() => onHover(true)}
+            onMouseOut={() => onHover(false)}
         />
     );
 };

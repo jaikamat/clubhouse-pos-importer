@@ -1,22 +1,38 @@
 import React, { FC, useState } from 'react';
 import BrowseInventoryForm, { initialFilters } from './BrowseInventoryForm';
 import BrowseInventoryRow from './BrowseInventoryRow';
-import {
-    Table,
-    Menu,
-    Icon,
-    Dimmer,
-    Loader,
-    Segment,
-    Header,
-    Container,
-} from 'semantic-ui-react';
 import _ from 'lodash';
 import filteredCardsQuery, {
     Filters,
     ResponseCard,
 } from './filteredCardsQuery';
+import Placeholder from '../ui/Placeholder';
+import SearchIcon from '@material-ui/icons/Search';
+import {
+    Box,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Typography,
+    Container,
+    Modal,
+    CircularProgress,
+    withStyles,
+} from '@material-ui/core';
+import ReportProblemIcon from '@material-ui/icons/ReportProblem';
+import Pagination from '@material-ui/lab/Pagination';
+
 const LIMIT = 100; // Matching the backend for now
+
+export const InvertedLoader = withStyles(({ palette }) => ({
+    root: {
+        color: palette.common.white,
+    },
+}))(CircularProgress);
 
 interface State {
     cards: ResponseCard[];
@@ -25,7 +41,6 @@ interface State {
     numPages: number;
     isLoading: boolean;
     cachedFilters: Filters;
-    showPages: any[];
     searchTouched: boolean;
 }
 
@@ -37,7 +52,6 @@ const BrowseInventory: FC = () => {
         numPages: 0,
         isLoading: false,
         cachedFilters: initialFilters,
-        showPages: [],
         searchTouched: false, // Tracks whether the user has initially searched for the 'no results' message
     });
 
@@ -48,18 +62,6 @@ const BrowseInventory: FC = () => {
             const { cards, total } = await filteredCardsQuery(filters, page);
 
             const numPages = Math.ceil(total / LIMIT);
-            const pages = _.range(1, numPages + 1);
-            let showPages;
-
-            // Logic that controls the visibility of page number links
-            // Default max number pages to display is 5
-            if (page <= 3) {
-                showPages = pages.slice(0, 5);
-            } else if (page >= numPages - 2) {
-                showPages = pages.slice(numPages - 5, numPages);
-            } else {
-                showPages = pages.slice(page - 2, page + 3);
-            }
 
             setState({
                 ...state,
@@ -68,7 +70,6 @@ const BrowseInventory: FC = () => {
                 isLoading: false,
                 numPages: numPages,
                 currentPage: page,
-                showPages: showPages,
                 searchTouched: true,
                 // Set the filters for pagination requests later
                 cachedFilters: filters,
@@ -83,182 +84,76 @@ const BrowseInventory: FC = () => {
         isLoading,
         currentPage,
         numPages,
-        showPages,
         count,
         cachedFilters,
     } = state;
-    const showLeftPageButtons = !(currentPage === 1);
-    const showRightPageButtons = !(currentPage === numPages);
 
     return (
         <Container>
-            <Dimmer
-                active={isLoading}
-                inverted
-                page
-                style={{ marginTop: '52.63px' }}
-            >
-                <Loader size="large">Loading</Loader>
-            </Dimmer>
-            <Segment secondary>
-                <Icon name="exclamation triangle" color="blue" />
-                Prices from this table are updated weekly and are subject to
-                fluctuations. Consult 'New Sale' or 'Manage Inventory' for
-                up-to-date values
-            </Segment>
+            <Modal open={isLoading}>
+                <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    height={1}
+                >
+                    <InvertedLoader />
+                </Box>
+            </Modal>
+            <Box pb={2}>
+                <Typography>
+                    <ReportProblemIcon
+                        fontSize="small"
+                        color="primary"
+                        style={{ verticalAlign: 'middle' }}
+                    />
+                    Prices from this table are updated weekly and are subject to
+                    fluctuations. Consult 'New Sale' or 'Manage Inventory' for
+                    up-to-date values
+                </Typography>
+            </Box>
             <BrowseInventoryForm doSubmit={fetchData} />
+            <br />
             {!!cards.length && (
-                <Table celled striped compact>
-                    <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell colSpan="5">
-                                <Menu floated>
-                                    <Menu.Item>
-                                        Viewing page {currentPage} of {numPages}
-                                    </Menu.Item>
-                                </Menu>
-                                <Menu floated="right">
-                                    {showLeftPageButtons && (
-                                        <Menu.Item
-                                            as="a"
-                                            icon
-                                            onClick={() =>
-                                                fetchData(
-                                                    cachedFilters,
-                                                    currentPage - 1
-                                                )
-                                            }
-                                        >
-                                            <Icon name="chevron left" />
-                                        </Menu.Item>
-                                    )}
-                                    <React.Fragment>
-                                        {showPages.map((p) => {
-                                            return (
-                                                <Menu.Item
-                                                    key={`page-${p}`}
-                                                    onClick={() =>
-                                                        fetchData(
-                                                            cachedFilters,
-                                                            p
-                                                        )
-                                                    }
-                                                    active={currentPage === p}
-                                                    disabled={currentPage === p}
-                                                    as="a"
-                                                >
-                                                    {p}
-                                                </Menu.Item>
-                                            );
-                                        })}
-                                    </React.Fragment>
-                                    {showRightPageButtons && (
-                                        <Menu.Item
-                                            as="a"
-                                            icon
-                                            onClick={() =>
-                                                fetchData(
-                                                    cachedFilters,
-                                                    currentPage + 1
-                                                )
-                                            }
-                                        >
-                                            <Icon name="chevron right" />
-                                        </Menu.Item>
-                                    )}
-                                </Menu>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell>Name</Table.HeaderCell>
-                            <Table.HeaderCell>Edition</Table.HeaderCell>
-                            <Table.HeaderCell>Condition</Table.HeaderCell>
-                            <Table.HeaderCell>Qty</Table.HeaderCell>
-                            <Table.HeaderCell>Price</Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                        {cards.map((card) => (
-                            <BrowseInventoryRow
-                                key={`${card._id}-${card.finishCondition}`}
-                                card={card}
-                            />
-                        ))}
-                    </Table.Body>
-                    <Table.Footer>
-                        <Table.Row>
-                            <Table.HeaderCell colSpan="5">
-                                <Menu floated>
-                                    <Menu.Item>
-                                        Total results: {count}
-                                    </Menu.Item>
-                                </Menu>
-                                <Menu floated="right">
-                                    {showLeftPageButtons && (
-                                        <Menu.Item
-                                            as="a"
-                                            icon
-                                            onClick={() =>
-                                                fetchData(
-                                                    cachedFilters,
-                                                    currentPage - 1
-                                                )
-                                            }
-                                        >
-                                            <Icon name="chevron left" />
-                                        </Menu.Item>
-                                    )}
-                                    <React.Fragment>
-                                        {showPages.map((p) => {
-                                            return (
-                                                <Menu.Item
-                                                    key={`page-${p}`}
-                                                    onClick={() =>
-                                                        fetchData(
-                                                            cachedFilters,
-                                                            p
-                                                        )
-                                                    }
-                                                    active={currentPage === p}
-                                                    disabled={currentPage === p}
-                                                    as="a"
-                                                >
-                                                    {p}
-                                                </Menu.Item>
-                                            );
-                                        })}
-                                    </React.Fragment>
-                                    {showRightPageButtons && (
-                                        <Menu.Item
-                                            as="a"
-                                            icon
-                                            onClick={() =>
-                                                fetchData(
-                                                    cachedFilters,
-                                                    currentPage + 1
-                                                )
-                                            }
-                                        >
-                                            <Icon name="chevron right" />
-                                        </Menu.Item>
-                                    )}
-                                </Menu>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Footer>
-                </Table>
+                <TableContainer component={Paper} variant="outlined">
+                    <Box p={2} display="flex" justifyContent="space-between">
+                        <Pagination
+                            count={numPages}
+                            page={currentPage}
+                            onChange={(_, page) =>
+                                fetchData(cachedFilters, page)
+                            }
+                            color="primary"
+                        />
+                        <Typography>Total results: {count}</Typography>
+                    </Box>
+                    <Table size="small">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Name</TableCell>
+                                <TableCell>Edition</TableCell>
+                                <TableCell>Condition</TableCell>
+                                <TableCell>Quantity</TableCell>
+                                <TableCell>Price Estimate</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {cards.map((card) => (
+                                <BrowseInventoryRow
+                                    key={`${card._id}-${card.finishCondition}`}
+                                    card={card}
+                                />
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             )}
             {!cards.length && (
-                <Segment placeholder>
-                    <Header icon>
-                        <Icon name="search" />
-                        {state.searchTouched
-                            ? 'No results found'
-                            : 'Use the filters to browse inventory'}
-                    </Header>
-                </Segment>
+                <Placeholder icon={<SearchIcon style={{ fontSize: 80 }} />}>
+                    {state.searchTouched
+                        ? 'No results found'
+                        : 'Use the filters to browse inventory'}
+                </Placeholder>
             )}
         </Container>
     );

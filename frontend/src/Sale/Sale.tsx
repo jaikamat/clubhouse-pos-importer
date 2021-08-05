@@ -1,5 +1,4 @@
 import React, { useContext, FC, useState, useEffect } from 'react';
-import { Divider } from 'semantic-ui-react';
 import BrowseCardList from './SaleSearchCardList';
 import SaleCartList from './SaleCartList';
 import PrintList from './PrintList';
@@ -78,7 +77,7 @@ const Sale: FC<Props> = () => {
                             />
                         )}
                     </Grid>
-                    <Divider />
+                    <br />
                     <BrowseCardList
                         loading={loading}
                         term={searchTerm}
@@ -112,7 +111,7 @@ const Sale: FC<Props> = () => {
                             )}
                         </Box>
                     </Grid>
-                    <Divider />
+                    <br />
                     <SaleCartList saleList={saleListCards} />
                 </Grid>
             </Grid>

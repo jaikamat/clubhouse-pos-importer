@@ -1,5 +1,4 @@
-import React, { useState, useContext, FC } from 'react';
-import { Button, Label, Icon, Grid, Segment, Header } from 'semantic-ui-react';
+import React, { useContext, FC } from 'react';
 import Price from '../common/Price';
 import {
     ReceivingCard,
@@ -8,6 +7,11 @@ import {
 } from '../context/ReceivingContext';
 import SetIcon from '../ui/SetIcon';
 import CardImageTooltip from '../ui/CardImageTooltip';
+import { ListItem, Grid, Typography, Box, IconButton } from '@material-ui/core';
+import Chip from '../common/Chip';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import CreditCardIcon from '@material-ui/icons/CreditCard';
+import CloseIcon from '@material-ui/icons/Close';
 
 interface Props {
     card: ReceivingCard;
@@ -30,22 +34,21 @@ const ReceivingCartItem: FC<Props> = ({
     },
 }) => {
     const { CASH, CREDIT } = TRADE_TYPE;
-    const [hovered, setHovered] = useState(false);
     const { removeFromList, activeTradeType } = useContext(ReceivingContext);
 
     return (
-        <Segment>
-            <Grid verticalAlign="middle">
-                <Grid.Column tablet={16} computer={11}>
-                    <div>
-                        <CardImageTooltip cardImage={cardImage}>
-                            <Header as="h4" style={{ cursor: 'help' }}>
+        <ListItem>
+            <Grid container alignItems="center" justify="space-between">
+                <Grid item>
+                    <CardImageTooltip cardImage={cardImage}>
+                        <Box display="flex" alignItems="center">
+                            <Typography variant="h6" style={{ cursor: 'help' }}>
                                 {display_name}
-                            </Header>
-                        </CardImageTooltip>
-                    </div>
-                    <SetIcon set={set} rarity={rarity} />
-                    <Label color="grey">{set.toUpperCase()}</Label>
+                            </Typography>
+                            <SetIcon set={set} rarity={rarity} />
+                            <Chip size="small" label={set.toUpperCase()} />
+                        </Box>
+                    </CardImageTooltip>
                     {finishCondition && (
                         <span>
                             {finishCondition.split('_')[1]} {' | '}
@@ -67,40 +70,31 @@ const ReceivingCartItem: FC<Props> = ({
                             </b>
                         </span>
                     </div>
-                </Grid.Column>
-                <Grid.Column tablet={16} computer={5} textAlign="right">
-                    <Button
-                        compact
-                        active={tradeType === CASH}
-                        color={tradeType === CASH ? 'blue' : undefined}
+                </Grid>
+                <Grid item>
+                    <IconButton
+                        color={tradeType === CASH ? 'primary' : undefined}
                         onClick={() => activeTradeType(uuid_key, Trade.Cash)}
                         disabled={cashPrice === 0}
-                        icon
                     >
-                        <Icon name="dollar sign"></Icon>
-                    </Button>
-                    <Button
-                        compact
-                        active={tradeType === CREDIT}
-                        color={tradeType === CREDIT ? 'blue' : undefined}
+                        <AttachMoneyIcon />
+                    </IconButton>
+                    <IconButton
+                        color={tradeType === CREDIT ? 'primary' : undefined}
                         onClick={() => activeTradeType(uuid_key, Trade.Credit)}
                         disabled={creditPrice === 0}
-                        icon
                     >
-                        <Icon name="credit card outline"></Icon>
-                    </Button>
-                    <Button
-                        compact
-                        icon="cancel"
-                        circular
+                        <CreditCardIcon />
+                    </IconButton>
+                    <IconButton
                         onClick={() => removeFromList(uuid_key)}
-                        onMouseOver={() => setHovered(true)}
-                        onMouseOut={() => setHovered(false)}
-                        color={hovered ? 'red' : undefined}
-                    />
-                </Grid.Column>
+                        color="secondary"
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </Grid>
             </Grid>
-        </Segment>
+        </ListItem>
     );
 };
 

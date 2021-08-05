@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
 import SaleSearchCard from './SaleSearchCard';
-import { Segment, Header, Icon } from 'semantic-ui-react';
 import { ScryfallCard } from '../utils/ScryfallCard';
 import { Grid } from '@material-ui/core';
 import Loading from '../ui/Loading';
+import SearchIcon from '@material-ui/icons/Search';
+import Placeholder from '../ui/Placeholder';
 
 interface Props {
     loading: boolean;
@@ -35,12 +36,9 @@ const BrowseCardList: FC<Props> = ({ loading, term, cards }) => {
 
     if (cards.length === 0) {
         return (
-            <Segment placeholder>
-                <Header icon>
-                    <Icon name="search" />
-                    <span>{searchNotification()}</span>
-                </Header>
-            </Segment>
+            <Placeholder icon={<SearchIcon style={{ fontSize: 80 }} />}>
+                <span>{searchNotification()}</span>
+            </Placeholder>
         );
     }
 

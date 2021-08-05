@@ -41,6 +41,7 @@ const BrowseInventoryRow: FC<Props> = ({
                     <span style={{ cursor: 'help' }}>{name} </span>
                 </CardImageTooltip>
                 {finish === 'FOIL' && (
+                    // TODO: Pull out this inline styling into a custom component
                     <StarIcon
                         fontSize="small"
                         color="primary"

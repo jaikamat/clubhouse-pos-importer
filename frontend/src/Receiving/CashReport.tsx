@@ -1,8 +1,15 @@
 import React, { FC } from 'react';
 import _ from 'lodash';
 import Price from '../common/Price';
-import { Table } from 'semantic-ui-react';
 import { ReceivingCard } from '../context/ReceivingContext';
+import {
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+    TableFooter,
+} from '@material-ui/core';
 
 interface Props {
     receivingList: ReceivingCard[];
@@ -49,51 +56,49 @@ const CashReport: FC<Props> = ({ receivingList }) => {
     return (
         <React.Fragment>
             <div id="cash-report">
-                <Table celled>
-                    <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell colSpan={6}>
-                                Employee Name:
-                            </Table.HeaderCell>
-                        </Table.Row>
-                        <Table.Row>
-                            <Table.HeaderCell>Card Name</Table.HeaderCell>
-                            <Table.HeaderCell>Market Value</Table.HeaderCell>
-                            <Table.HeaderCell>Condition</Table.HeaderCell>
-                            <Table.HeaderCell>Quantity</Table.HeaderCell>
-                            <Table.HeaderCell>Cash Offer</Table.HeaderCell>
-                            <Table.HeaderCell>Cash Out</Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell colSpan={6}>Employee Name:</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Card Name</TableCell>
+                            <TableCell>Market Value</TableCell>
+                            <TableCell>Condition</TableCell>
+                            <TableCell>Quantity</TableCell>
+                            <TableCell>Cash Offer</TableCell>
+                            <TableCell>Cash Out</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
                         {mergedWithQty.map((c) => {
                             return (
-                                <Table.Row key={c.temp_uuid}>
-                                    <Table.Cell>{c.name}</Table.Cell>
-                                    <Table.Cell>
+                                <TableRow key={c.temp_uuid}>
+                                    <TableCell>{c.name}</TableCell>
+                                    <TableCell>
                                         <Price num={c.marketPrice} />
-                                    </Table.Cell>
-                                    <Table.Cell>{c.finishCondition}</Table.Cell>
-                                    <Table.Cell>{c.tradeQty}</Table.Cell>
-                                    <Table.Cell>
+                                    </TableCell>
+                                    <TableCell>{c.finishCondition}</TableCell>
+                                    <TableCell>{c.tradeQty}</TableCell>
+                                    <TableCell>
                                         <Price num={c.cashPrice} />
-                                    </Table.Cell>
-                                    <Table.Cell>
+                                    </TableCell>
+                                    <TableCell>
                                         <Price
                                             num={
                                                 c.tradeQty * (c.cashPrice || 0)
                                             }
                                         />
-                                    </Table.Cell>
-                                </Table.Row>
+                                    </TableCell>
+                                </TableRow>
                             );
                         })}
-                    </Table.Body>
-                    <Table.Footer>
-                        <Table.HeaderCell colSpan={6}>
+                    </TableBody>
+                    <TableFooter>
+                        <TableCell colSpan={6}>
                             Total: <Price num={totalCashOut} />
-                        </Table.HeaderCell>
-                    </Table.Footer>
+                        </TableCell>
+                    </TableFooter>
                 </Table>
             </div>
         </React.Fragment>

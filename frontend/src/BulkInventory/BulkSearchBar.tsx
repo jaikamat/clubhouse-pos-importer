@@ -45,6 +45,7 @@ const BulkSearchBar: FC<Props> = ({ value, onChange, onHighlight }) => {
 
     const handleSearchChange = async (_: ChangeEvent<{}>, val: string) => {
         setInputValue(val);
+        setInternalValue(null);
 
         // Skip undefined and short internalValues
         if (!val || val.length < 3) {
@@ -63,6 +64,7 @@ const BulkSearchBar: FC<Props> = ({ value, onChange, onHighlight }) => {
         // If the user clears the input, then we need to reset the state
         if (reason === 'clear') {
             onChange(null);
+            setInternalValue(null);
             return;
         }
 

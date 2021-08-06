@@ -35,11 +35,8 @@ const BulkSearchBar: FC<Props> = ({ value, onChange, onHighlight }) => {
 
     const fetchResults = async (v: string) => {
         setLoading(true);
-        console.log('loading');
         const data = await bulkInventoryQuery(v);
-        console.log({ data });
         await setOptions(data);
-        console.log({ results: options });
         setLoading(false);
     };
 
@@ -92,11 +89,6 @@ const BulkSearchBar: FC<Props> = ({ value, onChange, onHighlight }) => {
             <div>
                 <pre>{JSON.stringify({ internalValue }, null, 2)}</pre>
             </div>
-            <div>
-                <pre>
-                    {JSON.stringify({ options: options.length }, null, 2)}
-                </pre>
-            </div>
             <Autocomplete
                 id="searchBar"
                 autoHighlight
@@ -108,8 +100,10 @@ const BulkSearchBar: FC<Props> = ({ value, onChange, onHighlight }) => {
                 loading={loading}
                 options={options}
                 getOptionLabel={(o) => o.display_name}
-                filterOptions={(x) => x}
-                getOptionSelected={(o, v) => o.display_name === v.display_name}
+                // We do not want to filter options based on user input
+                // This overrides the default behavior
+                filterOptions={(o) => o}
+                getOptionSelected={(o, v) => o.scryfall_id === v.scryfall_id}
                 onHighlightChange={(_, o) => {
                     if (onHighlight) {
                         onHighlight(o);
@@ -117,13 +111,15 @@ const BulkSearchBar: FC<Props> = ({ value, onChange, onHighlight }) => {
                 }}
                 renderOption={(o) => {
                     return (
-                        <>
-                            <Typography>{o.display_name}</Typography>
+                        <div>
+                            <Typography component="span">
+                                {o.display_name}
+                            </Typography>
                             <SetIcon
                                 set={o.set_abbreviation}
                                 rarity={o.rarity}
                             />
-                        </>
+                        </div>
                     );
                 }}
                 placeholder="Enter a card title"

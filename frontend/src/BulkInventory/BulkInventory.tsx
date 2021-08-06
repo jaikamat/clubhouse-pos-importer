@@ -14,7 +14,7 @@ const BulkInventory: FC = () => {
             <Grid container spacing={2}>
                 <Grid item xs={6}>
                     <BulkSearchBar
-                        value={bulkCard ? bulkCard.name : ''}
+                        value={bulkCard}
                         onChange={(v) => setBulkCard(v)}
                         onHighlight={(o) => setCurrentCardImage(o?.image || '')}
                     />

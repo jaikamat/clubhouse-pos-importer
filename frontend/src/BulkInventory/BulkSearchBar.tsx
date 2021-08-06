@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 });
 
 interface Props {
-    value: string;
+    value: Option | null;
     onChange: (result: Option | null) => void;
     onHighlight?: (o: Option | null) => void;
 }
@@ -30,8 +30,8 @@ const BulkSearchBar: FC<Props> = ({ value, onChange, onHighlight }) => {
     const classes = useStyles();
     const [loading, setLoading] = useState<boolean>(false);
     const [options, setOptions] = useState<Option[]>([]);
-    const [internalValue, setInternalValue] = useState<Option | null>(null);
-    const [inputValue, setInputValue] = useState<string>(value);
+    const [internalValue, setInternalValue] = useState<Option | null>(value);
+    const [inputValue, setInputValue] = useState<string>('');
 
     const fetchResults = async (v: string) => {
         setLoading(true);

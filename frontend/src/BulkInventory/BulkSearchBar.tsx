@@ -28,26 +28,29 @@ interface Props {
 const BulkSearchBar: FC<Props> = ({ value, onChange }) => {
     const classes = useStyles();
     const [loading, setLoading] = useState<boolean>(false);
-    const [results, setResults] = useState<Option[]>([]);
+    const [options, setOptions] = useState<Option[]>([]);
     const [internalValue, setInternalValue] = useState<Option | null>(null);
     const [inputValue, setInputValue] = useState<string>(value);
 
     const fetchResults = async (v: string) => {
         setLoading(true);
+        console.log('loading');
         const data = await bulkInventoryQuery(v);
-        setResults(data);
+        console.log({ data });
+        await setOptions(data);
+        console.log({ results: options });
         setLoading(false);
     };
 
     // Cache so it doesn't create a new instance each render
-    const debouncedFetch = useCallback(_.debounce(fetchResults, 500), []);
+    const debouncedFetch = useCallback(_.debounce(fetchResults, 750), []);
 
     const handleSearchChange = async (_: ChangeEvent<{}>, val: string) => {
         setInputValue(val);
 
         // Skip undefined and short internalValues
         if (!val || val.length < 3) {
-            setResults([]);
+            setOptions([]);
             return;
         }
 
@@ -81,42 +84,60 @@ const BulkSearchBar: FC<Props> = ({ value, onChange }) => {
     };
 
     return (
-        <Autocomplete
-            id="searchBar"
-            autoHighlight
-            selectOnFocus
-            value={internalValue}
-            inputValue={inputValue}
-            onInputChange={handleSearchChange}
-            onChange={handleResultSelect}
-            loading={loading}
-            options={results}
-            getOptionLabel={(o) => o.display_name}
-            getOptionSelected={(o, v) => o.scryfall_id === v.scryfall_id}
-            renderOption={(o) => {
-                return (
-                    <>
-                        <Typography>{o.display_name}</Typography>
-                        <SetIcon set={o.set_abbreviation} rarity={o.rarity} />
-                    </>
-                );
-            }}
-            placeholder="Enter a card title"
-            closeIcon={null}
-            popupIcon={<SearchIcon />}
-            noOptionsText="No results found"
-            classes={{
-                popupIndicatorOpen: classes.popupIndicatorOpen,
-            }}
-            renderInput={(params) => (
-                <TextField
-                    {...params}
-                    label="Enter a card title"
-                    variant="outlined"
-                    size="small"
-                />
-            )}
-        />
+        <>
+            <div>
+                <pre>{JSON.stringify({ inputValue }, null, 2)}</pre>
+            </div>
+            <div>
+                <pre>{JSON.stringify({ internalValue }, null, 2)}</pre>
+            </div>
+            <div>
+                <pre>
+                    {JSON.stringify({ options: options.length }, null, 2)}
+                </pre>
+            </div>
+            <Autocomplete
+                id="searchBar"
+                autoHighlight
+                selectOnFocus
+                value={internalValue}
+                inputValue={inputValue}
+                onInputChange={handleSearchChange}
+                onChange={handleResultSelect}
+                loading={loading}
+                options={options}
+                getOptionLabel={(o) => o.display_name}
+                filterOptions={(x) => x}
+                getOptionSelected={(o, v) => o.display_name === v.display_name}
+                renderOption={(o) => {
+                    return (
+                        <>
+                            {/* <pre>{JSON.stringify(o, null, 1)}</pre> */}
+                            <Typography>{o.display_name}</Typography>
+                            <SetIcon
+                                set={o.set_abbreviation}
+                                rarity={o.rarity}
+                            />
+                        </>
+                    );
+                }}
+                placeholder="Enter a card title"
+                closeIcon={null}
+                popupIcon={<SearchIcon />}
+                noOptionsText="No results found"
+                classes={{
+                    popupIndicatorOpen: classes.popupIndicatorOpen,
+                }}
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        label="Enter a card title"
+                        variant="outlined"
+                        size="small"
+                    />
+                )}
+            />
+        </>
     );
 };
 

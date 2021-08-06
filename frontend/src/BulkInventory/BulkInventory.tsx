@@ -9,7 +9,7 @@ const BulkInventory: FC = () => {
 
     return (
         <Container>
-            <pre>{JSON.stringify(bulkCard, null, 2)}</pre>
+            {/* <pre>{JSON.stringify(bulkCard, null, 2)}</pre> */}
             <BulkSearchBar
                 value={bulkCard ? bulkCard.name : ''}
                 onChange={(v) => setBulkCard(v)}

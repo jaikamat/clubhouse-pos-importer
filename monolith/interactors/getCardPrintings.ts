@@ -3,6 +3,19 @@ import getDatabaseConnection from '../database';
 import stripPunctuation from '../lib/stripPunctuation';
 import ScryfallCard from './ScryfallCard';
 
+const getCardImage = (card: ScryfallCard) => {
+    let myImage: string;
+
+    try {
+        // If normal prop doesn't exist, move to catch block for flip card faces
+        myImage = card.image_uris.normal;
+    } catch (e) {
+        myImage = card.card_faces[0].image_uris.normal;
+    }
+
+    return myImage;
+};
+
 /**
  * Creates a detailed user-friendly name for cards to discern what they are, without imagery
  */
@@ -31,6 +44,8 @@ function cardDisplayName(card: ScryfallCard): string {
     const isExtendedArt =
         card.frame_effects && card.frame_effects.includes('extendedart');
 
+    const isRetroBorder = card.frame && card.frame.includes('1997');
+
     if (isPrereleasePromo) treatments.push('Prerelease promo');
     if (isPromoPackPromo) treatments.push('Promo pack');
     if (isStampedPromo) treatments.push('Stamped');
@@ -38,6 +53,7 @@ function cardDisplayName(card: ScryfallCard): string {
     if (isBorderless) treatments.push('Borderless');
     if (isEtched) treatments.push('Etched');
     if (isExtendedArt) treatments.push('Extended art');
+    if (isRetroBorder) treatments.push('Retro frame');
 
     const separator = treatments.length > 0 ? ' - ' : '';
 
@@ -53,6 +69,8 @@ class BulkCard {
     public rarity: string;
     public foil_printing: boolean;
     public nonfoil_printing: boolean;
+    public frame: string;
+    public image: string;
 
     constructor(card: ScryfallCard) {
         this.scryfall_id = card.id;
@@ -63,6 +81,8 @@ class BulkCard {
         this.rarity = card.rarity;
         this.foil_printing = card.foil;
         this.nonfoil_printing = card.nonfoil;
+        this.frame = card.frame;
+        this.image = getCardImage(card);
     }
 }
 
@@ -92,7 +112,7 @@ async function getCardPrintings(cardName: string) {
         const search = {
             index: 'autocomplete',
             autocomplete: {
-                query: modifiedName,
+                query: cardName,
                 path: 'name',
                 tokenOrder: 'sequential',
             },

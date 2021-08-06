@@ -1,5 +1,6 @@
 import { Collection } from '../common/types';
 import getDatabaseConnection from '../database';
+import stripPunctuation from '../lib/stripPunctuation';
 import ScryfallCard from './ScryfallCard';
 
 /**
@@ -65,9 +66,20 @@ class BulkCard {
     }
 }
 
+const replacePunctuation = (str: string): string => {
+    return str.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, ' ');
+};
+
 async function getCardPrintings(cardName: string) {
     try {
         const db = await getDatabaseConnection();
+        // Modify the input string so it cooperates
+        // with the search implementation
+        // We remove punctuation as well as multiple spaces
+        const modifiedName = replacePunctuation(cardName).replace(
+            / +(?= )/g,
+            ''
+        );
 
         const pipeline = [];
 
@@ -80,7 +92,7 @@ async function getCardPrintings(cardName: string) {
         const search = {
             index: 'autocomplete',
             autocomplete: {
-                query: cardName,
+                query: modifiedName,
                 path: 'name',
                 tokenOrder: 'sequential',
             },

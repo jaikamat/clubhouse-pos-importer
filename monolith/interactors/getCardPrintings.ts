@@ -1,20 +1,7 @@
 import { Collection } from '../common/types';
 import getDatabaseConnection from '../database';
-import stripPunctuation from '../lib/stripPunctuation';
 import ScryfallCard from './ScryfallCard';
-
-const getCardImage = (card: ScryfallCard) => {
-    let myImage: string;
-
-    try {
-        // If normal prop doesn't exist, move to catch block for flip card faces
-        myImage = card.image_uris.normal;
-    } catch (e) {
-        myImage = card.card_faces[0].image_uris.normal;
-    }
-
-    return myImage;
-};
+import cardImageUrl from '../lib/cardImageUrl';
 
 /**
  * Creates a detailed user-friendly name for cards to discern what they are, without imagery
@@ -82,24 +69,13 @@ class BulkCard {
         this.foil_printing = card.foil;
         this.nonfoil_printing = card.nonfoil;
         this.frame = card.frame;
-        this.image = getCardImage(card);
+        this.image = cardImageUrl(card);
     }
 }
-
-const replacePunctuation = (str: string): string => {
-    return str.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, ' ');
-};
 
 async function getCardPrintings(cardName: string) {
     try {
         const db = await getDatabaseConnection();
-        // Modify the input string so it cooperates
-        // with the search implementation
-        // We remove punctuation as well as multiple spaces
-        const modifiedName = replacePunctuation(cardName).replace(
-            / +(?= )/g,
-            ''
-        );
 
         const pipeline = [];
 

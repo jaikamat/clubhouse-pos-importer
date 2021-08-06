@@ -11,6 +11,8 @@ export interface BulkCard {
     rarity: string;
     foil_printing: boolean;
     nonfoil_printing: boolean;
+    frame: string;
+    image: string;
 }
 
 const bulkInventoryQuery = async (cardName: string) => {

@@ -23,9 +23,10 @@ const useStyles = makeStyles({
 interface Props {
     value: string;
     onChange: (result: Option | null) => void;
+    onHighlight?: (o: Option | null) => void;
 }
 
-const BulkSearchBar: FC<Props> = ({ value, onChange }) => {
+const BulkSearchBar: FC<Props> = ({ value, onChange, onHighlight }) => {
     const classes = useStyles();
     const [loading, setLoading] = useState<boolean>(false);
     const [options, setOptions] = useState<Option[]>([]);
@@ -109,10 +110,14 @@ const BulkSearchBar: FC<Props> = ({ value, onChange }) => {
                 getOptionLabel={(o) => o.display_name}
                 filterOptions={(x) => x}
                 getOptionSelected={(o, v) => o.display_name === v.display_name}
+                onHighlightChange={(_, o) => {
+                    if (onHighlight) {
+                        onHighlight(o);
+                    }
+                }}
                 renderOption={(o) => {
                     return (
                         <>
-                            {/* <pre>{JSON.stringify(o, null, 1)}</pre> */}
                             <Typography>{o.display_name}</Typography>
                             <SetIcon
                                 set={o.set_abbreviation}

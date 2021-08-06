@@ -1,3 +1,4 @@
+import React, { FC, useEffect, useState } from 'react';
 import {
     Container,
     FormControl,
@@ -7,10 +8,10 @@ import {
     Select,
 } from '@material-ui/core';
 import { useFormik } from 'formik';
-import React, { FC } from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
 import CardImage from '../common/CardImage';
+import ControlledDropdown from '../ui/ControlledDropdown';
+import IntegerInput from '../ui/IntegerInput';
+import { cardConditions } from '../utils/dropdownOptions';
 import { BulkCard } from './bulkInventoryQuery';
 import BulkSearchBar from './BulkSearchBar';
 
@@ -20,18 +21,18 @@ type Condition = 'NM' | 'LP' | 'MP' | 'HP';
 interface FormValues {
     bulkCard: BulkCard | null;
     finish: Finish;
-    quanitity: number;
+    quantity: string;
     condition: Condition;
 }
 
 const BulkInventory: FC = () => {
     const [currentCardImage, setCurrentCardImage] = useState<string>('');
 
-    const { values, setFieldValue } = useFormik<FormValues>({
+    const { values, setFieldValue, handleSubmit } = useFormik<FormValues>({
         initialValues: {
             bulkCard: null,
             finish: 'NONFOIL',
-            quanitity: 1,
+            quantity: '1',
             condition: 'NM',
         },
         onSubmit: async (v: FormValues) => {
@@ -41,6 +42,12 @@ const BulkInventory: FC = () => {
 
     useEffect(() => {
         if (values.bulkCard) {
+            // Reset condtion when cards change
+            setFieldValue('condition', 'NM');
+
+            // Reset quantity when cards change
+            setFieldValue('quantity', '1');
+
             // If _only_ a foil printing exists, set to foil
             if (!values.bulkCard.nonfoil_printing) {
                 setFieldValue('finish', 'FOIL');
@@ -54,7 +61,7 @@ const BulkInventory: FC = () => {
             // Otherwise both exist, default to nonfoil
             setFieldValue('finish', 'NONFOIL');
         }
-    }, [values]);
+    }, [values.bulkCard]);
 
     return (
         <Container>
@@ -106,11 +113,25 @@ const BulkInventory: FC = () => {
                                 </MenuItem>
                             </Select>
                         </FormControl>
+                        <ControlledDropdown
+                            name="condition"
+                            label="Condition"
+                            options={cardConditions}
+                            value={values.condition}
+                            onChange={(v) => setFieldValue('condition', v)}
+                        />
+                        <IntegerInput
+                            label="Quantity"
+                            name="quantity"
+                            value={values.quantity}
+                            onChange={(v) => setFieldValue('quantity', v)}
+                        />
                         <div>
                             <CardImage image={currentCardImage} />
                         </div>
                     </Grid>
                 </Grid>
+                <button onClick={() => handleSubmit()}>Submit!</button>
             </form>
         </Container>
     );

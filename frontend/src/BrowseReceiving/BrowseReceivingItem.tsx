@@ -92,7 +92,7 @@ const BrowseReceivingItem: FC<Props> = ({ received }) => {
                                 />
                                 <Chip
                                     size="small"
-                                    label={`Cash: ${getPrice(creditPrice)}`}
+                                    label={`Credit: ${getPrice(creditPrice)}`}
                                     color={
                                         creditPrice > 0 ? 'primary' : undefined
                                     }

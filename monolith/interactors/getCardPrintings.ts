@@ -48,6 +48,11 @@ async function getCardPrintings(cardName: string) {
                 query: cardName,
                 path: 'name',
                 tokenOrder: 'sequential',
+                fuzzy: {
+                    maxEdits: 1,
+                    maxExpansions: 50,
+                    prefixLength: 3,
+                },
             },
         };
 

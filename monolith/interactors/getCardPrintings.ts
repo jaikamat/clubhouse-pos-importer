@@ -30,6 +30,12 @@ class BulkCard {
     }
 }
 
+/**
+ * We clamp a max number of return objects to prevent results with hundreds
+ * of results (such as basic lands) to slow rendering in the client
+ */
+const MAX_RESULTS = 50;
+
 async function getCardPrintings(cardName: string) {
     try {
         const db = await getDatabaseConnection();
@@ -64,7 +70,14 @@ async function getCardPrintings(cardName: string) {
             .aggregate(pipeline)
             .toArray();
 
-        return cards.map((c) => new BulkCard(c));
+        const bulk = cards.map((c) => new BulkCard(c));
+
+        return (
+            bulk
+                // Sort names to order the shortest matches first
+                .sort((a, b) => a.name.length - b.name.length)
+                .slice(0, MAX_RESULTS)
+        );
     } catch (err) {
         console.log(err);
         throw err;

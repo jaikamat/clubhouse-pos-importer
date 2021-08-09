@@ -35,6 +35,8 @@ const IntegerInput: FC<Props> = ({
                 const transformed = parseInt(value);
                 if (isNaN(transformed) || transformed < 1) {
                     return onChange('1');
+                } else {
+                    onChange(transformed.toString());
                 }
             }}
             onChange={(e) => {

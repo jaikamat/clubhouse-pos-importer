@@ -19,6 +19,7 @@ import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core';
 import NavBar from './NavBar/NavBar';
 import Reporting from './Reporting/Reporting';
 import BulkInventory from './BulkInventory/BulkInventory';
+import ToastProvider from './ui/ToastContext';
 
 const useStyles = makeStyles(({ spacing }) => ({
     contentContainer: {
@@ -46,53 +47,59 @@ const App: FC = () => {
     return (
         <AuthProvider>
             <ThemeProvider theme={theme}>
-                <NavBar />
-                <Switch>
-                    <Route exact path="/" component={Home} />
-                    <div className={backgroundColor}>
-                        <div className={contentContainer}>
-                            <AdminRoute exact path="/manage-inventory">
-                                <InventoryProvider>
-                                    <ManageInventory />
-                                </InventoryProvider>
-                            </AdminRoute>
-                            <AdminRoute exact path="/new-sale">
-                                <SaleProvider>
-                                    <Sale />
-                                </SaleProvider>
-                            </AdminRoute>
-                            <AdminRoute exact path="/receiving">
-                                <ReceivingProvider>
-                                    <Receiving />
-                                </ReceivingProvider>
-                            </AdminRoute>
-                            <AdminRoute exact path="/browse-sales">
-                                <BrowseSales />
-                            </AdminRoute>
-                            <AdminRoute exact path="/browse-inventory">
-                                <BrowseInventory />
-                            </AdminRoute>
-                            <AdminRoute exact path="/browse-receiving">
-                                <BrowseReceiving />
-                            </AdminRoute>
-                            <AdminRoute exact path="/bulk-add">
-                                <BulkInventory />
-                            </AdminRoute>
-                            <Route
-                                exact
-                                path="/public-inventory"
-                                component={PublicInventory}
-                            />
-                            <Route
-                                exact
-                                path="/reporting"
-                                component={Reporting}
-                            />
-                            <Route exact path="/login" component={Login} />
-                            <Route exact path="/logout" component={Logout} />
+                <ToastProvider>
+                    <NavBar />
+                    <Switch>
+                        <Route exact path="/" component={Home} />
+                        <div className={backgroundColor}>
+                            <div className={contentContainer}>
+                                <AdminRoute exact path="/manage-inventory">
+                                    <InventoryProvider>
+                                        <ManageInventory />
+                                    </InventoryProvider>
+                                </AdminRoute>
+                                <AdminRoute exact path="/new-sale">
+                                    <SaleProvider>
+                                        <Sale />
+                                    </SaleProvider>
+                                </AdminRoute>
+                                <AdminRoute exact path="/receiving">
+                                    <ReceivingProvider>
+                                        <Receiving />
+                                    </ReceivingProvider>
+                                </AdminRoute>
+                                <AdminRoute exact path="/browse-sales">
+                                    <BrowseSales />
+                                </AdminRoute>
+                                <AdminRoute exact path="/browse-inventory">
+                                    <BrowseInventory />
+                                </AdminRoute>
+                                <AdminRoute exact path="/browse-receiving">
+                                    <BrowseReceiving />
+                                </AdminRoute>
+                                <AdminRoute exact path="/bulk-add">
+                                    <BulkInventory />
+                                </AdminRoute>
+                                <Route
+                                    exact
+                                    path="/public-inventory"
+                                    component={PublicInventory}
+                                />
+                                <Route
+                                    exact
+                                    path="/reporting"
+                                    component={Reporting}
+                                />
+                                <Route exact path="/login" component={Login} />
+                                <Route
+                                    exact
+                                    path="/logout"
+                                    component={Logout}
+                                />
+                            </div>
                         </div>
-                    </div>
-                </Switch>
+                    </Switch>
+                </ToastProvider>
             </ThemeProvider>
         </AuthProvider>
     );

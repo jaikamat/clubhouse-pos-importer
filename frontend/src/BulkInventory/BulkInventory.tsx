@@ -28,6 +28,13 @@ interface FormValues {
 
 const BulkInventory: FC = () => {
     const [currentCardImage, setCurrentCardImage] = useState<string>('');
+    const [submittedCards, setSubmittedCards] = useState<FormValues[]>([]);
+
+    const onSubmit = async (values: FormValues) => {
+        alert(JSON.stringify(values, null, 2));
+        setSubmittedCards([values, ...submittedCards]);
+        resetForm();
+    };
 
     const { values, setFieldValue, handleSubmit, resetForm } = useFormik<
         FormValues
@@ -38,10 +45,7 @@ const BulkInventory: FC = () => {
             quantity: '1',
             condition: 'NM',
         },
-        onSubmit: async (v: FormValues) => {
-            alert(JSON.stringify(v, null, 2));
-            resetForm();
-        },
+        onSubmit,
     });
 
     useEffect(() => {
@@ -103,7 +107,7 @@ const BulkInventory: FC = () => {
                                         key="nonfoil"
                                         value="FOIL"
                                         disabled={
-                                            !values?.bulkCard?.foil_printing
+                                            !values.bulkCard?.foil_printing
                                         }
                                     >
                                         Foil
@@ -112,7 +116,7 @@ const BulkInventory: FC = () => {
                                         key="foil"
                                         value="NONFOIL"
                                         disabled={
-                                            !values?.bulkCard?.nonfoil_printing
+                                            !values.bulkCard?.nonfoil_printing
                                         }
                                     >
                                         Nonfoil
@@ -140,7 +144,10 @@ const BulkInventory: FC = () => {
                             />
                         </Grid>
                         <Grid item>
-                            <Button onClick={() => handleSubmit()}>
+                            <Button
+                                onClick={() => handleSubmit()}
+                                disabled={!values.bulkCard}
+                            >
                                 Submit!
                             </Button>
                         </Grid>
@@ -152,6 +159,9 @@ const BulkInventory: FC = () => {
                         >
                             <CardImage image={currentCardImage} />
                         </div>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <pre>{JSON.stringify({ submittedCards }, null, 2)}</pre>
                     </Grid>
                 </Grid>
             </form>

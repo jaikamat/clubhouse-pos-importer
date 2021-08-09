@@ -15,6 +15,7 @@ import { cardConditions } from '../utils/dropdownOptions';
 import { BulkCard } from './bulkInventoryQuery';
 import BulkSearchBar from './BulkSearchBar';
 import Button from '../ui/Button';
+import { useToastContext } from '../ui/ToastContext';
 
 type Finish = 'FOIL' | 'NONFOIL';
 type Condition = 'NM' | 'LP' | 'MP' | 'HP';
@@ -29,10 +30,17 @@ interface FormValues {
 const BulkInventory: FC = () => {
     const [currentCardImage, setCurrentCardImage] = useState<string>('');
     const [submittedCards, setSubmittedCards] = useState<FormValues[]>([]);
+    const createToast = useToastContext();
 
     const onSubmit = async (values: FormValues) => {
         alert(JSON.stringify(values, null, 2));
         setSubmittedCards([values, ...submittedCards]);
+        if (values.bulkCard) {
+            createToast({
+                message: `Added ${values.quantity}x ${values.bulkCard.name}`,
+                severity: 'success',
+            });
+        }
         resetForm();
     };
 

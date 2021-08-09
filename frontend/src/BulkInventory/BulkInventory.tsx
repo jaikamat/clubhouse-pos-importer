@@ -16,11 +16,13 @@ import { BulkCard } from './bulkInventoryQuery';
 import BulkSearchBar from './BulkSearchBar';
 import Button from '../ui/Button';
 import { useToastContext } from '../ui/ToastContext';
+import SubmittedCardsTable from './SubmittedCardsTable';
+import { SectionText } from '../ui/Typography';
 
 type Finish = 'FOIL' | 'NONFOIL';
 type Condition = 'NM' | 'LP' | 'MP' | 'HP';
 
-interface FormValues {
+export interface FormValues {
     bulkCard: BulkCard | null;
     finish: Finish;
     quantity: string;
@@ -168,9 +170,12 @@ const BulkInventory: FC = () => {
                             <CardImage image={currentCardImage} />
                         </div>
                     </Grid>
-                    <Grid item xs={12}>
-                        <pre>{JSON.stringify({ submittedCards }, null, 2)}</pre>
-                    </Grid>
+                    {submittedCards.length > 0 && (
+                        <Grid item xs={12}>
+                            <SectionText>Recently added cards</SectionText>
+                            <SubmittedCardsTable cards={submittedCards} />
+                        </Grid>
+                    )}
                 </Grid>
             </form>
         </Container>

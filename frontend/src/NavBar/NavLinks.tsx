@@ -38,7 +38,7 @@ const NavLinks: FC<{}> = () => {
                 <ListItemIcon>
                     <QueueIcon color="primary" />
                 </ListItemIcon>
-                Bulk Inventory
+                Bulk Entry
             </ListItem>
             <ListItem
                 button

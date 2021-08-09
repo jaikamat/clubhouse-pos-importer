@@ -14,6 +14,7 @@ import IntegerInput from '../ui/IntegerInput';
 import { cardConditions } from '../utils/dropdownOptions';
 import { BulkCard } from './bulkInventoryQuery';
 import BulkSearchBar from './BulkSearchBar';
+import Button from '../ui/Button';
 
 type Finish = 'FOIL' | 'NONFOIL';
 type Condition = 'NM' | 'LP' | 'MP' | 'HP';
@@ -65,73 +66,89 @@ const BulkInventory: FC = () => {
 
     return (
         <Container>
-            <pre>{JSON.stringify({ values }, null, 2)}</pre>
             <form>
                 <Grid container spacing={2}>
-                    <Grid item xs={6}>
-                        <BulkSearchBar
-                            value={values.bulkCard}
-                            onChange={(v) => setFieldValue('bulkCard', v)}
-                            onHighlight={(o) =>
-                                setCurrentCardImage(o?.image || '')
-                            }
-                        />
-                    </Grid>
-                    <Grid item xs={6}>
-                        <FormControl
-                            variant="outlined"
-                            size="small"
-                            fullWidth
-                            disabled={!values.bulkCard}
-                        >
-                            <InputLabel>Finish</InputLabel>
-                            <Select
-                                label="Finish"
-                                value={values.finish}
-                                onChange={(e) =>
-                                    setFieldValue(
-                                        'finish',
-                                        e.target.value as string
-                                    )
+                    <Grid item container spacing={2} xs={8}>
+                        <Grid item xs={12}>
+                            <BulkSearchBar
+                                value={values.bulkCard}
+                                onChange={(v) => setFieldValue('bulkCard', v)}
+                                onHighlight={(o) =>
+                                    setCurrentCardImage(o?.image || '')
                                 }
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <FormControl
+                                variant="outlined"
+                                size="small"
+                                fullWidth
+                                disabled={!values.bulkCard}
                             >
-                                <MenuItem
-                                    key="nonfoil"
-                                    value="FOIL"
-                                    disabled={!values?.bulkCard?.foil_printing}
-                                >
-                                    Foil
-                                </MenuItem>
-                                <MenuItem
-                                    key="foil"
-                                    value="NONFOIL"
-                                    disabled={
-                                        !values?.bulkCard?.nonfoil_printing
+                                <InputLabel>Finish</InputLabel>
+                                <Select
+                                    label="Finish"
+                                    value={values.finish}
+                                    onChange={(e) =>
+                                        setFieldValue(
+                                            'finish',
+                                            e.target.value as string
+                                        )
                                     }
                                 >
-                                    Nonfoil
-                                </MenuItem>
-                            </Select>
-                        </FormControl>
-                        <ControlledDropdown
-                            name="condition"
-                            label="Condition"
-                            options={cardConditions}
-                            value={values.condition}
-                            onChange={(v) => setFieldValue('condition', v)}
-                        />
-                        <IntegerInput
-                            label="Quantity"
-                            name="quantity"
-                            value={values.quantity}
-                            onChange={(v) => setFieldValue('quantity', v)}
-                        />
-                        <div>
+                                    <MenuItem
+                                        key="nonfoil"
+                                        value="FOIL"
+                                        disabled={
+                                            !values?.bulkCard?.foil_printing
+                                        }
+                                    >
+                                        Foil
+                                    </MenuItem>
+                                    <MenuItem
+                                        key="foil"
+                                        value="NONFOIL"
+                                        disabled={
+                                            !values?.bulkCard?.nonfoil_printing
+                                        }
+                                    >
+                                        Nonfoil
+                                    </MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <ControlledDropdown
+                                name="condition"
+                                label="Condition"
+                                options={cardConditions}
+                                value={values.condition}
+                                onChange={(v) => setFieldValue('condition', v)}
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <IntegerInput
+                                label="Quantity"
+                                name="quantity"
+                                value={values.quantity}
+                                onChange={(v) => setFieldValue('quantity', v)}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <Button onClick={() => handleSubmit()}>
+                                Submit!
+                            </Button>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <div
+                            // TODO: Extract this style
+                            style={{ maxWidth: 200, height: 'auto' }}
+                        >
                             <CardImage image={currentCardImage} />
                         </div>
                     </Grid>
                 </Grid>
-                <button onClick={() => handleSubmit()}>Submit!</button>
             </form>
         </Container>
     );

@@ -11,6 +11,7 @@ interface Props {
 const IntegerInput: FC<Props> = ({ value, onChange, label, name }) => {
     return (
         <TextField
+            fullWidth
             type="number"
             size="small"
             variant="outlined"

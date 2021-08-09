@@ -1,6 +1,5 @@
 import React, { ChangeEvent, FC, useCallback, useState } from 'react';
 import _ from 'lodash';
-import $ from 'jquery';
 import Autocomplete, {
     AutocompleteChangeReason,
 } from '@material-ui/lab/Autocomplete';
@@ -31,7 +30,6 @@ const BulkSearchBar: FC<Props> = ({ value, onChange, onHighlight }) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [options, setOptions] = useState<Option[]>([]);
     const [internalValue, setInternalValue] = useState<Option | null>(value);
-    const [inputValue, setInputValue] = useState<string>('');
 
     const fetchResults = async (v: string) => {
         setLoading(true);
@@ -44,9 +42,6 @@ const BulkSearchBar: FC<Props> = ({ value, onChange, onHighlight }) => {
     const debouncedFetch = useCallback(_.debounce(fetchResults, 750), []);
 
     const handleSearchChange = async (_: ChangeEvent<{}>, val: string) => {
-        setInputValue(val);
-        setInternalValue(null);
-
         // Skip undefined and short internalValues
         if (!val || val.length < 3) {
             setOptions([]);
@@ -68,11 +63,6 @@ const BulkSearchBar: FC<Props> = ({ value, onChange, onHighlight }) => {
             return;
         }
 
-        // This line is a hacky way to get around the fact that if we just select(), then
-        // when the user manually clicks the first (or any) result in the resultlist, it does not select,
-        // presumably because there is some collision between selecting the resultList element and focusing the input
-        setTimeout(() => $('#searchBar').select(), 10);
-
         try {
             setLoading(true);
             setInternalValue(value);
@@ -85,18 +75,11 @@ const BulkSearchBar: FC<Props> = ({ value, onChange, onHighlight }) => {
 
     return (
         <>
-            <div>
-                <pre>{JSON.stringify({ inputValue }, null, 2)}</pre>
-            </div>
-            <div>
-                <pre>{JSON.stringify({ internalValue }, null, 2)}</pre>
-            </div>
             <Autocomplete
                 id="searchBar"
                 autoHighlight
                 selectOnFocus
                 value={internalValue}
-                inputValue={inputValue}
                 onInputChange={handleSearchChange}
                 onChange={handleResultSelect}
                 loading={loading}

@@ -40,7 +40,11 @@ const SubmittedCardsTable: FC<Props> = ({ cards }) => {
                             const { bulkCard, quantity, finish, condition } = c;
 
                             return (
-                                <TableRow key={c.bulkCard.scryfall_id}>
+                                <TableRow
+                                    key={`${
+                                        c.bulkCard.scryfall_id
+                                    }-${Math.random()}`}
+                                >
                                     <TableCell>
                                         {bulkCard.display_name}
                                     </TableCell>

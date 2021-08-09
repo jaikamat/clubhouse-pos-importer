@@ -122,6 +122,7 @@ const BulkInventory: FC = () => {
                         </Grid>
                         <Grid item xs={4}>
                             <ControlledDropdown
+                                disabled={!values.bulkCard}
                                 name="condition"
                                 label="Condition"
                                 options={cardConditions}
@@ -135,6 +136,7 @@ const BulkInventory: FC = () => {
                                 name="quantity"
                                 value={values.quantity}
                                 onChange={(v) => setFieldValue('quantity', v)}
+                                disabled={!values.bulkCard}
                             />
                         </Grid>
                         <Grid item>

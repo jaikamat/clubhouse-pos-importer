@@ -1,14 +1,21 @@
 import React, { FC } from 'react';
 import { TextField } from '@material-ui/core';
+import { TextFieldProps } from '@material-ui/core';
 
-interface Props {
+type Props = Omit<TextFieldProps, 'value' | 'onChange' | 'label' | 'name'> & {
     value: string;
     onChange: (v: string) => void;
     label: string;
     name: string;
-}
+};
 
-const IntegerInput: FC<Props> = ({ value, onChange, label, name }) => {
+const IntegerInput: FC<Props> = ({
+    value,
+    onChange,
+    label,
+    name,
+    ...props
+}) => {
     return (
         <TextField
             fullWidth
@@ -33,6 +40,7 @@ const IntegerInput: FC<Props> = ({ value, onChange, label, name }) => {
             onChange={(e) => {
                 onChange(e.target.value);
             }}
+            {...props}
         />
     );
 };

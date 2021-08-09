@@ -7,6 +7,8 @@ import { TextField, makeStyles, Typography } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import bulkInventoryQuery, { BulkCard } from './bulkInventoryQuery';
 import SetIcon from '../ui/SetIcon';
+import { useEffect } from 'react';
+import { useRef } from 'react';
 
 export type Option = BulkCard;
 
@@ -30,6 +32,18 @@ const BulkSearchBar: FC<Props> = ({ value, onChange, onHighlight }) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [options, setOptions] = useState<Option[]>([]);
     const [internalValue, setInternalValue] = useState<Option | null>(value);
+    const ref = useRef<HTMLInputElement>();
+
+    useEffect(() => {
+        // If `value` is `null` on prop change, set the internal value to `null` as well
+        if (!value) {
+            setInternalValue(null);
+        }
+        // Focus the input when it is cleared
+        if (ref && ref.current) {
+            ref.current.focus();
+        }
+    }, [value]);
 
     const fetchResults = async (v: string) => {
         setLoading(true);
@@ -115,12 +129,16 @@ const BulkSearchBar: FC<Props> = ({ value, onChange, onHighlight }) => {
                     popupIndicatorOpen: classes.popupIndicatorOpen,
                 }}
                 renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        label="Enter a card title"
-                        variant="outlined"
-                        size="small"
-                    />
+                    <div ref={params.InputProps.ref}>
+                        <TextField
+                            inputProps={{ ref }}
+                            {...params.inputProps}
+                            fullWidth
+                            label="Enter a card title"
+                            variant="outlined"
+                            size="small"
+                        />
+                    </div>
                 )}
             />
         </>

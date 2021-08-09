@@ -29,7 +29,9 @@ interface FormValues {
 const BulkInventory: FC = () => {
     const [currentCardImage, setCurrentCardImage] = useState<string>('');
 
-    const { values, setFieldValue, handleSubmit } = useFormik<FormValues>({
+    const { values, setFieldValue, handleSubmit, resetForm } = useFormik<
+        FormValues
+    >({
         initialValues: {
             bulkCard: null,
             finish: 'NONFOIL',
@@ -38,6 +40,7 @@ const BulkInventory: FC = () => {
         },
         onSubmit: async (v: FormValues) => {
             alert(JSON.stringify(v, null, 2));
+            resetForm();
         },
     });
 

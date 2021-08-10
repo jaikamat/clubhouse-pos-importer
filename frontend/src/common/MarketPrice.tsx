@@ -1,8 +1,7 @@
 import React, { useState, useEffect, FC } from 'react';
 import Chip from './Chip';
 import marketPriceQuery from './marketPriceQuery';
-
-type Finish = 'FOIL' | 'NONFOIL';
+import { Finish } from './types';
 
 interface Props {
     id: string;

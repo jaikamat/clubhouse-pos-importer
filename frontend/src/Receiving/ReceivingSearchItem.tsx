@@ -5,18 +5,17 @@ import CardImage from '../common/CardImage';
 import createToast from '../common/createToast';
 import { ReceivingContext } from '../context/ReceivingContext';
 import { finishes, cardConditions } from '../utils/dropdownOptions';
-import checkCardFinish, { Finish } from '../utils/checkCardFinish';
+import checkCardFinish from '../utils/checkCardFinish';
 import { ScryfallCard } from '../utils/ScryfallCard';
 import CardHeader from '../ui/CardHeader';
 import { FormikErrors, useFormik } from 'formik';
 import FormikSelectField from '../ui/FormikSelectField';
 import { Box, Paper } from '@material-ui/core';
+import { Finish, Condition } from '../common/types';
 
 interface Props {
     card: ScryfallCard;
 }
-
-type Condition = 'NM' | 'LP' | 'MP' | 'HP';
 
 interface FormValues {
     quantity: number;

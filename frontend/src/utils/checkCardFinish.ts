@@ -1,4 +1,4 @@
-export type Finish = 'FOIL' | 'NONFOIL';
+import { Finish } from '../common/types';
 
 interface CardFinishState {
     selectedFinish: Finish;

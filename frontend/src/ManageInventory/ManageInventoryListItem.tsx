@@ -11,6 +11,7 @@ import { ScryfallCard } from '../utils/ScryfallCard';
 import CardHeader from '../ui/CardHeader';
 import addCardToInventoryQuery from './addCardToInventoryQuery';
 import { Box, Paper } from '@material-ui/core';
+import { Finish } from '../common/types';
 
 interface Props {
     card: ScryfallCard;
@@ -21,8 +22,6 @@ interface FormValues {
     selectedCondition: string;
     quantity: string;
 }
-
-type Finish = 'FOIL' | 'NONFOIL';
 
 const validate = ({ quantity }: FormValues) => {
     let errors: FormikErrors<FormValues> = {};

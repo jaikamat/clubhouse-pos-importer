@@ -9,11 +9,11 @@ interface ToastArgs {
     message: string;
 }
 
-interface ToastContext {
+interface IToastContext {
     createToast: ({ severity, message }: ToastArgs) => void;
 }
 
-const ToastContext = createContext<ToastContext>({
+const ToastContext = createContext<IToastContext>({
     createToast: () => null,
 });
 

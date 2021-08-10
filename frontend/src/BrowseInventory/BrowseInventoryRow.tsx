@@ -5,9 +5,9 @@ import CardImageTooltip from '../ui/CardImageTooltip';
 import SetIcon from '../ui/SetIcon';
 import { ResponseCard } from './filteredCardsQuery';
 import StarIcon from '@material-ui/icons/Star';
-import { Condition } from '../common/types';
+import { Condition, Finish } from '../common/types';
 
-const conditionMap = {
+const conditionMap: Record<Condition, string> = {
     NM: 'Near Mint',
     LP: 'Light Play',
     MP: 'Moderate Play',
@@ -30,7 +30,7 @@ const BrowseInventoryRow: FC<Props> = ({
         image_uri,
     },
 }) => {
-    const finish = finishCondition.split('_')[0];
+    const finish = finishCondition.split('_')[0] as Finish;
     const condition = finishCondition.split('_')[1] as Condition;
 
     return (

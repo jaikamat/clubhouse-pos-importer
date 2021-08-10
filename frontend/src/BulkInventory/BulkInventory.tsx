@@ -19,6 +19,7 @@ import Button from '../ui/Button';
 import { useToastContext } from '../ui/ToastContext';
 import SubmittedCardsTable from './SubmittedCardsTable';
 import { SectionText } from '../ui/Typography';
+import addCardToInventoryQuery from '../ManageInventory/addCardToInventoryQuery';
 
 type Finish = 'FOIL' | 'NONFOIL';
 type Condition = 'NM' | 'LP' | 'MP' | 'HP';
@@ -53,20 +54,42 @@ const BulkInventory: FC = () => {
     const createToast = useToastContext();
 
     const onSubmit = async (values: FormValues) => {
-        alert(JSON.stringify(values, null, 2));
-        setSubmittedCards([values, ...submittedCards]);
-        if (values.bulkCard) {
+        try {
+            if (values.bulkCard) {
+                await addCardToInventoryQuery({
+                    quantity: Number(values.quantity),
+                    finishCondition: `${values.finish}_${values.condition}`,
+                    cardInfo: {
+                        id: values.bulkCard.scryfall_id,
+                        name: values.bulkCard.name,
+                        set_name: values.bulkCard.set_name,
+                        set: values.bulkCard.set_abbreviation,
+                    },
+                });
+
+                createToast({
+                    message: `Added ${values.quantity}x ${values.bulkCard.name} to inventory`,
+                    severity: 'success',
+                });
+            }
+            setSubmittedCards([values, ...submittedCards]);
+            resetForm();
+        } catch (err) {
+            console.log(err);
             createToast({
-                message: `Added ${values.quantity}x ${values.bulkCard.name} to inventory`,
-                severity: 'success',
+                message: `Error adding card`,
+                severity: 'error',
             });
         }
-        resetForm();
     };
 
-    const { values, setFieldValue, handleSubmit, resetForm } = useFormik<
-        FormValues
-    >({
+    const {
+        values,
+        setFieldValue,
+        handleSubmit,
+        resetForm,
+        isSubmitting,
+    } = useFormik<FormValues>({
         initialValues: {
             bulkCard: null,
             finish: 'NONFOIL',
@@ -187,7 +210,7 @@ const BulkInventory: FC = () => {
                                     type="submit"
                                     primary
                                     onClick={() => handleSubmit()}
-                                    disabled={!values.bulkCard}
+                                    disabled={!values.bulkCard || isSubmitting}
                                 >
                                     Add to inventory
                                 </Button>

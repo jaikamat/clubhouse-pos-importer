@@ -2,12 +2,12 @@ import React, { FC } from 'react';
 import { ScryfallCard } from '../utils/ScryfallCard';
 import QohLabels from '../common/QohLabels';
 import MarketPrice from '../common/MarketPrice';
-import { Finish } from '../utils/checkCardFinish';
 import SetIcon from './SetIcon';
 import Button from './Button';
 import { Box, Link, Typography, withStyles } from '@material-ui/core';
 import language from '../utils/Language';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+import { Finish } from '../common/types';
 
 interface Props {
     card: ScryfallCard;

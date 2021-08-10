@@ -20,9 +20,7 @@ import { useToastContext } from '../ui/ToastContext';
 import SubmittedCardsTable from './SubmittedCardsTable';
 import { SectionText } from '../ui/Typography';
 import addCardToInventoryQuery from '../ManageInventory/addCardToInventoryQuery';
-
-type Finish = 'FOIL' | 'NONFOIL';
-type Condition = 'NM' | 'LP' | 'MP' | 'HP';
+import { Finish, Condition } from '../common/types';
 
 const useStyles = makeStyles(({ palette }) => ({
     imageContainer: { maxWidth: 200, height: 'auto' },

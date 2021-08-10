@@ -10,6 +10,7 @@ import { FormikErrors, useFormik } from 'formik';
 import FormikSelectField from '../ui/FormikSelectField';
 import { Box, Paper } from '@material-ui/core';
 import roundPrice from '../utils/roundPrice';
+import { Finish } from '../common/types';
 
 interface ConditionOptions {
     text: string;
@@ -39,8 +40,6 @@ function createConditionOptions(
         };
     });
 }
-
-type Finish = 'FOIL' | 'NONFOIL';
 
 interface FormValues {
     quantityToSell: number;

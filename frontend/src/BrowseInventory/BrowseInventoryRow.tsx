@@ -5,6 +5,7 @@ import CardImageTooltip from '../ui/CardImageTooltip';
 import SetIcon from '../ui/SetIcon';
 import { ResponseCard } from './filteredCardsQuery';
 import StarIcon from '@material-ui/icons/Star';
+import { Condition } from '../common/types';
 
 const conditionMap = {
     NM: 'Near Mint',
@@ -12,8 +13,6 @@ const conditionMap = {
     MP: 'Moderate Play',
     HP: 'Heavy Play',
 };
-
-type Condition = keyof typeof conditionMap;
 
 interface Props {
     card: ResponseCard;

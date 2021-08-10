@@ -20,22 +20,35 @@ import getCardsFromReceiving from '../interactors/getCardsFromReceiving';
 import getUserById, { User } from '../interactors/getUserById';
 import Joi from 'joi';
 import {
+    validColorSpecificity,
+    validContact,
+    validDate,
+    validFinish,
+    validFinishConditions,
+    validFormatLegalities,
+    validFrame,
+    validInteger,
+    validName,
+    validPrice,
+    validPriceOperator,
+    validSort,
+    validSortDirection,
+    validString,
+    validStringRequired,
+    validTradeType,
+    validTypeline,
+} from '../common/validations';
+import {
     AddCardToInventoryReq,
     AddCardToInventoryReqBody,
     ColorSpecificity,
-    colorSpecificity,
     DecodedToken,
-    finish,
     Finish,
-    finishConditions,
     FinishSaleCard,
-    formatLegalities,
     FormatLegality,
     Frame,
-    frames,
     JoiValidation,
     PriceFilter,
-    priceFilters,
     ReceivingBody,
     ReceivingCard,
     RequestWithUserInfo,
@@ -43,13 +56,9 @@ import {
     ReqWithReceivingCards,
     ReqWithSuspendSale,
     SortBy,
-    sortBy,
-    sortByDirection,
     SortByDirection,
     SuspendSaleBody,
-    Trade,
     TypeLine,
-    typeLines,
 } from '../common/types';
 import moment from 'moment';
 import getReceivingById from '../interactors/getReceivingById';
@@ -109,15 +118,13 @@ router.use(async (req: RequestWithUserInfo, res, next) => {
  */
 router.post('/addCardToInventory', (req: AddCardToInventoryReq, res, next) => {
     const schema = Joi.object<AddCardToInventoryReqBody>({
-        quantity: Joi.number().integer().required(),
-        finishCondition: Joi.string()
-            .valid(...finishConditions)
-            .required(),
+        quantity: validInteger,
+        finishCondition: validFinishConditions,
         cardInfo: Joi.object({
-            id: Joi.string().required(),
-            name: Joi.string().required(),
-            set_name: Joi.string().required(),
-            set: Joi.string().required(),
+            id: validStringRequired,
+            name: validStringRequired,
+            set_name: validStringRequired,
+            set: validStringRequired,
         }).required(),
     });
 
@@ -161,14 +168,12 @@ router.post('/addCardToInventory', async (req: AddCardToInventoryReq, res) => {
  */
 router.post('/finishSale', (req: ReqWithFinishSaleCards, res, next) => {
     const schema = Joi.object<FinishSaleCard>({
-        id: Joi.string().required(),
-        price: Joi.number().min(0).required(),
-        qtyToSell: Joi.number().integer().required(),
-        name: Joi.string().required(),
-        set_name: Joi.string().required(),
-        finishCondition: Joi.string()
-            .valid(...finishConditions)
-            .required(),
+        id: validStringRequired,
+        price: validPrice,
+        qtyToSell: validInteger,
+        name: validStringRequired,
+        set_name: validStringRequired,
+        finishCondition: validFinishConditions,
     });
 
     const { cards } = req.body;
@@ -235,7 +240,7 @@ interface GetSaleByTitleQuery {
 
 router.get('/getSaleByTitle', async (req: RequestWithUserInfo, res) => {
     const schema = Joi.object<GetSaleByTitleQuery>({
-        cardName: Joi.string().required(),
+        cardName: validStringRequired,
     });
 
     const { error, value }: JoiValidation<GetSaleByTitleQuery> =
@@ -264,23 +269,21 @@ router.get('/getSaleByTitle', async (req: RequestWithUserInfo, res) => {
  */
 router.post('/receiveCards', (req: ReqWithReceivingCards, res, next) => {
     const receivingCardSchema = Joi.object<ReceivingCard>({
-        id: Joi.string().required(),
-        quantity: Joi.number().integer().required(),
-        name: Joi.string().required(),
-        set_name: Joi.string().required(),
-        finishCondition: Joi.string()
-            .valid(...finishConditions)
-            .required(),
-        set: Joi.string().required(),
-        creditPrice: Joi.number().min(0).required(),
-        cashPrice: Joi.number().min(0).required(),
-        marketPrice: Joi.number().min(0).required(),
-        tradeType: Joi.string().valid(Trade.Cash, Trade.Credit).required(),
+        id: validStringRequired,
+        quantity: validInteger,
+        name: validStringRequired,
+        set_name: validStringRequired,
+        finishCondition: validFinishConditions,
+        set: validStringRequired,
+        creditPrice: validPrice,
+        cashPrice: validPrice,
+        marketPrice: validPrice,
+        tradeType: validTradeType,
     });
 
     const schema = Joi.object<ReceivingBody>({
-        customerName: Joi.string().min(3).max(50).required(),
-        customerContact: Joi.string().max(50).allow(null),
+        customerName: validName,
+        customerContact: validContact,
         cards: Joi.array().items(receivingCardSchema),
     });
 
@@ -348,18 +351,16 @@ router.get('/suspendSale/:id', async (req: RequestWithUserInfo, res) => {
 
 router.post('/suspendSale', async (req: ReqWithSuspendSale, res) => {
     const schema = Joi.object<SuspendSaleBody>({
-        customerName: Joi.string().min(3).max(100).required(),
-        notes: Joi.string().min(0).max(255).allow(''),
+        customerName: validString.min(3).max(100).required(),
+        notes: validString.min(0).max(255).allow(''),
         saleList: Joi.array().items(
             Joi.object<FinishSaleCard>({
-                id: Joi.string().required(),
-                price: Joi.number().min(0).required(),
-                qtyToSell: Joi.number().integer().required(),
-                name: Joi.string().required(),
-                set_name: Joi.string().required(),
-                finishCondition: Joi.string()
-                    .valid(...finishConditions)
-                    .required(),
+                id: validStringRequired,
+                price: validPrice,
+                qtyToSell: validInteger,
+                name: validStringRequired,
+                set_name: validStringRequired,
+                finishCondition: validFinishConditions,
             })
         ),
     });
@@ -422,22 +423,18 @@ export interface GetCardsByFilterQuery {
 
 router.get('/getCardsByFilter', async (req: RequestWithUserInfo, res) => {
     const schema = Joi.object<GetCardsByFilterQuery>({
-        title: Joi.string(),
-        setName: Joi.string(),
-        format: Joi.string().valid(...formatLegalities),
+        title: validString,
+        setName: validString,
+        format: validFormatLegalities,
         price: Joi.number().positive().allow(0),
-        finish: Joi.string().valid(...finish),
-        colors: Joi.string(),
-        sortBy: Joi.string().valid(...sortBy),
-        colorSpecificity: Joi.string().valid(...colorSpecificity),
-        type: Joi.string().valid(...typeLines),
-        frame: Joi.string().valid(...frames),
-        priceOperator: Joi.string()
-            .valid(...priceFilters)
-            .required(),
-        sortByDirection: Joi.number()
-            .valid(...sortByDirection)
-            .required(),
+        finish: validFinish,
+        colors: validString,
+        sortBy: validSort,
+        colorSpecificity: validColorSpecificity,
+        type: validTypeline,
+        frame: validFrame,
+        priceOperator: validPriceOperator,
+        sortByDirection: validSortDirection,
         page: Joi.number().integer().min(1).required(),
     });
 
@@ -479,7 +476,7 @@ interface GetCardsWithInfoQuery {
 
 router.get('/getCardsWithInfo', async (req: RequestWithUserInfo, res) => {
     const schema = Joi.object({
-        title: Joi.string().required(),
+        title: validStringRequired,
         matchInStock: Joi.boolean().required(),
     });
 
@@ -515,9 +512,9 @@ interface ReceivedCardQuery {
 
 router.get('/getReceivedCards', async (req: RequestWithUserInfo, res) => {
     const schema = Joi.object<ReceivedCardQuery>({
-        startDate: Joi.date().iso().required(),
-        endDate: Joi.date().iso().required(),
-        cardName: Joi.string().allow(null),
+        startDate: validDate,
+        endDate: validDate,
+        cardName: validString.allow(null),
     });
 
     const { error, value }: JoiValidation<ReceivedCardQuery> = schema.validate(
@@ -567,8 +564,8 @@ interface SalesReportQuery {
 
 router.get('/getSalesReport', async (req: RequestWithUserInfo, res) => {
     const schema = Joi.object<SalesReportQuery>({
-        startDate: Joi.date().iso().required(),
-        endDate: Joi.date().iso().required(),
+        startDate: validDate,
+        endDate: validDate,
     });
 
     const { error, value }: JoiValidation<SalesReportQuery> = schema.validate(
@@ -602,7 +599,7 @@ interface BulkSearchQuery {
 
 router.get('/bulkSearch', async (req: RequestWithUserInfo, res) => {
     const schema = Joi.object<BulkSearchQuery>({
-        cardName: Joi.string().required(),
+        cardName: validStringRequired,
     });
 
     const { error, value }: JoiValidation<BulkSearchQuery> = schema.validate(

@@ -54,6 +54,7 @@ import {
 import moment from 'moment';
 import getReceivingById from '../interactors/getReceivingById';
 import getSalesReport from '../interactors/getSalesReport';
+import getCardPrintings from '../interactors/getCardPrintings';
 
 /**
  * Middleware to check for Bearer token by validating JWT
@@ -589,6 +590,33 @@ router.get('/getSalesReport', async (req: RequestWithUserInfo, res) => {
         });
 
         res.status(200).send(message);
+    } catch (err) {
+        console.error(new Error(err));
+        res.status(500).send(err.message);
+    }
+});
+
+interface BulkSearchQuery {
+    cardName: string;
+}
+
+router.get('/bulkSearch', async (req: RequestWithUserInfo, res) => {
+    const schema = Joi.object<BulkSearchQuery>({
+        cardName: Joi.string().required(),
+    });
+
+    const { error, value }: JoiValidation<BulkSearchQuery> = schema.validate(
+        req.query,
+        { abortEarly: false }
+    );
+
+    if (error) {
+        return res.status(400).json(error);
+    }
+
+    try {
+        const cards = await getCardPrintings(value.cardName);
+        res.status(200).json(cards);
     } catch (err) {
         console.error(new Error(err));
         res.status(500).send(err.message);

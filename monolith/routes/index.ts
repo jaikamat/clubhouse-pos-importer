@@ -26,7 +26,7 @@ router.post('/jwt', async (req: JwtRequest, res) => {
     });
 
     if (error) {
-        res.status(400).json(error);
+        return res.status(400).json(error);
     }
 
     try {

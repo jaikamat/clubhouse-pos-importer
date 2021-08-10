@@ -12,6 +12,8 @@ const useStyles = makeStyles(({ zIndex }) => ({
         boxShadow: '2px 2px 5px 0 rgba(0,0,0,.25)',
         zIndex: zIndex.appBar,
         transition: 'all .2s ease-in-out',
+        maxWidth: '100%',
+        maxHeight: '100%',
     },
     hoveredStyle: {
         transform: 'scale(1.75)',

@@ -42,14 +42,14 @@ const getClubhouseLocationName = (location: ClubhouseLocation | null) => {
 };
 
 const NavBar: FC<{}> = () => {
-    const { loggedIn, currentLocation, currentUser } = useAuthContext();
+    const { isLoggedIn, currentLocation, currentUser } = useAuthContext();
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
     const { title, list, menuButton, menuLinkText } = useStyles();
 
     return (
         <AppBar>
             <Toolbar>
-                {loggedIn && (
+                {isLoggedIn() && (
                     <IconButton
                         edge="start"
                         color="inherit"

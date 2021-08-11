@@ -7,7 +7,6 @@ import BrowseSales from './BrowseSales/BrowseSales';
 import PublicInventory from './PublicInventory/PublicInventory';
 import BrowseInventory from './BrowseInventory/BrowseInventory';
 import Login from './Login/Login';
-import Logout from './Logout/Logout';
 import Receiving from './Receiving/Receiving';
 import { SaleProvider } from './context/SaleContext';
 import ReceivingProvider from './context/ReceivingContext';
@@ -91,11 +90,6 @@ const App: FC = () => {
                                     component={Reporting}
                                 />
                                 <Route exact path="/login" component={Login} />
-                                <Route
-                                    exact
-                                    path="/logout"
-                                    component={Logout}
-                                />
                             </div>
                         </div>
                     </Switch>

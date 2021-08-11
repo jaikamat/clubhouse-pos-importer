@@ -10,9 +10,11 @@ import ViewListIcon from '@material-ui/icons/ViewList';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import QueueIcon from '@material-ui/icons/Queue';
+import { useAuthContext } from '../context/AuthProvider';
 
 const NavLinks: FC<{}> = () => {
     const { pathname } = useLocation();
+    const { handleLogout } = useAuthContext();
 
     return (
         <List>
@@ -114,13 +116,7 @@ const NavLinks: FC<{}> = () => {
                 Reporting (Beta)
             </ListItem>
             <Divider />
-            <ListItem
-                button
-                component={RouterLink}
-                to="/logout"
-                selected={pathname === '/logout'}
-                replace
-            >
+            <ListItem button onClick={() => handleLogout()}>
                 <ListItemIcon>
                     <ExitToAppIcon color="primary" />
                 </ListItemIcon>

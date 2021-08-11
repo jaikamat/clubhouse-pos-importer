@@ -62,7 +62,7 @@ const validate = ({ username, password, location }: FormValues) => {
 };
 
 const Login = () => {
-    const { loggedIn, handleLogin } = useAuthContext();
+    const { isLoggedIn, handleLogin } = useAuthContext();
 
     const onSubmit = async ({ username, password, location }: FormValues) => {
         if (!location) return;
@@ -97,7 +97,7 @@ const Login = () => {
         validateOnChange: false,
     });
 
-    if (loggedIn) return <Redirect to="/manage-inventory" />;
+    if (isLoggedIn()) return <Redirect to="/manage-inventory" />;
 
     return (
         <LoginContainer>

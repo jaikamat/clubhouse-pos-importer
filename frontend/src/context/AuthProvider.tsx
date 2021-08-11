@@ -11,21 +11,23 @@ const locationKey = 'currentLocation';
 const userKey = 'currentUser';
 
 interface Context {
-    loggedIn: boolean;
     handleLogin: (
         username: string,
         password: string,
         currentLocation: ClubhouseLocation
     ) => Promise<any>;
     handleLogout: () => void;
+    isLoggedIn: () => boolean;
+    authToken: string | null;
     currentLocation: ClubhouseLocation | null;
     currentUser: string | null;
 }
 
 export const AuthContext = React.createContext<Context>({
-    loggedIn: false,
+    authToken: null,
     currentLocation: null,
     currentUser: null,
+    isLoggedIn: () => false,
     handleLogout: () => null,
     handleLogin: () => new Promise(() => null),
 });
@@ -34,7 +36,7 @@ export const useAuthContext = () => useContext(AuthContext);
 
 const AuthProvider: FC<Props> = ({ children }) => {
     const history = useHistory();
-    const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem(tokenKey));
+    const [authToken, setAuthToken] = useState(localStorage.getItem(tokenKey));
 
     const [
         currentLocation,
@@ -75,7 +77,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
 
             if (data.token) {
                 localStorage.setItem(tokenKey, data.token);
-                setLoggedIn(!!localStorage.getItem(tokenKey));
+                setAuthToken(data.token);
 
                 localStorage.setItem(locationKey, currentLocation);
                 setCurrentLocation(currentLocation);
@@ -92,7 +94,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
 
     const handleLogout = () => {
         localStorage.removeItem(tokenKey);
-        setLoggedIn(!!localStorage.getItem(tokenKey));
+        setAuthToken(localStorage.getItem(tokenKey));
 
         localStorage.removeItem(locationKey);
         setCurrentLocation(null);
@@ -103,14 +105,17 @@ const AuthProvider: FC<Props> = ({ children }) => {
         history.push('/login');
     };
 
+    const isLoggedIn = () => !!authToken;
+
     return (
         <AuthContext.Provider
             value={{
-                loggedIn,
+                authToken,
                 currentLocation,
                 currentUser,
                 handleLogin,
                 handleLogout,
+                isLoggedIn,
             }}
         >
             {children}

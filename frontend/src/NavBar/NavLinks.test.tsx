@@ -42,7 +42,6 @@ test('Correct link navigation', async () => {
           "/browse-inventory",
           "/browse-sales",
           "/browse-receiving",
-          "/logout",
         ]
     `);
 });

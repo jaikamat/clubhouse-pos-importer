@@ -70,10 +70,10 @@ const Sale: FC<Props> = () => {
                 <Grid item xs={12} lg={8}>
                     <Grid container justify="space-between">
                         <HeaderText>Inventory</HeaderText>
-                        {searchResults.length > 0 && (
+                        {term && (
                             <TotalStoreInventory
                                 searchResults={searchResults}
-                                title={searchResults[0].name}
+                                title={term}
                             />
                         )}
                     </Grid>

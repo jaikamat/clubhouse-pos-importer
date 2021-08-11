@@ -28,8 +28,7 @@ const useLocalStorage = <T>(key: string, initialValue: T) => {
 
             setStoredValue(valueToStore);
 
-            // Remove entirely if falsy
-            if (!valueToStore) {
+            if (valueToStore === null) {
                 window.localStorage.removeItem(key);
             } else {
                 window.localStorage.setItem(key, JSON.stringify(valueToStore));

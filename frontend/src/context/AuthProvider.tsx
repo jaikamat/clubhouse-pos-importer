@@ -1,5 +1,6 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import useLocalStorage from '../common/useLocalStorage';
 import loginQuery from './loginQuery';
 
 interface Props {}
@@ -36,16 +37,21 @@ export const useAuthContext = () => useContext(AuthContext);
 
 const AuthProvider: FC<Props> = ({ children }) => {
     const history = useHistory();
-    const [authToken, setAuthToken] = useState(localStorage.getItem(tokenKey));
+    const [authToken, setAuthToken] = useLocalStorage(
+        tokenKey,
+        localStorage.getItem(tokenKey)
+    );
 
     const [
         currentLocation,
         setCurrentLocation,
-    ] = useState<ClubhouseLocation | null>(
+    ] = useLocalStorage<ClubhouseLocation | null>(
+        locationKey,
         localStorage.getItem(locationKey) as ClubhouseLocation
     );
 
-    const [currentUser, setCurrentUser] = useState<string | null>(
+    const [currentUser, setCurrentUser] = useLocalStorage<string | null>(
+        userKey,
         localStorage.getItem(userKey)
     );
 
@@ -76,13 +82,8 @@ const AuthProvider: FC<Props> = ({ children }) => {
             const data = await loginQuery(username, password, currentLocation);
 
             if (data.token) {
-                localStorage.setItem(tokenKey, data.token);
                 setAuthToken(data.token);
-
-                localStorage.setItem(locationKey, currentLocation);
                 setCurrentLocation(currentLocation);
-
-                localStorage.setItem(userKey, username);
                 setCurrentUser(username);
             }
 
@@ -93,13 +94,8 @@ const AuthProvider: FC<Props> = ({ children }) => {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem(tokenKey);
-        setAuthToken(localStorage.getItem(tokenKey));
-
-        localStorage.removeItem(locationKey);
+        setAuthToken(null);
         setCurrentLocation(null);
-
-        localStorage.removeItem(userKey);
         setCurrentUser(null);
 
         history.push('/login');

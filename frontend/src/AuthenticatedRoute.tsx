@@ -3,9 +3,9 @@ import { Redirect, Route, RouteProps } from 'react-router';
 import { useAuthContext } from './context/AuthProvider';
 
 const AdminOnly: FC = ({ children }) => {
-    const { currentUser, currentLocation } = useAuthContext();
+    const { currentUser, currentLocation, loggedIn } = useAuthContext();
 
-    if (!currentUser || !currentLocation) {
+    if (!currentUser || !currentLocation || !loggedIn) {
         return <Redirect to="/" />;
     }
 

@@ -1,4 +1,5 @@
 import React, { FC, useContext, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import loginQuery from './loginQuery';
 
 interface Props {}
@@ -28,6 +29,7 @@ export const AuthContext = React.createContext<Context>({
 export const useAuthContext = () => useContext(AuthContext);
 
 const AuthProvider: FC<Props> = ({ children }) => {
+    const history = useHistory();
     const [loggedIn, setLoggedIn] = useState(
         !!localStorage.getItem('clubhouse_JWT')
     );
@@ -77,6 +79,8 @@ const AuthProvider: FC<Props> = ({ children }) => {
 
         localStorage.removeItem('currentUser');
         setCurrentUser(null);
+
+        history.push('/login');
     };
 
     return (

@@ -2,7 +2,6 @@ import express from 'express';
 const router = express.Router();
 require('dotenv').config();
 import getCardsByFilter from '../interactors/getCardsByFilter';
-import addCardToInventory from '../interactors/addCardToInventory';
 import getDistinctSetNames from '../interactors/getDistinctSetNames';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
 import finishSale from '../interactors/updateInventoryCards';
@@ -37,10 +36,7 @@ import {
     validTypeline,
 } from '../common/validations';
 import {
-    AddCardToInventoryReq,
-    AddCardToInventoryReqBody,
     ColorSpecificity,
-    DecodedToken,
     Finish,
     FinishSaleCard,
     FormatLegality,
@@ -63,58 +59,12 @@ import getReceivingById from '../interactors/getReceivingById';
 import getSalesReport from '../interactors/getSalesReport';
 import getCardPrintings from '../interactors/getCardPrintings';
 import authController from '../controllers/authController';
+import addCardToInventoryValidationController from '../controllers/addCardToInventoryValidationController';
+import addCardToInventoryController from '../controllers/addCardToInventoryController';
 
 router.use(authController);
-
-/**
- * Request body schema sanitization middleware
- */
-router.post('/addCardToInventory', (req: AddCardToInventoryReq, res, next) => {
-    const schema = Joi.object<AddCardToInventoryReqBody>({
-        quantity: validInteger,
-        finishCondition: validFinishConditions,
-        cardInfo: Joi.object({
-            id: validStringRequired,
-            name: validStringRequired,
-            set_name: validStringRequired,
-            set: validStringRequired,
-        }).required(),
-    });
-
-    const { error }: JoiValidation<AddCardToInventoryReqBody> = schema.validate(
-        req.body,
-        {
-            abortEarly: false,
-            allowUnknown: true,
-        }
-    );
-
-    if (error) {
-        return res.status(400).json(error);
-    }
-    return next();
-});
-
-router.post('/addCardToInventory', async (req: AddCardToInventoryReq, res) => {
-    try {
-        const { quantity, finishCondition, cardInfo } = req.body;
-        const { currentLocation: location } = req;
-        const { id, name, set_name, set } = cardInfo;
-        const message = await addCardToInventory({
-            quantity,
-            finishCondition,
-            id,
-            name,
-            set_name,
-            set,
-            location,
-        });
-        res.status(200).send(message);
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
-    }
-});
+router.post('/addCardToInventory', addCardToInventoryValidationController);
+router.post('/addCardToInventory', addCardToInventoryController);
 
 /**
  * Sale middleware that sanitizes card array to ensure inputs are valid. Will throw errors and end sale if needed

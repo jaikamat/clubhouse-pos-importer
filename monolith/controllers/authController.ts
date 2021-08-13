@@ -1,8 +1,13 @@
 require('dotenv').config();
 import jwt from 'jsonwebtoken';
 import getUserById, { User } from '../interactors/getUserById';
-import { DecodedToken, RequestWithUserInfo } from '../common/types';
+import { ClubhouseLocation, RequestWithUserInfo } from '../common/types';
 import { NextFunction, Response } from 'express';
+
+interface DecodedToken {
+    userId: string;
+    currentLocation: ClubhouseLocation;
+}
 
 /**
  * Middleware to check for Bearer token by validating JWT

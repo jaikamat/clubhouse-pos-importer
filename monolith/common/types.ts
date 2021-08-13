@@ -81,11 +81,6 @@ export const frames = ['borderless', 'extendedArt', 'showcase'] as const;
 
 export type Frame = typeof frames[number];
 
-export interface DecodedToken {
-    userId: string;
-    currentLocation: ClubhouseLocation;
-}
-
 export interface QOH {
     FOIL_NM?: number;
     FOIL_LP?: number;

@@ -2,10 +2,8 @@ import express from 'express';
 const router = express.Router();
 require('dotenv').config();
 import Joi from 'joi';
-import { validDate, validStringRequired } from '../common/validations';
+import { validStringRequired } from '../common/validations';
 import { JoiValidation, RequestWithUserInfo } from '../common/types';
-import moment from 'moment';
-import getSalesReport from '../interactors/getSalesReport';
 import getCardPrintings from '../interactors/getCardPrintings';
 import authController from '../controllers/authController';
 import addCardToInventoryValidationController from '../controllers/addCardToInventoryValidationController';
@@ -25,6 +23,7 @@ import distinctSetNamesController from '../controllers/distinctSetNamesControlle
 import getCardsWithInfoController from '../controllers/getCardsWithInfoController';
 import getReceivedCardsController from '../controllers/getReceivedCardsController';
 import getReceivedCardsByIdController from '../controllers/getReceivedCardsByIdController';
+import salesReportController from '../controllers/salesReportController';
 
 router.use(authController);
 router.post('/addCardToInventory', addCardToInventoryValidationController);
@@ -44,42 +43,7 @@ router.get('/getDistinctSetNames', distinctSetNamesController);
 router.get('/getCardsWithInfo', getCardsWithInfoController);
 router.get('/getReceivedCards', getReceivedCardsController);
 router.get('/getReceivedCards/:id', getReceivedCardsByIdController);
-
-interface SalesReportQuery {
-    startDate: string | null;
-    endDate: string | null;
-}
-
-router.get('/getSalesReport', async (req: RequestWithUserInfo, res) => {
-    const schema = Joi.object<SalesReportQuery>({
-        startDate: validDate,
-        endDate: validDate,
-    });
-
-    const { error, value }: JoiValidation<SalesReportQuery> = schema.validate(
-        req.query,
-        { abortEarly: false }
-    );
-
-    if (error) {
-        return res.status(400).json(error);
-    }
-
-    const { startDate, endDate } = value;
-
-    try {
-        const message = await getSalesReport({
-            location: req.currentLocation,
-            startDate: moment(startDate).utc().startOf('day').toDate(),
-            endDate: moment(endDate).utc().startOf('day').toDate(),
-        });
-
-        res.status(200).send(message);
-    } catch (err) {
-        console.error(new Error(err));
-        res.status(500).send(err.message);
-    }
-});
+router.get('/getSalesReport', salesReportController);
 
 interface BulkSearchQuery {
     cardName: string;

@@ -1,13 +1,8 @@
 import express from 'express';
 const router = express.Router();
 require('dotenv').config();
-import getCardsFromReceiving from '../interactors/getCardsFromReceiving';
 import Joi from 'joi';
-import {
-    validDate,
-    validString,
-    validStringRequired,
-} from '../common/validations';
+import { validDate, validStringRequired } from '../common/validations';
 import { JoiValidation, RequestWithUserInfo } from '../common/types';
 import moment from 'moment';
 import getReceivingById from '../interactors/getReceivingById';
@@ -29,6 +24,7 @@ import deleteSuspendedSaleController from '../controllers/deleteSuspendedSaleCon
 import getCardsByFilterController from '../controllers/getCardsByFilterController';
 import distinctSetNamesController from '../controllers/distinctSetNamesController';
 import getCardsWithInfoController from '../controllers/getCardsWithInfoController';
+import getReceivedCardsController from '../controllers/getReceivedCardsController';
 
 router.use(authController);
 router.post('/addCardToInventory', addCardToInventoryValidationController);
@@ -46,47 +42,7 @@ router.delete('/suspendSale/:id', deleteSuspendedSaleController);
 router.get('/getCardsByFilter', getCardsByFilterController);
 router.get('/getDistinctSetNames', distinctSetNamesController);
 router.get('/getCardsWithInfo', getCardsWithInfoController);
-
-interface ReceivedCardQuery {
-    startDate: string | null;
-    endDate: string | null;
-    cardName: string | null;
-}
-
-router.get('/getReceivedCards', async (req: RequestWithUserInfo, res) => {
-    const schema = Joi.object<ReceivedCardQuery>({
-        startDate: validDate,
-        endDate: validDate,
-        cardName: validString.allow(null),
-    });
-
-    const { error, value }: JoiValidation<ReceivedCardQuery> = schema.validate(
-        req.query,
-        {
-            abortEarly: false,
-        }
-    );
-
-    if (error) {
-        return res.status(400).json(error);
-    }
-
-    const { startDate, endDate, cardName } = value;
-
-    try {
-        const message = await getCardsFromReceiving({
-            location: req.currentLocation,
-            startDate: moment(startDate).utc().startOf('day').toDate(),
-            endDate: moment(endDate).utc().endOf('day').toDate(),
-            cardName: cardName || null,
-        });
-
-        res.status(200).send(message);
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
-    }
-});
+router.get('/getReceivedCards', getReceivedCardsController);
 
 router.get('/getReceivedCards/:id', async (req: RequestWithUserInfo, res) => {
     const { id } = req.params;

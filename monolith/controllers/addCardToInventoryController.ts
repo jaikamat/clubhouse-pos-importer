@@ -1,7 +1,7 @@
-import { Response } from 'express';
 require('dotenv').config();
 import addCardToInventory from '../interactors/addCardToInventory';
 import {
+    Controller,
     FinishCondition,
     JoiValidation,
     RequestWithUserInfo,
@@ -28,9 +28,9 @@ interface AddCardToInventoryReq extends RequestWithUserInfo {
     body: AddCardToInventoryReqBody;
 }
 
-const addCardToInventoryController = async (
-    req: AddCardToInventoryReq,
-    res: Response
+const addCardToInventoryController: Controller<AddCardToInventoryReq> = async (
+    req,
+    res
 ) => {
     try {
         const schema = Joi.object<AddCardToInventoryReqBody>({

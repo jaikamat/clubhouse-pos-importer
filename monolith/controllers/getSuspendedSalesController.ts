@@ -1,11 +1,10 @@
 require('dotenv').config();
 import getSuspendedSales from '../interactors/getSuspendedSales';
-import { RequestWithUserInfo } from '../common/types';
-import { Response } from 'express';
+import { Controller, RequestWithUserInfo } from '../common/types';
 
-const getSuspendedSalesController = async (
-    req: RequestWithUserInfo,
-    res: Response
+const getSuspendedSalesController: Controller<RequestWithUserInfo> = async (
+    req,
+    res
 ) => {
     try {
         const message = await getSuspendedSales(req.currentLocation);

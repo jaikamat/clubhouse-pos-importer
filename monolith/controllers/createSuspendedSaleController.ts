@@ -9,16 +9,16 @@ import {
     validStringRequired,
 } from '../common/validations';
 import {
+    Controller,
     FinishSaleCard,
     JoiValidation,
     ReqWithSuspendSale,
     SuspendSaleBody,
 } from '../common/types';
-import { Response } from 'express';
 
-const createSuspendedSaleController = async (
-    req: ReqWithSuspendSale,
-    res: Response
+const createSuspendedSaleController: Controller<ReqWithSuspendSale> = async (
+    req,
+    res
 ) => {
     const schema = Joi.object<SuspendSaleBody>({
         customerName: validString.min(3).max(100).required(),

@@ -2,17 +2,20 @@ require('dotenv').config();
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
 import Joi from 'joi';
 import { validStringRequired } from '../common/validations';
-import { JoiValidation, RequestWithUserInfo } from '../common/types';
-import { Response } from 'express';
+import {
+    Controller,
+    JoiValidation,
+    RequestWithUserInfo,
+} from '../common/types';
 
 interface GetCardsWithInfoQuery {
     title: string;
     matchInStock: boolean;
 }
 
-const getCardsWithInfoController = async (
-    req: RequestWithUserInfo,
-    res: Response
+const getCardsWithInfoController: Controller<RequestWithUserInfo> = async (
+    req,
+    res
 ) => {
     const schema = Joi.object({
         title: validStringRequired,

@@ -1,10 +1,12 @@
 require('dotenv').config();
 import getAllSales from '../interactors/getAllSales';
 import getFormatLegalities from '../interactors/getFormatLegalities';
-import { RequestWithUserInfo } from '../common/types';
-import { Response } from 'express';
+import { Controller, RequestWithUserInfo } from '../common/types';
 
-const allSalesController = async (req: RequestWithUserInfo, res: Response) => {
+const allSalesController: Controller<RequestWithUserInfo> = async (
+    req,
+    res
+) => {
     try {
         const sales_data = await getAllSales(req.currentLocation);
         const format_legalities = await getFormatLegalities(

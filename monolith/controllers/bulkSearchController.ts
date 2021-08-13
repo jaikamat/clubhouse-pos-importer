@@ -1,17 +1,20 @@
 require('dotenv').config();
 import Joi from 'joi';
 import { validStringRequired } from '../common/validations';
-import { JoiValidation, RequestWithUserInfo } from '../common/types';
+import {
+    Controller,
+    JoiValidation,
+    RequestWithUserInfo,
+} from '../common/types';
 import getCardPrintings from '../interactors/getCardPrintings';
-import { Response } from 'express';
 
 interface BulkSearchQuery {
     cardName: string;
 }
 
-const bulkSearchController = async (
-    req: RequestWithUserInfo,
-    res: Response
+const bulkSearchController: Controller<RequestWithUserInfo> = async (
+    req,
+    res
 ) => {
     const schema = Joi.object<BulkSearchQuery>({
         cardName: validStringRequired,

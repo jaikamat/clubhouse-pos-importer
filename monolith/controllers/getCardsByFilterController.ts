@@ -14,6 +14,7 @@ import {
 } from '../common/validations';
 import {
     ColorSpecificity,
+    Controller,
     Finish,
     FormatLegality,
     Frame,
@@ -24,7 +25,6 @@ import {
     SortByDirection,
     TypeLine,
 } from '../common/types';
-import { Response } from 'express';
 
 export interface GetCardsByFilterQuery {
     title?: string;
@@ -42,9 +42,9 @@ export interface GetCardsByFilterQuery {
     page: number;
 }
 
-const getCardsByFilterController = async (
-    req: RequestWithUserInfo,
-    res: Response
+const getCardsByFilterController: Controller<RequestWithUserInfo> = async (
+    req,
+    res
 ) => {
     const schema = Joi.object<GetCardsByFilterQuery>({
         title: validString,

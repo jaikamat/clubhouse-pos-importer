@@ -1,11 +1,10 @@
 require('dotenv').config();
 import deleteSuspendedSale from '../interactors/deleteSuspendedSale';
-import { RequestWithUserInfo } from '../common/types';
-import { Response } from 'express';
+import { Controller, RequestWithUserInfo } from '../common/types';
 
-const deleteSuspendedSaleController = async (
-    req: RequestWithUserInfo,
-    res: Response
+const deleteSuspendedSaleController: Controller<RequestWithUserInfo> = async (
+    req,
+    res
 ) => {
     const { id } = req.params;
 

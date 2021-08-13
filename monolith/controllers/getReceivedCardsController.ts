@@ -2,9 +2,12 @@ require('dotenv').config();
 import getCardsFromReceiving from '../interactors/getCardsFromReceiving';
 import Joi from 'joi';
 import { validDate, validString } from '../common/validations';
-import { JoiValidation, RequestWithUserInfo } from '../common/types';
+import {
+    Controller,
+    JoiValidation,
+    RequestWithUserInfo,
+} from '../common/types';
 import moment from 'moment';
-import { Response } from 'express';
 
 interface ReceivedCardQuery {
     startDate: string | null;
@@ -12,9 +15,9 @@ interface ReceivedCardQuery {
     cardName: string | null;
 }
 
-const getReceivedCardsController = async (
-    req: RequestWithUserInfo,
-    res: Response
+const getReceivedCardsController: Controller<RequestWithUserInfo> = async (
+    req,
+    res
 ) => {
     const schema = Joi.object<ReceivedCardQuery>({
         startDate: validDate,

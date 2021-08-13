@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { ValidationError } from 'joi';
 
 export type ClubhouseLocation = 'ch1' | 'ch2';
@@ -173,3 +173,12 @@ export enum Collection {
     scryfallBulkCards = 'scryfall_bulk_cards',
     users = 'users',
 }
+
+/**
+ * Helper type used to define controller signatures
+ */
+export type Controller<T extends Request> = (
+    req: T,
+    res: Response,
+    next?: NextFunction
+) => void;

@@ -1,11 +1,10 @@
 require('dotenv').config();
-import { Response } from 'express';
-import { RequestWithUserInfo } from '../common/types';
+import { Controller, RequestWithUserInfo } from '../common/types';
 import getReceivingById from '../interactors/getReceivingById';
 
-const getReceivedCardsByIdController = async (
-    req: RequestWithUserInfo,
-    res: Response
+const getReceivedCardsByIdController: Controller<RequestWithUserInfo> = async (
+    req,
+    res
 ) => {
     const { id } = req.params;
 

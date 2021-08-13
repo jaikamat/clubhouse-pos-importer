@@ -1,4 +1,3 @@
-import { NextFunction, Response } from 'express';
 require('dotenv').config();
 import Joi from 'joi';
 import {
@@ -8,6 +7,7 @@ import {
     validStringRequired,
 } from '../common/validations';
 import {
+    Controller,
     FinishSaleCard,
     JoiValidation,
     ReqWithFinishSaleCards,
@@ -16,10 +16,10 @@ import {
 /**
  * Sale middleware that sanitizes card array to ensure inputs are valid. Will throw errors and end sale if needed
  */
-const finishSaleValidationController = (
-    req: ReqWithFinishSaleCards,
-    res: Response,
-    next: NextFunction
+const finishSaleValidationController: Controller<ReqWithFinishSaleCards> = (
+    req,
+    res,
+    next
 ) => {
     const schema = Joi.object<FinishSaleCard>({
         id: validStringRequired,

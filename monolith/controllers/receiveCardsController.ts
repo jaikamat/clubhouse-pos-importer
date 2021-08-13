@@ -1,12 +1,11 @@
 require('dotenv').config();
 import addCardToInventoryReceiving from '../interactors/addCardToInventoryReceiving';
 import addCardsToReceivingRecords from '../interactors/addCardsToReceivingRecords';
-import { ReqWithReceivingCards } from '../common/types';
-import { Response } from 'express';
+import { Controller, ReqWithReceivingCards } from '../common/types';
 
-const receiveCardsController = async (
-    req: ReqWithReceivingCards,
-    res: Response
+const receiveCardsController: Controller<ReqWithReceivingCards> = async (
+    req,
+    res
 ) => {
     try {
         const { cards, customerName, customerContact } = req.body;

@@ -1,19 +1,22 @@
 require('dotenv').config();
 import Joi from 'joi';
 import { validDate } from '../common/validations';
-import { JoiValidation, RequestWithUserInfo } from '../common/types';
+import {
+    Controller,
+    JoiValidation,
+    RequestWithUserInfo,
+} from '../common/types';
 import moment from 'moment';
 import getSalesReport from '../interactors/getSalesReport';
-import { Response } from 'express';
 
 interface SalesReportQuery {
     startDate: string | null;
     endDate: string | null;
 }
 
-const salesReportController = async (
-    req: RequestWithUserInfo,
-    res: Response
+const salesReportController: Controller<RequestWithUserInfo> = async (
+    req,
+    res
 ) => {
     const schema = Joi.object<SalesReportQuery>({
         startDate: validDate,

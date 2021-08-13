@@ -10,20 +10,20 @@ import {
     validTradeType,
 } from '../common/validations';
 import {
+    Controller,
     JoiValidation,
     ReceivingBody,
     ReceivingCard,
     ReqWithReceivingCards,
 } from '../common/types';
-import { NextFunction, Response } from 'express';
 
 /**
  * Sanitizes card object properties so nothing funky is committed to the database
  */
-const receiveCardsValidationController = (
-    req: ReqWithReceivingCards,
-    res: Response,
-    next: NextFunction
+const receiveCardsValidationController: Controller<ReqWithReceivingCards> = (
+    req,
+    res,
+    next
 ) => {
     const receivingCardSchema = Joi.object<ReceivingCard>({
         id: validStringRequired,

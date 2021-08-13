@@ -1,11 +1,10 @@
-import { Response } from 'express';
 require('dotenv').config();
 import finishSale from '../interactors/updateInventoryCards';
-import { ReqWithFinishSaleCards } from '../common/types';
+import { Controller, ReqWithFinishSaleCards } from '../common/types';
 
-const finishSaleController = async (
-    req: ReqWithFinishSaleCards,
-    res: Response
+const finishSaleController: Controller<ReqWithFinishSaleCards> = async (
+    req,
+    res
 ) => {
     try {
         const { cards } = req.body;

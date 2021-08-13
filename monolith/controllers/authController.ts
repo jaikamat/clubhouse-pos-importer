@@ -1,8 +1,11 @@
 require('dotenv').config();
 import jwt from 'jsonwebtoken';
 import getUserById, { User } from '../interactors/getUserById';
-import { ClubhouseLocation, RequestWithUserInfo } from '../common/types';
-import { NextFunction, Response } from 'express';
+import {
+    ClubhouseLocation,
+    Controller,
+    RequestWithUserInfo,
+} from '../common/types';
 
 interface DecodedToken {
     userId: string;
@@ -14,10 +17,10 @@ interface DecodedToken {
  *
  * It attaches current user information to the req for downstream use
  */
-const authController = async (
-    req: RequestWithUserInfo,
-    res: Response,
-    next: NextFunction
+const authController: Controller<RequestWithUserInfo> = async (
+    req,
+    res,
+    next
 ) => {
     let token = req.headers['authorization']; // Express headers converted to lowercase
 

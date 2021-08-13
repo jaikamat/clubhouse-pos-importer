@@ -1,10 +1,6 @@
 import express from 'express';
 const router = express.Router();
 require('dotenv').config();
-import Joi from 'joi';
-import { validStringRequired } from '../common/validations';
-import { JoiValidation, RequestWithUserInfo } from '../common/types';
-import getCardPrintings from '../interactors/getCardPrintings';
 import authController from '../controllers/authController';
 import addCardToInventoryValidationController from '../controllers/addCardToInventoryValidationController';
 import addCardToInventoryController from '../controllers/addCardToInventoryController';
@@ -24,6 +20,7 @@ import getCardsWithInfoController from '../controllers/getCardsWithInfoControlle
 import getReceivedCardsController from '../controllers/getReceivedCardsController';
 import getReceivedCardsByIdController from '../controllers/getReceivedCardsByIdController';
 import salesReportController from '../controllers/salesReportController';
+import bulkSearchController from '../controllers/bulkSearchController';
 
 router.use(authController);
 router.post('/addCardToInventory', addCardToInventoryValidationController);
@@ -44,32 +41,6 @@ router.get('/getCardsWithInfo', getCardsWithInfoController);
 router.get('/getReceivedCards', getReceivedCardsController);
 router.get('/getReceivedCards/:id', getReceivedCardsByIdController);
 router.get('/getSalesReport', salesReportController);
-
-interface BulkSearchQuery {
-    cardName: string;
-}
-
-router.get('/bulkSearch', async (req: RequestWithUserInfo, res) => {
-    const schema = Joi.object<BulkSearchQuery>({
-        cardName: validStringRequired,
-    });
-
-    const { error, value }: JoiValidation<BulkSearchQuery> = schema.validate(
-        req.query,
-        { abortEarly: false }
-    );
-
-    if (error) {
-        return res.status(400).json(error);
-    }
-
-    try {
-        const cards = await getCardPrintings(value.cardName);
-        res.status(200).json(cards);
-    } catch (err) {
-        console.error(new Error(err));
-        res.status(500).send(err.message);
-    }
-});
+router.get('/bulkSearch', bulkSearchController);
 
 export default router;

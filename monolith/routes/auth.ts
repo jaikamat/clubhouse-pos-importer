@@ -14,21 +14,18 @@ import getCardsFromReceiving from '../interactors/getCardsFromReceiving';
 import Joi from 'joi';
 import {
     validColorSpecificity,
-    validContact,
     validDate,
     validFinish,
     validFinishConditions,
     validFormatLegalities,
     validFrame,
     validInteger,
-    validName,
     validPrice,
     validPriceOperator,
     validSort,
     validSortDirection,
     validString,
     validStringRequired,
-    validTradeType,
     validTypeline,
 } from '../common/validations';
 import {
@@ -39,8 +36,6 @@ import {
     Frame,
     JoiValidation,
     PriceFilter,
-    ReceivingBody,
-    ReceivingCard,
     RequestWithUserInfo,
     ReqWithReceivingCards,
     ReqWithSuspendSale,
@@ -60,6 +55,7 @@ import finishSaleValidationController from '../controllers/finishSaleValidationC
 import finishSaleController from '../controllers/finishSaleController';
 import allSalesController from '../controllers/allSalesController';
 import getSalesByTitleController from '../controllers/getSalesByTitleController';
+import receiveCardsValidationController from '../controllers/receiveCardsValidationController';
 
 router.use(authController);
 router.post('/addCardToInventory', addCardToInventoryValidationController);
@@ -68,45 +64,7 @@ router.post('/finishSale', finishSaleValidationController);
 router.post('/finishSale', finishSaleController);
 router.get('/allSales', allSalesController);
 router.get('/getSaleByTitle', getSalesByTitleController);
-
-/**
- * Sanitizes card object properties so nothing funky is committed to the database
- */
-router.post('/receiveCards', (req: ReqWithReceivingCards, res, next) => {
-    const receivingCardSchema = Joi.object<ReceivingCard>({
-        id: validStringRequired,
-        quantity: validInteger,
-        name: validStringRequired,
-        set_name: validStringRequired,
-        finishCondition: validFinishConditions,
-        set: validStringRequired,
-        creditPrice: validPrice,
-        cashPrice: validPrice,
-        marketPrice: validPrice,
-        tradeType: validTradeType,
-    });
-
-    const schema = Joi.object<ReceivingBody>({
-        customerName: validName,
-        customerContact: validContact,
-        cards: Joi.array().items(receivingCardSchema),
-    });
-
-    try {
-        const { error }: JoiValidation<ReceivingCard> = schema.validate(
-            req.body,
-            { abortEarly: false }
-        );
-
-        if (error) {
-            return res.status(400).json(error);
-        }
-
-        return next();
-    } catch (err) {
-        res.status(400).send(err.message);
-    }
-});
+router.post('/receiveCards', receiveCardsValidationController);
 
 router.post('/receiveCards', async (req: ReqWithReceivingCards, res) => {
     try {

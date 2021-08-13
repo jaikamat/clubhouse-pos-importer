@@ -1,7 +1,6 @@
 import express from 'express';
 const router = express.Router();
 require('dotenv').config();
-import getCardsWithInfo from '../interactors/getCardsWithInfo';
 import getCardsFromReceiving from '../interactors/getCardsFromReceiving';
 import Joi from 'joi';
 import {
@@ -29,6 +28,7 @@ import createSuspendedSaleController from '../controllers/createSuspendedSaleCon
 import deleteSuspendedSaleController from '../controllers/deleteSuspendedSaleController';
 import getCardsByFilterController from '../controllers/getCardsByFilterController';
 import distinctSetNamesController from '../controllers/distinctSetNamesController';
+import getCardsWithInfoController from '../controllers/getCardsWithInfoController';
 
 router.use(authController);
 router.post('/addCardToInventory', addCardToInventoryValidationController);
@@ -45,41 +45,7 @@ router.post('/suspendSale', createSuspendedSaleController);
 router.delete('/suspendSale/:id', deleteSuspendedSaleController);
 router.get('/getCardsByFilter', getCardsByFilterController);
 router.get('/getDistinctSetNames', distinctSetNamesController);
-
-interface GetCardsWithInfoQuery {
-    title: string;
-    matchInStock: boolean;
-}
-
-router.get('/getCardsWithInfo', async (req: RequestWithUserInfo, res) => {
-    const schema = Joi.object({
-        title: validStringRequired,
-        matchInStock: Joi.boolean().required(),
-    });
-
-    const { error, value }: JoiValidation<GetCardsWithInfoQuery> =
-        schema.validate(req.query, {
-            abortEarly: false,
-        });
-
-    if (error) {
-        return res.status(400).json(error);
-    }
-
-    try {
-        const { title, matchInStock } = value;
-
-        const message = await getCardsWithInfo(
-            title,
-            matchInStock,
-            req.currentLocation
-        );
-        res.status(200).send(message);
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
-    }
-});
+router.get('/getCardsWithInfo', getCardsWithInfoController);
 
 interface ReceivedCardQuery {
     startDate: string | null;

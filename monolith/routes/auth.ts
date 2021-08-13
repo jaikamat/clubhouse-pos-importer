@@ -1,7 +1,6 @@
 import express from 'express';
 const router = express.Router();
 require('dotenv').config();
-import getDistinctSetNames from '../interactors/getDistinctSetNames';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
 import getCardsFromReceiving from '../interactors/getCardsFromReceiving';
 import Joi from 'joi';
@@ -29,6 +28,7 @@ import suspendedSaleByIdController from '../controllers/suspendedSaleByIdControl
 import createSuspendedSaleController from '../controllers/createSuspendedSaleController';
 import deleteSuspendedSaleController from '../controllers/deleteSuspendedSaleController';
 import getCardsByFilterController from '../controllers/getCardsByFilterController';
+import distinctSetNamesController from '../controllers/distinctSetNamesController';
 
 router.use(authController);
 router.post('/addCardToInventory', addCardToInventoryValidationController);
@@ -44,16 +44,7 @@ router.get('/suspendSale/:id', suspendedSaleByIdController);
 router.post('/suspendSale', createSuspendedSaleController);
 router.delete('/suspendSale/:id', deleteSuspendedSaleController);
 router.get('/getCardsByFilter', getCardsByFilterController);
-
-router.get('/getDistinctSetNames', async (req: RequestWithUserInfo, res) => {
-    try {
-        const names = await getDistinctSetNames(req.currentLocation);
-        res.status(200).send(names);
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
-    }
-});
+router.get('/getDistinctSetNames', distinctSetNamesController);
 
 interface GetCardsWithInfoQuery {
     title: string;

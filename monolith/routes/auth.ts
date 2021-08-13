@@ -5,7 +5,6 @@ import Joi from 'joi';
 import { validDate, validStringRequired } from '../common/validations';
 import { JoiValidation, RequestWithUserInfo } from '../common/types';
 import moment from 'moment';
-import getReceivingById from '../interactors/getReceivingById';
 import getSalesReport from '../interactors/getSalesReport';
 import getCardPrintings from '../interactors/getCardPrintings';
 import authController from '../controllers/authController';
@@ -25,6 +24,7 @@ import getCardsByFilterController from '../controllers/getCardsByFilterControlle
 import distinctSetNamesController from '../controllers/distinctSetNamesController';
 import getCardsWithInfoController from '../controllers/getCardsWithInfoController';
 import getReceivedCardsController from '../controllers/getReceivedCardsController';
+import getReceivedCardsByIdController from '../controllers/getReceivedCardsByIdController';
 
 router.use(authController);
 router.post('/addCardToInventory', addCardToInventoryValidationController);
@@ -43,18 +43,7 @@ router.get('/getCardsByFilter', getCardsByFilterController);
 router.get('/getDistinctSetNames', distinctSetNamesController);
 router.get('/getCardsWithInfo', getCardsWithInfoController);
 router.get('/getReceivedCards', getReceivedCardsController);
-
-router.get('/getReceivedCards/:id', async (req: RequestWithUserInfo, res) => {
-    const { id } = req.params;
-
-    try {
-        const message = await getReceivingById(id, req.currentLocation);
-        res.status(200).send(message);
-    } catch (err) {
-        console.error(new Error(err));
-        res.status(500).send(err.message);
-    }
-});
+router.get('/getReceivedCards/:id', getReceivedCardsByIdController);
 
 interface SalesReportQuery {
     startDate: string | null;

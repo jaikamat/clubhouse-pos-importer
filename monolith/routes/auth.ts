@@ -2,7 +2,6 @@ import express from 'express';
 const router = express.Router();
 require('dotenv').config();
 import authController from '../controllers/authController';
-import addCardToInventoryValidationController from '../controllers/addCardToInventoryValidationController';
 import addCardToInventoryController from '../controllers/addCardToInventoryController';
 import finishSaleValidationController from '../controllers/finishSaleValidationController';
 import finishSaleController from '../controllers/finishSaleController';
@@ -23,7 +22,6 @@ import salesReportController from '../controllers/salesReportController';
 import bulkSearchController from '../controllers/bulkSearchController';
 
 router.use(authController);
-router.post('/addCardToInventory', addCardToInventoryValidationController);
 router.post('/addCardToInventory', addCardToInventoryController);
 router.post('/finishSale', finishSaleValidationController);
 router.post('/finishSale', finishSaleController);

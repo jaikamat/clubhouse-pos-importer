@@ -105,21 +105,6 @@ export interface RequestWithUserInfo extends Request {
     userId: string;
 }
 
-export interface AddCardToInventoryReqBody {
-    quantity: number;
-    finishCondition: FinishCondition;
-    cardInfo: {
-        id: string;
-        name: string;
-        set_name: string;
-        set: string;
-    };
-}
-
-export interface AddCardToInventoryReq extends RequestWithUserInfo {
-    body: AddCardToInventoryReqBody;
-}
-
 export interface FinishSaleCard {
     id: string;
     price: number;

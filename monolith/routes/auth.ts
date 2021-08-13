@@ -4,7 +4,6 @@ require('dotenv').config();
 import getCardsByFilter from '../interactors/getCardsByFilter';
 import getDistinctSetNames from '../interactors/getDistinctSetNames';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
-import getSalesFromCardname from '../interactors/getSalesFromCardname';
 import addCardToInventoryReceiving from '../interactors/addCardToInventoryReceiving';
 import getSuspendedSales from '../interactors/getSuspendedSales';
 import getSuspendedSale from '../interactors/getSuspendedSale';
@@ -60,6 +59,7 @@ import addCardToInventoryController from '../controllers/addCardToInventoryContr
 import finishSaleValidationController from '../controllers/finishSaleValidationController';
 import finishSaleController from '../controllers/finishSaleController';
 import allSalesController from '../controllers/allSalesController';
+import getSalesByTitleController from '../controllers/getSalesByTitleController';
 
 router.use(authController);
 router.post('/addCardToInventory', addCardToInventoryValidationController);
@@ -67,36 +67,7 @@ router.post('/addCardToInventory', addCardToInventoryController);
 router.post('/finishSale', finishSaleValidationController);
 router.post('/finishSale', finishSaleController);
 router.get('/allSales', allSalesController);
-
-interface GetSaleByTitleQuery {
-    cardName: string;
-}
-
-router.get('/getSaleByTitle', async (req: RequestWithUserInfo, res) => {
-    const schema = Joi.object<GetSaleByTitleQuery>({
-        cardName: validStringRequired,
-    });
-
-    const { error, value }: JoiValidation<GetSaleByTitleQuery> =
-        schema.validate(req.query, {
-            abortEarly: false,
-        });
-
-    if (error) {
-        return res.status(400).json(error);
-    }
-
-    try {
-        const message = await getSalesFromCardname(
-            value.cardName,
-            req.currentLocation
-        );
-        res.status(200).send(message);
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
-    }
-});
+router.get('/getSaleByTitle', getSalesByTitleController);
 
 /**
  * Sanitizes card object properties so nothing funky is committed to the database

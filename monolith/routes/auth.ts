@@ -4,7 +4,6 @@ require('dotenv').config();
 import getCardsByFilter from '../interactors/getCardsByFilter';
 import getDistinctSetNames from '../interactors/getDistinctSetNames';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
-import finishSale from '../interactors/updateInventoryCards';
 import getSalesFromCardname from '../interactors/getSalesFromCardname';
 import getAllSales from '../interactors/getAllSales';
 import getFormatLegalities from '../interactors/getFormatLegalities';
@@ -46,7 +45,6 @@ import {
     ReceivingBody,
     ReceivingCard,
     RequestWithUserInfo,
-    ReqWithFinishSaleCards,
     ReqWithReceivingCards,
     ReqWithSuspendSale,
     SortBy,
@@ -61,68 +59,14 @@ import getCardPrintings from '../interactors/getCardPrintings';
 import authController from '../controllers/authController';
 import addCardToInventoryValidationController from '../controllers/addCardToInventoryValidationController';
 import addCardToInventoryController from '../controllers/addCardToInventoryController';
+import finishSaleValidationController from '../controllers/finishSaleValidationController';
+import finishSaleController from '../controllers/finishSaleController';
 
 router.use(authController);
 router.post('/addCardToInventory', addCardToInventoryValidationController);
 router.post('/addCardToInventory', addCardToInventoryController);
-
-/**
- * Sale middleware that sanitizes card array to ensure inputs are valid. Will throw errors and end sale if needed
- */
-router.post('/finishSale', (req: ReqWithFinishSaleCards, res, next) => {
-    const schema = Joi.object<FinishSaleCard>({
-        id: validStringRequired,
-        price: validPrice,
-        qtyToSell: validInteger,
-        name: validStringRequired,
-        set_name: validStringRequired,
-        finishCondition: validFinishConditions,
-    });
-
-    const { cards } = req.body;
-
-    try {
-        for (let card of cards) {
-            const { error }: JoiValidation<FinishSaleCard> = schema.validate(
-                card,
-                {
-                    abortEarly: false,
-                    allowUnknown: true,
-                }
-            );
-
-            if (error) {
-                return res.status(400).json(error);
-            }
-        }
-
-        return next();
-    } catch (err) {
-        console.log(err);
-        res.status(400).send(err.message);
-    }
-});
-
-/**
- * Create root POST route
- */
-router.post('/finishSale', async (req: ReqWithFinishSaleCards, res) => {
-    try {
-        const { cards } = req.body;
-        const { currentLocation, lightspeedEmployeeNumber } = req;
-
-        const data = await finishSale(
-            cards,
-            currentLocation,
-            lightspeedEmployeeNumber
-        );
-
-        res.status(200).send(data);
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err.message);
-    }
-});
+router.post('/finishSale', finishSaleValidationController);
+router.post('/finishSale', finishSaleController);
 
 router.get('/allSales', async (req: RequestWithUserInfo, res) => {
     try {

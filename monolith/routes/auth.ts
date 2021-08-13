@@ -1,36 +1,16 @@
 import express from 'express';
 const router = express.Router();
 require('dotenv').config();
-import getCardsByFilter from '../interactors/getCardsByFilter';
 import getDistinctSetNames from '../interactors/getDistinctSetNames';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
 import getCardsFromReceiving from '../interactors/getCardsFromReceiving';
 import Joi from 'joi';
 import {
-    validColorSpecificity,
     validDate,
-    validFinish,
-    validFormatLegalities,
-    validFrame,
-    validPriceOperator,
-    validSort,
-    validSortDirection,
     validString,
     validStringRequired,
-    validTypeline,
 } from '../common/validations';
-import {
-    ColorSpecificity,
-    Finish,
-    FormatLegality,
-    Frame,
-    JoiValidation,
-    PriceFilter,
-    RequestWithUserInfo,
-    SortBy,
-    SortByDirection,
-    TypeLine,
-} from '../common/types';
+import { JoiValidation, RequestWithUserInfo } from '../common/types';
 import moment from 'moment';
 import getReceivingById from '../interactors/getReceivingById';
 import getSalesReport from '../interactors/getSalesReport';
@@ -48,6 +28,7 @@ import getSuspendedSalesController from '../controllers/getSuspendedSalesControl
 import suspendedSaleByIdController from '../controllers/suspendedSaleByIdController';
 import createSuspendedSaleController from '../controllers/createSuspendedSaleController';
 import deleteSuspendedSaleController from '../controllers/deleteSuspendedSaleController';
+import getCardsByFilterController from '../controllers/getCardsByFilterController';
 
 router.use(authController);
 router.post('/addCardToInventory', addCardToInventoryValidationController);
@@ -62,60 +43,7 @@ router.get('/suspendSale', getSuspendedSalesController);
 router.get('/suspendSale/:id', suspendedSaleByIdController);
 router.post('/suspendSale', createSuspendedSaleController);
 router.delete('/suspendSale/:id', deleteSuspendedSaleController);
-
-export interface GetCardsByFilterQuery {
-    title?: string;
-    setName?: string;
-    format?: FormatLegality;
-    price?: number;
-    finish?: Finish;
-    colors?: string;
-    sortBy?: SortBy;
-    colorSpecificity?: ColorSpecificity;
-    type?: TypeLine;
-    frame?: Frame;
-    priceOperator: PriceFilter;
-    sortByDirection: SortByDirection;
-    page: number;
-}
-
-router.get('/getCardsByFilter', async (req: RequestWithUserInfo, res) => {
-    const schema = Joi.object<GetCardsByFilterQuery>({
-        title: validString,
-        setName: validString,
-        format: validFormatLegalities,
-        price: Joi.number().positive().allow(0),
-        finish: validFinish,
-        colors: validString,
-        sortBy: validSort,
-        colorSpecificity: validColorSpecificity,
-        type: validTypeline,
-        frame: validFrame,
-        priceOperator: validPriceOperator,
-        sortByDirection: validSortDirection,
-        page: Joi.number().integer().min(1).required(),
-    });
-
-    const { error, value }: JoiValidation<GetCardsByFilterQuery> =
-        schema.validate(req.query, {
-            abortEarly: false,
-        });
-
-    if (error) {
-        return res.status(400).json(error);
-    }
-
-    try {
-        const { currentLocation } = req;
-
-        const message = await getCardsByFilter(value, currentLocation);
-
-        res.status(200).json(message);
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
-    }
-});
+router.get('/getCardsByFilter', getCardsByFilterController);
 
 router.get('/getDistinctSetNames', async (req: RequestWithUserInfo, res) => {
     try {

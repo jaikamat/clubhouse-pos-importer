@@ -5,8 +5,6 @@ import getCardsByFilter from '../interactors/getCardsByFilter';
 import getDistinctSetNames from '../interactors/getDistinctSetNames';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
 import getSalesFromCardname from '../interactors/getSalesFromCardname';
-import getAllSales from '../interactors/getAllSales';
-import getFormatLegalities from '../interactors/getFormatLegalities';
 import addCardToInventoryReceiving from '../interactors/addCardToInventoryReceiving';
 import getSuspendedSales from '../interactors/getSuspendedSales';
 import getSuspendedSale from '../interactors/getSuspendedSale';
@@ -61,25 +59,14 @@ import addCardToInventoryValidationController from '../controllers/addCardToInve
 import addCardToInventoryController from '../controllers/addCardToInventoryController';
 import finishSaleValidationController from '../controllers/finishSaleValidationController';
 import finishSaleController from '../controllers/finishSaleController';
+import allSalesController from '../controllers/allSalesController';
 
 router.use(authController);
 router.post('/addCardToInventory', addCardToInventoryValidationController);
 router.post('/addCardToInventory', addCardToInventoryController);
 router.post('/finishSale', finishSaleValidationController);
 router.post('/finishSale', finishSaleController);
-
-router.get('/allSales', async (req: RequestWithUserInfo, res) => {
-    try {
-        const sales_data = await getAllSales(req.currentLocation);
-        const format_legalities = await getFormatLegalities(
-            req.currentLocation
-        );
-        res.status(200).send({ sales_data, format_legalities });
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
-    }
-});
+router.get('/allSales', allSalesController);
 
 interface GetSaleByTitleQuery {
     cardName: string;

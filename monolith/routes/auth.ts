@@ -4,12 +4,10 @@ require('dotenv').config();
 import getCardsByFilter from '../interactors/getCardsByFilter';
 import getDistinctSetNames from '../interactors/getDistinctSetNames';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
-import addCardToInventoryReceiving from '../interactors/addCardToInventoryReceiving';
 import getSuspendedSales from '../interactors/getSuspendedSales';
 import getSuspendedSale from '../interactors/getSuspendedSale';
 import createSuspendedSale from '../interactors/createSuspendedSale';
 import deleteSuspendedSale from '../interactors/deleteSuspendedSale';
-import addCardsToReceivingRecords from '../interactors/addCardsToReceivingRecords';
 import getCardsFromReceiving from '../interactors/getCardsFromReceiving';
 import Joi from 'joi';
 import {
@@ -37,7 +35,6 @@ import {
     JoiValidation,
     PriceFilter,
     RequestWithUserInfo,
-    ReqWithReceivingCards,
     ReqWithSuspendSale,
     SortBy,
     SortByDirection,
@@ -56,6 +53,7 @@ import finishSaleController from '../controllers/finishSaleController';
 import allSalesController from '../controllers/allSalesController';
 import getSalesByTitleController from '../controllers/getSalesByTitleController';
 import receiveCardsValidationController from '../controllers/receiveCardsValidationController';
+import receiveCardsController from '../controllers/receiveCardsController';
 
 router.use(authController);
 router.post('/addCardToInventory', addCardToInventoryValidationController);
@@ -65,30 +63,7 @@ router.post('/finishSale', finishSaleController);
 router.get('/allSales', allSalesController);
 router.get('/getSaleByTitle', getSalesByTitleController);
 router.post('/receiveCards', receiveCardsValidationController);
-
-router.post('/receiveCards', async (req: ReqWithReceivingCards, res) => {
-    try {
-        const { cards, customerName, customerContact } = req.body;
-        const messages = await addCardToInventoryReceiving(
-            cards,
-            req.currentLocation
-        );
-
-        await addCardsToReceivingRecords({
-            cards,
-            employeeNumber: req.lightspeedEmployeeNumber,
-            location: req.currentLocation,
-            userId: req.userId,
-            customerName,
-            customerContact,
-        });
-
-        res.status(200).send(messages);
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
-    }
-});
+router.post('/receiveCards', receiveCardsController);
 
 router.get('/suspendSale', async (req: RequestWithUserInfo, res) => {
     try {

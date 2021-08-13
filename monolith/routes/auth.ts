@@ -4,7 +4,6 @@ require('dotenv').config();
 import getCardsByFilter from '../interactors/getCardsByFilter';
 import getDistinctSetNames from '../interactors/getDistinctSetNames';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
-import getSuspendedSales from '../interactors/getSuspendedSales';
 import getSuspendedSale from '../interactors/getSuspendedSale';
 import createSuspendedSale from '../interactors/createSuspendedSale';
 import deleteSuspendedSale from '../interactors/deleteSuspendedSale';
@@ -54,6 +53,7 @@ import allSalesController from '../controllers/allSalesController';
 import getSalesByTitleController from '../controllers/getSalesByTitleController';
 import receiveCardsValidationController from '../controllers/receiveCardsValidationController';
 import receiveCardsController from '../controllers/receiveCardsController';
+import getSuspendedSalesController from '../controllers/getSuspendedSalesController';
 
 router.use(authController);
 router.post('/addCardToInventory', addCardToInventoryValidationController);
@@ -65,15 +65,7 @@ router.get('/getSaleByTitle', getSalesByTitleController);
 router.post('/receiveCards', receiveCardsValidationController);
 router.post('/receiveCards', receiveCardsController);
 
-router.get('/suspendSale', async (req: RequestWithUserInfo, res) => {
-    try {
-        const message = await getSuspendedSales(req.currentLocation);
-        res.status(200).send(message);
-    } catch (err) {
-        console.error(new Error(err));
-        res.status(500).send(err.message);
-    }
-});
+router.get('/suspendSale', getSuspendedSalesController);
 
 router.get('/suspendSale/:id', async (req: RequestWithUserInfo, res) => {
     const { id } = req.params;

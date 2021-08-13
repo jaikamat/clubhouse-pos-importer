@@ -4,7 +4,6 @@ require('dotenv').config();
 import getCardsByFilter from '../interactors/getCardsByFilter';
 import getDistinctSetNames from '../interactors/getDistinctSetNames';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
-import createSuspendedSale from '../interactors/createSuspendedSale';
 import deleteSuspendedSale from '../interactors/deleteSuspendedSale';
 import getCardsFromReceiving from '../interactors/getCardsFromReceiving';
 import Joi from 'joi';
@@ -12,11 +11,8 @@ import {
     validColorSpecificity,
     validDate,
     validFinish,
-    validFinishConditions,
     validFormatLegalities,
     validFrame,
-    validInteger,
-    validPrice,
     validPriceOperator,
     validSort,
     validSortDirection,
@@ -27,16 +23,13 @@ import {
 import {
     ColorSpecificity,
     Finish,
-    FinishSaleCard,
     FormatLegality,
     Frame,
     JoiValidation,
     PriceFilter,
     RequestWithUserInfo,
-    ReqWithSuspendSale,
     SortBy,
     SortByDirection,
-    SuspendSaleBody,
     TypeLine,
 } from '../common/types';
 import moment from 'moment';
@@ -54,6 +47,7 @@ import receiveCardsValidationController from '../controllers/receiveCardsValidat
 import receiveCardsController from '../controllers/receiveCardsController';
 import getSuspendedSalesController from '../controllers/getSuspendedSalesController';
 import suspendedSaleByIdController from '../controllers/suspendedSaleByIdController';
+import createSuspendedSaleController from '../controllers/createSuspendedSaleController';
 
 router.use(authController);
 router.post('/addCardToInventory', addCardToInventoryValidationController);
@@ -66,50 +60,7 @@ router.post('/receiveCards', receiveCardsValidationController);
 router.post('/receiveCards', receiveCardsController);
 router.get('/suspendSale', getSuspendedSalesController);
 router.get('/suspendSale/:id', suspendedSaleByIdController);
-
-router.post('/suspendSale', async (req: ReqWithSuspendSale, res) => {
-    const schema = Joi.object<SuspendSaleBody>({
-        customerName: validString.min(3).max(100).required(),
-        notes: validString.min(0).max(255).allow(''),
-        saleList: Joi.array().items(
-            Joi.object<FinishSaleCard>({
-                id: validStringRequired,
-                price: validPrice,
-                qtyToSell: validInteger,
-                name: validStringRequired,
-                set_name: validStringRequired,
-                finishCondition: validFinishConditions,
-            })
-        ),
-    });
-
-    const { customerName = '', notes = '', saleList = [] } = req.body;
-
-    const { error }: JoiValidation<SuspendSaleBody> = schema.validate(
-        req.body,
-        {
-            abortEarly: false,
-            allowUnknown: true,
-        }
-    );
-
-    if (error) {
-        return res.status(400).json(error);
-    }
-
-    try {
-        const message = await createSuspendedSale(
-            customerName,
-            notes,
-            saleList,
-            req.currentLocation
-        );
-        res.status(200).send(message);
-    } catch (err) {
-        console.error(new Error(err));
-        res.status(500).send(err.message);
-    }
-});
+router.post('/suspendSale', createSuspendedSaleController);
 
 router.delete('/suspendSale/:id', async (req: RequestWithUserInfo, res) => {
     const { id } = req.params;

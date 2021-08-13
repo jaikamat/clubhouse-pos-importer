@@ -1,25 +1,27 @@
+require('dotenv').config();
 import express from 'express';
 const router = express.Router();
-require('dotenv').config();
-import authController from '../controllers/authController';
-import addCardToInventoryController from '../controllers/addCardToInventoryController';
-import finishSaleValidationController from '../controllers/finishSaleValidationController';
-import finishSaleController from '../controllers/finishSaleController';
-import allSalesController from '../controllers/allSalesController';
-import getSalesByTitleController from '../controllers/getSalesByTitleController';
-import receiveCardsValidationController from '../controllers/receiveCardsValidationController';
-import receiveCardsController from '../controllers/receiveCardsController';
-import getSuspendedSalesController from '../controllers/getSuspendedSalesController';
-import suspendedSaleByIdController from '../controllers/suspendedSaleByIdController';
-import createSuspendedSaleController from '../controllers/createSuspendedSaleController';
-import deleteSuspendedSaleController from '../controllers/deleteSuspendedSaleController';
-import getCardsByFilterController from '../controllers/getCardsByFilterController';
-import distinctSetNamesController from '../controllers/distinctSetNamesController';
-import getCardsWithInfoController from '../controllers/getCardsWithInfoController';
-import getReceivedCardsController from '../controllers/getReceivedCardsController';
-import getReceivedCardsByIdController from '../controllers/getReceivedCardsByIdController';
-import salesReportController from '../controllers/salesReportController';
-import bulkSearchController from '../controllers/bulkSearchController';
+import {
+    addCardToInventoryController,
+    allSalesController,
+    authController,
+    bulkSearchController,
+    createSuspendedSaleController,
+    deleteSuspendedSaleController,
+    distinctSetNamesController,
+    finishSaleController,
+    finishSaleValidationController,
+    getCardsByFilterController,
+    getCardsWithInfoController,
+    getReceivedCardsByIdController,
+    getReceivedCardsController,
+    getSalesByTitleController,
+    getSuspendedSalesController,
+    receiveCardsController,
+    receiveCardsValidationController,
+    salesReportController,
+    suspendedSaleByIdController,
+} from '../controllers';
 
 router.use(authController);
 router.post('/addCardToInventory', addCardToInventoryController);

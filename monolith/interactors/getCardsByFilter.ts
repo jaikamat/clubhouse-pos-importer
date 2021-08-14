@@ -1,7 +1,7 @@
 import { ClubhouseLocation, Collection } from '../common/types';
+import { GetCardsByFilterQuery } from '../controllers/getCardsByFilterController';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import { GetCardsByFilterQuery } from '../routes/auth';
 const LIMIT = 100;
 
 /**

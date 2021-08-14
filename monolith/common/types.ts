@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { ValidationError } from 'joi';
 
 export type ClubhouseLocation = 'ch1' | 'ch2';
@@ -81,11 +81,6 @@ export const frames = ['borderless', 'extendedArt', 'showcase'] as const;
 
 export type Frame = typeof frames[number];
 
-export interface DecodedToken {
-    userId: string;
-    currentLocation: ClubhouseLocation;
-}
-
 export interface QOH {
     FOIL_NM?: number;
     FOIL_LP?: number;
@@ -103,21 +98,6 @@ export interface RequestWithUserInfo extends Request {
     isAdmin: boolean;
     lightspeedEmployeeNumber: number;
     userId: string;
-}
-
-export interface AddCardToInventoryReqBody {
-    quantity: number;
-    finishCondition: FinishCondition;
-    cardInfo: {
-        id: string;
-        name: string;
-        set_name: string;
-        set: string;
-    };
-}
-
-export interface AddCardToInventoryReq extends RequestWithUserInfo {
-    body: AddCardToInventoryReqBody;
 }
 
 export interface FinishSaleCard {
@@ -193,3 +173,12 @@ export enum Collection {
     scryfallBulkCards = 'scryfall_bulk_cards',
     users = 'users',
 }
+
+/**
+ * Helper type used to define controller signatures
+ */
+export type Controller<T extends Request> = (
+    req: T,
+    res: Response,
+    next?: NextFunction
+) => void;

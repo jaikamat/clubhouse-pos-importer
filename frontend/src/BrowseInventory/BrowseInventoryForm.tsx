@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { FormikHelpers, useFormik } from 'formik';
 import setNameQuery from './setNameQuery';
-import { Filters } from './filteredCardsQuery';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
 import ControlledDropdown, { DropdownOption } from '../ui/ControlledDropdown';
 import ControlledMultiSelect from '../ui/ControlledMultiSelect';
@@ -90,7 +89,7 @@ const frameOptions: DropdownOption[] = [
     { key: 'showcase', value: 'showcase', text: 'Showcase' },
 ];
 
-interface FormValues {
+export interface FormValues {
     title: string;
     setName: string;
     format: string;
@@ -126,7 +125,7 @@ const validate = () => {
 };
 
 interface Props {
-    doSubmit: (v: Filters, page: number) => Promise<void>;
+    doSubmit: (v: FormValues, page: number) => Promise<void>;
 }
 
 const FormContainer = withStyles(({ spacing }) => ({
@@ -146,39 +145,7 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
     ) => {
         try {
             await doSubmit(
-                {
-                    title: values.title || undefined,
-                    setName: values.setName || undefined,
-                    format: values.format || undefined,
-                    price: Number(values.price) || undefined,
-                    finish: values.finish || undefined,
-                    colors:
-                        values.colorsArray.length > 0
-                            ? values.colorsArray
-                                  .map((c) => {
-                                      const colorsMap: Record<
-                                          string,
-                                          string
-                                      > = {
-                                          White: 'W',
-                                          Blue: 'U',
-                                          Black: 'B',
-                                          Red: 'R',
-                                          Green: 'G',
-                                      };
-
-                                      return colorsMap[c];
-                                  })
-                                  .sort()
-                                  .join('')
-                            : undefined,
-                    colorSpecificity: values.colorSpecificity || undefined,
-                    type: values.typeLine || undefined,
-                    frame: values.frame || undefined,
-                    sortByDirection: values.sortByDirection,
-                    priceOperator: values.priceOperator,
-                    sortBy: values.sortBy,
-                },
+                values,
                 // Always start at page 1 after filtering
                 1
             );

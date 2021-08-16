@@ -3,7 +3,7 @@ import { GET_CARDS_BY_FILTER } from '../utils/api_resources';
 import makeAuthHeader from '../utils/makeAuthHeader';
 import { FinishCondition } from '../utils/ScryfallCard';
 
-export interface Filters {
+interface Filters {
     title?: string;
     setName?: string;
     format?: string;

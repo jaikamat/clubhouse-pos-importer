@@ -48,6 +48,7 @@ const finishDropdownOptions: DropdownOption[] = [
 const sortByDropdownOptions: DropdownOption[] = [
     { key: 'pricesort', value: 'price', text: 'Price' },
     { key: 'alphasort', value: 'name', text: 'Card Name' },
+    { key: 'quantitySort', value: 'quantityInStock', text: 'Quantity' },
 ];
 
 const sortByDirectionDropdownOptions: DropdownOption[] = [

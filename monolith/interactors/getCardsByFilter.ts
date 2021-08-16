@@ -51,14 +51,6 @@ const getCardsByFilter = async (
         // Create aggregation
         const aggregation = [];
 
-        // Build the initialMatch
-        const initialMatch: { name?: any; set_name?: string } = {};
-
-        if (title) initialMatch.name = { $regex: `${title}`, $options: 'i' };
-        if (setName) initialMatch.set_name = setName;
-
-        aggregation.push({ $match: initialMatch });
-
         // Attach bulk card information
         aggregation.push({
             $lookup: {
@@ -81,38 +73,22 @@ const getCardsByFilter = async (
             },
         });
 
-        const typeMatch: { type_line?: any } = {};
+        const nameMatch = { name: { $regex: `${title}`, $options: 'i' } };
+        const setNameMatch = { set_name: setName };
+        const typeMatch = { type_line: { $regex: `${type}`, $options: 'i' } };
+        const borderMatch = { border_color: 'borderless' };
+        const showcaseMatch = { frame_effects: 'showcase' };
+        const extendedArtMatch = { frame_effects: 'extendedart' };
 
-        // Types are Tribal, Instant, Sorcery, Creature, Enchantment, Land, Planeswalker, Artifact
-        if (type) typeMatch.type_line = { $regex: `${type}`, $options: 'i' };
-
-        aggregation.push({ $match: typeMatch });
-
-        const borderMatch: { border_color?: string } = {};
-        const showcaseMatch: { frame_effects?: string } = {};
-        const extendedArtMatch: { frame_effects?: string } = {};
-
-        // Matches borderless art only
-        borderMatch.border_color = 'borderless';
-
-        // Matches extended art cards
-        extendedArtMatch.frame_effects = 'extendedart';
-
-        // Matches showcase art cards
-        showcaseMatch.frame_effects = 'showcase';
-
-        if (frame === 'borderless') {
-            aggregation.push({ $match: borderMatch });
-        }
-
-        if (frame === 'extendedArt') {
+        if (title) aggregation.push({ $match: nameMatch });
+        if (setName) aggregation.push({ $match: setNameMatch });
+        if (type) aggregation.push({ $match: typeMatch });
+        if (frame === 'borderless') aggregation.push({ $match: borderMatch });
+        if (frame === 'showcase') aggregation.push({ $match: showcaseMatch });
+        if (frame === 'extendedArt')
             aggregation.push({ $match: extendedArtMatch });
-        }
 
-        if (frame === 'showcase') {
-            aggregation.push({ $match: showcaseMatch });
-        }
-
+        // Pre-unwind, we add these fields
         const addFields = {
             image_uri: {
                 $ifNull: [
@@ -165,13 +141,9 @@ const getCardsByFilter = async (
 
         aggregation.push({ $unwind: '$inventory' });
 
+        // Post-unwind, we add estimated pricing from Sryfall
         aggregation.push({
-            $project: {
-                _id: 1,
-                name: 1,
-                set_name: 1,
-                set: 1,
-                inventory: 1,
+            $addFields: {
                 price: {
                     $switch: {
                         branches: [
@@ -210,17 +182,7 @@ const getCardsByFilter = async (
                         ],
                     },
                 },
-                image_uri: 1,
-                rarity: 1,
-                colors_string: 1,
                 colors_string_length: { $strLenCP: '$colors_string' },
-                legalities: 1,
-                type_line: 1,
-                prices: 1,
-                printed_name: 1,
-                flavor_name: 1,
-                border_color: 1,
-                frame_effects: 1,
             },
         });
 
@@ -280,24 +242,35 @@ const getCardsByFilter = async (
             },
         });
 
-        // Final projection to curate return types
+        /**
+         * Pare down response objects and sculpt them
+         *
+         * Based on runtime experiments, this substantially cuts down the time
+         * it takes for the following $sort stage to execute.
+         */
         aggregation.push({
             $project: {
-                border_color: 0,
-                colors_string: 0,
-                colors_string_length: 0,
-                legalities: 0,
-                type_line: 0,
-                inventory: 0,
+                _id: 1,
+                image_uri: 1,
+                name: 1,
+                price: 1,
+                rarity: 1,
+                set: 1,
+                set_name: 1,
+                finishCondition: 1,
+                quantityInStock: 1,
             },
         });
 
-        const sortByFilter = {};
-        const sortByProp = sortBy;
-        const sortByDirectionProp = sortByDirection;
-        sortByFilter[sortByProp] = sortByDirectionProp;
-
-        aggregation.push({ $sort: sortByFilter });
+        /**
+         * TODO: This sort is what affects query runtime the most.
+         *
+         * It's having to scan all virtualized, unwound entries in memory. There's no clean way to
+         * presort this without first performing an $unwind, which is irritating.
+         */
+        aggregation.push({
+            $sort: { [sortBy]: sortByDirection },
+        });
 
         aggregation.push({
             $facet: {
@@ -306,7 +279,9 @@ const getCardsByFilter = async (
             },
         });
 
-        const docs = await collection.aggregate(aggregation).toArray();
+        const docs = await collection
+            .aggregate(aggregation, { allowDiskUse: true })
+            .toArray();
 
         const output: {
             cards?: any;

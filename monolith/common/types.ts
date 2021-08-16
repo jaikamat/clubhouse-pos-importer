@@ -52,7 +52,7 @@ export const finish = ['FOIL', 'NONFOIL'] as const;
 
 export type Finish = typeof finish[number];
 
-export const sortBy = ['price', 'name'] as const;
+export const sortBy = ['price', 'name', 'quantityInStock'] as const;
 
 export type SortBy = typeof sortBy[number];
 

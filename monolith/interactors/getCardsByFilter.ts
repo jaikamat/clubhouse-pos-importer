@@ -243,6 +243,26 @@ const getCardsByFilter = async (
         });
 
         /**
+         * Pare down response objects and sculpt them
+         *
+         * Based on runtime experiments, this substantially cuts down the time
+         * it takes for the following $sort stage to execute.
+         */
+        aggregation.push({
+            $project: {
+                _id: 1,
+                image_uri: 1,
+                name: 1,
+                price: 1,
+                rarity: 1,
+                set: 1,
+                set_name: 1,
+                finishCondition: 1,
+                quantityInStock: 1,
+            },
+        });
+
+        /**
          * TODO: This sort is what affects query runtime the most.
          *
          * It's having to scan all virtualized, unwound entries in memory. There's no clean way to

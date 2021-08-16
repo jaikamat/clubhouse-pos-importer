@@ -134,7 +134,7 @@ const BrowseInventory: FC = () => {
                                 <TableCell>Edition</TableCell>
                                 <TableCell>Condition</TableCell>
                                 <TableCell>Quantity</TableCell>
-                                <TableCell>Price Estimate</TableCell>
+                                <TableCell>Estimated Price</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

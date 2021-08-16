@@ -30,7 +30,6 @@ export interface GetCardsByFilterQuery {
     title?: string;
     setName?: string;
     format?: FormatLegality;
-    price?: number;
     finish?: Finish;
     colors?: string;
     sortBy?: SortBy;
@@ -40,6 +39,8 @@ export interface GetCardsByFilterQuery {
     priceOperator: PriceFilter;
     sortByDirection: SortByDirection;
     page: number;
+    maxPrice?: number;
+    minPrice?: number;
 }
 
 const getCardsByFilterController: Controller<RequestWithUserInfo> = async (
@@ -50,7 +51,6 @@ const getCardsByFilterController: Controller<RequestWithUserInfo> = async (
         title: validString,
         setName: validString,
         format: validFormatLegalities,
-        price: Joi.number().positive().allow(0),
         finish: validFinish,
         colors: validString,
         sortBy: validSort,
@@ -59,6 +59,8 @@ const getCardsByFilterController: Controller<RequestWithUserInfo> = async (
         frame: validFrame,
         priceOperator: validPriceOperator,
         sortByDirection: validSortDirection,
+        maxPrice: Joi.number(),
+        minPrice: Joi.number(),
         page: Joi.number().integer().min(1).required(),
     });
 

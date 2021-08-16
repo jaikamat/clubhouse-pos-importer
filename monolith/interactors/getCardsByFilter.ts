@@ -26,8 +26,6 @@ const getCardsByFilter = async (
         title,
         setName,
         format,
-        price,
-        priceOperator,
         finish,
         colors,
         sortBy,
@@ -36,6 +34,8 @@ const getCardsByFilter = async (
         page,
         type,
         frame,
+        maxPrice,
+        minPrice,
     }: GetCardsByFilterQuery,
     location: ClubhouseLocation
 ) => {
@@ -228,8 +228,16 @@ const getCardsByFilter = async (
         endMatch[`inventory.v`] = { $gt: 0 };
 
         // Price filtering logic
-        if (price && priceOperator) {
-            endMatch.price = { [`$${priceOperator}`]: price };
+        if (maxPrice) {
+            aggregation.push({
+                $match: { price: { $lte: maxPrice } },
+            });
+        }
+
+        if (minPrice) {
+            aggregation.push({
+                $match: { price: { $gte: minPrice } },
+            });
         }
 
         aggregation.push({ $match: endMatch });

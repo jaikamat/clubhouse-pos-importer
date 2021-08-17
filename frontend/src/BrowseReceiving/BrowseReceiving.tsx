@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import browseReceivingQuery, { Received } from './browseReceivingQuery';
-import { Grid, Box, Typography, Button } from '@material-ui/core';
+import { Grid, Box, Typography, Button, Container } from '@material-ui/core';
 import BrowseReceivingItem from './BrowseReceivingItem';
 import moment from 'moment';
 import Loading from '../ui/Loading';
@@ -57,43 +57,39 @@ const BrowseReceiving: FC = () => {
     }, [filters]);
 
     return (
-        <div>
+        <Container>
             <Box pb={2}>
                 <HeaderText>Browse Receiving</HeaderText>
             </Box>
+            <Box>
+                <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                >
+                    <div>
+                        <SectionText>Results</SectionText>
+                        <Typography color="textSecondary">
+                            {`Searching ${
+                                filters.cardName || 'all cards'
+                            } from ${filters.startDate} to ${filters.endDate}`}
+                        </Typography>
+                    </div>
+                    <div>
+                        {!shallowCompare(initialFilters, filters) && (
+                            <Button color="primary" onClick={onClearFilters}>
+                                Clear filters
+                            </Button>
+                        )}
+                        <BrowseReceivingFilterDialog
+                            filters={filters}
+                            onSubmit={onSubmit}
+                        />
+                    </div>
+                </Box>
+            </Box>
             <Grid container justify="space-between" spacing={2}>
-                <Grid item alignItems="center" md={12} lg={6}>
-                    <Box
-                        display="flex"
-                        justifyContent="space-between"
-                        alignItems="center"
-                    >
-                        <div>
-                            <SectionText>Results</SectionText>
-                            <Typography color="textSecondary">
-                                {`Searching ${
-                                    filters.cardName || 'all cards'
-                                } from ${filters.startDate} to ${
-                                    filters.endDate
-                                }`}
-                            </Typography>
-                        </div>
-                        <div>
-                            {!shallowCompare(initialFilters, filters) && (
-                                <Button
-                                    color="primary"
-                                    onClick={onClearFilters}
-                                >
-                                    Clear filters
-                                </Button>
-                            )}
-                            <BrowseReceivingFilterDialog
-                                filters={filters}
-                                onSubmit={onSubmit}
-                            />
-                        </div>
-                    </Box>
-                </Grid>
+                <Grid item alignItems="center" md={12} lg={6}></Grid>
                 {loading ? (
                     <Loading />
                 ) : receivedList.length === 0 ? (
@@ -108,7 +104,7 @@ const BrowseReceiving: FC = () => {
                     ))
                 )}
             </Grid>
-        </div>
+        </Container>
     );
 };
 

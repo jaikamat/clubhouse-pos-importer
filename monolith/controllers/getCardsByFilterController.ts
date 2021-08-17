@@ -6,7 +6,6 @@ import {
     validFinish,
     validFormatLegalities,
     validFrame,
-    validPriceOperator,
     validSort,
     validSortDirection,
     validString,
@@ -19,7 +18,6 @@ import {
     FormatLegality,
     Frame,
     JoiValidation,
-    PriceFilter,
     RequestWithUserInfo,
     SortBy,
     SortByDirection,
@@ -36,7 +34,6 @@ export interface GetCardsByFilterQuery {
     colorSpecificity?: ColorSpecificity;
     type?: TypeLine;
     frame?: Frame;
-    priceOperator: PriceFilter;
     sortByDirection: SortByDirection;
     page: number;
     maxPrice?: number;
@@ -57,7 +54,6 @@ const getCardsByFilterController: Controller<RequestWithUserInfo> = async (
         colorSpecificity: validColorSpecificity,
         type: validTypeline,
         frame: validFrame,
-        priceOperator: validPriceOperator,
         sortByDirection: validSortDirection,
         maxPrice: Joi.number(),
         minPrice: Joi.number(),

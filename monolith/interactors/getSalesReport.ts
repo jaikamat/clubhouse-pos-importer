@@ -11,7 +11,7 @@ interface Args {
 const createGroupStage = (groupId: string) => {
     return {
         _id: groupId,
-        count: { $sum: 1 },
+        count: { $sum: '$quantity_sold' },
         card_title: { $first: '$card_title' },
     };
 };
@@ -32,6 +32,7 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
             created_at: { $toDate: '$_id' },
             card_id: '$card_list.id',
             card_title: '$card_list.name',
+            quantity_sold: '$card_list.qtyToSell',
         };
 
         const match = {

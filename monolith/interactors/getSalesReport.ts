@@ -8,14 +8,6 @@ interface Args {
     endDate: Date;
 }
 
-const createGroupStage = (groupId: string) => {
-    return {
-        _id: groupId,
-        count: { $sum: '$quantity_sold' },
-        card_title: { $first: '$card_title' },
-    };
-};
-
 async function getSalesReport({ location, startDate, endDate }: Args) {
     try {
         const db = await getDatabaseConnection();
@@ -30,9 +22,10 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
 
         const project = {
             created_at: { $toDate: '$_id' },
-            card_id: '$card_list.id',
+            scryfall_id: '$card_list.id',
             card_title: '$card_list.name',
             quantity_sold: '$card_list.qtyToSell',
+            finish_condition: '$card_list.finishCondition',
         };
 
         const match = {
@@ -47,19 +40,22 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
 
         const facet = {
             countByPrinting: [
-                { $group: createGroupStage('$card_id') },
-                { $sort: sort },
-                { $limit: limit },
-                // Here we convert the `_id` we used in $group to a more reasonable name
                 {
-                    $addFields: {
-                        scryfall_id: '$_id',
+                    $group: {
+                        _id: {
+                            scryfall_id: '$scryfall_id',
+                            finish_condition: '$finish_condition',
+                        },
+                        count: { $sum: '$quantity_sold' },
+                        card_title: { $first: '$card_title' },
                     },
                 },
+                { $sort: sort },
+                { $limit: limit },
                 {
                     $lookup: {
                         from: Collection.scryfallBulkCards,
-                        localField: 'scryfall_id',
+                        localField: '_id.scryfall_id',
                         foreignField: 'id',
                         as: 'card_metadata',
                     },
@@ -69,10 +65,15 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
                         card_metadata: { $first: '$card_metadata' },
                     },
                 },
-                { $project: { _id: 0 } }, // Suppress _id we used in $group
             ],
             countByCardName: [
-                { $group: createGroupStage('$card_title') },
+                {
+                    $group: {
+                        _id: '$card_title',
+                        count: { $sum: '$quantity_sold' },
+                        card_title: { $first: '$card_title' },
+                    },
+                },
                 { $sort: sort },
                 { $limit: limit },
                 { $project: { _id: 0 } }, // Suppress _id we used in $group

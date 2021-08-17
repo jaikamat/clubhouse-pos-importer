@@ -1,5 +1,8 @@
 import React, { FC, useState } from 'react';
-import BrowseInventoryForm, { initialFilters } from './BrowseInventoryForm';
+import BrowseInventoryForm, {
+    FormValues,
+    initialFilters,
+} from './BrowseInventoryForm';
 import BrowseInventoryRow from './BrowseInventoryRow';
 import _ from 'lodash';
 import filteredCardsQuery, {
@@ -40,7 +43,7 @@ interface State {
     currentPage: number;
     numPages: number;
     isLoading: boolean;
-    cachedFilters: Filters;
+    cachedFilters: FormValues;
     searchTouched: boolean;
 }
 
@@ -55,11 +58,50 @@ const BrowseInventory: FC = () => {
         searchTouched: false, // Tracks whether the user has initially searched for the 'no results' message
     });
 
-    const fetchData = async (filters: Filters, page: number) => {
+    const fetchData = async (filters: FormValues, page: number) => {
         try {
             setState({ ...state, isLoading: true });
 
-            const { cards, total } = await filteredCardsQuery(filters, page);
+            // Translates form types to the necessary types the query requires
+            const queryFilters: Filters = {
+                title: filters.title || undefined,
+                setName: filters.setName || undefined,
+                format: filters.format || undefined,
+                minPrice: filters.minPrice
+                    ? Number(filters.minPrice)
+                    : undefined,
+                maxPrice: filters.maxPrice
+                    ? Number(filters.maxPrice)
+                    : undefined,
+                finish: filters.finish || undefined,
+                colors:
+                    filters.colorsArray.length > 0
+                        ? filters.colorsArray
+                              .map((c) => {
+                                  const colorsMap: Record<string, string> = {
+                                      White: 'W',
+                                      Blue: 'U',
+                                      Black: 'B',
+                                      Red: 'R',
+                                      Green: 'G',
+                                  };
+
+                                  return colorsMap[c];
+                              })
+                              .sort()
+                              .join('')
+                        : undefined,
+                colorSpecificity: filters.colorSpecificity || undefined,
+                type: filters.typeLine || undefined,
+                frame: filters.frame || undefined,
+                sortByDirection: filters.sortByDirection,
+                sortBy: filters.sortBy,
+            };
+
+            const { cards, total } = await filteredCardsQuery(
+                queryFilters,
+                page
+            );
 
             const numPages = Math.ceil(total / LIMIT);
 

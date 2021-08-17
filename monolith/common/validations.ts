@@ -5,7 +5,6 @@ import {
     finishConditions,
     formatLegalities,
     frames,
-    priceFilters,
     sortBy,
     sortByDirection,
     Trade,
@@ -21,9 +20,6 @@ export const validSort = Joi.string().valid(...sortBy);
 export const validColorSpecificity = Joi.string().valid(...colorSpecificity);
 export const validTypeline = Joi.string().valid(...typeLines);
 export const validFrame = Joi.string().valid(...frames);
-export const validPriceOperator = Joi.string()
-    .valid(...priceFilters)
-    .required();
 export const validSortDirection = Joi.number()
     .valid(...sortByDirection)
     .required();

@@ -26,10 +26,6 @@ export const finishConditions = [
 
 export type FinishCondition = typeof finishConditions[number];
 
-export const priceFilters = ['gte', 'lte', 'gt', 'lt'] as const;
-
-export type PriceFilter = typeof priceFilters[number];
-
 export const formatLegalities = [
     'standard',
     'future',

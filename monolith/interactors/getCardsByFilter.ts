@@ -11,7 +11,8 @@ const LIMIT = 100;
  * title - name of the card
  * setName - the full name of the set
  * format - format in which the card is legal
- * priceNum - the price to query on. Used in conjunciton with priceFilter
+ * maxPrice - maximum queryable card price
+ * minPrice - minimum queryable card price
  * priceFilter - gt, gte, lt, or lte. Used with Mongo aggregation to find price relations
  * finish - `FOIL` or `NONFOIL`
  * sortBy - `name` or `price`
@@ -26,8 +27,6 @@ const getCardsByFilter = async (
         title,
         setName,
         format,
-        price,
-        priceOperator,
         finish,
         colors,
         sortBy,
@@ -36,6 +35,8 @@ const getCardsByFilter = async (
         page,
         type,
         frame,
+        maxPrice,
+        minPrice,
     }: GetCardsByFilterQuery,
     location: ClubhouseLocation
 ) => {
@@ -141,6 +142,11 @@ const getCardsByFilter = async (
 
         aggregation.push({ $unwind: '$inventory' });
 
+        // Always ensure results are in stock
+        aggregation.push({
+            $match: { [`inventory.v`]: { $gt: 0 } },
+        });
+
         // Post-unwind, we add estimated pricing from Sryfall
         aggregation.push({
             $addFields: {
@@ -186,53 +192,77 @@ const getCardsByFilter = async (
             },
         });
 
-        // Building the end match
-        const endMatch: {
-            colors_string_length?: any;
-            colors_string?: string;
-            price?: any;
-        } = {};
-
         // End match foiling logic
         if (finish === 'FOIL') {
-            endMatch['inventory.k'] = {
-                $in: ['FOIL_NM', 'FOIL_LP', 'FOIL_MP', 'FOIL_HP'],
-            };
+            aggregation.push({
+                $match: {
+                    'inventory.k': {
+                        $in: ['FOIL_NM', 'FOIL_LP', 'FOIL_MP', 'FOIL_HP'],
+                    },
+                },
+            });
         } else if (finish === 'NONFOIL') {
-            endMatch['inventory.k'] = {
-                $in: ['NONFOIL_NM', 'NONFOIL_LP', 'NONFOIL_MP', 'NONFOIL_HP'],
-            };
+            aggregation.push({
+                $match: {
+                    'inventory.k': {
+                        $in: [
+                            'NONFOIL_NM',
+                            'NONFOIL_LP',
+                            'NONFOIL_MP',
+                            'NONFOIL_HP',
+                        ],
+                    },
+                },
+            });
         }
 
         // End match format legality logic
-        if (format)
-            endMatch[`legalities.${format}`] = { $in: ['restricted', 'legal'] };
+        if (format) {
+            aggregation.push({
+                $match: {
+                    [`legalities.${format}`]: { $in: ['restricted', 'legal'] },
+                },
+            });
+        }
 
         // End match colors matching logic
-        if (colors) endMatch.colors_string = colors;
+        if (colors) {
+            aggregation.push({
+                $match: { colors_string: colors },
+            });
+        }
 
         // Match monocolor, multicolor, or colorless
         if (colorSpecificity) {
             if (colorSpecificity === 'colorless') {
-                endMatch.colors_string_length = { $eq: 0 };
+                aggregation.push({
+                    $match: { colors_string_length: { $eq: 0 } },
+                });
             }
             if (colorSpecificity === 'mono') {
-                endMatch.colors_string_length = { $eq: 1 };
+                aggregation.push({
+                    $match: { colors_string_length: { $eq: 1 } },
+                });
             }
             if (colorSpecificity === 'multi') {
-                endMatch.colors_string_length = { $gt: 1 };
+                aggregation.push({
+                    $match: { colors_string_length: { $gt: 1 } },
+                });
             }
         }
 
-        // Always ensure results are in stock
-        endMatch[`inventory.v`] = { $gt: 0 };
-
         // Price filtering logic
-        if (price && priceOperator) {
-            endMatch.price = { [`$${priceOperator}`]: price };
+        if (maxPrice) {
+            aggregation.push({
+                $match: { price: { $lte: maxPrice } },
+            });
         }
 
-        aggregation.push({ $match: endMatch });
+        if (minPrice) {
+            aggregation.push({
+                $match: { price: { $gte: minPrice } },
+            });
+        }
 
         // Add sane inventory fields
         aggregation.push({

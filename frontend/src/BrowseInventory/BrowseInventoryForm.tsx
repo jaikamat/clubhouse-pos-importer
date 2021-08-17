@@ -93,14 +93,14 @@ export interface FormValues {
     title: string;
     setName: string;
     format: string;
-    price: number;
+    minPrice: string;
+    maxPrice: string;
     finish: string;
     colorsArray: string[];
     colorSpecificity: string;
     typeLine: string;
     frame: string;
     sortByDirection: number;
-    priceOperator: string;
     sortBy: string;
 }
 
@@ -108,8 +108,8 @@ export const initialFilters: FormValues = {
     title: '',
     setName: '',
     format: '',
-    price: 0,
-    priceOperator: 'gte',
+    minPrice: '',
+    maxPrice: '',
     finish: '',
     sortBy: 'price',
     colorsArray: [],
@@ -253,22 +253,26 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <ControlledDropdown
-                        name="priceOperator"
-                        label="Price operator"
-                        options={priceOperatorDropdownOptions}
-                        value={values.priceOperator}
-                        onChange={(v) => setFieldValue('priceOperator', v)}
-                    />
+                    <FormControl fullWidth>
+                        <TextField
+                            label="Minimum price"
+                            variant="outlined"
+                            size="small"
+                            placeholder="Enter a price"
+                            name="minPrice"
+                            type="number"
+                            onChange={handleChange}
+                        />
+                    </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <FormControl fullWidth>
                         <TextField
-                            label="Price filter"
+                            label="Maximum price"
                             variant="outlined"
                             size="small"
                             placeholder="Enter a price"
-                            name="price"
+                            name="maxPrice"
                             type="number"
                             onChange={handleChange}
                         />

@@ -3,18 +3,18 @@ import { GET_CARDS_BY_FILTER } from '../utils/api_resources';
 import makeAuthHeader from '../utils/makeAuthHeader';
 import { FinishCondition } from '../utils/ScryfallCard';
 
-interface Filters {
+export interface Filters {
     title?: string;
     setName?: string;
     format?: string;
-    price?: number;
+    minPrice?: number;
+    maxPrice?: number;
     finish?: string;
     colors?: string;
     colorSpecificity?: string;
     type?: string;
     frame?: string;
     sortByDirection: number;
-    priceOperator: string;
     sortBy: string;
 }
 

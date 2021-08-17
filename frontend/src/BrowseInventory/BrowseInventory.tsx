@@ -5,7 +5,10 @@ import BrowseInventoryForm, {
 } from './BrowseInventoryForm';
 import BrowseInventoryRow from './BrowseInventoryRow';
 import _ from 'lodash';
-import filteredCardsQuery, { ResponseCard } from './filteredCardsQuery';
+import filteredCardsQuery, {
+    Filters,
+    ResponseCard,
+} from './filteredCardsQuery';
 import Placeholder from '../ui/Placeholder';
 import SearchIcon from '@material-ui/icons/Search';
 import {
@@ -59,11 +62,17 @@ const BrowseInventory: FC = () => {
         try {
             setState({ ...state, isLoading: true });
 
-            const queryFilters = {
+            // Translates form types to the necessary types the query requires
+            const queryFilters: Filters = {
                 title: filters.title || undefined,
                 setName: filters.setName || undefined,
                 format: filters.format || undefined,
-                price: Number(filters.price) || undefined,
+                minPrice: filters.minPrice
+                    ? Number(filters.minPrice)
+                    : undefined,
+                maxPrice: filters.maxPrice
+                    ? Number(filters.maxPrice)
+                    : undefined,
                 finish: filters.finish || undefined,
                 colors:
                     filters.colorsArray.length > 0
@@ -86,7 +95,6 @@ const BrowseInventory: FC = () => {
                 type: filters.typeLine || undefined,
                 frame: filters.frame || undefined,
                 sortByDirection: filters.sortByDirection,
-                priceOperator: filters.priceOperator,
                 sortBy: filters.sortBy,
             };
 

@@ -24,10 +24,7 @@ interface ConditionOptions {
  * @param {Object} qoh
  * @param {String} id
  */
-function createConditionOptions(
-    qoh: Partial<QOH>,
-    id: string
-): ConditionOptions[] {
+function createConditionOptions(qoh: QOH, id: string): ConditionOptions[] {
     const removeZeroedQuantites = _.pickBy(qoh, (p) => p && p > 0); // Quantites of zero not included
 
     return Object.entries(removeZeroedQuantites).map((d) => {

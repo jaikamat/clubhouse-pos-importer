@@ -6,7 +6,7 @@ interface Props {}
 
 interface Context {
     searchResults: ScryfallCard[];
-    changeCardQuantity: (id: string, qoh: Partial<QOH>) => void;
+    changeCardQuantity: (id: string, qoh: QOH) => void;
     handleSearchSelect: (term: string) => void;
 }
 
@@ -28,7 +28,7 @@ const InventoryProvider: FC<Props> = ({ children }) => {
         setSearchResults(cards);
     };
 
-    const changeCardQuantity = (id: string, qoh: Partial<QOH>) => {
+    const changeCardQuantity = (id: string, qoh: QOH) => {
         const copiedState = [...searchResults];
         const targetIndex = copiedState.findIndex((e) => e.id === id);
         copiedState[targetIndex].qoh = qoh;

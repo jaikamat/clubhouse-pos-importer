@@ -6,7 +6,7 @@ import parseQoh from '../utils/parseQoh';
 import { QOH } from '../utils/ScryfallCard';
 
 export const createInventoryLineItems = (
-    inventoryQty: Partial<QOH>,
+    inventoryQty: QOH,
     matchStrings: (keyof QOH)[]
 ): string[] => {
     const matches = matchStrings
@@ -24,7 +24,7 @@ export const createInventoryLineItems = (
 };
 
 interface Props {
-    inventoryQty: Partial<QOH>;
+    inventoryQty: QOH;
 }
 
 interface LabelWithPopupProps {

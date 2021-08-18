@@ -1,6 +1,35 @@
-import { ClubhouseLocation, Collection } from '../common/types';
+import {
+    ClubhouseLocation,
+    Collection,
+    FinishCondition,
+    QOH,
+} from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
+import isNonfoil from '../lib/isNonfoil';
+import parseQoh from '../lib/parseQoh';
+import ScryfallCard from './ScryfallCard';
+
+interface CountByPrinting {
+    _id: {
+        scryfall_id: string;
+        finish_condition: FinishCondition;
+    };
+    count: number;
+    card_title: string;
+    card_metadata: ScryfallCard;
+    quantity_on_hand: Partial<QOH>;
+}
+
+interface CountByCardName {
+    count: number;
+    card_title: string;
+}
+
+interface QueryResult {
+    countByPrinting: Array<CountByPrinting>;
+    countByCardName: Array<CountByCardName>;
+}
 
 interface Args {
     location: ClubhouseLocation;
@@ -52,6 +81,7 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
                 },
                 { $sort: sort },
                 { $limit: limit },
+                // Join on bulk cards for metadata
                 {
                     $lookup: {
                         from: Collection.scryfallBulkCards,
@@ -60,9 +90,24 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
                         as: 'card_metadata',
                     },
                 },
+                // Join on current inventory for current QOH
+                {
+                    $lookup: {
+                        from: Collection.cardInventory,
+                        localField: '_id.scryfall_id',
+                        foreignField: '_id',
+                        as: 'inventory',
+                    },
+                },
                 {
                     $addFields: {
                         card_metadata: { $first: '$card_metadata' },
+                        inventory: { $first: '$inventory' },
+                    },
+                },
+                {
+                    $addFields: {
+                        quantity_on_hand: '$inventory.qoh',
                     },
                 },
             ],
@@ -90,7 +135,31 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
             .aggregate(aggregation)
             .toArray();
 
-        return doc[0];
+        const result: QueryResult = doc[0];
+
+        /**
+         * Transform the data with a custom _id for client use and
+         * and infer quantity on hand for the indicated finish_condition
+         */
+        return {
+            countByPrinting: result.countByPrinting.map((c) => {
+                const id = `${c._id.scryfall_id}-${c._id.finish_condition}`;
+
+                // Infer finish from the finish_condition
+                const nonfoil = isNonfoil(c._id.finish_condition);
+
+                // Parse the entire QOH to use with inferred finish
+                const { foilQty, nonfoilQty } = parseQoh(c.quantity_on_hand);
+
+                return {
+                    ...c,
+                    _id: id,
+                    finish_condition: c._id.finish_condition,
+                    quantity_on_hand: nonfoil ? nonfoilQty : foilQty,
+                };
+            }),
+            countByCardName: result.countByCardName,
+        };
     } catch (e) {
         throw e;
     }

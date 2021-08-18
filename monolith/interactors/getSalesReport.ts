@@ -18,7 +18,7 @@ interface CountByPrinting {
     quantity_sold: number;
     card_title: string;
     card_metadata: ScryfallCard;
-    quantity_on_hand: Partial<QOH>;
+    quantity_on_hand: QOH;
 }
 
 interface CountByCardName {

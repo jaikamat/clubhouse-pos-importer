@@ -31,7 +31,7 @@ export type FinishCondition =
     | 'NONFOIL_MP'
     | 'NONFOIL_HP';
 
-export interface QOH {
+export type QOH = Partial<{
     FOIL_NM: number;
     FOIL_LP: number;
     FOIL_MP: number;
@@ -40,7 +40,7 @@ export interface QOH {
     NONFOIL_LP: number;
     NONFOIL_MP: number;
     NONFOIL_HP: number;
-}
+}>;
 
 export interface ImageURIs {
     normal: string;
@@ -72,7 +72,7 @@ export interface ScryfallApiCard {
     display_name: string;
     cardImage: string;
     color_identity: string[];
-    qoh?: Partial<QOH>;
+    qoh?: QOH;
     quantity?: number;
     qtyToSell?: number;
     finishCondition?: string;
@@ -109,7 +109,7 @@ export class ScryfallCard {
     public color_identity: string[];
     public promo_types: string[];
     public tcgplayer_id: number | null;
-    public qoh: Partial<QOH>;
+    public qoh: QOH;
 
     public constructor(card: ScryfallApiCard) {
         this.id = card.id;

@@ -20,7 +20,7 @@ interface ResponseData {
     _id: string;
     name: string;
     set: string;
-    qoh: Partial<QOH>;
+    qoh: QOH;
 }
 
 const addCardToInventoryQuery = async (payload: Payload) => {

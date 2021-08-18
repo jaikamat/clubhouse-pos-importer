@@ -77,16 +77,16 @@ export const frames = ['borderless', 'extendedArt', 'showcase'] as const;
 
 export type Frame = typeof frames[number];
 
-export interface QOH {
-    FOIL_NM?: number;
-    FOIL_LP?: number;
-    FOIL_MP?: number;
-    FOIL_HP?: number;
-    NONFOIL_NM?: number;
-    NONFOIL_LP?: number;
-    NONFOIL_MP?: number;
-    NONFOIL_HP?: number;
-}
+export type QOH = Partial<{
+    FOIL_NM: number;
+    FOIL_LP: number;
+    FOIL_MP: number;
+    FOIL_HP: number;
+    NONFOIL_NM: number;
+    NONFOIL_LP: number;
+    NONFOIL_MP: number;
+    NONFOIL_HP: number;
+}>;
 
 export interface RequestWithUserInfo extends Request {
     locations: string[];

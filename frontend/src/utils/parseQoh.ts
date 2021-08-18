@@ -1,6 +1,6 @@
 import { QOH } from './ScryfallCard';
 
-export default function parseQoh(qoh: Partial<QOH>) {
+export default function parseQoh(qoh: QOH) {
     const foilQty =
         (qoh?.FOIL_NM || 0) +
         (qoh?.FOIL_LP || 0) +

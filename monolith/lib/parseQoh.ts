@@ -3,7 +3,7 @@ import { QOH } from '../common/types';
 /**
  * This function parses the `qoh` object from mongo into something more presentable
  */
-export default function parseQoh(qoh: Partial<QOH>): {
+export default function parseQoh(qoh: QOH): {
     foilQty: number;
     nonfoilQty: number;
 } {

@@ -1,17 +1,24 @@
 import Axios from 'axios';
+import { Finish } from '../common/types';
 import { GET_REPORT } from '../utils/api_resources';
 import makeAuthHeader from '../utils/makeAuthHeader';
-import { ScryfallApiCard } from '../utils/ScryfallCard';
+import { FinishCondition, ScryfallApiCard } from '../utils/ScryfallCard';
 
 export interface ResponseData {
     countByPrinting: Array<{
-        count: number;
-        card_title: string;
+        _id: string;
         scryfall_id: string;
+        quantity_sold: number;
+        card_title: string;
         card_metadata: ScryfallApiCard;
+        quantity_on_hand: number;
+        finish: Finish;
+        finish_condition: FinishCondition;
+        estimated_price: number;
     }>;
     countByCardName: Array<{
-        count: number;
+        _id: string;
+        quantity_sold: number;
         card_title: string;
     }>;
 }

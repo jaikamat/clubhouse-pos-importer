@@ -16,7 +16,8 @@ import {
     TableRow,
 } from '@material-ui/core';
 import { HeaderText, SectionText } from '../ui/Typography';
-import { uniqueId } from 'lodash';
+import displayFinishCondition from '../utils/finishCondition';
+import { price } from '../utils/price';
 
 interface SearchDates {
     startDate: string;
@@ -30,12 +31,12 @@ enum RangeName {
 
 const allTimeDates: SearchDates = {
     startDate: moment().year(1999).toISOString(),
-    endDate: moment().toISOString(),
+    endDate: moment().add(1, 'days').toISOString(),
 };
 
 const lastMonthDates: SearchDates = {
     startDate: moment().subtract(30, 'days').toISOString(),
-    endDate: moment().toISOString(),
+    endDate: moment().add(1, 'days').toISOString(),
 };
 
 const Reporting = () => {
@@ -85,7 +86,7 @@ const Reporting = () => {
                 <Loading />
             ) : (
                 <Grid container spacing={2}>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={4}>
                         <SectionText>Top cards sold by name</SectionText>
                         <TableContainer component={Paper} variant="outlined">
                             <Table size="small">
@@ -101,8 +102,10 @@ const Reporting = () => {
                                 </TableHead>
                                 <TableBody>
                                     {report.countByCardName.map((c) => (
-                                        <TableRow key={uniqueId()}>
-                                            <TableCell>{c.count}</TableCell>
+                                        <TableRow key={c._id}>
+                                            <TableCell>
+                                                {c.quantity_sold}
+                                            </TableCell>
                                             <TableCell>
                                                 {c.card_title}
                                             </TableCell>
@@ -112,7 +115,7 @@ const Reporting = () => {
                             </Table>
                         </TableContainer>
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={8}>
                         <SectionText>
                             Top cards sold by a single printing
                         </SectionText>
@@ -127,19 +130,43 @@ const Reporting = () => {
                                             <b>Card name</b>
                                         </TableCell>
                                         <TableCell>
-                                            <b>Set name</b>
+                                            <b>Edition</b>
+                                        </TableCell>
+                                        <TableCell>
+                                            <b>Finish (Condition)</b>
+                                        </TableCell>
+                                        <TableCell>
+                                            <b>Estimated market price</b>
+                                        </TableCell>
+                                        <TableCell>
+                                            <b>Quantity on hand</b>
                                         </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {report.countByPrinting.map((c) => (
-                                        <TableRow key={uniqueId()}>
-                                            <TableCell>{c.count}</TableCell>
+                                        <TableRow key={c._id}>
+                                            <TableCell>
+                                                {c.quantity_sold}
+                                            </TableCell>
                                             <TableCell>
                                                 {c.card_title}
                                             </TableCell>
                                             <TableCell>
                                                 {c.card_metadata.set_name}
+                                            </TableCell>
+                                            <TableCell>
+                                                {displayFinishCondition(
+                                                    c.finish_condition
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                {c.estimated_price !== null
+                                                    ? price(c.estimated_price)
+                                                    : '—'}
+                                            </TableCell>
+                                            <TableCell>
+                                                {c.quantity_on_hand}
                                             </TableCell>
                                         </TableRow>
                                     ))}

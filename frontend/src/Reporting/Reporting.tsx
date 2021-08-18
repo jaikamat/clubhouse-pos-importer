@@ -18,6 +18,7 @@ import {
 import { HeaderText, SectionText } from '../ui/Typography';
 import { uniqueId } from 'lodash';
 import displayFinishCondition from '../utils/finishCondition';
+import { price } from '../utils/price';
 
 interface SearchDates {
     startDate: string;
@@ -86,7 +87,7 @@ const Reporting = () => {
                 <Loading />
             ) : (
                 <Grid container spacing={2}>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={4}>
                         <SectionText>Top cards sold by name</SectionText>
                         <TableContainer component={Paper} variant="outlined">
                             <Table size="small">
@@ -113,7 +114,7 @@ const Reporting = () => {
                             </Table>
                         </TableContainer>
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={8}>
                         <SectionText>
                             Top cards sold by a single printing
                         </SectionText>
@@ -134,6 +135,9 @@ const Reporting = () => {
                                             <b>Finish (Condition)</b>
                                         </TableCell>
                                         <TableCell>
+                                            <b>Estimated market price</b>
+                                        </TableCell>
+                                        <TableCell>
                                             <b>Quantity on hand</b>
                                         </TableCell>
                                     </TableRow>
@@ -152,6 +156,11 @@ const Reporting = () => {
                                                 {displayFinishCondition(
                                                     c.finish_condition
                                                 )}
+                                            </TableCell>
+                                            <TableCell>
+                                                {c.estimated_price !== null
+                                                    ? price(c.estimated_price)
+                                                    : '—'}
                                             </TableCell>
                                             <TableCell>
                                                 {c.quantity_on_hand}

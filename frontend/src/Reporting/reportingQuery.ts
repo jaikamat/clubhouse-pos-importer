@@ -14,6 +14,7 @@ export interface ResponseData {
         quantity_on_hand: number;
         finish: Finish;
         finish_condition: FinishCondition;
+        estimated_price: number;
     }>;
     countByCardName: Array<{
         count: number;

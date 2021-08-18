@@ -17,6 +17,7 @@ export interface ResponseData {
         estimated_price: number;
     }>;
     countByCardName: Array<{
+        _id: string;
         quantity_sold: number;
         card_title: string;
     }>;

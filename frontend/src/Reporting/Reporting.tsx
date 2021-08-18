@@ -16,7 +16,6 @@ import {
     TableRow,
 } from '@material-ui/core';
 import { HeaderText, SectionText } from '../ui/Typography';
-import { uniqueId } from 'lodash';
 import displayFinishCondition from '../utils/finishCondition';
 import { price } from '../utils/price';
 
@@ -103,7 +102,7 @@ const Reporting = () => {
                                 </TableHead>
                                 <TableBody>
                                     {report.countByCardName.map((c) => (
-                                        <TableRow key={uniqueId()}>
+                                        <TableRow key={c._id}>
                                             <TableCell>
                                                 {c.quantity_sold}
                                             </TableCell>

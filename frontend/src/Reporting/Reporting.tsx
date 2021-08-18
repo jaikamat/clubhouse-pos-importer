@@ -17,6 +17,7 @@ import {
 } from '@material-ui/core';
 import { HeaderText, SectionText } from '../ui/Typography';
 import { uniqueId } from 'lodash';
+import displayFinishCondition from '../utils/finishCondition';
 
 interface SearchDates {
     startDate: string;
@@ -30,12 +31,12 @@ enum RangeName {
 
 const allTimeDates: SearchDates = {
     startDate: moment().year(1999).toISOString(),
-    endDate: moment().toISOString(),
+    endDate: moment().add(1, 'days').toISOString(),
 };
 
 const lastMonthDates: SearchDates = {
     startDate: moment().subtract(30, 'days').toISOString(),
-    endDate: moment().toISOString(),
+    endDate: moment().add(1, 'days').toISOString(),
 };
 
 const Reporting = () => {
@@ -127,19 +128,33 @@ const Reporting = () => {
                                             <b>Card name</b>
                                         </TableCell>
                                         <TableCell>
-                                            <b>Set name</b>
+                                            <b>Edition</b>
+                                        </TableCell>
+                                        <TableCell>
+                                            <b>Finish (Condition)</b>
+                                        </TableCell>
+                                        <TableCell>
+                                            <b>Quantity on hand</b>
                                         </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {report.countByPrinting.map((c) => (
-                                        <TableRow key={uniqueId()}>
+                                        <TableRow key={c._id}>
                                             <TableCell>{c.count}</TableCell>
                                             <TableCell>
                                                 {c.card_title}
                                             </TableCell>
                                             <TableCell>
                                                 {c.card_metadata.set_name}
+                                            </TableCell>
+                                            <TableCell>
+                                                {displayFinishCondition(
+                                                    c.finish_condition
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                {c.quantity_on_hand}
                                             </TableCell>
                                         </TableRow>
                                     ))}

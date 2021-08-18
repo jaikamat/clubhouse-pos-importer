@@ -8,7 +8,7 @@ export interface ResponseData {
     countByPrinting: Array<{
         _id: string;
         scryfall_id: string;
-        count: number;
+        quantity_sold: number;
         card_title: string;
         card_metadata: ScryfallApiCard;
         quantity_on_hand: number;
@@ -17,7 +17,7 @@ export interface ResponseData {
         estimated_price: number;
     }>;
     countByCardName: Array<{
-        count: number;
+        quantity_sold: number;
         card_title: string;
     }>;
 }

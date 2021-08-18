@@ -104,7 +104,9 @@ const Reporting = () => {
                                 <TableBody>
                                     {report.countByCardName.map((c) => (
                                         <TableRow key={uniqueId()}>
-                                            <TableCell>{c.count}</TableCell>
+                                            <TableCell>
+                                                {c.quantity_sold}
+                                            </TableCell>
                                             <TableCell>
                                                 {c.card_title}
                                             </TableCell>
@@ -145,7 +147,9 @@ const Reporting = () => {
                                 <TableBody>
                                     {report.countByPrinting.map((c) => (
                                         <TableRow key={c._id}>
-                                            <TableCell>{c.count}</TableCell>
+                                            <TableCell>
+                                                {c.quantity_sold}
+                                            </TableCell>
                                             <TableCell>
                                                 {c.card_title}
                                             </TableCell>

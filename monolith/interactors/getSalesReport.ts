@@ -15,14 +15,14 @@ interface CountByPrinting {
         scryfall_id: string;
         finish_condition: FinishCondition;
     };
-    count: number;
+    quantity_sold: number;
     card_title: string;
     card_metadata: ScryfallCard;
     quantity_on_hand: Partial<QOH>;
 }
 
 interface CountByCardName {
-    count: number;
+    quantity_sold: number;
     card_title: string;
 }
 
@@ -64,7 +64,7 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
             },
         };
 
-        const sort = { count: -1 };
+        const sort = { quantity_sold: -1 };
         const limit = 100;
 
         const facet = {
@@ -75,7 +75,7 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
                             scryfall_id: '$scryfall_id',
                             finish_condition: '$finish_condition',
                         },
-                        count: { $sum: '$quantity_sold' },
+                        quantity_sold: { $sum: '$quantity_sold' },
                         card_title: { $first: '$card_title' },
                     },
                 },
@@ -115,13 +115,12 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
                 {
                     $group: {
                         _id: '$card_title',
-                        count: { $sum: '$quantity_sold' },
+                        quantity_sold: { $sum: '$quantity_sold' },
                         card_title: { $first: '$card_title' },
                     },
                 },
                 { $sort: sort },
                 { $limit: limit },
-                { $project: { _id: 0 } }, // Suppress _id we used in $group
             ],
         };
 

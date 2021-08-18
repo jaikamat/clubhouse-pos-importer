@@ -158,6 +158,9 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
                     finish_condition: c._id.finish_condition,
                     finish: nonfoil ? 'NONFOIL' : 'FOIL',
                     quantity_on_hand: nonfoil ? nonfoilQty : foilQty,
+                    estimated_price: nonfoil
+                        ? c.card_metadata.prices.usd
+                        : c.card_metadata.prices.usd_foil,
                 };
             }),
             countByCardName: result.countByCardName,

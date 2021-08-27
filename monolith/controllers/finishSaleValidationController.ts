@@ -1,17 +1,17 @@
 require('dotenv').config();
 import Joi from 'joi';
 import {
-    validFinishConditions,
-    validInteger,
-    validPrice,
-    validStringRequired,
-} from '../common/validations';
-import {
     Controller,
     FinishSaleCard,
     JoiValidation,
     ReqWithFinishSaleCards,
 } from '../common/types';
+import {
+    validFinishConditions,
+    validInteger,
+    validPrice,
+    validStringRequired,
+} from '../common/validations';
 
 /**
  * Sale middleware that sanitizes card array to ensure inputs are valid. Will throw errors and end sale if needed

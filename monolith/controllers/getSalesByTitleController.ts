@@ -1,12 +1,12 @@
 require('dotenv').config();
-import getSalesFromCardname from '../interactors/getSalesFromCardname';
 import Joi from 'joi';
-import { validStringRequired } from '../common/validations';
 import {
     Controller,
     JoiValidation,
     RequestWithUserInfo,
 } from '../common/types';
+import { validStringRequired } from '../common/validations';
+import getSalesFromCardname from '../interactors/getSalesFromCardname';
 
 interface GetSaleByTitleQuery {
     cardName: string;

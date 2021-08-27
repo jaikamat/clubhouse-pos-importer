@@ -1,6 +1,6 @@
 require('dotenv').config();
-import deleteSuspendedSale from '../interactors/deleteSuspendedSale';
 import { Controller, RequestWithUserInfo } from '../common/types';
+import deleteSuspendedSale from '../interactors/deleteSuspendedSale';
 
 const deleteSuspendedSaleController: Controller<RequestWithUserInfo> = async (
     req,

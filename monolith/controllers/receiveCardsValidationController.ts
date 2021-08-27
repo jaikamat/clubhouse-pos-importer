@@ -1,6 +1,13 @@
 require('dotenv').config();
 import Joi from 'joi';
 import {
+    Controller,
+    JoiValidation,
+    ReceivingBody,
+    ReceivingCard,
+    ReqWithReceivingCards,
+} from '../common/types';
+import {
     validContact,
     validFinishConditions,
     validInteger,
@@ -9,13 +16,6 @@ import {
     validStringRequired,
     validTradeType,
 } from '../common/validations';
-import {
-    Controller,
-    JoiValidation,
-    ReceivingBody,
-    ReceivingCard,
-    ReqWithReceivingCards,
-} from '../common/types';
 
 /**
  * Sanitizes card object properties so nothing funky is committed to the database

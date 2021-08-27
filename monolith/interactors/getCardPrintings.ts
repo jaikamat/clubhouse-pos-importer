@@ -1,8 +1,8 @@
 import { Collection } from '../common/types';
 import getDatabaseConnection from '../database';
-import ScryfallCard from './ScryfallCard';
-import cardImageUrl from '../lib/cardImageUrl';
 import cardDisplayName from '../lib/cardDisplayName';
+import cardImageUrl from '../lib/cardImageUrl';
+import ScryfallCard from './ScryfallCard';
 
 class BulkCard {
     public scryfall_id: string;

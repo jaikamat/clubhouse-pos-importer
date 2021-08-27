@@ -1,7 +1,7 @@
 require('dotenv').config();
+import { Controller, RequestWithUserInfo } from '../common/types';
 import getAllSales from '../interactors/getAllSales';
 import getFormatLegalities from '../interactors/getFormatLegalities';
-import { Controller, RequestWithUserInfo } from '../common/types';
 
 const allSalesController: Controller<RequestWithUserInfo> = async (
     req,

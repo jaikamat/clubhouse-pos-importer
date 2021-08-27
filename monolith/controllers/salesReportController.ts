@@ -1,12 +1,12 @@
 require('dotenv').config();
 import Joi from 'joi';
-import { validDate } from '../common/validations';
+import moment from 'moment';
 import {
     Controller,
     JoiValidation,
     RequestWithUserInfo,
 } from '../common/types';
-import moment from 'moment';
+import { validDate } from '../common/validations';
 import getSalesReport from '../interactors/getSalesReport';
 
 interface SalesReportQuery {

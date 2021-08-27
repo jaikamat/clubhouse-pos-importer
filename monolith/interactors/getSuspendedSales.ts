@@ -1,6 +1,6 @@
-import collectionFromLocation from '../lib/collectionFromLocation';
-import getDatabaseConnection from '../database';
 import { ClubhouseLocation } from '../common/types';
+import getDatabaseConnection from '../database';
+import collectionFromLocation from '../lib/collectionFromLocation';
 
 /**
  * Returns all suspended sales' ids, customer names, and notes (omitting card lists)

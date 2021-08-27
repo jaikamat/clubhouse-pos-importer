@@ -1,11 +1,11 @@
-import createError from 'http-errors';
-import express from 'express';
-import path from 'path';
 import cookieParser from 'cookie-parser';
-import logger from 'morgan';
 import cors from 'cors';
-import indexRouter from './routes/index';
+import express from 'express';
+import createError from 'http-errors';
+import logger from 'morgan';
+import path from 'path';
 import authRouter from './routes/auth';
+import indexRouter from './routes/index';
 
 var app = express();
 

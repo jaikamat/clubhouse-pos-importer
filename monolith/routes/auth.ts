@@ -1,6 +1,5 @@
 require('dotenv').config();
 import express from 'express';
-const router = express.Router();
 import {
     addCardToInventoryController,
     allSalesController,
@@ -22,6 +21,7 @@ import {
     salesReportController,
     suspendedSaleByIdController,
 } from '../controllers';
+const router = express.Router();
 
 router.use(authController);
 router.post('/addCardToInventory', addCardToInventoryController);

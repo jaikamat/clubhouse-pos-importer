@@ -1,5 +1,5 @@
-import getDatabaseConnection from '../database';
 import { ClubhouseLocation, Collection } from '../common/types';
+import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 
 async function getFormatLegalities(location: ClubhouseLocation) {

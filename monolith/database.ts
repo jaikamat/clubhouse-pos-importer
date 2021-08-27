@@ -1,6 +1,6 @@
-import mongoOptions from './lib/mongoOptions';
 import { Db, MongoClient } from 'mongodb';
 import getDatabaseName from './lib/getDatabaseName';
+import mongoOptions from './lib/mongoOptions';
 const DATABASE_NAME = getDatabaseName();
 
 let _db: Db;

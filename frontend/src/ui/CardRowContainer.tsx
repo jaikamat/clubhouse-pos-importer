@@ -19,10 +19,8 @@ const CardRowContainer: FC<Props> = ({ image, header, children }) => {
         <Paper variant="outlined">
             <Box p={2}>
                 <Grid container spacing={2}>
-                    <Grid item alignItems="center" justifyContent="center">
-                        {image}
-                    </Grid>
-                    <Grid item xs={10} alignContent="space-between">
+                    <Grid item>{image}</Grid>
+                    <Grid item xs={10}>
                         <div className={headerContainer}>{header}</div>
                         <div>{children}</div>
                     </Grid>

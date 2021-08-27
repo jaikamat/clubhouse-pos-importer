@@ -21,15 +21,11 @@ export type LanguageCode =
     | 'sa'
     | 'px';
 
-export type FinishCondition =
-    | 'FOIL_NM'
-    | 'FOIL_LP'
-    | 'FOIL_MP'
-    | 'FOIL_HP'
-    | 'NONFOIL_NM'
-    | 'NONFOIL_LP'
-    | 'NONFOIL_MP'
-    | 'NONFOIL_HP';
+export type Finish = 'FOIL' | 'NONFOIL';
+
+export type Condition = 'NM' | 'LP' | 'MP' | 'HP';
+
+export type FinishCondition = `${Finish}_${Condition}`
 
 export type QOH = Partial<{
     FOIL_NM: number;

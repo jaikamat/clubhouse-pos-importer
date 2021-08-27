@@ -5,12 +5,11 @@ import _ from 'lodash';
 import React, { ChangeEvent, FC, useContext } from 'react';
 import { Button, Form, Input, Item } from 'semantic-ui-react';
 import CardImage from '../common/CardImage';
-import { Finish } from '../common/types';
 import { SaleContext } from '../context/SaleContext';
 import CardHeader from '../ui/CardHeader';
 import FormikSelectField from '../ui/FormikSelectField';
 import roundPrice from '../utils/roundPrice';
-import { QOH, ScryfallCard } from '../utils/ScryfallCard';
+import { Finish, QOH, ScryfallCard } from '../utils/ScryfallCard';
 
 interface ConditionOptions {
     text: string;

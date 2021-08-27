@@ -2,9 +2,9 @@ import { TableCell, TableRow } from '@material-ui/core';
 import StarIcon from '@material-ui/icons/Star';
 import React, { FC } from 'react';
 import Price from '../common/Price';
-import { Condition, Finish } from '../common/types';
 import CardImageTooltip from '../ui/CardImageTooltip';
 import SetIcon from '../ui/SetIcon';
+import { Condition, Finish } from '../utils/ScryfallCard';
 import { ResponseCard } from './filteredCardsQuery';
 
 const conditionMap: Record<Condition, string> = {

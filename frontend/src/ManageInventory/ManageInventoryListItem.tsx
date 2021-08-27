@@ -3,7 +3,6 @@ import { FormikErrors, FormikHelpers, useFormik } from 'formik';
 import $ from 'jquery';
 import React, { ChangeEvent, FC, useContext, useState } from 'react';
 import CardImage from '../common/CardImage';
-import { Finish } from '../common/types';
 import { InventoryContext } from '../context/InventoryContext';
 import Button from '../ui/Button';
 import CardHeader from '../ui/CardHeader';
@@ -11,8 +10,9 @@ import ControlledDropdown from '../ui/ControlledDropdown';
 import TextField from '../ui/TextField';
 import { useToastContext } from '../ui/ToastContext';
 import checkCardFinish from '../utils/checkCardFinish';
+import createFinishCondition from '../utils/createFinishCondtition';
 import { cardConditions, finishes } from '../utils/dropdownOptions';
-import { ScryfallCard } from '../utils/ScryfallCard';
+import { Condition, Finish, ScryfallCard } from '../utils/ScryfallCard';
 import addCardToInventoryQuery from './addCardToInventoryQuery';
 
 interface Props {
@@ -21,7 +21,7 @@ interface Props {
 
 interface FormValues {
     selectedFinish: Finish;
-    selectedCondition: string;
+    selectedCondition: Condition;
     quantity: string;
 }
 
@@ -58,7 +58,10 @@ const ManageInventoryListItem: FC<Props> = ({ card }) => {
         try {
             const { qoh } = await addCardToInventoryQuery({
                 quantity: parseInt(quantity, 10),
-                finishCondition: `${selectedFinish}_${selectedCondition}`,
+                finishCondition: createFinishCondition(
+                    selectedFinish,
+                    selectedCondition
+                ),
                 cardInfo: { id, name, set_name, set },
             });
 

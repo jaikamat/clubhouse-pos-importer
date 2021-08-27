@@ -3,9 +3,8 @@ import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import React, { FC } from 'react';
 import MarketPrice from '../common/MarketPrice';
 import QohLabels from '../common/QohLabels';
-import { Finish } from '../common/types';
 import language from '../utils/Language';
-import { ScryfallCard } from '../utils/ScryfallCard';
+import { Finish, ScryfallCard } from '../utils/ScryfallCard';
 import Button from './Button';
 import SetIcon from './SetIcon';
 

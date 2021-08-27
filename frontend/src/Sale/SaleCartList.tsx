@@ -1,11 +1,11 @@
+import { Box, Divider, Grid, List, Paper, Typography } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import React, { FC, Fragment } from 'react';
+import { SaleListCard } from '../context/SaleContext';
+import Placeholder from '../ui/Placeholder';
+import FinishSale from './FinishSale';
 import SaleCartItem from './SaleCartItem';
 import SaleCartPriceTotal from './SaleCartPriceTotal';
-import FinishSale from './FinishSale';
-import { SaleListCard } from '../context/SaleContext';
-import AddIcon from '@material-ui/icons/Add';
-import Placeholder from '../ui/Placeholder';
-import { List, Paper, Divider, Box, Grid, Typography } from '@material-ui/core';
 
 interface Props {
     saleList: SaleListCard[];

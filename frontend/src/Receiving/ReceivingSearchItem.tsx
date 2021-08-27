@@ -1,17 +1,17 @@
-import React, { useContext, FC, ChangeEvent } from 'react';
+import { Box, Paper } from '@material-ui/core';
+import { FormikErrors, useFormik } from 'formik';
 import $ from 'jquery';
-import { Input, Button, Form, Item } from 'semantic-ui-react';
+import React, { ChangeEvent, FC, useContext } from 'react';
+import { Button, Form, Input, Item } from 'semantic-ui-react';
 import CardImage from '../common/CardImage';
 import createToast from '../common/createToast';
+import { Condition, Finish } from '../common/types';
 import { ReceivingContext } from '../context/ReceivingContext';
-import { finishes, cardConditions } from '../utils/dropdownOptions';
-import checkCardFinish from '../utils/checkCardFinish';
-import { ScryfallCard } from '../utils/ScryfallCard';
 import CardHeader from '../ui/CardHeader';
-import { FormikErrors, useFormik } from 'formik';
 import FormikSelectField from '../ui/FormikSelectField';
-import { Box, Paper } from '@material-ui/core';
-import { Finish, Condition } from '../common/types';
+import checkCardFinish from '../utils/checkCardFinish';
+import { cardConditions, finishes } from '../utils/dropdownOptions';
+import { ScryfallCard } from '../utils/ScryfallCard';
 
 interface Props {
     card: ScryfallCard;

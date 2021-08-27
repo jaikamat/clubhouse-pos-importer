@@ -1,7 +1,7 @@
 import React from 'react';
 import { Message } from 'semantic-ui-react';
-import toaster from 'toasted-notes';
 import styled from 'styled-components';
+import toaster from 'toasted-notes';
 
 const ToastContainer = styled(Message)`
     position: relative;

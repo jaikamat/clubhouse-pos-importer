@@ -1,7 +1,6 @@
 import axios from 'axios';
-import makeAuthHeader from '../utils/makeAuthHeader';
 import { FINISH_SALE } from '../utils/api_resources';
-import { Trade } from './ReceivingContext';
+import makeAuthHeader from '../utils/makeAuthHeader';
 import { SaleListCard } from './SaleContext';
 
 interface Payload {

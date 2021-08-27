@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
-import { Chip as MUIChip, makeStyles, ChipProps } from '@material-ui/core';
+import { Chip as MUIChip, ChipProps, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
+import React, { FC } from 'react';
 
 type Props = ChipProps & { foil?: boolean };
 

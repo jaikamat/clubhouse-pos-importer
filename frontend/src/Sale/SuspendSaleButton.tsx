@@ -1,16 +1,16 @@
-import React, { useState, useEffect, FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
-    Modal,
     Button,
-    Grid,
-    Form,
-    Message,
-    TextAreaProps,
     DropdownProps,
+    Form,
+    Grid,
+    Message,
+    Modal,
+    TextAreaProps,
 } from 'semantic-ui-react';
 import styled from 'styled-components';
-import { SaleContext } from '../context/SaleContext';
 import { SuspendedSale } from '../context/getSuspendedSaleQuery';
+import { SaleContext } from '../context/SaleContext';
 import getSuspendedSalesQuery from './getSuspendedSalesQuery';
 
 interface Props {

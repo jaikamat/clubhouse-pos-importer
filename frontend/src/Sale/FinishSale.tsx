@@ -1,5 +1,5 @@
-import React, { useState, useContext, FC } from 'react';
-import { Modal, Button, Header, Icon } from 'semantic-ui-react';
+import React, { FC, useContext, useState } from 'react';
+import { Button, Header, Icon, Modal } from 'semantic-ui-react';
 import { SaleContext } from '../context/SaleContext';
 
 interface Props {}

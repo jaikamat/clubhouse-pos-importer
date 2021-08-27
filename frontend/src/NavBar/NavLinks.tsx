@@ -1,15 +1,15 @@
-import React, { FC } from 'react';
 import { Divider, List, ListItem, ListItemIcon } from '@material-ui/core';
-import { useLocation, Link as RouterLink } from 'react-router-dom';
 import AddIcon from '@material-ui/icons/Add';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import ListAltIcon from '@material-ui/icons/ListAlt';
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import ViewListIcon from '@material-ui/icons/ViewList';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import ListAltIcon from '@material-ui/icons/ListAlt';
 import QueueIcon from '@material-ui/icons/Queue';
+import ViewListIcon from '@material-ui/icons/ViewList';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import React, { FC } from 'react';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthProvider';
 
 const NavLinks: FC<{}> = () => {

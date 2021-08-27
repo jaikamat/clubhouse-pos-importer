@@ -1,5 +1,5 @@
-import useLocalStorage from './useLocalStorage';
 import { act, renderHook } from '@testing-library/react-hooks';
+import useLocalStorage from './useLocalStorage';
 
 beforeEach(() => localStorage.clear());
 afterEach(() => localStorage.clear());

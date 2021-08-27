@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
  * The browser emits a "beforeunload" event right before the user closes a tab or refreshes

@@ -1,4 +1,3 @@
-import React, { FC, useState } from 'react';
 import {
     AppBar,
     Box,
@@ -9,12 +8,13 @@ import {
     Toolbar,
     Typography,
 } from '@material-ui/core';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 import MenuIcon from '@material-ui/icons/Menu';
+import React, { FC, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { version } from '../../package.json';
 import { ClubhouseLocation, useAuthContext } from '../context/AuthProvider';
 import NavLinks from './NavLinks';
-import { Link as RouterLink } from 'react-router-dom';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import { version } from '../../package.json';
 
 const useStyles = makeStyles(({ spacing, typography, palette }) => ({
     title: {

@@ -1,17 +1,17 @@
-import React, { FC, useContext, useState } from 'react';
-import { Input, Button, Form, Select, Item } from 'semantic-ui-react';
-import $ from 'jquery';
-import { FormikErrors, FormikHelpers, useFormik } from 'formik';
-import createToast from '../common/createToast';
-import CardImage from '../common/CardImage';
-import { finishes, cardConditions } from '../utils/dropdownOptions';
-import checkCardFinish from '../utils/checkCardFinish';
-import { InventoryContext } from '../context/InventoryContext';
-import { ScryfallCard } from '../utils/ScryfallCard';
-import CardHeader from '../ui/CardHeader';
-import addCardToInventoryQuery from './addCardToInventoryQuery';
 import { Box, Paper } from '@material-ui/core';
+import { FormikErrors, FormikHelpers, useFormik } from 'formik';
+import $ from 'jquery';
+import React, { FC, useContext, useState } from 'react';
+import { Button, Form, Input, Item, Select } from 'semantic-ui-react';
+import CardImage from '../common/CardImage';
+import createToast from '../common/createToast';
 import { Finish } from '../common/types';
+import { InventoryContext } from '../context/InventoryContext';
+import CardHeader from '../ui/CardHeader';
+import checkCardFinish from '../utils/checkCardFinish';
+import { cardConditions, finishes } from '../utils/dropdownOptions';
+import { ScryfallCard } from '../utils/ScryfallCard';
+import addCardToInventoryQuery from './addCardToInventoryQuery';
 
 interface Props {
     card: ScryfallCard;

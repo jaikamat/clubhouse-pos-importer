@@ -1,11 +1,11 @@
-import React, { useContext, FC } from 'react';
-import { SaleContext, SaleListCard } from '../context/SaleContext';
-import Price from '../common/Price';
-import SetIcon from '../ui/SetIcon';
-import CardImageTooltip from '../ui/CardImageTooltip';
-import { ListItem, Grid, Box, Typography, IconButton } from '@material-ui/core';
-import Chip from '../common/Chip';
+import { Box, Grid, IconButton, ListItem, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import React, { FC, useContext } from 'react';
+import Chip from '../common/Chip';
+import Price from '../common/Price';
+import { SaleContext, SaleListCard } from '../context/SaleContext';
+import CardImageTooltip from '../ui/CardImageTooltip';
+import SetIcon from '../ui/SetIcon';
 
 interface Props {
     card: SaleListCard;

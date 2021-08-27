@@ -1,17 +1,17 @@
+import { Grid as MUIGrid } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
+import { FormikErrors, useFormik } from 'formik';
 import React, { FC, useState } from 'react';
 import { Grid, Header } from 'semantic-ui-react';
-import { ScryfallCard } from '../utils/ScryfallCard';
-import { FormikErrors, useFormik } from 'formik';
-import { ClubhouseLocation } from '../context/AuthProvider';
 import styled from 'styled-components';
+import { ClubhouseLocation } from '../context/AuthProvider';
+import Button from '../ui/Button';
+import ControlledDropdown from '../ui/ControlledDropdown';
+import ControlledSearchBar from '../ui/ControlledSearchBar';
+import Placeholder from '../ui/Placeholder';
+import { ScryfallCard } from '../utils/ScryfallCard';
 import PublicCard from './PublicCard';
 import publicCardSearchQuery from './publicCardSearchQuery';
-import ControlledSearchBar from '../ui/ControlledSearchBar';
-import ControlledDropdown from '../ui/ControlledDropdown';
-import Button from '../ui/Button';
-import { Grid as MUIGrid } from '@material-ui/core';
-import Placeholder from '../ui/Placeholder';
-import SearchIcon from '@material-ui/icons/Search';
 
 interface State {
     searchResults: ScryfallCard[];

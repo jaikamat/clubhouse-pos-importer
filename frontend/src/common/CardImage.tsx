@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core';
-import React, { FC, useState } from 'react';
 import clsx from 'clsx';
+import React, { FC, useState } from 'react';
 
 interface Props {
     image: string;

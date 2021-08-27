@@ -1,6 +1,6 @@
 import { Snackbar } from '@material-ui/core';
 import { Alert, AlertProps } from '@material-ui/lab';
-import React, { FC, useContext, createContext, useState } from 'react';
+import React, { createContext, FC, useContext, useState } from 'react';
 
 type Severity = AlertProps['severity'];
 

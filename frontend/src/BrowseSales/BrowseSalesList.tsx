@@ -1,11 +1,11 @@
 import {
-    Table,
-    TableCell,
-    TableHead,
-    TableBody,
-    TableRow,
     Paper,
+    Table,
+    TableBody,
+    TableCell,
     TableContainer,
+    TableHead,
+    TableRow,
 } from '@material-ui/core';
 import React, { FC } from 'react';
 import BrowseSalesItem from './BrowseSalesItem';

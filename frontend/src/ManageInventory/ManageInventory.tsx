@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
-import TotalStoreInventory from './TotalStoreInventory';
-import { InventoryContext } from '../context/InventoryContext';
-import ManageInventoryListItem from './ManageInventoryListItem';
 import { Grid } from '@material-ui/core';
-import { HeaderText } from '../ui/Typography';
-import Loading from '../ui/Loading';
-import ControlledSearchBar from '../ui/ControlledSearchBar';
-import Placeholder from '../ui/Placeholder';
 import SearchIcon from '@material-ui/icons/Search';
+import React, { useContext, useEffect, useState } from 'react';
+import { InventoryContext } from '../context/InventoryContext';
+import ControlledSearchBar from '../ui/ControlledSearchBar';
+import Loading from '../ui/Loading';
+import Placeholder from '../ui/Placeholder';
+import { HeaderText } from '../ui/Typography';
+import ManageInventoryListItem from './ManageInventoryListItem';
+import TotalStoreInventory from './TotalStoreInventory';
 
 export default function ManageInventory() {
     const [term, setTerm] = useState<string>('');

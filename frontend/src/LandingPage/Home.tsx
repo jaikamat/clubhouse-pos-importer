@@ -2,10 +2,10 @@ import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
-import clubhouse_products from './clubhouse_products.png';
-import ch1 from './tables.jpg';
-import learn_to_play from './learn_to_play.jpg';
 import ch2 from './ch2.jpg';
+import clubhouse_products from './clubhouse_products.png';
+import learn_to_play from './learn_to_play.jpg';
+import ch1 from './tables.jpg';
 
 const colors = {
     primary: '#2185d0',

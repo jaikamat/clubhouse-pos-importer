@@ -1,6 +1,5 @@
+import { TextField, TextFieldProps } from '@material-ui/core';
 import React, { FC } from 'react';
-import { TextField } from '@material-ui/core';
-import { TextFieldProps } from '@material-ui/core';
 
 type Props = Omit<TextFieldProps, 'value' | 'onChange' | 'label' | 'name'> & {
     value: string;

@@ -1,6 +1,6 @@
 import axios from 'axios';
-import makeAuthHeader from '../utils/makeAuthHeader';
 import { SUSPEND_SALE } from '../utils/api_resources';
+import makeAuthHeader from '../utils/makeAuthHeader';
 import { SaleListCard } from './SaleContext';
 
 export interface SuspendedSale {

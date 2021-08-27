@@ -1,17 +1,17 @@
-import React, { useContext, FC } from 'react';
+import { Box, Grid, IconButton, ListItem, Typography } from '@material-ui/core';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import CloseIcon from '@material-ui/icons/Close';
+import CreditCardIcon from '@material-ui/icons/CreditCard';
+import React, { FC, useContext } from 'react';
+import Chip from '../common/Chip';
 import Price from '../common/Price';
 import {
     ReceivingCard,
     ReceivingContext,
     Trade,
 } from '../context/ReceivingContext';
-import SetIcon from '../ui/SetIcon';
 import CardImageTooltip from '../ui/CardImageTooltip';
-import { ListItem, Grid, Typography, Box, IconButton } from '@material-ui/core';
-import Chip from '../common/Chip';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import CreditCardIcon from '@material-ui/icons/CreditCard';
-import CloseIcon from '@material-ui/icons/Close';
+import SetIcon from '../ui/SetIcon';
 
 interface Props {
     card: ReceivingCard;

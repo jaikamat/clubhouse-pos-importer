@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
 import { Button as MUIButton, ButtonProps } from '@material-ui/core';
+import React, { FC } from 'react';
 
 type Props = Omit<ButtonProps, 'variant' | 'color' | 'disableElevation'> & {
     primary?: boolean;

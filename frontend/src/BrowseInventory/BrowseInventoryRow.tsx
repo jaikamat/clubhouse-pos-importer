@@ -1,11 +1,11 @@
 import { TableCell, TableRow } from '@material-ui/core';
+import StarIcon from '@material-ui/icons/Star';
 import React, { FC } from 'react';
 import Price from '../common/Price';
+import { Condition, Finish } from '../common/types';
 import CardImageTooltip from '../ui/CardImageTooltip';
 import SetIcon from '../ui/SetIcon';
 import { ResponseCard } from './filteredCardsQuery';
-import StarIcon from '@material-ui/icons/Star';
-import { Condition, Finish } from '../common/types';
 
 const conditionMap: Record<Condition, string> = {
     NM: 'Near Mint',

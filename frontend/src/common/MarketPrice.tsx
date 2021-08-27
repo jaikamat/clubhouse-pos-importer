@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import Chip from './Chip';
 import marketPriceQuery from './marketPriceQuery';
 import { Finish } from './types';

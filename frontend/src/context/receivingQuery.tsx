@@ -1,6 +1,6 @@
 import axios from 'axios';
-import makeAuthHeader from '../utils/makeAuthHeader';
 import { RECEIVE_CARDS } from '../utils/api_resources';
+import makeAuthHeader from '../utils/makeAuthHeader';
 import { Trade } from './ReceivingContext';
 
 interface ReceivingQueryCard {

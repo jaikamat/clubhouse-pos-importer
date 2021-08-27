@@ -1,17 +1,17 @@
-import React, { useContext, FC, useState, useEffect } from 'react';
-import BrowseCardList from './SaleSearchCardList';
-import SaleCartList from './SaleCartList';
-import PrintList from './PrintList';
-import SuspendSaleButton from './SuspendSaleButton';
-import { SaleContext } from '../context/SaleContext';
-import TotalCardsLabel from '../common/TotalCardsLabel';
-import TotalStoreInventory from '../ManageInventory/TotalStoreInventory';
-import sum from '../utils/sum';
 import { Box, Grid } from '@material-ui/core';
-import { HeaderText } from '../ui/Typography';
-import useInterruptExit from '../utils/useInterruptExit';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { Prompt } from 'react-router';
+import TotalCardsLabel from '../common/TotalCardsLabel';
+import { SaleContext } from '../context/SaleContext';
+import TotalStoreInventory from '../ManageInventory/TotalStoreInventory';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
+import { HeaderText } from '../ui/Typography';
+import sum from '../utils/sum';
+import useInterruptExit from '../utils/useInterruptExit';
+import PrintList from './PrintList';
+import SaleCartList from './SaleCartList';
+import BrowseCardList from './SaleSearchCardList';
+import SuspendSaleButton from './SuspendSaleButton';
 
 interface Props {}
 

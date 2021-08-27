@@ -1,8 +1,8 @@
+import { TableCell, TableRow } from '@material-ui/core';
 import React, { FC } from 'react';
+import formatDate from '../utils/formatDate';
 import sum from '../utils/sum';
 import { Sale } from './browseSalesQuery';
-import formatDate from '../utils/formatDate';
-import { TableCell, TableRow } from '@material-ui/core';
 
 interface Props {
     sale: Sale;

@@ -1,5 +1,5 @@
-import React, { FC, ReactNode } from 'react';
 import { Box, makeStyles, Paper, Typography } from '@material-ui/core';
+import React, { FC, ReactNode } from 'react';
 
 const useStyles = makeStyles(({ typography, spacing }) => ({
     font: {

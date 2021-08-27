@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
-import SaleSearchCard from './SaleSearchCard';
-import { ScryfallCard } from '../utils/ScryfallCard';
 import { Grid } from '@material-ui/core';
-import Loading from '../ui/Loading';
 import SearchIcon from '@material-ui/icons/Search';
+import React, { FC } from 'react';
+import Loading from '../ui/Loading';
 import Placeholder from '../ui/Placeholder';
+import { ScryfallCard } from '../utils/ScryfallCard';
+import SaleSearchCard from './SaleSearchCard';
 
 interface Props {
     loading: boolean;

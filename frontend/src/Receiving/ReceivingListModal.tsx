@@ -1,8 +1,8 @@
-import React, { useState, useContext, FC } from 'react';
-import { Modal, Button, Form, List, Header } from 'semantic-ui-react';
-import { ReceivingContext, Trade } from '../context/ReceivingContext';
-import Price from '../common/Price';
 import { FormikErrors, useFormik } from 'formik';
+import React, { FC, useContext, useState } from 'react';
+import { Button, Form, Header, List, Modal } from 'semantic-ui-react';
+import Price from '../common/Price';
+import { ReceivingContext, Trade } from '../context/ReceivingContext';
 import sum from '../utils/sum';
 
 interface Props {}

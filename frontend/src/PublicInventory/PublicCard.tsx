@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { Image as SurImage, Label } from 'semantic-ui-react';
-import MarketPrice from '../common/MarketPrice';
 import styled from 'styled-components';
-import { ScryfallCard } from '../utils/ScryfallCard';
+import MarketPrice from '../common/MarketPrice';
 import parseQoh from '../utils/parseQoh';
+import { ScryfallCard } from '../utils/ScryfallCard';
 
 interface Props {
     card: ScryfallCard;

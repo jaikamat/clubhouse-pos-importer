@@ -1,4 +1,3 @@
-import React, { FC, useEffect, useState } from 'react';
 import {
     Container,
     FormControl,
@@ -9,18 +8,19 @@ import {
     Select,
 } from '@material-ui/core';
 import { useFormik } from 'formik';
+import React, { FC, useEffect, useState } from 'react';
 import CardImage from '../common/CardImage';
+import { Condition, Finish } from '../common/types';
+import addCardToInventoryQuery from '../ManageInventory/addCardToInventoryQuery';
+import Button from '../ui/Button';
 import ControlledDropdown from '../ui/ControlledDropdown';
 import IntegerInput from '../ui/IntegerInput';
+import { useToastContext } from '../ui/ToastContext';
+import { SectionText } from '../ui/Typography';
 import { cardConditions } from '../utils/dropdownOptions';
 import { BulkCard } from './bulkInventoryQuery';
 import BulkSearchBar from './BulkSearchBar';
-import Button from '../ui/Button';
-import { useToastContext } from '../ui/ToastContext';
 import SubmittedCardsTable from './SubmittedCardsTable';
-import { SectionText } from '../ui/Typography';
-import addCardToInventoryQuery from '../ManageInventory/addCardToInventoryQuery';
-import { Finish, Condition } from '../common/types';
 
 const useStyles = makeStyles(({ palette }) => ({
     imageContainer: { maxWidth: 200, height: 'auto' },

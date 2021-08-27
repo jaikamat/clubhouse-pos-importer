@@ -1,4 +1,3 @@
-import React, { FC, useState } from 'react';
 import {
     Button,
     Dialog,
@@ -8,6 +7,7 @@ import {
     Grid,
 } from '@material-ui/core';
 import { useFormik } from 'formik';
+import React, { FC, useState } from 'react';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
 import FormikNativeDatePicker from '../ui/FormikNativeDatePicker';
 

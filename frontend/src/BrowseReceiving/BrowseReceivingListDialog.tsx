@@ -1,26 +1,26 @@
-import React, { FC, useEffect, useState } from 'react';
-import { Trade } from '../context/ReceivingContext';
-import displayFinishCondition from '../utils/finishCondition';
-import { price } from '../utils/price';
 import {
+    Button,
     Dialog,
+    DialogActions,
     DialogContent,
     DialogTitle,
-    DialogActions,
-    Button,
     List,
     ListItem,
     ListItemText,
     Typography,
 } from '@material-ui/core';
-import MetaData from '../ui/MetaData';
-import formatDate from '../utils/formatDate';
-import displayEmpty from '../utils/displayEmpty';
-import SetIcon from '../ui/SetIcon';
-import receivedByIdQuery, { Received } from './receivedByIdQuery';
-import Loading from '../ui/Loading';
+import React, { FC, useEffect, useState } from 'react';
+import { Trade } from '../context/ReceivingContext';
 import CardImageTooltip from '../ui/CardImageTooltip';
+import Loading from '../ui/Loading';
+import MetaData from '../ui/MetaData';
+import SetIcon from '../ui/SetIcon';
+import displayEmpty from '../utils/displayEmpty';
+import displayFinishCondition from '../utils/finishCondition';
+import formatDate from '../utils/formatDate';
+import { price } from '../utils/price';
 import { ScryfallCard } from '../utils/ScryfallCard';
+import receivedByIdQuery, { Received } from './receivedByIdQuery';
 
 interface Props {
     receivedId: string;

@@ -1,8 +1,8 @@
-import collectionFromLocation from '../lib/collectionFromLocation';
-import getDatabaseConnection from '../database';
-import { ReceivingCard } from './addCardToInventoryReceiving';
-import { ClubhouseLocation } from '../common/types';
 import moment from 'moment';
+import { ClubhouseLocation } from '../common/types';
+import getDatabaseConnection from '../database';
+import collectionFromLocation from '../lib/collectionFromLocation';
+import { ReceivingCard } from './addCardToInventoryReceiving';
 
 interface Args {
     cards: ReceivingCard[];

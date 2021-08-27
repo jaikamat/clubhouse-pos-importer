@@ -1,12 +1,12 @@
-import React, { useState, useContext, FC } from 'react';
+import { Box, Grid, Paper, Typography } from '@material-ui/core';
+import React, { FC, useContext, useState } from 'react';
 import { Button, Modal } from 'semantic-ui-react';
 import Price from '../common/Price';
+import { ReceivingContext, Trade } from '../context/ReceivingContext';
+import sum from '../utils/sum';
 import CashReport from './CashReport';
 import printCashReport from './printCashReport';
 import ReceivingListModal from './ReceivingListModal';
-import { ReceivingContext, Trade } from '../context/ReceivingContext';
-import sum from '../utils/sum';
-import { Box, Grid, Paper, Typography } from '@material-ui/core';
 
 interface Props {}
 

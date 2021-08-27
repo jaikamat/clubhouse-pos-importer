@@ -1,7 +1,7 @@
 import axios from 'axios';
+import { GET_CARDS_WITH_INFO } from '../utils/api_resources';
 import makeAuthHeader from '../utils/makeAuthHeader';
 import { ScryfallApiCard, ScryfallCard } from '../utils/ScryfallCard';
-import { GET_CARDS_WITH_INFO } from '../utils/api_resources';
 
 interface Params {
     cardName: string;

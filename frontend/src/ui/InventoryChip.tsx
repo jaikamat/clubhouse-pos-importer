@@ -1,6 +1,5 @@
-import React, { FC } from 'react';
 import { Chip, makeStyles } from '@material-ui/core';
-import { forwardRef } from 'react';
+import React, { FC, forwardRef } from 'react';
 
 const useStyles = makeStyles({
     container: {

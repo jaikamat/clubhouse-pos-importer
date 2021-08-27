@@ -1,11 +1,11 @@
 require('dotenv').config();
 import jwt from 'jsonwebtoken';
-import getUserById, { User } from '../interactors/getUserById';
 import {
     ClubhouseLocation,
     Controller,
     RequestWithUserInfo,
 } from '../common/types';
+import getUserById, { User } from '../interactors/getUserById';
 
 interface DecodedToken {
     userId: string;

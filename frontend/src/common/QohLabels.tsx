@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
 import { Tooltip, Typography } from '@material-ui/core';
+import React, { FC } from 'react';
 import InventoryChip from '../ui/InventoryChip';
 import displayFinishCondition from '../utils/finishCondition';
 import parseQoh from '../utils/parseQoh';

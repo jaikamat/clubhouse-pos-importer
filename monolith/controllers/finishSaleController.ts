@@ -1,6 +1,6 @@
 require('dotenv').config();
-import finishSale from '../interactors/updateInventoryCards';
 import { Controller, ReqWithFinishSaleCards } from '../common/types';
+import finishSale from '../interactors/updateInventoryCards';
 
 const finishSaleController: Controller<ReqWithFinishSaleCards> = async (
     req,

@@ -1,7 +1,3 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
-import moment from 'moment';
-import Loading from '../ui/Loading';
-import reportingQuery, { ResponseData } from './reportingQuery';
 import {
     Box,
     Grid,
@@ -15,9 +11,13 @@ import {
     TableHead,
     TableRow,
 } from '@material-ui/core';
+import moment from 'moment';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import Loading from '../ui/Loading';
 import { HeaderText, SectionText } from '../ui/Typography';
 import displayFinishCondition from '../utils/finishCondition';
 import { price } from '../utils/price';
+import reportingQuery, { ResponseData } from './reportingQuery';
 
 interface SearchDates {
     startDate: string;

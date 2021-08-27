@@ -1,14 +1,19 @@
-import React, { ChangeEvent, FC, useCallback, useState } from 'react';
-import _ from 'lodash';
+import { makeStyles, TextField, Typography } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
 import Autocomplete, {
     AutocompleteChangeReason,
 } from '@material-ui/lab/Autocomplete';
-import { TextField, makeStyles, Typography } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
-import bulkInventoryQuery, { BulkCard } from './bulkInventoryQuery';
+import _ from 'lodash';
+import React, {
+    ChangeEvent,
+    FC,
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 import SetIcon from '../ui/SetIcon';
-import { useEffect } from 'react';
-import { useRef } from 'react';
+import bulkInventoryQuery, { BulkCard } from './bulkInventoryQuery';
 
 export type Option = BulkCard;
 

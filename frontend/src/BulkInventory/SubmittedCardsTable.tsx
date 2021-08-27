@@ -1,4 +1,3 @@
-import React, { FC } from 'react';
 import {
     Paper,
     Table,
@@ -8,6 +7,7 @@ import {
     TableHead,
     TableRow,
 } from '@material-ui/core';
+import React, { FC } from 'react';
 import { FormValues } from './BulkInventory';
 
 interface Props {

@@ -1,9 +1,4 @@
 import express from 'express';
-const router = express.Router();
-import getJwt from '../interactors/getJwt';
-import getCardsWithInfo from '../interactors/getCardsWithInfo';
-import getCardFromAllLocations from '../interactors/getCardFromAllLocations';
-import autocomplete from '../interactors/autocomplete';
 import Joi from 'joi';
 import {
     ClubhouseLocation,
@@ -12,6 +7,11 @@ import {
     JwtRequest,
     locations,
 } from '../common/types';
+import autocomplete from '../interactors/autocomplete';
+import getCardFromAllLocations from '../interactors/getCardFromAllLocations';
+import getCardsWithInfo from '../interactors/getCardsWithInfo';
+import getJwt from '../interactors/getJwt';
+const router = express.Router();
 
 router.post('/jwt', async (req: JwtRequest, res) => {
     const schema = Joi.object<JwtBody>({

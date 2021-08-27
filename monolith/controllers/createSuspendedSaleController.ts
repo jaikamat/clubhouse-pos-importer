@@ -1,13 +1,5 @@
 require('dotenv').config();
-import createSuspendedSale from '../interactors/createSuspendedSale';
 import Joi from 'joi';
-import {
-    validFinishConditions,
-    validInteger,
-    validPrice,
-    validString,
-    validStringRequired,
-} from '../common/validations';
 import {
     Controller,
     FinishSaleCard,
@@ -15,6 +7,14 @@ import {
     ReqWithSuspendSale,
     SuspendSaleBody,
 } from '../common/types';
+import {
+    validFinishConditions,
+    validInteger,
+    validPrice,
+    validString,
+    validStringRequired,
+} from '../common/validations';
+import createSuspendedSale from '../interactors/createSuspendedSale';
 
 const createSuspendedSaleController: Controller<ReqWithSuspendSale> = async (
     req,

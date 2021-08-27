@@ -1,11 +1,11 @@
 require('dotenv').config();
 import Joi from 'joi';
-import { validStringRequired } from '../common/validations';
 import {
     Controller,
     JoiValidation,
     RequestWithUserInfo,
 } from '../common/types';
+import { validStringRequired } from '../common/validations';
 import getCardPrintings from '../interactors/getCardPrintings';
 
 interface BulkSearchQuery {

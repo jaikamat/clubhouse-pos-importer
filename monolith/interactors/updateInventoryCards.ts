@@ -1,8 +1,8 @@
-import collectionFromLocation from '../lib/collectionFromLocation';
 import request from 'request-promise-native';
-import createLightspeedSale from './createLightspeedSale';
-import getDatabaseConnection from '../database';
 import { ClubhouseLocation } from '../common/types';
+import getDatabaseConnection from '../database';
+import collectionFromLocation from '../lib/collectionFromLocation';
+import createLightspeedSale from './createLightspeedSale';
 
 /**
  * Updates a single card's QOH based on qtyToSell, finishCondition, id, name

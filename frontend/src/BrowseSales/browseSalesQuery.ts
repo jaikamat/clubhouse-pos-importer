@@ -1,7 +1,7 @@
 import axios from 'axios';
-import makeAuthHeader from '../utils/makeAuthHeader';
-import { GET_SALES_BY_TITLE } from '../utils/api_resources';
 import { SaleListCard } from '../context/SaleContext';
+import { GET_SALES_BY_TITLE } from '../utils/api_resources';
+import makeAuthHeader from '../utils/makeAuthHeader';
 
 interface SaleData {
     total: string;

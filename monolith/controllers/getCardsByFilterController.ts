@@ -1,16 +1,5 @@
 require('dotenv').config();
-import getCardsByFilter from '../interactors/getCardsByFilter';
 import Joi from 'joi';
-import {
-    validColorSpecificity,
-    validFinish,
-    validFormatLegalities,
-    validFrame,
-    validSort,
-    validSortDirection,
-    validString,
-    validTypeline,
-} from '../common/validations';
 import {
     ColorSpecificity,
     Controller,
@@ -23,6 +12,17 @@ import {
     SortByDirection,
     TypeLine,
 } from '../common/types';
+import {
+    validColorSpecificity,
+    validFinish,
+    validFormatLegalities,
+    validFrame,
+    validSort,
+    validSortDirection,
+    validString,
+    validTypeline,
+} from '../common/validations';
+import getCardsByFilter from '../interactors/getCardsByFilter';
 
 export interface GetCardsByFilterQuery {
     title?: string;

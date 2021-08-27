@@ -1,6 +1,6 @@
 import { makeStyles, Tooltip } from '@material-ui/core';
-import { FC } from 'react';
 import clsx from 'clsx';
+import { FC } from 'react';
 
 interface Props {
     cardImage: string;

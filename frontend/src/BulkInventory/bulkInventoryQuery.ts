@@ -1,6 +1,6 @@
 import axios from 'axios';
-import makeAuthHeader from '../utils/makeAuthHeader';
 import { GET_BULK_CARDS } from '../utils/api_resources';
+import makeAuthHeader from '../utils/makeAuthHeader';
 
 export interface BulkCard {
     scryfall_id: string;

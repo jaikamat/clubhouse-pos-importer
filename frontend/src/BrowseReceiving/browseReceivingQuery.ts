@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { FinishCondition } from '../utils/ScryfallCard';
-import makeAuthHeader from '../utils/makeAuthHeader';
-import { RECEIVING } from '../utils/api_resources';
-import { Trade } from '../context/ReceivingContext';
 import { ClubhouseLocation } from '../context/AuthProvider';
+import { Trade } from '../context/ReceivingContext';
+import { RECEIVING } from '../utils/api_resources';
+import makeAuthHeader from '../utils/makeAuthHeader';
+import { FinishCondition } from '../utils/ScryfallCard';
 
 export interface ReceivedCard {
     quantity: number;

@@ -1,4 +1,4 @@
-import { Form, Select, FormFieldProps } from 'semantic-ui-react';
+import { Form, FormFieldProps, Select } from 'semantic-ui-react';
 
 type FormSelectFieldProps<T> = {
     label: string;

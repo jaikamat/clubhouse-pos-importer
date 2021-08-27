@@ -1,15 +1,15 @@
-import React, { FC } from 'react';
-import _ from 'lodash';
-import Price from '../common/Price';
-import { ReceivingCard } from '../context/ReceivingContext';
 import {
     Table,
+    TableBody,
+    TableCell,
+    TableFooter,
     TableHead,
     TableRow,
-    TableCell,
-    TableBody,
-    TableFooter,
 } from '@material-ui/core';
+import _ from 'lodash';
+import React, { FC } from 'react';
+import Price from '../common/Price';
+import { ReceivingCard } from '../context/ReceivingContext';
 
 interface Props {
     receivingList: ReceivingCard[];

@@ -1,18 +1,18 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
-import ReceivingSearchItem from './ReceivingSearchItem';
-import { ReceivingContext } from '../context/ReceivingContext';
-import ReceivingCart from './ReceivingCart';
-import TotalCardsLabel from '../common/TotalCardsLabel';
-import TotalStoreInventory from '../ManageInventory/TotalStoreInventory';
 import { Grid } from '@material-ui/core';
-import { HeaderText } from '../ui/Typography';
-import Loading from '../ui/Loading';
-import { Prompt } from 'react-router';
-import useInterruptExit from '../utils/useInterruptExit';
-import ControlledSearchBar from '../ui/ControlledSearchBar';
-import Placeholder from '../ui/Placeholder';
 import SearchIcon from '@material-ui/icons/Search';
+import React, { FC, useContext, useEffect, useState } from 'react';
+import { Prompt } from 'react-router';
+import TotalCardsLabel from '../common/TotalCardsLabel';
+import { ReceivingContext } from '../context/ReceivingContext';
+import TotalStoreInventory from '../ManageInventory/TotalStoreInventory';
+import ControlledSearchBar from '../ui/ControlledSearchBar';
+import Loading from '../ui/Loading';
+import Placeholder from '../ui/Placeholder';
+import { HeaderText } from '../ui/Typography';
+import useInterruptExit from '../utils/useInterruptExit';
+import ReceivingCart from './ReceivingCart';
 import ReceivingListTotals from './ReceivingListTotals';
+import ReceivingSearchItem from './ReceivingSearchItem';
 
 interface Props {}
 

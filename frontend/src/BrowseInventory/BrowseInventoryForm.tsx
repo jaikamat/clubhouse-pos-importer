@@ -1,9 +1,3 @@
-import React, { FC, useEffect, useState } from 'react';
-import { FormikHelpers, useFormik } from 'formik';
-import setNameQuery from './setNameQuery';
-import ControlledSearchBar from '../ui/ControlledSearchBar';
-import ControlledDropdown, { DropdownOption } from '../ui/ControlledDropdown';
-import ControlledMultiSelect from '../ui/ControlledMultiSelect';
 import {
     FormControl,
     Grid,
@@ -11,8 +5,14 @@ import {
     TextField,
     withStyles,
 } from '@material-ui/core';
+import { FormikHelpers, useFormik } from 'formik';
+import React, { FC, useEffect, useState } from 'react';
 import Button from '../ui/Button';
+import ControlledDropdown, { DropdownOption } from '../ui/ControlledDropdown';
+import ControlledMultiSelect from '../ui/ControlledMultiSelect';
+import ControlledSearchBar from '../ui/ControlledSearchBar';
 import { SectionText } from '../ui/Typography';
+import setNameQuery from './setNameQuery';
 
 const formatDropdownOptions: DropdownOption[] = [
     { key: 'qw', value: '', text: 'None' },

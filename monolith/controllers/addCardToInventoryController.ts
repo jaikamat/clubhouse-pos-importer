@@ -1,17 +1,17 @@
 require('dotenv').config();
-import addCardToInventory from '../interactors/addCardToInventory';
+import Joi from 'joi';
 import {
     Controller,
     FinishCondition,
     JoiValidation,
     RequestWithUserInfo,
 } from '../common/types';
-import Joi from 'joi';
 import {
     validFinishConditions,
     validInteger,
     validStringRequired,
 } from '../common/validations';
+import addCardToInventory from '../interactors/addCardToInventory';
 
 interface AddCardToInventoryReqBody {
     quantity: number;

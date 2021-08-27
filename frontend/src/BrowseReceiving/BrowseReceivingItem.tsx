@@ -1,7 +1,3 @@
-import React, { FC, useState } from 'react';
-import { Received } from './browseReceivingQuery';
-import pluralize from '../utils/pluralize';
-import formatDate from '../utils/formatDate';
 import {
     Card,
     CardActionArea,
@@ -9,13 +5,17 @@ import {
     Grid,
     Typography,
 } from '@material-ui/core';
-import BrowseReceivingListDialog from './BrowseReceivingListDialog';
 import { sum } from 'lodash';
-import { getPrice } from '../common/Price';
-import MetaData from '../ui/MetaData';
-import { Trade } from '../context/ReceivingContext';
-import displayEmpty from '../utils/displayEmpty';
+import React, { FC, useState } from 'react';
 import Chip from '../common/Chip';
+import { getPrice } from '../common/Price';
+import { Trade } from '../context/ReceivingContext';
+import MetaData from '../ui/MetaData';
+import displayEmpty from '../utils/displayEmpty';
+import formatDate from '../utils/formatDate';
+import pluralize from '../utils/pluralize';
+import BrowseReceivingListDialog from './BrowseReceivingListDialog';
+import { Received } from './browseReceivingQuery';
 
 interface Props {
     received: Received;

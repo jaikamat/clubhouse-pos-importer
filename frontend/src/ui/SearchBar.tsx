@@ -1,12 +1,12 @@
-import React, { ChangeEvent, FC, useCallback, useState } from 'react';
-import _ from 'lodash';
-import $ from 'jquery';
-import autocompleteQuery from '../common/autocompleteQuery';
+import { makeStyles, TextField } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
 import Autocomplete, {
     AutocompleteChangeReason,
 } from '@material-ui/lab/Autocomplete';
-import { TextField, makeStyles } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
+import $ from 'jquery';
+import _ from 'lodash';
+import React, { ChangeEvent, FC, useCallback, useState } from 'react';
+import autocompleteQuery from '../common/autocompleteQuery';
 
 export type Option = { title: string };
 

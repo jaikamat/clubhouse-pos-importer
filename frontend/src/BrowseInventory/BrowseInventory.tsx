@@ -1,18 +1,8 @@
-import React, { FC, useState } from 'react';
-import BrowseInventoryForm, {
-    FormValues,
-    initialFilters,
-} from './BrowseInventoryForm';
-import BrowseInventoryRow from './BrowseInventoryRow';
-import _ from 'lodash';
-import filteredCardsQuery, {
-    Filters,
-    ResponseCard,
-} from './filteredCardsQuery';
-import Placeholder from '../ui/Placeholder';
-import SearchIcon from '@material-ui/icons/Search';
 import {
     Box,
+    CircularProgress,
+    Container,
+    Modal,
     Paper,
     Table,
     TableBody,
@@ -21,13 +11,22 @@ import {
     TableHead,
     TableRow,
     Typography,
-    Container,
-    Modal,
-    CircularProgress,
     withStyles,
 } from '@material-ui/core';
 import ReportProblemIcon from '@material-ui/icons/ReportProblem';
+import SearchIcon from '@material-ui/icons/Search';
 import Pagination from '@material-ui/lab/Pagination';
+import React, { FC, useState } from 'react';
+import Placeholder from '../ui/Placeholder';
+import BrowseInventoryForm, {
+    FormValues,
+    initialFilters,
+} from './BrowseInventoryForm';
+import BrowseInventoryRow from './BrowseInventoryRow';
+import filteredCardsQuery, {
+    Filters,
+    ResponseCard,
+} from './filteredCardsQuery';
 
 const LIMIT = 100; // Matching the backend for now
 

@@ -1,16 +1,16 @@
-import React, { useContext, FC, ChangeEvent } from 'react';
-import { Form, Input, Button, Item } from 'semantic-ui-react';
+import { Box, Paper } from '@material-ui/core';
+import { FormikErrors, useFormik } from 'formik';
 import $ from 'jquery';
 import _ from 'lodash';
+import React, { ChangeEvent, FC, useContext } from 'react';
+import { Button, Form, Input, Item } from 'semantic-ui-react';
 import CardImage from '../common/CardImage';
-import { SaleContext } from '../context/SaleContext';
-import { ScryfallCard, QOH } from '../utils/ScryfallCard';
-import CardHeader from '../ui/CardHeader';
-import { FormikErrors, useFormik } from 'formik';
-import FormikSelectField from '../ui/FormikSelectField';
-import { Box, Paper } from '@material-ui/core';
-import roundPrice from '../utils/roundPrice';
 import { Finish } from '../common/types';
+import { SaleContext } from '../context/SaleContext';
+import CardHeader from '../ui/CardHeader';
+import FormikSelectField from '../ui/FormikSelectField';
+import roundPrice from '../utils/roundPrice';
+import { QOH, ScryfallCard } from '../utils/ScryfallCard';
 
 interface ConditionOptions {
     text: string;

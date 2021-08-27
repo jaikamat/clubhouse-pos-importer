@@ -1,10 +1,10 @@
+import { Box, Divider, Grid, Typography } from '@material-ui/core';
 import React, { FC, useEffect, useState } from 'react';
+import ControlledSearchBar from '../ui/ControlledSearchBar';
+import Loading from '../ui/Loading';
+import { HeaderText } from '../ui/Typography';
 import BrowseSalesList from './BrowseSalesList';
 import browseSalesQuery, { Sale } from './browseSalesQuery';
-import { HeaderText } from '../ui/Typography';
-import Loading from '../ui/Loading';
-import { Grid, Typography, Divider, Box } from '@material-ui/core';
-import ControlledSearchBar from '../ui/ControlledSearchBar';
 
 const BrowseSales: FC = () => {
     const [term, setTerm] = useState<string>('');

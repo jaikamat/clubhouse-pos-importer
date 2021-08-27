@@ -1,6 +1,6 @@
-import sortSaleList from './sortSaleList';
 import mockData from './mockData';
 import { ScryfallCard } from './ScryfallCard';
+import sortSaleList from './sortSaleList';
 
 /**
  * Shuffles an array

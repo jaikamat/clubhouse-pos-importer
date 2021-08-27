@@ -1,7 +1,7 @@
 import axios from 'axios';
-import makeAuthHeader from '../utils/makeAuthHeader';
-import { SUSPEND_SALE } from '../utils/api_resources';
 import { SuspendedSale } from '../context/getSuspendedSaleQuery';
+import { SUSPEND_SALE } from '../utils/api_resources';
+import makeAuthHeader from '../utils/makeAuthHeader';
 
 const getSuspendedSalesQuery = async () => {
     try {

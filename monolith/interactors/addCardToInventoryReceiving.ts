@@ -1,7 +1,7 @@
 import { Collection } from 'mongodb';
-import collectionFromLocation from '../lib/collectionFromLocation';
-import getDatabaseConnection from '../database';
 import { ClubhouseLocation, Trade } from '../common/types';
+import getDatabaseConnection from '../database';
+import collectionFromLocation from '../lib/collectionFromLocation';
 
 export type ReceivingCard = {
     quantity: number;

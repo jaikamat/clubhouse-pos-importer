@@ -4,11 +4,11 @@
  * Module dependencies.
  */
 
-import app from '../app';
 import debugImport from 'debug';
-const debug = debugImport('monolith:server');
 import http from 'http';
+import app from '../app';
 import getDatabaseConnection from '../database';
+const debug = debugImport('monolith:server');
 require('dotenv').config(); // load local env vars
 
 const init = async () => {

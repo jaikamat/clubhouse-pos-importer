@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { ScryfallCard, ScryfallApiCard } from '../utils/ScryfallCard';
-import { GET_CARDS_WITH_INFO_PUBLIC } from '../utils/api_resources';
 import { ClubhouseLocation } from '../context/AuthProvider';
+import { GET_CARDS_WITH_INFO_PUBLIC } from '../utils/api_resources';
+import { ScryfallApiCard, ScryfallCard } from '../utils/ScryfallCard';
 
 interface Params {
     title: string;

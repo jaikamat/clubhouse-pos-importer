@@ -1,12 +1,12 @@
 require('dotenv').config();
-import getCardsWithInfo from '../interactors/getCardsWithInfo';
 import Joi from 'joi';
-import { validStringRequired } from '../common/validations';
 import {
     Controller,
     JoiValidation,
     RequestWithUserInfo,
 } from '../common/types';
+import { validStringRequired } from '../common/validations';
+import getCardsWithInfo from '../interactors/getCardsWithInfo';
 
 interface GetCardsWithInfoQuery {
     title: string;

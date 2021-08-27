@@ -1,13 +1,13 @@
-import React, { useState, createContext, FC } from 'react';
 import $ from 'jquery';
-import sortSaleList from '../utils/sortSaleList';
+import React, { createContext, FC, useState } from 'react';
 import createToast from '../common/createToast';
-import getSuspendedSaleQuery, { SuspendedSale } from './getSuspendedSaleQuery';
-import deleteSuspendedSaleQuery from './deleteSuspendedSaleQuery';
-import createSuspendedSaleQuery from './createSuspendedSaleQuery';
-import finishSaleQuery from './finishSaleQuery';
 import { ScryfallCard } from '../utils/ScryfallCard';
+import sortSaleList from '../utils/sortSaleList';
 import cardSearchQuery from './cardSearchQuery';
+import createSuspendedSaleQuery from './createSuspendedSaleQuery';
+import deleteSuspendedSaleQuery from './deleteSuspendedSaleQuery';
+import finishSaleQuery from './finishSaleQuery';
+import getSuspendedSaleQuery, { SuspendedSale } from './getSuspendedSaleQuery';
 
 interface Props {}
 

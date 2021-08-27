@@ -1,10 +1,10 @@
-import React from 'react';
-import createToast from '../common/createToast';
-import { Form, Button, Segment } from 'semantic-ui-react';
-import { Redirect } from 'react-router-dom';
-import { ClubhouseLocation, useAuthContext } from '../context/AuthProvider';
-import styled from 'styled-components';
 import { FormikErrors, useFormik } from 'formik';
+import React from 'react';
+import { Redirect } from 'react-router-dom';
+import { Button, Form, Segment } from 'semantic-ui-react';
+import styled from 'styled-components';
+import createToast from '../common/createToast';
+import { ClubhouseLocation, useAuthContext } from '../context/AuthProvider';
 import FormikSelectField from '../ui/FormikSelectField';
 
 interface FormValues {

@@ -1,11 +1,11 @@
-import { ChangeEvent } from 'react';
 import {
-    Select,
-    SelectProps,
-    MenuItem,
     FormControl,
     InputLabel,
+    MenuItem,
+    Select,
+    SelectProps,
 } from '@material-ui/core';
+import { ChangeEvent } from 'react';
 
 export interface DropdownOption {
     key: string;

@@ -1,6 +1,6 @@
-import collectionFromLocation from '../lib/collectionFromLocation';
-import getDatabaseConnection from '../database';
 import { ClubhouseLocation, QOH } from '../common/types';
+import getDatabaseConnection from '../database';
+import collectionFromLocation from '../lib/collectionFromLocation';
 
 type Card = {
     quantity: number;

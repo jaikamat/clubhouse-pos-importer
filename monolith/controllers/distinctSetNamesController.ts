@@ -1,6 +1,6 @@
 require('dotenv').config();
-import getDistinctSetNames from '../interactors/getDistinctSetNames';
 import { Controller, RequestWithUserInfo } from '../common/types';
+import getDistinctSetNames from '../interactors/getDistinctSetNames';
 
 const distinctSetNamesController: Controller<RequestWithUserInfo> = async (
     req,

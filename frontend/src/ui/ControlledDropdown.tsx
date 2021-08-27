@@ -1,5 +1,6 @@
 import {
     FormControl,
+    FormHelperText,
     InputLabel,
     MenuItem,
     Select,
@@ -18,7 +19,8 @@ type ControlledDropdownProps = {
     value: string;
     onChange: (value: string) => void;
     options: DropdownOption[];
-} & Omit<SelectProps, 'name' | 'multiple' | 'value' | 'onChange'>;
+    error?: string;
+} & Omit<SelectProps, 'name' | 'multiple' | 'value' | 'onChange' | 'error'>;
 
 function ControlledDropdown({
     label,
@@ -26,12 +28,14 @@ function ControlledDropdown({
     value,
     onChange,
     options,
+    error,
     ...props
 }: ControlledDropdownProps) {
     return (
         <FormControl variant="outlined" size="small" fullWidth>
             <InputLabel>{label}</InputLabel>
             <Select
+                error={!!error}
                 label={label}
                 name={name}
                 value={value}
@@ -46,6 +50,7 @@ function ControlledDropdown({
                     </MenuItem>
                 ))}
             </Select>
+            {error && <FormHelperText error>{error}</FormHelperText>}
         </FormControl>
     );
 }

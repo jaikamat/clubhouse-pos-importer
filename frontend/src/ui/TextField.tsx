@@ -7,7 +7,7 @@ import { FC } from 'react';
 
 type Props = {
     error?: string;
-} & Omit<TextFieldProps, 'error' | 'variant' | 'small'>;
+} & Omit<TextFieldProps, 'error' | 'variant' | 'size'>;
 
 const TextField: FC<Props> = ({ error, ...props }) => {
     return (

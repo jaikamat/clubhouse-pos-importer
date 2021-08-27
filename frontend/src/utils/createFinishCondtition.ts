@@ -1,6 +1,4 @@
-import { Condition, Finish } from '../utils/ScryfallCard';
-
-type FinishCondition = `${Finish}_${Condition}`
+import { Condition, Finish, FinishCondition } from '../utils/ScryfallCard';
 
 const createFinishCondition = (
     finish: Finish,

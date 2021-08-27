@@ -10,14 +10,15 @@ import {
 import { useFormik } from 'formik';
 import React, { FC, useEffect, useState } from 'react';
 import CardImage from '../common/CardImage';
-import { Condition, Finish } from '../common/types';
 import addCardToInventoryQuery from '../ManageInventory/addCardToInventoryQuery';
 import Button from '../ui/Button';
 import ControlledDropdown from '../ui/ControlledDropdown';
 import IntegerInput from '../ui/IntegerInput';
 import { useToastContext } from '../ui/ToastContext';
 import { SectionText } from '../ui/Typography';
+import createFinishCondition from '../utils/createFinishCondtition';
 import { cardConditions } from '../utils/dropdownOptions';
+import { Condition, Finish } from '../utils/ScryfallCard';
 import { BulkCard } from './bulkInventoryQuery';
 import BulkSearchBar from './BulkSearchBar';
 import SubmittedCardsTable from './SubmittedCardsTable';
@@ -56,7 +57,10 @@ const BulkInventory: FC = () => {
             if (values.bulkCard) {
                 await addCardToInventoryQuery({
                     quantity: Number(values.quantity),
-                    finishCondition: `${values.finish}_${values.condition}`,
+                    finishCondition: createFinishCondition(
+                        values.finish,
+                        values.condition
+                    ),
                     cardInfo: {
                         id: values.bulkCard.scryfall_id,
                         name: values.bulkCard.name,

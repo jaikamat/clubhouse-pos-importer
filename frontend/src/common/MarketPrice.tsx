@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
+import { Finish } from '../utils/ScryfallCard';
 import Chip from './Chip';
 import marketPriceQuery from './marketPriceQuery';
-import { Finish } from './types';
 
 interface Props {
     id: string;

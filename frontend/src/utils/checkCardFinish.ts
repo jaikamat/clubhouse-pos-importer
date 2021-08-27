@@ -1,4 +1,4 @@
-import { Finish } from '../common/types';
+import { Finish } from '../utils/ScryfallCard';
 
 interface CardFinishState {
     selectedFinish: Finish;

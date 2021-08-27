@@ -7,12 +7,17 @@ import { FC } from 'react';
 
 type Props = {
     error?: string;
-} & Omit<TextFieldProps, 'error'>;
+} & Omit<TextFieldProps, 'error' | 'variant' | 'size'>;
 
 const TextField: FC<Props> = ({ error, ...props }) => {
     return (
         <>
-            <MUITextField error={!!error} {...props} />
+            <MUITextField
+                variant="outlined"
+                size="small"
+                error={!!error}
+                {...props}
+            />
             {error && <FormHelperText error>{error}</FormHelperText>}
         </>
     );

@@ -1,8 +1,11 @@
 import Axios from 'axios';
-import { Finish } from '../common/types';
 import { GET_REPORT } from '../utils/api_resources';
 import makeAuthHeader from '../utils/makeAuthHeader';
-import { FinishCondition, ScryfallApiCard } from '../utils/ScryfallCard';
+import {
+    Finish,
+    FinishCondition,
+    ScryfallApiCard,
+} from '../utils/ScryfallCard';
 
 export interface ResponseData {
     countByPrinting: Array<{

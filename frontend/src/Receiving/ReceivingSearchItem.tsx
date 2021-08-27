@@ -4,14 +4,14 @@ import $ from 'jquery';
 import React, { ChangeEvent, FC, useContext } from 'react';
 import { Button, Form, Input, Item } from 'semantic-ui-react';
 import CardImage from '../common/CardImage';
-import { Condition, Finish } from '../common/types';
 import { ReceivingContext } from '../context/ReceivingContext';
 import CardHeader from '../ui/CardHeader';
 import FormikSelectField from '../ui/FormikSelectField';
 import { useToastContext } from '../ui/ToastContext';
 import checkCardFinish from '../utils/checkCardFinish';
+import createFinishCondition from '../utils/createFinishCondtition';
 import { cardConditions, finishes } from '../utils/dropdownOptions';
-import { ScryfallCard } from '../utils/ScryfallCard';
+import { Condition, Finish, ScryfallCard } from '../utils/ScryfallCard';
 
 interface Props {
     card: ScryfallCard;
@@ -87,7 +87,10 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
             cashPrice: cashPrice || 0,
             marketPrice: marketPrice || 0,
             creditPrice: creditPrice || 0,
-            finishCondition: `${selectedFinish}_${selectedCondition}`, // ex. NONFOIL_NM
+            finishCondition: createFinishCondition(
+                selectedFinish,
+                selectedCondition
+            ),
         });
 
         createToast({

@@ -108,8 +108,6 @@ const Login = () => {
                                 error={errors.username}
                                 name="username"
                                 label="Username"
-                                variant="outlined"
-                                size="small"
                                 fullWidth
                                 onChange={handleChange}
                             />
@@ -120,8 +118,6 @@ const Login = () => {
                                 name="password"
                                 type="password"
                                 label="Password"
-                                variant="outlined"
-                                size="small"
                                 fullWidth
                                 onChange={handleChange}
                             />

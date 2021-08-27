@@ -93,7 +93,7 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
                 // Join on current inventory for current QOH
                 {
                     $lookup: {
-                        from: Collection.cardInventory,
+                        from: collectionFromLocation(location).cardInventory,
                         localField: '_id.scryfall_id',
                         foreignField: '_id',
                         as: 'inventory',

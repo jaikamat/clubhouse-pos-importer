@@ -4,11 +4,11 @@ import $ from 'jquery';
 import React, { ChangeEvent, FC, useContext } from 'react';
 import { Button, Form, Input, Item } from 'semantic-ui-react';
 import CardImage from '../common/CardImage';
-import createToast from '../common/createToast';
 import { Condition, Finish } from '../common/types';
 import { ReceivingContext } from '../context/ReceivingContext';
 import CardHeader from '../ui/CardHeader';
 import FormikSelectField from '../ui/FormikSelectField';
+import { useToastContext } from '../ui/ToastContext';
 import checkCardFinish from '../utils/checkCardFinish';
 import { cardConditions, finishes } from '../utils/dropdownOptions';
 import { ScryfallCard } from '../utils/ScryfallCard';
@@ -55,6 +55,7 @@ const validate = ({
 };
 
 const ReceivingSearchItem: FC<Props> = ({ card }) => {
+    const createToast = useToastContext();
     const initialValues: FormValues = {
         quantity: 1,
         cashPrice: 0,
@@ -90,9 +91,8 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
         });
 
         createToast({
-            color: 'green',
-            header: `${quantity}x ${card.name} added to buylist!`,
-            duration: 2000,
+            severity: 'success',
+            message: `${quantity}x ${card.name} added to buylist!`,
         });
 
         // Highlight the input after successful card add

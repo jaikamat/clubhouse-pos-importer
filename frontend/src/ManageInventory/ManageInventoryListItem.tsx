@@ -4,10 +4,10 @@ import $ from 'jquery';
 import React, { FC, useContext, useState } from 'react';
 import { Button, Form, Input, Item, Select } from 'semantic-ui-react';
 import CardImage from '../common/CardImage';
-import createToast from '../common/createToast';
 import { Finish } from '../common/types';
 import { InventoryContext } from '../context/InventoryContext';
 import CardHeader from '../ui/CardHeader';
+import { useToastContext } from '../ui/ToastContext';
 import checkCardFinish from '../utils/checkCardFinish';
 import { cardConditions, finishes } from '../utils/dropdownOptions';
 import { ScryfallCard } from '../utils/ScryfallCard';
@@ -34,6 +34,7 @@ const validate = ({ quantity }: FormValues) => {
 };
 
 const ManageInventoryListItem: FC<Props> = ({ card }) => {
+    const createToast = useToastContext();
     const { foil, nonfoil, name, set_name, set, id, cardImage } = card;
 
     const [selectedFinish, setSelectedFinish] = useState<Finish>(
@@ -65,11 +66,10 @@ const ManageInventoryListItem: FC<Props> = ({ card }) => {
             changeCardQuantity(id, qoh);
 
             createToast({
-                color: 'green',
-                header: `${quantity}x ${name} ${
+                severity: 'success',
+                message: `${quantity}x ${name} ${
                     parseInt(quantity, 10) > 0 ? 'added' : 'removed'
                 }!`,
-                duration: 2000,
             });
 
             // Highlight the input after successful card add

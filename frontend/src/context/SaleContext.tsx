@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import React, { createContext, FC, useState } from 'react';
-import createToast from '../common/createToast';
+import { useToastContext } from '../ui/ToastContext';
 import { ScryfallCard } from '../utils/ScryfallCard';
 import sortSaleList from '../utils/sortSaleList';
 import cardSearchQuery from './cardSearchQuery';
@@ -65,6 +65,7 @@ export const SaleContext = createContext<SaleContext>({
 });
 
 export const SaleProvider: FC<Props> = ({ children }) => {
+    const createToast = useToastContext();
     const [saleListCards, setSaleListCards] = useState<SaleListCard[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [searchResults, setSearchResults] = useState<ScryfallCard[]>([]);
@@ -147,12 +148,15 @@ export const SaleProvider: FC<Props> = ({ children }) => {
             setSuspendedSale(sale);
 
             createToast({
-                color: 'green',
-                header: `You are viewing ${sale.name}'s sale`,
+                severity: 'success',
+                message: `You are viewing ${sale.name}'s sale`,
             });
         } catch (e) {
             console.log(e.response);
-            createToast({ color: 'red', header: `Error` });
+            createToast({
+                severity: 'error',
+                message: `Error`,
+            });
         }
     };
 
@@ -182,14 +186,13 @@ export const SaleProvider: FC<Props> = ({ children }) => {
             resetSaleState();
 
             createToast({
-                color: 'green',
-                header: `${data.ops[0].name}'s sale was suspended`,
+                severity: 'success',
+                message: `${data.ops[0].name}'s sale was suspended`,
             });
         } catch (e) {
             console.log(e.response);
             createToast({
-                color: 'red',
-                header: `Error`,
+                severity: 'error',
                 message: e.response.data || 'Error suspending sale',
             });
         }
@@ -203,14 +206,13 @@ export const SaleProvider: FC<Props> = ({ children }) => {
             resetSaleState();
 
             createToast({
-                color: 'green',
-                header: `${name}'s sale was deleted`,
+                severity: 'success',
+                message: `${name}'s sale was deleted`,
             });
         } catch (e) {
             console.log(e.response);
             createToast({
-                color: 'red',
-                header: `Error`,
+                severity: 'error',
                 message: e.response.data || 'Error deleting suspended sale',
             });
         }
@@ -231,16 +233,14 @@ export const SaleProvider: FC<Props> = ({ children }) => {
             });
 
             createToast({
-                color: 'green',
-                header: 'Sale created in Lightspeed!',
-                message: `The id number is #${sale_data.Sale.saleID}`,
+                severity: 'success',
+                message: `Sale created: ID #${sale_data.Sale.saleID}`,
             });
 
             resetSaleState();
         } catch (e) {
             createToast({
-                color: 'red',
-                header: 'Error',
+                severity: 'error',
                 message: e.response.data || 'Sale was not created',
             });
 

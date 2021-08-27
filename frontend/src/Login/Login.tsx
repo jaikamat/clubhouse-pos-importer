@@ -2,11 +2,11 @@ import { Box, Container, makeStyles, Paper } from '@material-ui/core';
 import { FormikErrors, useFormik } from 'formik';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import createToast from '../common/createToast';
 import { ClubhouseLocation, useAuthContext } from '../context/AuthProvider';
 import Button from '../ui/Button';
 import ControlledDropdown from '../ui/ControlledDropdown';
 import TextField from '../ui/TextField';
+import { useToastContext } from '../ui/ToastContext';
 
 interface FormValues {
     username: string;
@@ -62,6 +62,7 @@ const validate = ({ username, password, location }: FormValues) => {
 const Login = () => {
     const { formGap } = useStyles();
     const { isLoggedIn, handleLogin } = useAuthContext();
+    const createToast = useToastContext();
 
     const onSubmit = async ({ username, password, location }: FormValues) => {
         if (!location) return;
@@ -70,14 +71,12 @@ const Login = () => {
 
         if (data.token) {
             createToast({
-                color: 'green',
-                header: 'Success',
+                severity: 'success',
                 message: `Enjoy your time here!`,
             });
         } else {
             createToast({
-                color: 'red',
-                header: 'Error',
+                severity: 'error',
                 message: data,
             });
         }

@@ -1,7 +1,7 @@
 import { sortBy } from 'lodash';
 import React, { createContext, FC, useState } from 'react';
 import { v4 as uuid } from 'uuid';
-import createToast from '../common/createToast';
+import { useToastContext } from '../ui/ToastContext';
 import { ScryfallCard } from '../utils/ScryfallCard';
 import cardSearchQuery from './cardSearchQuery';
 import receivingQuery from './receivingQuery';
@@ -66,6 +66,7 @@ interface AddToListMeta {
 export const ReceivingContext = createContext<Context>(defaultContext);
 
 const ReceivingProvider: FC<Props> = ({ children }) => {
+    const createToast = useToastContext();
     const [searchResults, setSearchResults] = useState<ScryfallCard[]>([]);
     const [receivingList, setReceivingList] = useState<ReceivingCard[]>([]);
 
@@ -187,17 +188,14 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
             setReceivingList([]);
 
             createToast({
-                color: 'green',
-                header: `${receivingList.length} cards were added to inventory!`,
-                duration: 2000,
+                severity: 'success',
+                message: `${receivingList.length} cards were added to inventory!`,
             });
         } catch (e) {
             console.log(e);
             createToast({
-                color: 'red',
-                header: 'Error',
+                severity: 'error',
                 message: e.response.data || 'Error receiving cards',
-                duration: 2000,
             });
         }
     };

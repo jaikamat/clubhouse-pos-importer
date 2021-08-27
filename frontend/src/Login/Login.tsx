@@ -1,11 +1,12 @@
+import { Box, Container, makeStyles, Paper } from '@material-ui/core';
 import { FormikErrors, useFormik } from 'formik';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { Button, Form, Segment } from 'semantic-ui-react';
-import styled from 'styled-components';
 import createToast from '../common/createToast';
 import { ClubhouseLocation, useAuthContext } from '../context/AuthProvider';
-import FormikSelectField from '../ui/FormikSelectField';
+import Button from '../ui/Button';
+import ControlledDropdown from '../ui/ControlledDropdown';
+import TextField from '../ui/TextField';
 
 interface FormValues {
     username: string;
@@ -13,22 +14,19 @@ interface FormValues {
     location: ClubhouseLocation | null;
 }
 
-const LoginContainer = styled.div`
-    margin-top: 15px;
-    display: flex;
-    justify-content: center;
-`;
-
-const FormContainer = styled(Segment)`
-    width: 400px;
-    padding: 25px 25px 25px 25px !important;
-`;
-
 const initialFormValues: FormValues = {
     username: '',
     password: '',
     location: null,
 };
+
+const useStyles = makeStyles(({ spacing }) => ({
+    formGap: {
+        '& > *:not(:last-child)': {
+            paddingBottom: spacing(2),
+        },
+    },
+}));
 
 const locationDropdownOptions = [
     {
@@ -62,6 +60,7 @@ const validate = ({ username, password, location }: FormValues) => {
 };
 
 const Login = () => {
+    const { formGap } = useStyles();
     const { isLoggedIn, handleLogin } = useAuthContext();
 
     const onSubmit = async ({ username, password, location }: FormValues) => {
@@ -85,6 +84,7 @@ const Login = () => {
     };
 
     const {
+        values,
         handleChange,
         handleSubmit,
         setFieldValue,
@@ -100,47 +100,55 @@ const Login = () => {
     if (isLoggedIn()) return <Redirect to="/manage-inventory" />;
 
     return (
-        <LoginContainer>
-            <FormContainer raised loading={isSubmitting}>
-                <Form>
-                    <Form.Field>
-                        <label>Username</label>
-                        <Form.Input
-                            error={errors.username}
-                            onChange={handleChange}
-                            name="username"
+        <Container maxWidth="xs">
+            <Paper variant="outlined">
+                <Box p={3}>
+                    <form className={formGap}>
+                        <div>
+                            <TextField
+                                error={errors.username}
+                                name="username"
+                                label="Username"
+                                variant="outlined"
+                                size="small"
+                                fullWidth
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div>
+                            <TextField
+                                error={errors.password}
+                                name="password"
+                                type="password"
+                                label="Password"
+                                variant="outlined"
+                                size="small"
+                                fullWidth
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <ControlledDropdown
+                            error={errors.location}
+                            value={values.location || ''}
+                            label="Location"
+                            name="location"
+                            options={locationDropdownOptions}
+                            onChange={(v) => {
+                                setFieldValue('location', v);
+                            }}
                         />
-                    </Form.Field>
-                    <Form.Field>
-                        <label>Password</label>
-                        <Form.Input
-                            error={errors.password}
-                            type="password"
-                            onChange={handleChange}
-                            name="password"
-                        />
-                    </Form.Field>
-                    <FormikSelectField
-                        error={errors.location}
-                        label="Location"
-                        name="location"
-                        placeholder="Select location"
-                        options={locationDropdownOptions}
-                        onChange={(v) => {
-                            setFieldValue('location', v);
-                        }}
-                    />
-                    <Button
-                        primary
-                        fluid
-                        type="submit"
-                        onClick={() => handleSubmit()}
-                    >
-                        Submit
-                    </Button>
-                </Form>
-            </FormContainer>
-        </LoginContainer>
+                        <Button
+                            fullWidth
+                            primary
+                            onClick={() => handleSubmit()}
+                            disabled={isSubmitting}
+                        >
+                            Submit
+                        </Button>
+                    </form>
+                </Box>
+            </Paper>
+        </Container>
     );
 };
 

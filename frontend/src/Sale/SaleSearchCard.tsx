@@ -1,13 +1,15 @@
-import { Box, Paper } from '@material-ui/core';
+import { Box, Grid } from '@material-ui/core';
 import { FormikErrors, useFormik } from 'formik';
 import $ from 'jquery';
 import _ from 'lodash';
-import React, { ChangeEvent, FC, useContext } from 'react';
-import { Button, Form, Input, Item } from 'semantic-ui-react';
+import React, { ChangeEvent, FC, FocusEvent, useContext } from 'react';
 import CardImage from '../common/CardImage';
 import { SaleContext } from '../context/SaleContext';
+import Button from '../ui/Button';
 import CardHeader from '../ui/CardHeader';
-import FormikSelectField from '../ui/FormikSelectField';
+import CardRowContainer from '../ui/CardRowContainer';
+import ControlledDropdown from '../ui/ControlledDropdown';
+import TextField from '../ui/TextField';
 import roundPrice from '../utils/roundPrice';
 import { Finish, QOH, ScryfallCard } from '../utils/ScryfallCard';
 
@@ -43,7 +45,8 @@ interface FormValues {
     selectedFinishCondition: keyof QOH;
 }
 
-const handleFocus = (e: ChangeEvent<HTMLInputElement>) => e.target.select();
+const handleFocus = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    e.target.select();
 
 interface Props {
     card: ScryfallCard;
@@ -121,104 +124,80 @@ const SaleSearchCard: FC<Props> = ({ card }) => {
     });
 
     return (
-        <Paper variant="outlined">
-            <Box p={2}>
-                <Item.Group divided>
-                    <Item>
-                        <Item.Image size="tiny">
-                            <CardImage image={card.cardImage} />
-                        </Item.Image>
-                        <Item.Content>
-                            <CardHeader
-                                card={card}
-                                selectedFinish={
-                                    values.selectedFinishCondition.split(
-                                        '_'
-                                    )[0] as Finish
-                                }
-                                showMid
-                                round
-                            />
-                            <Item.Description>
-                                <Form>
-                                    <Form.Group>
-                                        <FormikSelectField
-                                            label="Select finish/condition"
-                                            name="selectedFinishCondition"
-                                            options={conditionSelectOptions}
-                                            defaultValue={
-                                                initialFormValues.selectedFinishCondition
-                                            }
-                                            onChange={(v) => {
-                                                setFieldValue(
-                                                    'selectedFinishCondition',
-                                                    v
-                                                );
-                                                setFieldValue(
-                                                    'quantityToSell',
-                                                    0
-                                                );
-                                            }}
-                                        />
-                                        <Form.Field
-                                            control={Input}
-                                            type="number"
-                                            label="Quantity to sell"
-                                            value={values.quantityToSell}
-                                            onChange={(
-                                                _: any,
-                                                { value }: { value: string }
-                                            ) => {
-                                                const castVal = parseInt(
-                                                    value,
-                                                    10
-                                                );
+        <CardRowContainer
+            image={
+                <Box width={100}>
+                    <CardImage image={card.cardImage} />
+                </Box>
+            }
+            header={
+                <CardHeader
+                    card={card}
+                    showMid
+                    round
+                    selectedFinish={
+                        values.selectedFinishCondition.split('_')[0] as Finish
+                    }
+                />
+            }
+        >
+            <Grid container alignItems="center" spacing={2}>
+                <Grid item>
+                    <ControlledDropdown
+                        name="selectedFinishCondition"
+                        label="Select finish/condition"
+                        options={conditionSelectOptions}
+                        value={values.selectedFinishCondition}
+                        onChange={(v) => {
+                            setFieldValue('selectedFinishCondition', v);
+                            setFieldValue('quantityToSell', 0);
+                        }}
+                    />
+                </Grid>
+                <Grid item>
+                    <TextField
+                        type="number"
+                        label="Quantity to sell"
+                        value={values.quantityToSell}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                            const castVal = parseInt(e.target.value);
 
-                                                if (
-                                                    castVal >
-                                                    card.qoh[
-                                                        values
-                                                            .selectedFinishCondition
-                                                    ]!
-                                                ) {
-                                                    return;
-                                                }
+                            if (
+                                castVal >
+                                card.qoh[values.selectedFinishCondition]!
+                            ) {
+                                return;
+                            }
 
-                                                setFieldValue(
-                                                    'quantityToSell',
-                                                    castVal
-                                                );
-                                            }}
-                                            onFocus={handleFocus}
-                                        />
-                                        <Form.Field
-                                            label="Price"
-                                            name="price"
-                                            control={Input}
-                                            type="number"
-                                            value={values.price}
-                                            onChange={handleChange}
-                                            onFocus={handleFocus}
-                                            step="0.5"
-                                        />
-                                        <Form.Button
-                                            type="submit"
-                                            label="Add to sale?"
-                                            control={Button}
-                                            primary
-                                            onClick={() => handleSubmit()}
-                                            disabled={!isValid}
-                                        >
-                                            Sell
-                                        </Form.Button>
-                                    </Form.Group>
-                                </Form>
-                            </Item.Description>
-                        </Item.Content>
-                    </Item>
-                </Item.Group>
-            </Box>
-        </Paper>
+                            setFieldValue('quantityToSell', castVal);
+                        }}
+                        onFocus={handleFocus}
+                    />
+                </Grid>
+                <Grid item>
+                    <TextField
+                        label="Price"
+                        name="price"
+                        type="number"
+                        value={values.price}
+                        onChange={handleChange}
+                        onFocus={handleFocus}
+                        inputProps={{
+                            step: 0.5,
+                        }}
+                    />
+                </Grid>
+                <Grid item>
+                    <Button
+                        primary
+                        disabled={!isValid}
+                        onClick={() => handleSubmit()}
+                    >
+                        Add to sale
+                    </Button>
+                </Grid>
+            </Grid>
+        </CardRowContainer>
     );
 };
 

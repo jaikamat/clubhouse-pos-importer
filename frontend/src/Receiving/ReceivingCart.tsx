@@ -13,7 +13,7 @@ const ReceivingCart: FC<Props> = ({ cards }) => {
             {cards.length > 0 && (
                 <List component={Paper} variant="outlined">
                     {cards.map((card, idx, arr) => (
-                        <Fragment>
+                        <Fragment key={`${card.id}-${idx}`}>
                             <ReceivingCartItem card={card} />
                             {idx !== arr.length - 1 && <Divider />}
                         </Fragment>

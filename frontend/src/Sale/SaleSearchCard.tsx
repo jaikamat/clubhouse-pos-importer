@@ -1,4 +1,4 @@
-import { Box, Paper } from '@material-ui/core';
+import { Box, Grid } from '@material-ui/core';
 import { FormikErrors, useFormik } from 'formik';
 import $ from 'jquery';
 import _ from 'lodash';
@@ -7,6 +7,7 @@ import CardImage from '../common/CardImage';
 import { SaleContext } from '../context/SaleContext';
 import Button from '../ui/Button';
 import CardHeader from '../ui/CardHeader';
+import CardRowContainer from '../ui/CardRowContainer';
 import ControlledDropdown from '../ui/ControlledDropdown';
 import TextField from '../ui/TextField';
 import roundPrice from '../utils/roundPrice';
@@ -123,68 +124,80 @@ const SaleSearchCard: FC<Props> = ({ card }) => {
     });
 
     return (
-        <Paper variant="outlined">
-            <Box p={2}>
+        <CardRowContainer
+            image={
                 <Box width={100}>
                     <CardImage image={card.cardImage} />
                 </Box>
-
+            }
+            header={
                 <CardHeader
                     card={card}
+                    showMid
+                    round
                     selectedFinish={
                         values.selectedFinishCondition.split('_')[0] as Finish
                     }
-                    showMid
-                    round
                 />
+            }
+        >
+            <Grid container alignItems="center" spacing={2}>
+                <Grid item>
+                    <ControlledDropdown
+                        name="selectedFinishCondition"
+                        label="Select finish/condition"
+                        options={conditionSelectOptions}
+                        value={values.selectedFinishCondition}
+                        onChange={(v) => {
+                            setFieldValue('selectedFinishCondition', v);
+                            setFieldValue('quantityToSell', 0);
+                        }}
+                    />
+                </Grid>
+                <Grid item>
+                    <TextField
+                        type="number"
+                        label="Quantity to sell"
+                        value={values.quantityToSell}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                            const castVal = parseInt(e.target.value);
 
-                <ControlledDropdown
-                    name="selectedFinishCondition"
-                    label="Select finish/condition"
-                    options={conditionSelectOptions}
-                    value={values.selectedFinishCondition}
-                    onChange={(v) => {
-                        setFieldValue('selectedFinishCondition', v);
-                        setFieldValue('quantityToSell', 0);
-                    }}
-                />
-                <TextField
-                    type="number"
-                    label="Quantity to sell"
-                    value={values.quantityToSell}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                        const castVal = parseInt(e.target.value);
+                            if (
+                                castVal >
+                                card.qoh[values.selectedFinishCondition]!
+                            ) {
+                                return;
+                            }
 
-                        if (
-                            castVal > card.qoh[values.selectedFinishCondition]!
-                        ) {
-                            return;
-                        }
-
-                        setFieldValue('quantityToSell', castVal);
-                    }}
-                    onFocus={handleFocus}
-                />
-                <TextField
-                    label="Price"
-                    name="price"
-                    type="number"
-                    value={values.price}
-                    onChange={handleChange}
-                    onFocus={handleFocus}
-                    inputProps={{
-                        step: 0.5,
-                    }}
-                />
-                <Button
-                    primary
-                    disabled={!isValid}
-                    onClick={() => handleSubmit()}
-                >
-                    Add to sale
-                </Button>
-            </Box>
-        </Paper>
+                            setFieldValue('quantityToSell', castVal);
+                        }}
+                        onFocus={handleFocus}
+                    />
+                </Grid>
+                <Grid item>
+                    <TextField
+                        label="Price"
+                        name="price"
+                        type="number"
+                        value={values.price}
+                        onChange={handleChange}
+                        onFocus={handleFocus}
+                        inputProps={{
+                            step: 0.5,
+                        }}
+                    />
+                </Grid>
+                <Grid item>
+                    <Button
+                        primary
+                        disabled={!isValid}
+                        onClick={() => handleSubmit()}
+                    >
+                        Add to sale
+                    </Button>
+                </Grid>
+            </Grid>
+        </CardRowContainer>
     );
 };
 

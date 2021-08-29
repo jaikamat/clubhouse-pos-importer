@@ -1,6 +1,5 @@
-import axios from 'axios';
+import http from '../common/http';
 import { GET_CARDS_BY_FILTER } from '../utils/api_resources';
-import makeAuthHeader from '../utils/makeAuthHeader';
 import { FinishCondition } from '../utils/ScryfallCard';
 
 export interface Filters {
@@ -40,9 +39,8 @@ interface ResponseData {
 const filteredCardsQuery = async (filters: Filters, page: number) => {
     const params: Params = { ...filters, page };
 
-    const { data } = await axios.get<ResponseData>(GET_CARDS_BY_FILTER, {
+    const { data } = await http.get<ResponseData>(GET_CARDS_BY_FILTER, {
         params,
-        headers: makeAuthHeader(),
     });
 
     return data;

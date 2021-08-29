@@ -1,8 +1,7 @@
-import axios from 'axios';
+import http from '../common/http';
 import { ClubhouseLocation } from '../context/AuthProvider';
 import { Trade } from '../context/ReceivingContext';
 import { RECEIVING } from '../utils/api_resources';
-import makeAuthHeader from '../utils/makeAuthHeader';
 import { FinishCondition } from '../utils/ScryfallCard';
 
 export interface ReceivedCard {
@@ -47,9 +46,8 @@ const browseReceivingQuery = async ({
     endDate,
 }: Payload) => {
     try {
-        const { data } = await axios.get<Received[]>(RECEIVING, {
+        const { data } = await http.get<Received[]>(RECEIVING, {
             params: { cardName, startDate, endDate },
-            headers: makeAuthHeader(),
         });
         return data;
     } catch (err) {

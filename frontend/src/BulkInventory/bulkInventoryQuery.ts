@@ -1,6 +1,5 @@
-import axios from 'axios';
+import http from '../common/http';
 import { GET_BULK_CARDS } from '../utils/api_resources';
-import makeAuthHeader from '../utils/makeAuthHeader';
 
 export interface BulkCard {
     scryfall_id: string;
@@ -17,11 +16,10 @@ export interface BulkCard {
 
 const bulkInventoryQuery = async (cardName: string) => {
     try {
-        const { data } = await axios.get<BulkCard[]>(GET_BULK_CARDS, {
+        const { data } = await http.get<BulkCard[]>(GET_BULK_CARDS, {
             params: {
                 cardName,
             },
-            headers: makeAuthHeader(),
         });
 
         return data;

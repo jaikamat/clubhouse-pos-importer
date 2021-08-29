@@ -1,6 +1,5 @@
-import axios from 'axios';
+import http from '../common/http';
 import { RECEIVE_CARDS } from '../utils/api_resources';
-import makeAuthHeader from '../utils/makeAuthHeader';
 import { Trade } from './ReceivingContext';
 
 interface ReceivingQueryCard {
@@ -29,11 +28,11 @@ const receivingQuery = async ({
 }: Payload) => {
     try {
         // We do not expect to use the return type, so we designate it `void`
-        const { data } = await axios.post<void>(
-            RECEIVE_CARDS,
-            { cards, customerName, customerContact },
-            { headers: makeAuthHeader() }
-        );
+        const { data } = await http.post<void>(RECEIVE_CARDS, {
+            cards,
+            customerName,
+            customerContact,
+        });
 
         return data;
     } catch (err) {

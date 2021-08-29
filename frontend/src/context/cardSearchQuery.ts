@@ -1,6 +1,5 @@
-import axios from 'axios';
+import http from '../common/http';
 import { GET_CARDS_WITH_INFO } from '../utils/api_resources';
-import makeAuthHeader from '../utils/makeAuthHeader';
 import { ScryfallApiCard, ScryfallCard } from '../utils/ScryfallCard';
 
 interface Params {
@@ -14,14 +13,13 @@ interface Params {
  */
 const cardSearchQuery = async ({ cardName, inStockOnly }: Params) => {
     try {
-        const { data } = await axios.get<ScryfallApiCard[]>(
+        const { data } = await http.get<ScryfallApiCard[]>(
             GET_CARDS_WITH_INFO,
             {
                 params: {
                     title: cardName,
                     matchInStock: inStockOnly,
                 },
-                headers: makeAuthHeader(),
             }
         );
 

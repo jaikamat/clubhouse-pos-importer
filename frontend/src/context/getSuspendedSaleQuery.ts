@@ -1,6 +1,5 @@
-import axios from 'axios';
+import http from '../common/http';
 import { SUSPEND_SALE } from '../utils/api_resources';
-import makeAuthHeader from '../utils/makeAuthHeader';
 import { SaleListCard } from './SaleContext';
 
 export interface SuspendedSale {
@@ -12,11 +11,8 @@ export interface SuspendedSale {
 
 const getSuspendedSaleQuery = async (saleId: string) => {
     try {
-        const { data } = await axios.get<SuspendedSale>(
-            `${SUSPEND_SALE}/${saleId}`,
-            {
-                headers: makeAuthHeader(),
-            }
+        const { data } = await http.get<SuspendedSale>(
+            `${SUSPEND_SALE}/${saleId}`
         );
 
         return data;

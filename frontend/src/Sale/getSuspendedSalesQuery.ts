@@ -1,13 +1,10 @@
-import axios from 'axios';
+import http from '../common/http';
 import { SuspendedSale } from '../context/getSuspendedSaleQuery';
 import { SUSPEND_SALE } from '../utils/api_resources';
-import makeAuthHeader from '../utils/makeAuthHeader';
 
 const getSuspendedSalesQuery = async () => {
     try {
-        const { data } = await axios.get<SuspendedSale[]>(SUSPEND_SALE, {
-            headers: makeAuthHeader(),
-        });
+        const { data } = await http.get<SuspendedSale[]>(SUSPEND_SALE);
 
         return data;
     } catch (err) {

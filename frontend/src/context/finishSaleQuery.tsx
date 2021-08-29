@@ -1,6 +1,5 @@
-import axios from 'axios';
+import http from '../common/http';
 import { FINISH_SALE } from '../utils/api_resources';
-import makeAuthHeader from '../utils/makeAuthHeader';
 import { SaleListCard } from './SaleContext';
 
 interface Payload {
@@ -17,9 +16,7 @@ interface ResponseData {
 
 const finishSaleQuery = async (payload: Payload) => {
     try {
-        const { data } = await axios.post<ResponseData>(FINISH_SALE, payload, {
-            headers: makeAuthHeader(),
-        });
+        const { data } = await http.post<ResponseData>(FINISH_SALE, payload);
 
         return data;
     } catch (err) {

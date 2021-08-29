@@ -18,6 +18,9 @@ jest.mock('axios', () => ({
     __esModule: true,
     default: {
         get: () => Promise.resolve({ data }),
+        // TODO: How to spy on this to ensure the submit is correct?
+        // I am unsure how to effectively spy on this or gain a reference to it through jest.fn()
+        post: (...args: any) => Promise.resolve({ data: args }),
     },
 }));
 
@@ -116,4 +119,38 @@ test('auto selects foil if no nonfoil option available', async () => {
     const select = within(selectContainer).getByRole('button');
 
     expect(select).toHaveAttribute('aria-disabled', 'true');
+});
+
+test('submission is disabled by default', async () => {
+    const mockCard = new ScryfallCard(lotus);
+
+    await render(<ManageInventoryListItem card={mockCard} />);
+
+    await screen.findByText('Black Lotus');
+    const submit = screen.getByText('Add to inventory').closest('button');
+
+    expect(submit).toBeDisabled();
+});
+
+test('submit fires, and with expected data', async () => {
+    const mockCard = new ScryfallCard(lotus);
+
+    await render(<ManageInventoryListItem card={mockCard} />);
+
+    await screen.findByText('Black Lotus');
+    const quantityInput = screen.getByDisplayValue('0');
+    fireEvent.change(quantityInput, { target: { value: 1 } });
+
+    // The previous fireEvent call will initiate a state change, which we need to wait for
+    await screen.findByDisplayValue('1');
+    const submit = await screen
+        .getByText('Add to inventory')
+        .closest('button')!;
+
+    expect(submit).not.toBeDisabled();
+
+    /**
+     * TODO: Need to test this submission by spying on the mocked axios post method
+     */
+    // fireEvent.click(submit);
 });

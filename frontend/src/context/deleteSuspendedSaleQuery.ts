@@ -1,12 +1,9 @@
-import axios from 'axios';
+import http from '../common/http';
 import { SUSPEND_SALE } from '../utils/api_resources';
-import makeAuthHeader from '../utils/makeAuthHeader';
 
 const deleteSuspendedSaleQuery = async (saleId: string) => {
     try {
-        const { data } = await axios.delete<void>(`${SUSPEND_SALE}/${saleId}`, {
-            headers: makeAuthHeader(),
-        });
+        const { data } = await http.delete<void>(`${SUSPEND_SALE}/${saleId}`);
         return data;
     } catch (err) {
         throw err;

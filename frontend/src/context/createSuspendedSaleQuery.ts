@@ -1,6 +1,5 @@
-import axios from 'axios';
+import http from '../common/http';
 import { SUSPEND_SALE } from '../utils/api_resources';
-import makeAuthHeader from '../utils/makeAuthHeader';
 import { SaleListCard } from './SaleContext';
 
 interface Payload {
@@ -15,9 +14,7 @@ interface ResponseData {
 
 const createSuspendedSaleQuery = async (payload: Payload) => {
     try {
-        const { data } = await axios.post<ResponseData>(SUSPEND_SALE, payload, {
-            headers: makeAuthHeader(),
-        });
+        const { data } = await http.post<ResponseData>(SUSPEND_SALE, payload);
 
         return data;
     } catch (err) {

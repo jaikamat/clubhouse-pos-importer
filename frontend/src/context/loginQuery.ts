@@ -1,6 +1,5 @@
-import axios from 'axios';
+import http from '../common/http';
 import { LOGIN } from '../utils/api_resources';
-import makeAuthHeader from '../utils/makeAuthHeader';
 
 type ClubhouseLocation = 'ch1' | 'ch2';
 
@@ -14,15 +13,11 @@ const loginQuery = async (
     currentLocation: ClubhouseLocation
 ) => {
     try {
-        const { data } = await axios.post<ResponseData>(
-            LOGIN,
-            {
-                username: username.toLowerCase(),
-                password,
-                currentLocation,
-            },
-            { headers: makeAuthHeader() }
-        );
+        const { data } = await http.post<ResponseData>(LOGIN, {
+            username: username.toLowerCase(),
+            password,
+            currentLocation,
+        });
 
         return data;
     } catch (err) {

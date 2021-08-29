@@ -17,6 +17,7 @@ const data = {
 jest.mock('axios', () => ({
     __esModule: true,
     default: {
+        create: () => jest.createMockFromModule('axios'),
         get: () => Promise.resolve({ data }),
         // TODO: How to spy on this to ensure the submit is correct?
         // I am unsure how to effectively spy on this or gain a reference to it through jest.fn()
@@ -132,7 +133,7 @@ test('submission is disabled by default', async () => {
     expect(submit).toBeDisabled();
 });
 
-test('submit fires, and with expected data', async () => {
+test('submission button not disabled with valid quantity', async () => {
     const mockCard = new ScryfallCard(lotus);
 
     await render(<ManageInventoryListItem card={mockCard} />);

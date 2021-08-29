@@ -1,6 +1,5 @@
-import axios from 'axios';
+import http from '../common/http';
 import { ADD_CARD_TO_INVENTORY } from '../utils/api_resources';
-import makeAuthHeader from '../utils/makeAuthHeader';
 import { QOH } from '../utils/ScryfallCard';
 
 interface CardInfo {
@@ -25,10 +24,9 @@ interface ResponseData {
 
 const addCardToInventoryQuery = async (payload: Payload) => {
     try {
-        const { data } = await axios.post<ResponseData>(
+        const { data } = await http.post<ResponseData>(
             ADD_CARD_TO_INVENTORY,
-            payload,
-            { headers: makeAuthHeader() }
+            payload
         );
 
         return data;

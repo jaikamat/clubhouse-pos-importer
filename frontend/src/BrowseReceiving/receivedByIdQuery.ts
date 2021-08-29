@@ -1,8 +1,7 @@
-import axios from 'axios';
+import http from '../common/http';
 import { ClubhouseLocation } from '../context/AuthProvider';
 import { Trade } from '../context/ReceivingContext';
 import { RECEIVING } from '../utils/api_resources';
-import makeAuthHeader from '../utils/makeAuthHeader';
 import { FinishCondition, ScryfallApiCard } from '../utils/ScryfallCard';
 
 interface ReceivedUser {
@@ -38,9 +37,7 @@ export interface Received {
 }
 
 const receivedByIdQuery = async (receivedId: string) => {
-    const { data } = await axios.get<Received>(`${RECEIVING}/${receivedId}`, {
-        headers: makeAuthHeader(),
-    });
+    const { data } = await http.get<Received>(`${RECEIVING}/${receivedId}`);
 
     // We still need to convert ScryfallApiCard to ScryfallCard downstream
     return data;

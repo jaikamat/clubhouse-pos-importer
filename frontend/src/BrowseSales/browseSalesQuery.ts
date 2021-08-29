@@ -1,7 +1,6 @@
-import axios from 'axios';
+import http from '../common/http';
 import { SaleListCard } from '../context/SaleContext';
 import { GET_SALES_BY_TITLE } from '../utils/api_resources';
-import makeAuthHeader from '../utils/makeAuthHeader';
 
 interface SaleData {
     total: string;
@@ -22,9 +21,8 @@ interface Payload {
 
 const browseSalesQuery = async ({ cardName }: Payload) => {
     try {
-        const { data } = await axios.get<Sale[]>(GET_SALES_BY_TITLE, {
+        const { data } = await http.get<Sale[]>(GET_SALES_BY_TITLE, {
             params: { cardName: cardName },
-            headers: makeAuthHeader(),
         });
         return data;
     } catch (err) {

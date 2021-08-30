@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { ScryfallCard } from '../utils/ScryfallCard';
 import dropdownOptionClick from '../utils/testing/dropdownOptionClick';
 import bop from '../utils/testing/fixtures/birdsOfParadise';
@@ -50,12 +50,8 @@ test('select finish', async () => {
     await render(<ManageInventoryListItem card={mockCard} />);
 
     await screen.findByText('Birds of Paradise');
-
-    const selectContainer = screen.getByDisplayValue('NONFOIL').parentElement!;
-    const select = within(selectContainer).getByRole('button');
-    fireEvent.mouseDown(select);
-    const listbox = screen.getByRole('listbox');
-    fireEvent.click(within(listbox).getByText('Foil'));
+    const select = selectDropdownByValue('NONFOIL');
+    dropdownOptionClick(select, 'Foil');
 
     // Validate the input value has changed
     screen.getByDisplayValue('FOIL');
@@ -70,8 +66,7 @@ test('finish is selectable when allowed', async () => {
     await render(<ManageInventoryListItem card={mockCard} />);
 
     await screen.findByText('Birds of Paradise');
-    const selectContainer = screen.getByDisplayValue('NONFOIL').parentElement!;
-    const select = within(selectContainer).getByRole('button');
+    const select = selectDropdownByValue('NONFOIL');
 
     expect(select).not.toHaveAttribute('aria-disabled');
 });
@@ -82,8 +77,7 @@ test('disables finish when appropriate', async () => {
     await render(<ManageInventoryListItem card={mockCard} />);
 
     await screen.findByText('Black Lotus');
-    const selectContainer = screen.getByDisplayValue('NONFOIL').parentElement!;
-    const select = within(selectContainer).getByRole('button');
+    const select = selectDropdownByValue('NONFOIL');
 
     expect(select).toHaveAttribute('aria-disabled', 'true');
 });
@@ -95,8 +89,7 @@ test('auto selects foil if no nonfoil option available', async () => {
     await render(<ManageInventoryListItem card={mockCard} />);
 
     await screen.findByText('Black Lotus');
-    const selectContainer = screen.getByDisplayValue('FOIL').parentElement!;
-    const select = within(selectContainer).getByRole('button');
+    const select = selectDropdownByValue('FOIL');
 
     expect(select).toHaveAttribute('aria-disabled', 'true');
 });

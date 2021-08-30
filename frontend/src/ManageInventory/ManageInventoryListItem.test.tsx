@@ -127,7 +127,7 @@ test('submission button not disabled with valid quantity', async () => {
     await render(<ManageInventoryListItem card={mockCard} />);
 
     await screen.findByText('Black Lotus');
-    const quantityInput = screen.getByDisplayValue('0');
+    const quantityInput = screen.getByLabelText('Quantity');
     fireEvent.change(quantityInput, { target: { value: 1 } });
 
     // The previous fireEvent call will initiate a state change, which we need to wait for

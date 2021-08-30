@@ -15,10 +15,10 @@ const useStyles = makeStyles({
     },
 });
 
-const Chip: FC<Props> = (props) => {
+const Chip: FC<Props> = ({ foil, ...props }) => {
     const { foilContainer, border } = useStyles();
 
-    if (props.foil) {
+    if (foil) {
         return <MUIChip {...props} className={clsx(foilContainer, border)} />;
     }
 

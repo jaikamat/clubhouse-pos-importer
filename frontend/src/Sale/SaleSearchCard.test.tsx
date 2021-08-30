@@ -1,37 +1,13 @@
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { QOH, ScryfallCard } from '../utils/ScryfallCard';
+import currentButton from '../utils/testing/currentButton';
+import currentByLabelText from '../utils/testing/currentByLabelText';
 import dropdownOptionClick from '../utils/testing/dropdownOptionClick';
 import bop from '../utils/testing/fixtures/birdsOfParadise';
 import mockHttp from '../utils/testing/mockHttp';
 import selectDropdownByValue from '../utils/testing/selectDropdownByValue';
 import SaleSearchCard from './SaleSearchCard';
-
-/**
- * Returns a function that caches the current button for repeated assertion
- */
-const currentButton = (buttonText: string) => {
-    let button: HTMLButtonElement;
-
-    return async () => {
-        button = (await screen.findByText(buttonText)).closest('button')!;
-
-        return button;
-    };
-};
-
-/**
- * Caches a found element for current state assertions
- */
-const currentByLabelText = (text: string) => {
-    let element: HTMLElement;
-
-    return async () => {
-        element = await screen.findByLabelText(text);
-
-        return element;
-    };
-};
 
 const data = {
     marketPrices: { foil: 11.2, normal: 4.56 },

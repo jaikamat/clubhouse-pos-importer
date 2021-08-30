@@ -3,6 +3,7 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import { ScryfallCard } from '../utils/ScryfallCard';
 import bop from '../utils/testing/fixtures/birdsOfParadise';
 import lotus from '../utils/testing/fixtures/blackLotus';
+import mockHttp from '../utils/testing/mockHttp';
 import ManageInventoryListItem from './ManageInventoryListItem';
 
 const data = {
@@ -10,20 +11,7 @@ const data = {
     medianPrices: { foil: 12.78, normal: 5.1 },
 };
 
-/**
- * TODO: WOW! This is so cool. So we can mock axios and overwrite its methods
- * This means we can return mock data for useEffect stuff and the tests will be deterministic!
- */
-jest.mock('axios', () => ({
-    __esModule: true,
-    default: {
-        create: () => jest.createMockFromModule('axios'),
-        get: () => Promise.resolve({ data }),
-        // TODO: How to spy on this to ensure the submit is correct?
-        // I am unsure how to effectively spy on this or gain a reference to it through jest.fn()
-        post: (...args: any) => Promise.resolve({ data: args }),
-    },
-}));
+jest.mock('axios', () => mockHttp(data));
 
 test('manage inventory list item', async () => {
     const mockCard = new ScryfallCard(bop);

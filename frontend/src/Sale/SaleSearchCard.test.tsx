@@ -1,8 +1,10 @@
 import '@testing-library/jest-dom';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { QOH, ScryfallCard } from '../utils/ScryfallCard';
+import dropdownOptionClick from '../utils/testing/dropdownOptionClick';
 import bop from '../utils/testing/fixtures/birdsOfParadise';
 import mockHttp from '../utils/testing/mockHttp';
+import selectDropdownByValue from '../utils/testing/selectDropdownByValue';
 import SaleSearchCard from './SaleSearchCard';
 
 /**
@@ -29,19 +31,6 @@ const currentByLabelText = (text: string) => {
 
         return element;
     };
-};
-
-const selectDropdownByValue = (value: string) => {
-    const selectContainer = screen.getByDisplayValue(value).parentElement!;
-    const select = within(selectContainer).getByRole('button');
-
-    return select;
-};
-
-const optionClick = (selectElement: HTMLElement, valueText: string) => {
-    fireEvent.mouseDown(selectElement);
-    const listbox = screen.getByRole('listbox');
-    fireEvent.click(within(listbox).getByText(valueText));
 };
 
 const data = {
@@ -98,7 +87,7 @@ test('list item condition change', async () => {
     await screen.findByDisplayValue('NONFOIL_NM');
 
     const select = selectDropdownByValue('NONFOIL_NM');
-    optionClick(select, 'NONFOIL | HP | Qty: 7');
+    dropdownOptionClick(select, 'NONFOIL | HP | Qty: 7');
 
     await screen.getByDisplayValue('NONFOIL_HP');
 });

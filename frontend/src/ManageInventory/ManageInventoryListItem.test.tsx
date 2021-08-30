@@ -1,9 +1,11 @@
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { ScryfallCard } from '../utils/ScryfallCard';
+import dropdownOptionClick from '../utils/testing/dropdownOptionClick';
 import bop from '../utils/testing/fixtures/birdsOfParadise';
 import lotus from '../utils/testing/fixtures/blackLotus';
 import mockHttp from '../utils/testing/mockHttp';
+import selectDropdownByValue from '../utils/testing/selectDropdownByValue';
 import ManageInventoryListItem from './ManageInventoryListItem';
 
 const data = {
@@ -35,19 +37,8 @@ test('select condition', async () => {
 
     await screen.findByText('Black Lotus');
 
-    // Get the parent of the <input /> element that has desired value
-    const selectContainer = screen.getByDisplayValue('NM').parentElement!;
-
-    // MUI's Select component uses `role=button`
-    const select = within(selectContainer).getByRole('button');
-
-    // Click on the select
-    fireEvent.mouseDown(select);
-
-    // A listbox appears, and then we assert it
-    const listbox = screen.getByRole('listbox');
-
-    fireEvent.click(within(listbox).getByText('Heavy Play'));
+    const select = selectDropdownByValue('NM');
+    dropdownOptionClick(select, 'Heavy Play');
 
     // Validate the input value has changed
     screen.getByDisplayValue('HP');

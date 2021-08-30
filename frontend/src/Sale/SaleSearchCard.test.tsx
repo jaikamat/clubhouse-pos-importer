@@ -31,6 +31,19 @@ const currentByLabelText = (text: string) => {
     };
 };
 
+const selectDropdownByValue = (value: string) => {
+    const selectContainer = screen.getByDisplayValue(value).parentElement!;
+    const select = within(selectContainer).getByRole('button');
+
+    return select;
+};
+
+const optionClick = (selectElement: HTMLElement, valueText: string) => {
+    fireEvent.mouseDown(selectElement);
+    const listbox = screen.getByRole('listbox');
+    fireEvent.click(within(listbox).getByText(valueText));
+};
+
 const data = {
     marketPrices: { foil: 11.2, normal: 4.56 },
     medianPrices: { foil: 12.78, normal: 5.1 },
@@ -84,12 +97,8 @@ test('list item condition change', async () => {
 
     await screen.findByDisplayValue('NONFOIL_NM');
 
-    const selectContainer = screen.getByDisplayValue('NONFOIL_NM')
-        .parentElement!;
-    const select = within(selectContainer).getByRole('button');
-    fireEvent.mouseDown(select);
-    const listbox = screen.getByRole('listbox');
-    fireEvent.click(within(listbox).getByText('NONFOIL | HP | Qty: 7'));
+    const select = selectDropdownByValue('NONFOIL_NM');
+    optionClick(select, 'NONFOIL | HP | Qty: 7');
 
     await screen.getByDisplayValue('NONFOIL_HP');
 });

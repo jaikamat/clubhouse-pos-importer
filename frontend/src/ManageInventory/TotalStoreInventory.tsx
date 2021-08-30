@@ -14,6 +14,15 @@ const useStyles = makeStyles(({ spacing }) => ({
             marginLeft: spacing(2),
         },
     },
+    chipContainer: {
+        display: 'inline',
+        '& > *': {
+            display: 'inline',
+        },
+        '& > *:first-child': {
+            paddingRight: spacing(1),
+        },
+    },
 }));
 
 interface Props {
@@ -22,7 +31,7 @@ interface Props {
 }
 
 const TotalStoreInventory: FC<Props> = ({ title, searchResults }) => {
-    const { labelContainer } = useStyles();
+    const { labelContainer, chipContainer } = useStyles();
     const [quantities, setQuantities] = useState<ResponseData>({
         ch1: { foilQty: 0, nonfoilQty: 0 },
         ch2: { foilQty: 0, nonfoilQty: 0 },
@@ -47,12 +56,12 @@ const TotalStoreInventory: FC<Props> = ({ title, searchResults }) => {
         return (
             <div className={labelContainer}>
                 <div>
-                    <Typography variant="body2">
-                        <b>Loading totals for all locations</b>
-                    </Typography>
-                    <div>
-                        <span>Loading...</span>
-                    </div>
+                    <Typography>Beaverton totals:</Typography>
+                    <Typography>Loading...</Typography>
+                </div>
+                <div>
+                    <Typography>Hillsboro totals:</Typography>
+                    <Typography>Loading...</Typography>
                 </div>
             </div>
         );
@@ -61,16 +70,12 @@ const TotalStoreInventory: FC<Props> = ({ title, searchResults }) => {
     return (
         <div className={labelContainer}>
             <div>
-                <Typography variant="body2">
-                    <b>Beaverton totals:</b>
-                </Typography>
-                <Box display="inline">
-                    <Box display="inline" pr={1}>
-                        <InventoryChip
-                            label="Foil"
-                            quantity={quantities.ch1.foilQty}
-                        />
-                    </Box>
+                <Typography>Beaverton totals:</Typography>
+                <Box className={chipContainer}>
+                    <InventoryChip
+                        label="Foil"
+                        quantity={quantities.ch1.foilQty}
+                    />
                     <InventoryChip
                         label="Nonfoil"
                         quantity={quantities.ch1.nonfoilQty}
@@ -78,16 +83,12 @@ const TotalStoreInventory: FC<Props> = ({ title, searchResults }) => {
                 </Box>
             </div>
             <div>
-                <Typography variant="body2">
-                    <b>Hillsboro totals:</b>
-                </Typography>
-                <Box display="inline">
-                    <Box display="inline" pr={1}>
-                        <InventoryChip
-                            label="Foil"
-                            quantity={quantities.ch2.foilQty}
-                        />
-                    </Box>
+                <Typography>Hillsboro totals:</Typography>
+                <Box className={chipContainer}>
+                    <InventoryChip
+                        label="Foil"
+                        quantity={quantities.ch2.foilQty}
+                    />
                     <InventoryChip
                         label="Nonfoil"
                         quantity={quantities.ch2.nonfoilQty}

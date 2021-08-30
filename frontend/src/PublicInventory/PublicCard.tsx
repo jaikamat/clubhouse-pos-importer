@@ -28,6 +28,9 @@ const useStyles = makeStyles(() => ({
             #b0b0b0 20px
         )`,
         borderRadius: `15px`,
+        '& > img': {
+            borderRadius: '15px',
+        },
     },
     inventoryRow: {
         display: 'flex',

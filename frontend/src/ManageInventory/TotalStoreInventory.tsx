@@ -1,42 +1,37 @@
+import { Box, makeStyles, Typography } from '@material-ui/core';
 import React, { FC, useEffect, useState } from 'react';
-import { Header, Label, Loader } from 'semantic-ui-react';
-import styled from 'styled-components';
+import InventoryChip from '../ui/InventoryChip';
 import { ScryfallCard } from '../utils/ScryfallCard';
 import allLocationInventoryQuery, {
     ResponseData,
 } from './allLocationInventoryQuery';
 
-const StyledContainer = styled('div')({
-    display: 'inline',
-});
-
-const FlexContainer = styled('div')({
-    display: 'flex',
-    alignItems: 'center',
-    '& > *': {
-        marginLeft: '10px',
+const useStyles = makeStyles(({ spacing }) => ({
+    labelContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        '& > *': {
+            marginLeft: spacing(2),
+        },
     },
-});
-
-interface QohLabelProps {
-    label: string;
-    value: number;
-}
-
-const QohLabel: FC<QohLabelProps> = ({ label, value }) => (
-    <Label color={value > 0 ? 'blue' : undefined} image>
-        {label}
-        <Label.Detail>{value}</Label.Detail>
-    </Label>
-);
+    chipContainer: {
+        display: 'inline',
+        '& > *': {
+            display: 'inline',
+        },
+        '& > *:first-child': {
+            paddingRight: spacing(1),
+        },
+    },
+}));
 
 interface Props {
     title: string;
     searchResults: ScryfallCard[];
 }
 
-// TODO: refetch on result set change
 const TotalStoreInventory: FC<Props> = ({ title, searchResults }) => {
+    const { labelContainer, chipContainer } = useStyles();
     const [quantities, setQuantities] = useState<ResponseData>({
         ch1: { foilQty: 0, nonfoilQty: 0 },
         ch2: { foilQty: 0, nonfoilQty: 0 },
@@ -59,38 +54,48 @@ const TotalStoreInventory: FC<Props> = ({ title, searchResults }) => {
 
     if (loading) {
         return (
-            <FlexContainer>
-                <span>Loading totals for all locations</span>
+            <div className={labelContainer}>
                 <div>
-                    <Loader active inline size="small" />
+                    <Typography>Beaverton totals:</Typography>
+                    <Typography>Loading...</Typography>
                 </div>
-            </FlexContainer>
+                <div>
+                    <Typography>Hillsboro totals:</Typography>
+                    <Typography>Loading...</Typography>
+                </div>
+            </div>
         );
     }
 
     return (
-        <FlexContainer>
+        <div className={labelContainer}>
             <div>
-                <Header sub>Beaverton totals:</Header>
-                <StyledContainer>
-                    <QohLabel label="Foil" value={quantities.ch1.foilQty} />
-                    <QohLabel
-                        label="Nonfoil"
-                        value={quantities.ch1.nonfoilQty}
+                <Typography>Beaverton totals:</Typography>
+                <Box className={chipContainer}>
+                    <InventoryChip
+                        label="Foil"
+                        quantity={quantities.ch1.foilQty}
                     />
-                </StyledContainer>
+                    <InventoryChip
+                        label="Nonfoil"
+                        quantity={quantities.ch1.nonfoilQty}
+                    />
+                </Box>
             </div>
             <div>
-                <Header sub>Hillsboro totals:</Header>
-                <StyledContainer>
-                    <QohLabel label="Foil" value={quantities.ch2.foilQty} />
-                    <QohLabel
-                        label="Nonfoil"
-                        value={quantities.ch2.nonfoilQty}
+                <Typography>Hillsboro totals:</Typography>
+                <Box className={chipContainer}>
+                    <InventoryChip
+                        label="Foil"
+                        quantity={quantities.ch2.foilQty}
                     />
-                </StyledContainer>
+                    <InventoryChip
+                        label="Nonfoil"
+                        quantity={quantities.ch2.nonfoilQty}
+                    />
+                </Box>
             </div>
-        </FlexContainer>
+        </div>
     );
 };
 

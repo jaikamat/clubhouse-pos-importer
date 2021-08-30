@@ -52,21 +52,21 @@ export interface CardFace {
 export interface ScryfallApiCard {
     id: string;
     name: string;
-    printed_name: string;
+    printed_name?: string;
     set: string;
     set_name: string;
     rarity: string;
     image_uris: ImageURIs;
-    card_faces: CardFace[];
+    card_faces?: CardFace[];
     nonfoil: boolean;
     foil: boolean;
     colors: string[];
     type_line: string;
-    frame_effects: string[];
+    frame_effects?: string[];
     lang: LanguageCode;
     border_color: string;
-    display_name: string;
-    cardImage: string;
+    display_name?: string;
+    cardImage?: string;
     color_identity: string[];
     qoh?: QOH;
     quantity?: number;
@@ -115,7 +115,7 @@ export class ScryfallCard {
         this.set_name = card.set_name;
         this.rarity = card.rarity;
         this.image_uris = card.image_uris || null;
-        this.card_faces = card.card_faces || null;
+        this.card_faces = card.card_faces || [];
         this.nonfoil = card.nonfoil;
         this.foil = card.foil;
         this.colors = card.colors;

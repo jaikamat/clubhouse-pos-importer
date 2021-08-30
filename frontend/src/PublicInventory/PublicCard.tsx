@@ -1,7 +1,8 @@
+import { makeStyles } from '@material-ui/core';
 import React, { FC } from 'react';
-import { Image as SurImage, Label } from 'semantic-ui-react';
-import styled from 'styled-components';
+import CardImage from '../common/CardImage';
 import MarketPrice from '../common/MarketPrice';
+import InventoryChip from '../ui/InventoryChip';
 import parseQoh from '../utils/parseQoh';
 import { ScryfallCard } from '../utils/ScryfallCard';
 
@@ -14,87 +15,84 @@ const cardImageRatio = 418.3 / 300;
 const cardImageWidth = 275;
 const cardImageHeight = cardImageRatio * cardImageWidth;
 
-const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: ${cardImageWidth}px;
-`;
-
-const InventoryWrapper = styled.div`
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 5px;
-    background-color: rgba(0, 0, 0, 0.9);
-    border-radius: 10px 10px 10px 10px;
-    box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.25);
-`;
-
-const InventoryRow = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin: 5px;
-`;
-
-const ImageWrapper = styled.div`
-    width: ${cardImageWidth}px;
-    height: ${cardImageHeight}px;
-    box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.25);
-    background: repeating-linear-gradient(
-        45deg,
-        #bfbfbf,
-        #bfbfbf 10px,
-        #b0b0b0 10px,
-        #b0b0b0 20px
-    );
-    border-radius: 15px;
-`;
-
-const Image = styled(SurImage)({
-    borderRadius: '15px',
-});
+const useStyles = makeStyles(() => ({
+    imageWrapper: {
+        width: `${cardImageWidth}px`,
+        height: `${cardImageHeight}px`,
+        boxShadow: `2px 2px 5px 0 rgba(0, 0, 0, 0.25)`,
+        background: `repeating-linear-gradient(
+            45deg,
+            #bfbfbf,
+            #bfbfbf 10px,
+            #b0b0b0 10px,
+            #b0b0b0 20px
+        )`,
+        borderRadius: `15px`,
+    },
+    inventoryRow: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        margin: '5px',
+    },
+    inventoryWrapper: {
+        display: 'flex',
+        width: '100%',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        padding: ' 5px',
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        borderRadius: '10px 10px 10px 10px',
+        boxShadow: '2px 2px 5px 0 rgba(0, 0, 0, 0.25)',
+    },
+    wrapper: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: `${cardImageWidth}px`,
+    },
+}));
 
 const PublicCard: FC<Props> = ({ card }) => {
+    const {
+        imageWrapper,
+        inventoryRow,
+        inventoryWrapper,
+        wrapper,
+    } = useStyles();
     const { id, cardImage } = card;
     const [foilQty, nonfoilQty] = parseQoh(card.qoh);
 
     return (
-        <Wrapper>
-            <ImageWrapper>
-                <Image src={cardImage} size="medium" />
-            </ImageWrapper>
-            <InventoryWrapper>
+        <div className={wrapper}>
+            <div className={imageWrapper}>
+                <CardImage image={cardImage} />
+            </div>
+            <div className={inventoryWrapper}>
                 {foilQty > 0 && (
-                    <InventoryRow>
-                        <Label color="blue" image>
-                            Foil<Label.Detail>{foilQty}</Label.Detail>
-                        </Label>
+                    <div className={inventoryRow}>
+                        <InventoryChip quantity={foilQty} label="Foil" />
                         <MarketPrice
                             id={id}
                             finish="FOIL"
                             round
                             showMid={false}
                         />
-                    </InventoryRow>
+                    </div>
                 )}
                 {nonfoilQty > 0 && (
-                    <InventoryRow>
-                        <Label color="blue" image>
-                            Nonfoil<Label.Detail>{nonfoilQty}</Label.Detail>
-                        </Label>
+                    <div className={inventoryRow}>
+                        <InventoryChip quantity={nonfoilQty} label="Nonfoil" />
                         <MarketPrice
                             id={id}
                             finish="NONFOIL"
                             round
                             showMid={false}
                         />
-                    </InventoryRow>
+                    </div>
                 )}
-            </InventoryWrapper>
-        </Wrapper>
+            </div>
+        </div>
     );
 };
 

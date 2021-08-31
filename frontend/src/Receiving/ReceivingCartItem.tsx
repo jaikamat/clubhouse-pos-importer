@@ -2,13 +2,13 @@ import { Box, Grid, IconButton, ListItem, Typography } from '@material-ui/core';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import CloseIcon from '@material-ui/icons/Close';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import Chip from '../common/Chip';
 import Price from '../common/Price';
 import {
     ReceivingCard,
-    ReceivingContext,
     Trade,
+    useReceivingContext,
 } from '../context/ReceivingContext';
 import CardImageTooltip from '../ui/CardImageTooltip';
 import SetIcon from '../ui/SetIcon';
@@ -20,21 +20,19 @@ interface Props {
 // Defines whether it uses cash or credit for trade types
 const TRADE_TYPE = { CASH: 'CASH', CREDIT: 'CREDIT' };
 
-const ReceivingCartItem: FC<Props> = ({
-    card: {
+const ReceivingCartItem: FC<Props> = ({ card }) => {
+    const {
         display_name,
         set,
         rarity,
         cashPrice,
         creditPrice,
         finishCondition,
-        uuid_key,
         tradeType,
         cardImage,
-    },
-}) => {
+    } = card;
     const { CASH, CREDIT } = TRADE_TYPE;
-    const { removeFromList, activeTradeType } = useContext(ReceivingContext);
+    const { removeFromList, activeTradeType } = useReceivingContext();
 
     return (
         <ListItem>
@@ -74,20 +72,20 @@ const ReceivingCartItem: FC<Props> = ({
                 <Grid item>
                     <IconButton
                         color={tradeType === CASH ? 'primary' : undefined}
-                        onClick={() => activeTradeType(uuid_key, Trade.Cash)}
+                        onClick={() => activeTradeType(card, Trade.Cash)}
                         disabled={cashPrice === 0}
                     >
                         <AttachMoneyIcon />
                     </IconButton>
                     <IconButton
                         color={tradeType === CREDIT ? 'primary' : undefined}
-                        onClick={() => activeTradeType(uuid_key, Trade.Credit)}
+                        onClick={() => activeTradeType(card, Trade.Credit)}
                         disabled={creditPrice === 0}
                     >
                         <CreditCardIcon />
                     </IconButton>
                     <IconButton
-                        onClick={() => removeFromList(uuid_key)}
+                        onClick={() => removeFromList(card)}
                         color="secondary"
                     >
                         <CloseIcon />

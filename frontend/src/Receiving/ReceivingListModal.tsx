@@ -1,8 +1,8 @@
 import { FormikErrors, useFormik } from 'formik';
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Button, Form, Header, List, Modal } from 'semantic-ui-react';
 import Price from '../common/Price';
-import { ReceivingContext, Trade } from '../context/ReceivingContext';
+import { Trade, useReceivingContext } from '../context/ReceivingContext';
 import sum from '../utils/sum';
 
 interface Props {}
@@ -44,7 +44,7 @@ const ReceivingListModal: FC<Props> = () => {
     const [loading, setLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
-    const { receivingList, commitToInventory } = useContext(ReceivingContext);
+    const { receivingList, commitToInventory } = useReceivingContext();
 
     const onSubmit = async ({ customerName, customerContact }: FormValues) => {
         setLoading(true);

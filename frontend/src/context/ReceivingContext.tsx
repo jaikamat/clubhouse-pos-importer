@@ -1,5 +1,5 @@
 import { sortBy } from 'lodash';
-import React, { createContext, FC, useState } from 'react';
+import React, { createContext, FC, useContext, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { useToastContext } from '../ui/ToastContext';
 import { ScryfallCard } from '../utils/ScryfallCard';
@@ -34,8 +34,8 @@ interface Context {
         card: ScryfallCard,
         meta: AddToListMeta
     ) => void;
-    removeFromList: (uuid: string) => void;
-    activeTradeType: (uuid: string, tradeType: Trade) => void;
+    removeFromList: (card: ReceivingCard) => void;
+    activeTradeType: (card: ReceivingCard, tradeType: Trade) => void;
     selectAll: (trade: Trade) => void;
     commitToInventory: (
         customerName: string,
@@ -63,7 +63,7 @@ interface AddToListMeta {
     finishCondition: string;
 }
 
-export const ReceivingContext = createContext<Context>(defaultContext);
+const ReceivingContext = createContext<Context>(defaultContext);
 
 const ReceivingProvider: FC<Props> = ({ children }) => {
     const createToast = useToastContext();
@@ -111,19 +111,20 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
     /**
      * Removes a card from the receiving list using the uuid
      */
-    const removeFromList = (uuid_key: string) => {
-        const copiedState = [...receivingList];
-        setReceivingList(copiedState.filter((e) => e.uuid_key !== uuid_key));
+    const removeFromList = (card: ReceivingCard) => {
+        setReceivingList(
+            [...receivingList].filter((e) => e.uuid_key !== card.uuid_key)
+        );
     };
 
     /**
      * Determines whether line-items use cash or credit.
      * Assigns a new trade type.
      */
-    const activeTradeType = (uuid_key: string, tradeType: Trade) => {
+    const activeTradeType = (currentCard: ReceivingCard, tradeType: Trade) => {
         setReceivingList(
             [...receivingList].map((card) => {
-                if (card.uuid_key === uuid_key) {
+                if (card.uuid_key === currentCard.uuid_key) {
                     card.tradeType = TRADE_TYPES[tradeType];
                 }
                 return card;
@@ -221,4 +222,5 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
     );
 };
 
+export const useReceivingContext = () => useContext(ReceivingContext);
 export default ReceivingProvider;

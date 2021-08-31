@@ -1,8 +1,8 @@
 import { Box, Grid, Paper, Typography } from '@material-ui/core';
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Button, Modal } from 'semantic-ui-react';
 import Price from '../common/Price';
-import { ReceivingContext, Trade } from '../context/ReceivingContext';
+import { Trade, useReceivingContext } from '../context/ReceivingContext';
 import sum from '../utils/sum';
 import CashReport from './CashReport';
 import printCashReport from './printCashReport';
@@ -13,7 +13,7 @@ interface Props {}
 const ReceivingListTotals: FC<Props> = () => {
     const { Cash, Credit } = Trade;
     const [showCashModal, setShowCashModal] = useState(false);
-    const { receivingList, selectAll } = useContext(ReceivingContext);
+    const { receivingList, selectAll } = useReceivingContext();
 
     const openCashModal = () => setShowCashModal(true);
     const closeCashModal = () => setShowCashModal(false);

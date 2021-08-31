@@ -1,9 +1,9 @@
 import { Grid } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Prompt } from 'react-router';
 import TotalCardsLabel from '../common/TotalCardsLabel';
-import { ReceivingContext } from '../context/ReceivingContext';
+import { useReceivingContext } from '../context/ReceivingContext';
 import TotalStoreInventory from '../ManageInventory/TotalStoreInventory';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
 import Loading from '../ui/Loading';
@@ -25,7 +25,7 @@ const Receiving: FC<Props> = () => {
         receivingList,
         handleSearchSelect,
         resetSearchResults,
-    } = useContext(ReceivingContext);
+    } = useReceivingContext();
 
     /**
      * Reset the search results on unmount to clear store

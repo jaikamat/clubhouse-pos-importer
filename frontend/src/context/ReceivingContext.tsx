@@ -195,7 +195,7 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
             console.log(e);
             createToast({
                 severity: 'error',
-                message: e.response.data || 'Error receiving cards',
+                message: 'Error receiving cards',
             });
         }
     };

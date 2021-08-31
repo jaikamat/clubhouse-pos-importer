@@ -152,7 +152,7 @@ export const SaleProvider: FC<Props> = ({ children }) => {
                 message: `You are viewing ${sale.name}'s sale`,
             });
         } catch (e) {
-            console.log(e.response);
+            console.log(e);
             createToast({
                 severity: 'error',
                 message: `Error`,
@@ -190,10 +190,10 @@ export const SaleProvider: FC<Props> = ({ children }) => {
                 message: `${data.ops[0].name}'s sale was suspended`,
             });
         } catch (e) {
-            console.log(e.response);
+            console.log(e);
             createToast({
                 severity: 'error',
-                message: e.response.data || 'Error suspending sale',
+                message: 'Error suspending sale',
             });
         }
     };
@@ -210,10 +210,10 @@ export const SaleProvider: FC<Props> = ({ children }) => {
                 message: `${name}'s sale was deleted`,
             });
         } catch (e) {
-            console.log(e.response);
+            console.log(e);
             createToast({
                 severity: 'error',
-                message: e.response.data || 'Error deleting suspended sale',
+                message: 'Error deleting suspended sale',
             });
         }
     };
@@ -239,9 +239,10 @@ export const SaleProvider: FC<Props> = ({ children }) => {
 
             resetSaleState();
         } catch (e) {
+            console.log(e);
             createToast({
                 severity: 'error',
-                message: e.response.data || 'Sale was not created',
+                message: 'Sale was not created',
             });
 
             resetSaleState();

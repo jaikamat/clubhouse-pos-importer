@@ -1,5 +1,5 @@
 import http from '../common/http';
-import { GET_SET_NAMES } from '../utils/api_resources';
+import { GET_SET_NAMES } from '../utils/endpoints';
 
 const setNameQuery = async () => {
     try {

@@ -1,5 +1,5 @@
 import http from '../common/http';
-import { GET_CARDS_WITH_INFO } from '../utils/api_resources';
+import { GET_CARDS_WITH_INFO } from '../utils/endpoints';
 import { ScryfallApiCard, ScryfallCard } from '../utils/ScryfallCard';
 
 interface Params {

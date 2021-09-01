@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_CARD_FROM_ALL_LOCATIONS } from '../utils/api_resources';
+import { GET_CARD_FROM_ALL_LOCATIONS } from '../utils/endpoints';
 
 interface Quantities {
     foilQty: number;

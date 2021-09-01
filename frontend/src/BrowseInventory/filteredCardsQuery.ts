@@ -1,5 +1,5 @@
 import http from '../common/http';
-import { GET_CARDS_BY_FILTER } from '../utils/api_resources';
+import { GET_CARDS_BY_FILTER } from '../utils/endpoints';
 import { FinishCondition } from '../utils/ScryfallCard';
 
 export interface Filters {

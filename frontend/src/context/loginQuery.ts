@@ -1,5 +1,5 @@
 import http from '../common/http';
-import { LOGIN } from '../utils/api_resources';
+import { LOGIN } from '../utils/endpoints';
 
 type ClubhouseLocation = 'ch1' | 'ch2';
 

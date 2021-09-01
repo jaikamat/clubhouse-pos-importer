@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { ClubhouseLocation } from '../context/AuthProvider';
-import { GET_CARDS_WITH_INFO_PUBLIC } from '../utils/api_resources';
+import { GET_CARDS_WITH_INFO_PUBLIC } from '../utils/endpoints';
 import { ScryfallApiCard, ScryfallCard } from '../utils/ScryfallCard';
 
 interface Params {

@@ -1,5 +1,5 @@
 import http from '../common/http';
-import { GET_REPORT } from '../utils/api_resources';
+import { GET_REPORT } from '../utils/endpoints';
 import {
     Finish,
     FinishCondition,

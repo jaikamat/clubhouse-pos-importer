@@ -1,7 +1,7 @@
 import http from '../common/http';
 import { ClubhouseLocation } from '../context/AuthProvider';
 import { Trade } from '../context/ReceivingContext';
-import { RECEIVING } from '../utils/api_resources';
+import { RECEIVING } from '../utils/endpoints';
 import { FinishCondition, ScryfallApiCard } from '../utils/ScryfallCard';
 
 interface ReceivedUser {

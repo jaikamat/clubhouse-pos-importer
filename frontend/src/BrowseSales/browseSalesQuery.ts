@@ -1,6 +1,6 @@
 import http from '../common/http';
 import { SaleListCard } from '../context/SaleContext';
-import { GET_SALES_BY_TITLE } from '../utils/api_resources';
+import { GET_SALES_BY_TITLE } from '../utils/endpoints';
 
 interface SaleData {
     total: string;

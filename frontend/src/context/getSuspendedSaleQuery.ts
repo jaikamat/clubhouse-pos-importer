@@ -1,5 +1,5 @@
 import http from '../common/http';
-import { SUSPEND_SALE } from '../utils/api_resources';
+import { SUSPEND_SALE } from '../utils/endpoints';
 import { SaleListCard } from './SaleContext';
 
 export interface SuspendedSale {

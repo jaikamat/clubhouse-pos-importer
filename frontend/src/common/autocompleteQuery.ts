@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AUTOCOMPLETE } from '../utils/api_resources';
+import { AUTOCOMPLETE } from '../utils/endpoints';
 
 const autocompleteQuery = async (cardName: string) => {
     try {

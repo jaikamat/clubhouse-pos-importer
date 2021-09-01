@@ -1,19 +1,25 @@
-// Maps all GCF and Scryfall API endpoints for code re-use
-const { REACT_APP_ENVIRONMENT } = process.env;
+// CRA Exposes this as 'development' internally for `npm start`, and 'production' in built code
+export const isProd = () => process.env.NODE_ENV === 'production';
 
 /**
- * Check the environment for dev - if dev, we reach out
- * to all endpoints appended by `_test` instead of production
+ * Asserts the env and returns the proper path prefix for resources
  */
-const env = REACT_APP_ENVIRONMENT === 'development' ? '_test' : '';
+export const getPrefix = () => {
+    if (isProd()) {
+        return 'https://clubhouse-collection.appspot.com';
+    } else {
+        return 'http://localhost:7331';
+    }
+};
 
 /**
- * Asserts the development env and returns the proper path prefix for resources
+ * Asserts the env and returns the proper path postfix for GCF functions
  */
-const getPrefix = () => {
-    return REACT_APP_ENVIRONMENT === 'development'
-        ? 'http://localhost:7331'
-        : 'https://clubhouse-collection.appspot.com';
+export const testEndpoint = () => {
+    if (!isProd()) {
+        return '_test';
+    }
+    return '';
 };
 
 export const FINISH_SALE = `${getPrefix()}/auth/finishSale`;
@@ -33,4 +39,4 @@ export const GET_REPORT = `${getPrefix()}/auth/getSalesReport`;
 export const GET_BULK_CARDS = `${getPrefix()}/auth/bulkSearch`;
 export const AUTOCOMPLETE = `${getPrefix()}/autocomplete`;
 export const SCRYFALL_SEARCH = 'https://api.scryfall.com/cards/search';
-export const GET_LIVE_PRICE = `https://us-central1-clubhouse-collection.cloudfunctions.net/getPriceFromTcg${env}`;
+export const GET_LIVE_PRICE = `https://us-central1-clubhouse-collection.cloudfunctions.net/getPriceFromTcg${testEndpoint()}`;

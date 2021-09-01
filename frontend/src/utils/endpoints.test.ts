@@ -1,4 +1,4 @@
-import { getPrefix, isProd, testEndpoint } from './api_resources';
+import { getPrefix, isProd, testEndpoint } from './endpoints';
 
 // CRA exposes NODE_ENV as 'test' when running `npm test`
 test('environment variables', () => {

@@ -1,6 +1,6 @@
 import http from '../common/http';
 import { SuspendedSale } from '../context/getSuspendedSaleQuery';
-import { SUSPEND_SALE } from '../utils/api_resources';
+import { SUSPEND_SALE } from '../utils/endpoints';
 
 const getSuspendedSalesQuery = async () => {
     try {

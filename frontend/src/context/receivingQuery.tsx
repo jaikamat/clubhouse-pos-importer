@@ -1,5 +1,5 @@
 import http from '../common/http';
-import { RECEIVE_CARDS } from '../utils/api_resources';
+import { RECEIVE_CARDS } from '../utils/endpoints';
 import { Trade } from './ReceivingContext';
 
 interface ReceivingQueryCard {

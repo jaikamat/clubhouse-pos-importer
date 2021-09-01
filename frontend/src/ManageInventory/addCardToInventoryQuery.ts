@@ -1,5 +1,5 @@
 import http from '../common/http';
-import { ADD_CARD_TO_INVENTORY } from '../utils/api_resources';
+import { ADD_CARD_TO_INVENTORY } from '../utils/endpoints';
 import { QOH } from '../utils/ScryfallCard';
 
 interface CardInfo {

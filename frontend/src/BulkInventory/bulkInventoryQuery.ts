@@ -1,5 +1,5 @@
 import http from '../common/http';
-import { GET_BULK_CARDS } from '../utils/api_resources';
+import { GET_BULK_CARDS } from '../utils/endpoints';
 
 export interface BulkCard {
     scryfall_id: string;

@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import { GET_LIVE_PRICE } from '../utils/api_resources';
+import { GET_LIVE_PRICE } from '../utils/endpoints';
 
 interface ResponseData {
     marketPrices: { foil: number; normal: number };

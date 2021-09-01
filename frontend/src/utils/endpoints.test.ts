@@ -1,4 +1,10 @@
-import { getPrefix, isProd, testEndpoint } from './endpoints';
+import {
+    authedEndpoint,
+    getPrefix,
+    isProd,
+    publicEndpoint,
+    testEndpoint,
+} from './endpoints';
 
 // CRA exposes NODE_ENV as 'test' when running `npm test`
 test('environment variables', () => {
@@ -11,4 +17,13 @@ test('resource path prefix', () => {
 
 test('resource path postfix', () => {
     expect(testEndpoint()).toMatchInlineSnapshot(`"_test"`);
+});
+
+test('endpoint permissions', () => {
+    expect(authedEndpoint('tester')).toMatchInlineSnapshot(
+        `"http://localhost:7331/auth/tester"`
+    );
+    expect(publicEndpoint('tester')).toMatchInlineSnapshot(
+        `"http://localhost:7331/tester"`
+    );
 });

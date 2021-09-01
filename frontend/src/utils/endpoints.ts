@@ -22,21 +22,30 @@ export const testEndpoint = () => {
     return '';
 };
 
-export const FINISH_SALE = `${getPrefix()}/auth/finishSale`;
-export const GET_CARD_FROM_ALL_LOCATIONS = `${getPrefix()}/getCardFromAllLocations`;
-export const ADD_CARD_TO_INVENTORY = `${getPrefix()}/auth/addCardToInventory`;
-export const RECEIVE_CARDS = `${getPrefix()}/auth/receiveCards`;
-export const GET_CARDS_BY_FILTER = `${getPrefix()}/auth/getCardsByFilter`;
-export const GET_SET_NAMES = `${getPrefix()}/auth/getDistinctSetNames`;
-export const SUSPEND_SALE = `${getPrefix()}/auth/suspendSale`;
-export const LOGIN = `${getPrefix()}/jwt`;
-export const GET_SALES_BY_TITLE = `${getPrefix()}/auth/getSaleByTitle`;
-export const RECEIVING = `${getPrefix()}/auth/getReceivedCards`;
-export const GET_ALL_SALES = `${getPrefix()}/auth/allSales`;
-export const GET_CARDS_WITH_INFO_PUBLIC = `${getPrefix()}/getCardsWithInfo`;
-export const GET_CARDS_WITH_INFO = `${getPrefix()}/auth/getCardsWithInfo`;
-export const GET_REPORT = `${getPrefix()}/auth/getSalesReport`;
-export const GET_BULK_CARDS = `${getPrefix()}/auth/bulkSearch`;
-export const AUTOCOMPLETE = `${getPrefix()}/autocomplete`;
-export const SCRYFALL_SEARCH = 'https://api.scryfall.com/cards/search';
+export const publicEndpoint = (s: string): string => `${getPrefix()}/${s}`;
+export const authedEndpoint = (s: string): string => `${getPrefix()}/auth/${s}`;
+
+// Public endpoints
+export const LOGIN = publicEndpoint('jwt');
+export const AUTOCOMPLETE = publicEndpoint('autocomplete');
+export const GET_CARDS_WITH_INFO_PUBLIC = publicEndpoint('getCardsWithInfo');
+
+// Private endpoints
+export const GET_CARDS_BY_FILTER = authedEndpoint('getCardsByFilter');
+export const GET_SET_NAMES = authedEndpoint('getDistinctSetNames');
+export const SUSPEND_SALE = authedEndpoint('suspendSale');
+export const GET_SALES_BY_TITLE = authedEndpoint('getSaleByTitle');
+export const RECEIVING = authedEndpoint('getReceivedCards');
+export const GET_ALL_SALES = authedEndpoint('allSales');
+export const GET_CARDS_WITH_INFO = authedEndpoint('getCardsWithInfo');
+export const GET_REPORT = authedEndpoint('getSalesReport');
+export const GET_BULK_CARDS = authedEndpoint('bulkSearch');
+export const FINISH_SALE = authedEndpoint('finishSale');
+export const ADD_CARD_TO_INVENTORY = authedEndpoint('addCardToInventory');
+export const RECEIVE_CARDS = authedEndpoint('receiveCards');
+export const GET_CARD_FROM_ALL_LOCATIONS = authedEndpoint(
+    'getCardFromAllLocations'
+);
+
+// GCF endpoint
 export const GET_LIVE_PRICE = `https://us-central1-clubhouse-collection.cloudfunctions.net/getPriceFromTcg${testEndpoint()}`;

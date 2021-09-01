@@ -136,6 +136,5 @@ test('should not be allowed to enter negative prices', async () => {
 
     fireEvent.change(await cashPriceInput(), { target: { value: -4.56 } });
     fireEvent.change(await marketPriceInput(), { target: { value: -4.56 } });
-
     expect(await button()).toBeDisabled();
 });

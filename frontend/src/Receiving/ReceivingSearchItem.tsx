@@ -139,97 +139,95 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
                 />
             }
         >
-            <Grid container alignItems="center" spacing={2}>
-                <Grid item>
-                    <TextField
-                        type="number"
-                        label="Quantity"
-                        value={values.quantity}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                            const castVal = parseInt(e.target.value);
-                            setFieldValue(
-                                'quantity',
-                                Math.min(castVal < 0 ? 0 : castVal, 50)
-                            );
-                        }}
-                        onFocus={(e) => e.target.select()}
-                    />
+            <form onSubmit={handleSubmit}>
+                <Grid container alignItems="center" spacing={2}>
+                    <Grid item>
+                        <TextField
+                            type="number"
+                            label="Quantity"
+                            value={values.quantity}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                const castVal = parseInt(e.target.value);
+                                setFieldValue(
+                                    'quantity',
+                                    Math.min(castVal < 0 ? 0 : castVal, 50)
+                                );
+                            }}
+                            onFocus={(e) => e.target.select()}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <TextField
+                            label="Credit Price"
+                            name="creditPrice"
+                            type="number"
+                            value={values.creditPrice}
+                            onChange={handleChange}
+                            onFocus={handleFocus}
+                            inputProps={{
+                                step: 0.25,
+                            }}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <TextField
+                            label="Cash Price"
+                            name="cashPrice"
+                            type="number"
+                            value={values.cashPrice}
+                            onChange={handleChange}
+                            onFocus={handleFocus}
+                            inputProps={{
+                                step: 0.25,
+                            }}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <TextField
+                            label="Market Price"
+                            name="marketPrice"
+                            type="number"
+                            value={values.marketPrice}
+                            onChange={handleChange}
+                            onFocus={handleFocus}
+                            disabled={!values.cashPrice}
+                            inputProps={{
+                                step: 0.25,
+                            }}
+                        />
+                    </Grid>
                 </Grid>
-                <Grid item>
-                    <TextField
-                        label="Credit Price"
-                        name="creditPrice"
-                        type="number"
-                        value={values.creditPrice}
-                        onChange={handleChange}
-                        onFocus={handleFocus}
-                        inputProps={{
-                            step: 0.25,
-                        }}
-                    />
+                <Grid container alignItems="center" spacing={2}>
+                    <Grid item>
+                        <ControlledDropdown
+                            name="selectedFinish"
+                            label="Finish"
+                            options={finishes}
+                            value={values.selectedFinish}
+                            onChange={(v) => {
+                                setFieldValue('selectedFinish', v);
+                            }}
+                            disabled={finishDisabled}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <ControlledDropdown
+                            name="selectedCondition"
+                            label="Condition"
+                            options={cardConditions}
+                            value={values.selectedCondition}
+                            onChange={(v) => {
+                                setFieldValue('selectedCondition', v);
+                            }}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <Button type="submit" primary disabled={!isValid}>
+                            Add to list
+                        </Button>
+                    </Grid>
                 </Grid>
-                <Grid item>
-                    <TextField
-                        label="Cash Price"
-                        name="cashPrice"
-                        type="number"
-                        value={values.cashPrice}
-                        onChange={handleChange}
-                        onFocus={handleFocus}
-                        inputProps={{
-                            step: 0.25,
-                        }}
-                    />
-                </Grid>
-                <Grid item>
-                    <TextField
-                        label="Market Price"
-                        name="marketPrice"
-                        type="number"
-                        value={values.marketPrice}
-                        onChange={handleChange}
-                        onFocus={handleFocus}
-                        disabled={!values.cashPrice}
-                        inputProps={{
-                            step: 0.25,
-                        }}
-                    />
-                </Grid>
-            </Grid>
-            <Grid container alignItems="center" spacing={2}>
-                <Grid item>
-                    <ControlledDropdown
-                        name="selectedFinish"
-                        label="Finish"
-                        options={finishes}
-                        value={values.selectedFinish}
-                        onChange={(v) => {
-                            setFieldValue('selectedFinish', v);
-                        }}
-                        disabled={finishDisabled}
-                    />
-                </Grid>
-                <Grid item>
-                    <ControlledDropdown
-                        name="selectedCondition"
-                        label="Condition"
-                        options={cardConditions}
-                        value={values.selectedCondition}
-                        onChange={(v) => {
-                            setFieldValue('selectedCondition', v);
-                        }}
-                    />
-                </Grid>
-                <Grid item>
-                    <Button
-                        primary
-                        disabled={!isValid}
-                        onClick={() => handleSubmit()}
-                    >
-                        Add to list
-                    </Button>
-                </Grid>
-            </Grid>
+            </form>
         </CardRowContainer>
     );
 };

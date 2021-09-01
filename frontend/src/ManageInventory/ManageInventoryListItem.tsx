@@ -109,56 +109,60 @@ const ManageInventoryListItem: FC<Props> = ({ card }) => {
                 <CardHeader card={card} selectedFinish={selectedFinish} round />
             }
         >
-            <Grid container alignItems="center" spacing={2}>
-                <Grid item>
-                    <TextField
-                        type="number"
-                        label="Quantity"
-                        value={values.quantity}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                            setFieldValue('quantity', e.target.value)
-                        }
-                        onFocus={() => {
-                            if (+values.quantity === 0) {
-                                setFieldValue('quantity', '');
+            <form onSubmit={handleSubmit}>
+                <Grid container alignItems="center" spacing={2}>
+                    <Grid item>
+                        <TextField
+                            type="number"
+                            label="Quantity"
+                            value={values.quantity}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                setFieldValue('quantity', e.target.value)
                             }
-                        }}
-                    />
+                            onFocus={() => {
+                                if (+values.quantity === 0) {
+                                    setFieldValue('quantity', '');
+                                }
+                            }}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <ControlledDropdown
+                            name="finish"
+                            label="Finish"
+                            value={values.selectedFinish}
+                            options={finishes}
+                            disabled={
+                                checkCardFinish(nonfoil, foil).finishDisabled
+                            }
+                            onChange={(value) => {
+                                setSelectedFinish(value as Finish);
+                                setFieldValue('selectedFinish', value);
+                            }}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <ControlledDropdown
+                            name="condition"
+                            label="Condition"
+                            value={values.selectedCondition}
+                            options={cardConditions}
+                            onChange={(value) => {
+                                setFieldValue('selectedCondition', value);
+                            }}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <Button
+                            type="submit"
+                            primary
+                            disabled={!isValid || isSubmitting}
+                        >
+                            Add to inventory
+                        </Button>
+                    </Grid>
                 </Grid>
-                <Grid item>
-                    <ControlledDropdown
-                        name="finish"
-                        label="Finish"
-                        value={values.selectedFinish}
-                        options={finishes}
-                        disabled={checkCardFinish(nonfoil, foil).finishDisabled}
-                        onChange={(value) => {
-                            setSelectedFinish(value as Finish);
-                            setFieldValue('selectedFinish', value);
-                        }}
-                    />
-                </Grid>
-                <Grid item>
-                    <ControlledDropdown
-                        name="condition"
-                        label="Condition"
-                        value={values.selectedCondition}
-                        options={cardConditions}
-                        onChange={(value) => {
-                            setFieldValue('selectedCondition', value);
-                        }}
-                    />
-                </Grid>
-                <Grid item>
-                    <Button
-                        primary
-                        disabled={!isValid || isSubmitting}
-                        onClick={() => handleSubmit()}
-                    >
-                        Add to inventory
-                    </Button>
-                </Grid>
-            </Grid>
+            </form>
         </CardRowContainer>
     );
 };

@@ -1,14 +1,13 @@
-import { Grid as MUIGrid } from '@material-ui/core';
+import { Grid, makeStyles, Typography } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { FormikErrors, useFormik } from 'formik';
 import React, { FC, useState } from 'react';
-import { Grid, Header } from 'semantic-ui-react';
-import styled from 'styled-components';
 import { ClubhouseLocation } from '../context/AuthProvider';
 import Button from '../ui/Button';
 import ControlledDropdown from '../ui/ControlledDropdown';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
 import Placeholder from '../ui/Placeholder';
+import { HeaderText } from '../ui/Typography';
 import { ScryfallCard } from '../utils/ScryfallCard';
 import PublicCard from './PublicCard';
 import publicCardSearchQuery from './publicCardSearchQuery';
@@ -24,11 +23,13 @@ interface FormValues {
     selectedLocation: ClubhouseLocation;
 }
 
-const GridContainer = styled('div')({
-    display: 'grid',
-    gridGap: '20px',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-    justifyItems: 'center',
+const useStyles = makeStyles({
+    gridContainer: {
+        display: 'grid',
+        gridGap: '20px',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+        justifyItems: 'center',
+    },
 });
 
 const initialState: State = {
@@ -58,6 +59,7 @@ const validate = ({ searchTerm }: FormValues) => {
 };
 
 const PublicInventory: FC = () => {
+    const { gridContainer } = useStyles();
     const [state, setState] = useState<State>(initialState);
     const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
 
@@ -101,22 +103,28 @@ const PublicInventory: FC = () => {
 
     return (
         <>
-            <MUIGrid container spacing={2} alignItems="center">
-                <MUIGrid item xs={12} md={4}>
+            <HeaderText>Inventory Search</HeaderText>
+            <Typography>
+                Card prices subject to change. Consult a Clubhouse employee for
+                final estimates
+            </Typography>
+            <br />
+            <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12} md={4}>
                     <ControlledSearchBar
                         value={values.searchTerm}
                         onChange={(v) => setFieldValue('searchTerm', v)}
                     />
-                </MUIGrid>
-                <MUIGrid item xs={12} md={4}>
+                </Grid>
+                <Grid item xs={12} md={4}>
                     <ControlledDropdown
                         name="storeLocation"
                         value={values.selectedLocation}
                         options={locationOptions}
                         onChange={(v) => setFieldValue('selectedLocation', v)}
                     />
-                </MUIGrid>
-                <MUIGrid item xs={12} md={4}>
+                </Grid>
+                <Grid item xs={12} md={4}>
                     <Button
                         type="submit"
                         primary
@@ -125,40 +133,24 @@ const PublicInventory: FC = () => {
                     >
                         Search
                     </Button>
-                </MUIGrid>
-            </MUIGrid>
-
-            <br />
-            <Grid stackable={true}>
-                <Grid.Column>
-                    <Header as="h2">
-                        Inventory Search
-                        <Header.Subheader>
-                            <em>
-                                Card prices subject to change. Consult a
-                                Clubhouse employee for final estimates
-                            </em>
-                        </Header.Subheader>
-                    </Header>
-                    {state.searchResults.length > 0 ? (
-                        <GridContainer>
-                            {state.searchResults.map((c) => (
-                                <PublicCard key={c.id} card={c} />
-                            ))}
-                        </GridContainer>
-                    ) : (
-                        <Placeholder
-                            icon={<SearchIcon style={{ fontSize: 80 }} />}
-                        >
-                            {formSubmitted ? (
-                                <span>No cards found in stock</span>
-                            ) : (
-                                <span>Search for a card</span>
-                            )}
-                        </Placeholder>
-                    )}
-                </Grid.Column>
+                </Grid>
             </Grid>
+            <br />
+            {state.searchResults.length > 0 ? (
+                <div className={gridContainer}>
+                    {state.searchResults.map((c) => (
+                        <PublicCard key={c.id} card={c} />
+                    ))}
+                </div>
+            ) : (
+                <Placeholder icon={<SearchIcon style={{ fontSize: 80 }} />}>
+                    {formSubmitted ? (
+                        <span>No cards found in stock</span>
+                    ) : (
+                        <span>Search for a card</span>
+                    )}
+                </Placeholder>
+            )}
         </>
     );
 };

@@ -1,5 +1,6 @@
 import {
     authedEndpoint,
+    gcfEndpoint,
     getPrefix,
     isProd,
     publicEndpoint,
@@ -26,4 +27,5 @@ test('endpoint permissions', () => {
     expect(publicEndpoint('tester')).toMatchInlineSnapshot(
         `"http://localhost:7331/tester"`
     );
+    expect(gcfEndpoint('tester')).toMatchInlineSnapshot(`"tester_test"`);
 });

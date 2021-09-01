@@ -24,6 +24,7 @@ export const testEndpoint = () => {
 
 export const publicEndpoint = (s: string): string => `${getPrefix()}/${s}`;
 export const authedEndpoint = (s: string): string => `${getPrefix()}/auth/${s}`;
+export const gcfEndpoint = (s: string): string => `${s}${testEndpoint()}`;
 
 // Public endpoints
 export const LOGIN = publicEndpoint('jwt');
@@ -48,4 +49,6 @@ export const GET_CARD_FROM_ALL_LOCATIONS = authedEndpoint(
 );
 
 // GCF endpoint
-export const GET_LIVE_PRICE = `https://us-central1-clubhouse-collection.cloudfunctions.net/getPriceFromTcg${testEndpoint()}`;
+export const GET_LIVE_PRICE = gcfEndpoint(
+    `https://us-central1-clubhouse-collection.cloudfunctions.net/getPriceFromTcg`
+);

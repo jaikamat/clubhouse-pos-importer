@@ -22,9 +22,11 @@ export const testEndpoint = () => {
     return '';
 };
 
-export const publicEndpoint = (s: string): string => `${getPrefix()}/${s}`;
-export const authedEndpoint = (s: string): string => `${getPrefix()}/auth/${s}`;
-export const gcfEndpoint = (s: string): string => `${s}${testEndpoint()}`;
+type UrlCreator = (s: string) => string;
+
+export const publicEndpoint: UrlCreator = (s) => `${getPrefix()}/${s}`;
+export const authedEndpoint: UrlCreator = (s) => `${getPrefix()}/auth/${s}`;
+export const gcfEndpoint: UrlCreator = (s) => `${s}${testEndpoint()}`;
 
 // Public endpoints
 export const LOGIN = publicEndpoint('jwt');

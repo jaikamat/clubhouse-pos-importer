@@ -1,9 +1,9 @@
 import { Box, Grid } from '@material-ui/core';
 import { FormikErrors, useFormik } from 'formik';
 import $ from 'jquery';
-import React, { ChangeEvent, FC, FocusEvent, useContext } from 'react';
+import React, { ChangeEvent, FC, FocusEvent } from 'react';
 import CardImage from '../common/CardImage';
-import { ReceivingContext } from '../context/ReceivingContext';
+import { useReceivingContext } from '../context/ReceivingContext';
 import Button from '../ui/Button';
 import CardHeader from '../ui/CardHeader';
 import CardRowContainer from '../ui/CardRowContainer';
@@ -71,7 +71,7 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
     const finishDisabled = checkCardFinish(card.nonfoil, card.foil)
         .finishDisabled;
 
-    const { addToList } = useContext(ReceivingContext);
+    const { addToList } = useReceivingContext();
 
     const handleFocus = (
         e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>

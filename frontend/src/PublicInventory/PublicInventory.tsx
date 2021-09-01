@@ -109,32 +109,35 @@ const PublicInventory: FC = () => {
                 final estimates
             </Typography>
             <br />
-            <Grid container spacing={2} alignItems="center">
-                <Grid item xs={12} md={4}>
-                    <ControlledSearchBar
-                        value={values.searchTerm}
-                        onChange={(v) => setFieldValue('searchTerm', v)}
-                    />
+            <form onSubmit={handleSubmit}>
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={12} md={4}>
+                        <ControlledSearchBar
+                            value={values.searchTerm}
+                            onChange={(v) => setFieldValue('searchTerm', v)}
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <ControlledDropdown
+                            name="storeLocation"
+                            value={values.selectedLocation}
+                            options={locationOptions}
+                            onChange={(v) =>
+                                setFieldValue('selectedLocation', v)
+                            }
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <Button
+                            type="submit"
+                            primary
+                            disabled={!values.searchTerm || isSubmitting}
+                        >
+                            Search
+                        </Button>
+                    </Grid>
                 </Grid>
-                <Grid item xs={12} md={4}>
-                    <ControlledDropdown
-                        name="storeLocation"
-                        value={values.selectedLocation}
-                        options={locationOptions}
-                        onChange={(v) => setFieldValue('selectedLocation', v)}
-                    />
-                </Grid>
-                <Grid item xs={12} md={4}>
-                    <Button
-                        type="submit"
-                        primary
-                        disabled={!values.searchTerm || isSubmitting}
-                        onClick={() => handleSubmit()}
-                    >
-                        Search
-                    </Button>
-                </Grid>
-            </Grid>
+            </form>
             <br />
             {state.searchResults.length > 0 ? (
                 <div className={gridContainer}>

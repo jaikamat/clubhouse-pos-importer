@@ -141,62 +141,60 @@ const SaleSearchCard: FC<Props> = ({ card }) => {
                 />
             }
         >
-            <Grid container alignItems="center" spacing={2}>
-                <Grid item>
-                    <ControlledDropdown
-                        name="selectedFinishCondition"
-                        label="Select finish/condition"
-                        options={conditionSelectOptions}
-                        value={values.selectedFinishCondition}
-                        onChange={(v) => {
-                            setFieldValue('selectedFinishCondition', v);
-                            setFieldValue('quantityToSell', 0);
-                        }}
-                    />
-                </Grid>
-                <Grid item>
-                    <TextField
-                        type="number"
-                        label="Quantity to sell"
-                        value={values.quantityToSell}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                            const castVal = parseInt(e.target.value);
+            <form onSubmit={handleSubmit}>
+                <Grid container alignItems="center" spacing={2}>
+                    <Grid item>
+                        <ControlledDropdown
+                            name="selectedFinishCondition"
+                            label="Select finish/condition"
+                            options={conditionSelectOptions}
+                            value={values.selectedFinishCondition}
+                            onChange={(v) => {
+                                setFieldValue('selectedFinishCondition', v);
+                                setFieldValue('quantityToSell', 0);
+                            }}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <TextField
+                            type="number"
+                            label="Quantity to sell"
+                            value={values.quantityToSell}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                const castVal = parseInt(e.target.value);
 
-                            if (
-                                castVal >
-                                card.qoh[values.selectedFinishCondition]!
-                            ) {
-                                return;
-                            }
+                                if (
+                                    castVal >
+                                    card.qoh[values.selectedFinishCondition]!
+                                ) {
+                                    return;
+                                }
 
-                            setFieldValue('quantityToSell', castVal);
-                        }}
-                        onFocus={handleFocus}
-                    />
+                                setFieldValue('quantityToSell', castVal);
+                            }}
+                            onFocus={handleFocus}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <TextField
+                            label="Price"
+                            name="price"
+                            type="number"
+                            value={values.price}
+                            onChange={handleChange}
+                            onFocus={handleFocus}
+                            inputProps={{
+                                step: 0.5,
+                            }}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <Button type="submit" primary disabled={!isValid}>
+                            Add to sale
+                        </Button>
+                    </Grid>
                 </Grid>
-                <Grid item>
-                    <TextField
-                        label="Price"
-                        name="price"
-                        type="number"
-                        value={values.price}
-                        onChange={handleChange}
-                        onFocus={handleFocus}
-                        inputProps={{
-                            step: 0.5,
-                        }}
-                    />
-                </Grid>
-                <Grid item>
-                    <Button
-                        primary
-                        disabled={!isValid}
-                        onClick={() => handleSubmit()}
-                    >
-                        Add to sale
-                    </Button>
-                </Grid>
-            </Grid>
+            </form>
         </CardRowContainer>
     );
 };

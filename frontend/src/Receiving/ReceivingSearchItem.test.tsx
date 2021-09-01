@@ -121,3 +121,21 @@ test('submission button disabling correctly', async () => {
     fireEvent.change(await cashPriceInput(), { target: { value: 0 } });
     expect(await button()).toBeDisabled();
 });
+
+test('should not be allowed to enter negative prices', async () => {
+    const mockCard = new ScryfallCard(bop);
+
+    await render(<ReceivingSearchItem card={mockCard} />);
+    const creditPriceInput = currentByLabelText('Credit Price');
+    const cashPriceInput = currentByLabelText('Cash Price');
+    const marketPriceInput = currentByLabelText('Market Price');
+    const button = currentButton('Add to list');
+
+    fireEvent.change(await creditPriceInput(), { target: { value: -4.56 } });
+    expect(await button()).toBeDisabled();
+
+    fireEvent.change(await cashPriceInput(), { target: { value: -4.56 } });
+    fireEvent.change(await marketPriceInput(), { target: { value: -4.56 } });
+
+    expect(await button()).toBeDisabled();
+});

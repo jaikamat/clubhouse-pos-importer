@@ -4,14 +4,15 @@ import {
     DialogContent,
     DialogTitle,
     Grid,
+    makeStyles,
 } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import React, { FC, useEffect, useState } from 'react';
-import { DropdownProps, Form, TextAreaProps } from 'semantic-ui-react';
-import styled from 'styled-components';
+import { DropdownProps, Form } from 'semantic-ui-react';
 import { SuspendedSale } from '../context/getSuspendedSaleQuery';
 import { SaleContext } from '../context/SaleContext';
 import Button from '../ui/Button';
+import TextField from '../ui/TextField';
 import getSuspendedSalesQuery from './getSuspendedSalesQuery';
 
 interface Props {
@@ -29,16 +30,23 @@ interface SuspendButtonState {
     deleteBtn: boolean;
 }
 
-const ClearMargin = styled.div`
-    margin-top: 0px;
-    margin-bottom: 0px;
-`;
+const CharLimit: FC<{ text: string; limit: number }> = ({ text, limit }) => {
+    const { charLimit } = useStyles();
 
-const CharLimit = styled.p`
-    font-size: 12px;
-    color: rgba(0, 0, 0, 0.2);
-    float: right;
-`;
+    return (
+        <div className={charLimit}>
+            {text.length}/{limit}
+        </div>
+    );
+};
+
+const useStyles = makeStyles({
+    charLimit: {
+        fontSize: '12px',
+        color: 'rgba(0, 0, 0, 0.4)',
+        float: 'right',
+    },
+});
 
 const SuspendSaleButton: FC<Props> = ({
     restoreSale,
@@ -122,63 +130,55 @@ const SuspendSaleButton: FC<Props> = ({
                             <React.Fragment>
                                 <Grid item xs={6}>
                                     <h3>Suspend Sale</h3>
-                                    <Form>
-                                        <ClearMargin>
-                                            <Form.Input
-                                                id="suspend-sale-name"
-                                                label="Customer Name"
-                                                placeholder="Jace, the Mind Sculptor"
-                                                value={customerName}
-                                                onChange={(e, { value }) =>
-                                                    setCustomerName(
-                                                        value.substring(0, 50)
+                                    {/* <Form> */}
+                                    <div>
+                                        <TextField
+                                            fullWidth
+                                            label="Customer Name"
+                                            placeholder="Jace, the Mind Sculptor"
+                                            value={customerName}
+                                            onChange={(e) => {
+                                                setCustomerName(
+                                                    e.target.value.substring(
+                                                        0,
+                                                        50
                                                     )
-                                                }
-                                            />
-                                        </ClearMargin>
-                                        <ClearMargin>
-                                            <CharLimit>
-                                                {customerName.length}/50
-                                            </CharLimit>
-                                        </ClearMargin>
-                                        <ClearMargin>
-                                            <Form.TextArea
-                                                label="Notes"
-                                                placeholder="Sometimes, I forget things..."
-                                                value={notes}
-                                                onChange={(
-                                                    e,
-                                                    { value }: TextAreaProps
-                                                ) => {
-                                                    if (
-                                                        typeof value ===
-                                                        'string'
-                                                    ) {
-                                                        setNotes(
-                                                            value.substring(
-                                                                0,
-                                                                150
-                                                            )
-                                                        );
-                                                    }
-                                                }}
-                                            />
-                                        </ClearMargin>
-                                        <ClearMargin>
-                                            <CharLimit>
-                                                {notes.length}/150
-                                            </CharLimit>
-                                        </ClearMargin>
-                                        <Form.Button
-                                            id="suspend-sale-submit"
-                                            primary
-                                            disabled={disabled || !customerName}
-                                            loading={loadingBtn.suspendBtn}
-                                            onClick={submitSuspendSale}
-                                        >
-                                            Suspend Sale
-                                        </Form.Button>
-                                    </Form>
+                                                );
+                                            }}
+                                        />
+                                    </div>
+                                    <CharLimit text={customerName} limit={50} />
+                                    <div>
+                                        <TextField
+                                            multiline
+                                            minRows={3}
+                                            fullWidth
+                                            label="Notes"
+                                            placeholder="Sometimes, I forget things..."
+                                            value={notes}
+                                            onChange={(e) => {
+                                                setNotes(
+                                                    e.target.value.substring(
+                                                        0,
+                                                        150
+                                                    )
+                                                );
+                                            }}
+                                        />
+                                    </div>
+                                    <CharLimit text={notes} limit={150} />
+                                    <Button
+                                        primary
+                                        disabled={
+                                            disabled ||
+                                            !customerName ||
+                                            loadingBtn.suspendBtn
+                                        }
+                                        onClick={submitSuspendSale}
+                                    >
+                                        Suspend Sale
+                                    </Button>
+                                    {/* </Form> */}
                                 </Grid>
                             </React.Fragment>
                         )}

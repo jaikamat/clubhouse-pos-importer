@@ -1,19 +1,20 @@
-import React, { FC, useEffect, useState } from 'react';
 import {
-    Button,
-    DropdownProps,
-    Form,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
     Grid,
-    Message,
-    Modal,
-    TextAreaProps,
-} from 'semantic-ui-react';
+} from '@material-ui/core';
+import React, { FC, useEffect, useState } from 'react';
+import { DropdownProps, Form, Message, TextAreaProps } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { SuspendedSale } from '../context/getSuspendedSaleQuery';
 import { SaleContext } from '../context/SaleContext';
+import Button from '../ui/Button';
 import getSuspendedSalesQuery from './getSuspendedSalesQuery';
 
 interface Props {
+    /** The suspended sale ID */
     id: string;
     saleListLength: number;
     restoreSale: SaleContext['restoreSale'];
@@ -26,11 +27,6 @@ interface SuspendButtonState {
     restoreBtn: boolean;
     deleteBtn: boolean;
 }
-
-const Divider = styled.div`
-    border-left: 1px solid rgba(0, 0, 0, 0.2);
-    height: 100%;
-`;
 
 const ClearMargin = styled.div`
     margin-top: 0px;
@@ -79,17 +75,6 @@ const SuspendSaleButton: FC<Props> = ({
         getSales();
     }, [id]); // If the parent-level suspended-sale _id changes, we fetch again
 
-    const modalTrigger = (
-        <div>
-            <Button
-                size="tiny"
-                id="suspend-sale-btn"
-                onClick={() => setModalOpen(true)}
-                icon="ellipsis horizontal"
-            />
-        </div>
-    );
-
     const submitSuspendSale = async () => {
         setDisabled(true);
         setLoadingBtn({ ...loadingBtn, suspendBtn: true });
@@ -123,13 +108,23 @@ const SuspendSaleButton: FC<Props> = ({
 
     return (
         <React.Fragment>
-            <Modal trigger={modalTrigger} open={modalOpen}>
-                <Modal.Header>Sales menu</Modal.Header>
-                <Modal.Content>
-                    <Grid columns={2} stackable relaxed="very">
+            <div>
+                <Button onClick={() => setModalOpen(true)}>
+                    Sales menu icon
+                </Button>
+            </div>
+            <Dialog
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                maxWidth="md"
+                fullWidth
+            >
+                <DialogTitle>Sales menu</DialogTitle>
+                <DialogContent>
+                    <Grid container spacing={2}>
                         {saleListLength > 0 && (
                             <React.Fragment>
-                                <Grid.Column width="7">
+                                <Grid item xs={6}>
                                     <h3>Suspend Sale</h3>
                                     <Form>
                                         <ClearMargin>
@@ -188,13 +183,10 @@ const SuspendSaleButton: FC<Props> = ({
                                             Suspend Sale
                                         </Form.Button>
                                     </Form>
-                                </Grid.Column>
-                                <Grid.Column width="1">
-                                    <Divider />
-                                </Grid.Column>
+                                </Grid>
                             </React.Fragment>
                         )}
-                        <Grid.Column width="7">
+                        <Grid item xs={6}>
                             <h3>Restore Sale</h3>
                             {sales.length > 0 && (
                                 <React.Fragment>
@@ -221,8 +213,11 @@ const SuspendSaleButton: FC<Props> = ({
                                         />
                                         <Form.Button
                                             primary
-                                            disabled={disabled || !saleID}
-                                            loading={loadingBtn.restoreBtn}
+                                            disabled={
+                                                disabled ||
+                                                !saleID ||
+                                                loadingBtn.restoreBtn
+                                            }
                                             onClick={submitRestoreSale}
                                         >
                                             Restore Sale
@@ -236,15 +231,13 @@ const SuspendSaleButton: FC<Props> = ({
                                     Suspend a sale first
                                 </Message>
                             )}
-                        </Grid.Column>
+                        </Grid>
                     </Grid>
-                </Modal.Content>
-                <Modal.Actions>
+                </DialogContent>
+                <DialogActions>
                     {!!id && (
                         <Button
-                            color="red"
-                            disabled={disabled}
-                            loading={loadingBtn.deleteBtn}
+                            disabled={disabled || loadingBtn.deleteBtn}
                             onClick={submitDeleteSale}
                         >
                             Delete current Sale
@@ -257,8 +250,8 @@ const SuspendSaleButton: FC<Props> = ({
                     >
                         Cancel
                     </Button>
-                </Modal.Actions>
-            </Modal>
+                </DialogActions>
+            </Dialog>
         </React.Fragment>
     );
 };

@@ -5,8 +5,9 @@ import {
     DialogTitle,
     Grid,
 } from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import React, { FC, useEffect, useState } from 'react';
-import { DropdownProps, Form, Message, TextAreaProps } from 'semantic-ui-react';
+import { DropdownProps, Form, TextAreaProps } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { SuspendedSale } from '../context/getSuspendedSaleQuery';
 import { SaleContext } from '../context/SaleContext';
@@ -113,12 +114,7 @@ const SuspendSaleButton: FC<Props> = ({
                     Sales menu icon
                 </Button>
             </div>
-            <Dialog
-                open={modalOpen}
-                onClose={() => setModalOpen(false)}
-                maxWidth="md"
-                fullWidth
-            >
+            <Dialog open={modalOpen} maxWidth="md" fullWidth>
                 <DialogTitle>Sales menu</DialogTitle>
                 <DialogContent>
                     <Grid container spacing={2}>
@@ -226,10 +222,10 @@ const SuspendSaleButton: FC<Props> = ({
                                 </React.Fragment>
                             )}
                             {sales.length === 0 && (
-                                <Message info>
-                                    <Message.Header>No sales</Message.Header>
+                                <Alert severity="info">
+                                    <AlertTitle>No sales</AlertTitle>
                                     Suspend a sale first
-                                </Message>
+                                </Alert>
                             )}
                         </Grid>
                     </Grid>

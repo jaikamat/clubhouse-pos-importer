@@ -32,6 +32,9 @@ export const gcfEndpoint: UrlCreator = (s) => `${s}${testEndpoint()}`;
 export const LOGIN = publicEndpoint('jwt');
 export const AUTOCOMPLETE = publicEndpoint('autocomplete');
 export const GET_CARDS_WITH_INFO_PUBLIC = publicEndpoint('getCardsWithInfo');
+export const GET_CARD_FROM_ALL_LOCATIONS = publicEndpoint(
+    'getCardFromAllLocations'
+);
 
 // Private endpoints
 export const GET_CARDS_BY_FILTER = authedEndpoint('getCardsByFilter');
@@ -46,9 +49,6 @@ export const GET_BULK_CARDS = authedEndpoint('bulkSearch');
 export const FINISH_SALE = authedEndpoint('finishSale');
 export const ADD_CARD_TO_INVENTORY = authedEndpoint('addCardToInventory');
 export const RECEIVE_CARDS = authedEndpoint('receiveCards');
-export const GET_CARD_FROM_ALL_LOCATIONS = authedEndpoint(
-    'getCardFromAllLocations'
-);
 
 // GCF endpoint
 export const GET_LIVE_PRICE = gcfEndpoint(

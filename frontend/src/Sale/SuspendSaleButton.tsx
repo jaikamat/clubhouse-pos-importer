@@ -1,19 +1,25 @@
-import React, { FC, useEffect, useState } from 'react';
 import {
-    Button,
-    DropdownProps,
-    Form,
+    Box,
+    Dialog,
+    DialogContent,
+    DialogTitle,
     Grid,
-    Message,
-    Modal,
-    TextAreaProps,
-} from 'semantic-ui-react';
-import styled from 'styled-components';
+    IconButton,
+    makeStyles,
+} from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import { Alert, AlertTitle } from '@material-ui/lab';
+import React, { FC, useEffect, useState } from 'react';
 import { SuspendedSale } from '../context/getSuspendedSaleQuery';
 import { SaleContext } from '../context/SaleContext';
+import Button from '../ui/Button';
+import ControlledDropdown from '../ui/ControlledDropdown';
+import TextField from '../ui/TextField';
 import getSuspendedSalesQuery from './getSuspendedSalesQuery';
 
 interface Props {
+    /** The suspended sale ID */
     id: string;
     saleListLength: number;
     restoreSale: SaleContext['restoreSale'];
@@ -27,21 +33,23 @@ interface SuspendButtonState {
     deleteBtn: boolean;
 }
 
-const Divider = styled.div`
-    border-left: 1px solid rgba(0, 0, 0, 0.2);
-    height: 100%;
-`;
+const CharLimit: FC<{ text: string; limit: number }> = ({ text, limit }) => {
+    const { charLimit } = useStyles();
 
-const ClearMargin = styled.div`
-    margin-top: 0px;
-    margin-bottom: 0px;
-`;
+    return (
+        <div className={charLimit}>
+            {text.length}/{limit}
+        </div>
+    );
+};
 
-const CharLimit = styled.p`
-    font-size: 12px;
-    color: rgba(0, 0, 0, 0.2);
-    float: right;
-`;
+const useStyles = makeStyles({
+    charLimit: {
+        fontSize: '12px',
+        color: 'rgba(0, 0, 0, 0.4)',
+        float: 'right',
+    },
+});
 
 const SuspendSaleButton: FC<Props> = ({
     restoreSale,
@@ -79,17 +87,6 @@ const SuspendSaleButton: FC<Props> = ({
         getSales();
     }, [id]); // If the parent-level suspended-sale _id changes, we fetch again
 
-    const modalTrigger = (
-        <div>
-            <Button
-                size="tiny"
-                id="suspend-sale-btn"
-                onClick={() => setModalOpen(true)}
-                icon="ellipsis horizontal"
-            />
-        </div>
-    );
-
     const submitSuspendSale = async () => {
         setDisabled(true);
         setLoadingBtn({ ...loadingBtn, suspendBtn: true });
@@ -122,86 +119,91 @@ const SuspendSaleButton: FC<Props> = ({
     };
 
     return (
-        <React.Fragment>
-            <Modal trigger={modalTrigger} open={modalOpen}>
-                <Modal.Header>Sales menu</Modal.Header>
-                <Modal.Content>
-                    <Grid columns={2} stackable relaxed="very">
+        <>
+            <div>
+                <IconButton
+                    disabled={disabled}
+                    onClick={() => setModalOpen(true)}
+                    size="small"
+                >
+                    <MoreHorizIcon />
+                </IconButton>
+            </div>
+            <Dialog open={modalOpen} maxWidth="md" fullWidth>
+                <DialogTitle>
+                    <Box
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="center"
+                    >
+                        <h3>Sales menu</h3>
+                        <IconButton
+                            disabled={disabled}
+                            onClick={() => setModalOpen(false)}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                    </Box>
+                </DialogTitle>
+                <DialogContent>
+                    <Grid container spacing={2}>
                         {saleListLength > 0 && (
-                            <React.Fragment>
-                                <Grid.Column width="7">
-                                    <h3>Suspend Sale</h3>
-                                    <Form>
-                                        <ClearMargin>
-                                            <Form.Input
-                                                id="suspend-sale-name"
-                                                label="Customer Name"
-                                                placeholder="Jace, the Mind Sculptor"
-                                                value={customerName}
-                                                onChange={(e, { value }) =>
-                                                    setCustomerName(
-                                                        value.substring(0, 50)
-                                                    )
-                                                }
-                                            />
-                                        </ClearMargin>
-                                        <ClearMargin>
-                                            <CharLimit>
-                                                {customerName.length}/50
-                                            </CharLimit>
-                                        </ClearMargin>
-                                        <ClearMargin>
-                                            <Form.TextArea
-                                                label="Notes"
-                                                placeholder="Sometimes, I forget things..."
-                                                value={notes}
-                                                onChange={(
-                                                    e,
-                                                    { value }: TextAreaProps
-                                                ) => {
-                                                    if (
-                                                        typeof value ===
-                                                        'string'
-                                                    ) {
-                                                        setNotes(
-                                                            value.substring(
-                                                                0,
-                                                                150
-                                                            )
-                                                        );
-                                                    }
-                                                }}
-                                            />
-                                        </ClearMargin>
-                                        <ClearMargin>
-                                            <CharLimit>
-                                                {notes.length}/150
-                                            </CharLimit>
-                                        </ClearMargin>
-                                        <Form.Button
-                                            id="suspend-sale-submit"
-                                            primary
-                                            disabled={disabled || !customerName}
-                                            loading={loadingBtn.suspendBtn}
-                                            onClick={submitSuspendSale}
-                                        >
-                                            Suspend Sale
-                                        </Form.Button>
-                                    </Form>
-                                </Grid.Column>
-                                <Grid.Column width="1">
-                                    <Divider />
-                                </Grid.Column>
-                            </React.Fragment>
+                            <Grid item xs={6}>
+                                <h4>Suspend sale</h4>
+                                <div>
+                                    <TextField
+                                        fullWidth
+                                        label="Customer Name"
+                                        placeholder="Jace, the Mind Sculptor"
+                                        value={customerName}
+                                        onChange={(e) => {
+                                            setCustomerName(
+                                                e.target.value.substring(0, 50)
+                                            );
+                                        }}
+                                    />
+                                </div>
+                                <CharLimit text={customerName} limit={50} />
+                                <div>
+                                    <TextField
+                                        multiline
+                                        minRows={3}
+                                        fullWidth
+                                        label="Notes"
+                                        placeholder="Sometimes, I forget things..."
+                                        value={notes}
+                                        onChange={(e) => {
+                                            setNotes(
+                                                e.target.value.substring(0, 150)
+                                            );
+                                        }}
+                                    />
+                                </div>
+                                <CharLimit text={notes} limit={150} />
+                                <br />
+                                <Button
+                                    fullWidth
+                                    primary
+                                    disabled={
+                                        disabled ||
+                                        !customerName ||
+                                        loadingBtn.suspendBtn
+                                    }
+                                    onClick={submitSuspendSale}
+                                >
+                                    Suspend Sale
+                                </Button>
+                            </Grid>
                         )}
-                        <Grid.Column width="7">
-                            <h3>Restore Sale</h3>
+                        <Grid item xs={6}>
+                            <h4>Restore suspended sale</h4>
                             {sales.length > 0 && (
-                                <React.Fragment>
-                                    <Form>
-                                        <Form.Select
-                                            fluid
-                                            label="Previously suspended sales"
+                                <>
+                                    <div>
+                                        <ControlledDropdown
+                                            value={saleID}
+                                            name="suspendedsales"
+                                            onChange={(val) => setSaleID(val)}
                                             options={sales.map((s) => {
                                                 return {
                                                     key: s._id,
@@ -209,57 +211,56 @@ const SuspendSaleButton: FC<Props> = ({
                                                     value: s._id,
                                                 };
                                             })}
-                                            placeholder="Select a sale"
-                                            onChange={(
-                                                e,
-                                                { value }: DropdownProps
-                                            ) => {
-                                                if (typeof value === 'string') {
-                                                    setSaleID(value);
-                                                }
-                                            }}
                                         />
-                                        <Form.Button
-                                            primary
-                                            disabled={disabled || !saleID}
-                                            loading={loadingBtn.restoreBtn}
-                                            onClick={submitRestoreSale}
-                                        >
-                                            Restore Sale
-                                        </Form.Button>
-                                    </Form>
-                                </React.Fragment>
+                                    </div>
+                                    <br />
+                                    <div>
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={6}>
+                                                <Button
+                                                    fullWidth
+                                                    primary
+                                                    disabled={
+                                                        disabled ||
+                                                        !saleID ||
+                                                        loadingBtn.restoreBtn
+                                                    }
+                                                    onClick={submitRestoreSale}
+                                                >
+                                                    Restore Sale
+                                                </Button>
+                                            </Grid>
+                                            {!!id && (
+                                                <Grid item xs={6}>
+                                                    <Button
+                                                        fullWidth
+                                                        disabled={
+                                                            disabled ||
+                                                            loadingBtn.deleteBtn
+                                                        }
+                                                        onClick={
+                                                            submitDeleteSale
+                                                        }
+                                                    >
+                                                        Delete current Sale
+                                                    </Button>
+                                                </Grid>
+                                            )}
+                                        </Grid>
+                                    </div>
+                                </>
                             )}
                             {sales.length === 0 && (
-                                <Message info>
-                                    <Message.Header>No sales</Message.Header>
+                                <Alert severity="info">
+                                    <AlertTitle>No sales</AlertTitle>
                                     Suspend a sale first
-                                </Message>
+                                </Alert>
                             )}
-                        </Grid.Column>
+                        </Grid>
                     </Grid>
-                </Modal.Content>
-                <Modal.Actions>
-                    {!!id && (
-                        <Button
-                            color="red"
-                            disabled={disabled}
-                            loading={loadingBtn.deleteBtn}
-                            onClick={submitDeleteSale}
-                        >
-                            Delete current Sale
-                        </Button>
-                    )}
-                    <Button
-                        primary
-                        disabled={disabled}
-                        onClick={() => setModalOpen(false)}
-                    >
-                        Cancel
-                    </Button>
-                </Modal.Actions>
-            </Modal>
-        </React.Fragment>
+                </DialogContent>
+            </Dialog>
+        </>
     );
 };
 

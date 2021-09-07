@@ -1,6 +1,7 @@
+import { IconButton } from '@material-ui/core';
+import PrintIcon from '@material-ui/icons/Print';
 import React, { FC, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import { Button, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import Price from '../common/Price';
 import { SaleListCard } from '../context/SaleContext';
@@ -35,9 +36,9 @@ const PrintList: FC<Props> = ({ saleListCards }) => {
     return (
         <>
             <div>
-                <Button size="tiny" onClick={handlePrint} icon>
-                    <Icon name="print" />
-                </Button>
+                <IconButton onClick={handlePrint} size="small">
+                    <PrintIcon />
+                </IconButton>
             </div>
             <PrintWrapper ref={componentRef}>
                 <ul>

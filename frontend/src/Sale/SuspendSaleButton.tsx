@@ -4,8 +4,10 @@ import {
     DialogContent,
     DialogTitle,
     Grid,
+    IconButton,
     makeStyles,
 } from '@material-ui/core';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import React, { FC, useEffect, useState } from 'react';
 import { SuspendedSale } from '../context/getSuspendedSaleQuery';
@@ -118,9 +120,13 @@ const SuspendSaleButton: FC<Props> = ({
     return (
         <React.Fragment>
             <div>
-                <Button onClick={() => setModalOpen(true)}>
-                    Sales menu icon
-                </Button>
+                <IconButton
+                    disabled={disabled}
+                    onClick={() => setModalOpen(true)}
+                    size="small"
+                >
+                    <MoreHorizIcon />
+                </IconButton>
             </div>
             <Dialog open={modalOpen} maxWidth="md" fullWidth>
                 <DialogTitle>Sales menu</DialogTitle>
@@ -128,7 +134,7 @@ const SuspendSaleButton: FC<Props> = ({
                     <Grid container spacing={2}>
                         {saleListLength > 0 && (
                             <Grid item xs={6}>
-                                <h3>Suspend Sale</h3>
+                                <h3>Suspend sale</h3>
                                 <div>
                                     <TextField
                                         fullWidth
@@ -159,6 +165,7 @@ const SuspendSaleButton: FC<Props> = ({
                                     />
                                 </div>
                                 <CharLimit text={notes} limit={150} />
+                                <br />
                                 <Button
                                     primary
                                     disabled={
@@ -173,33 +180,38 @@ const SuspendSaleButton: FC<Props> = ({
                             </Grid>
                         )}
                         <Grid item xs={6}>
-                            <h3>Restore Sale</h3>
+                            <h3>Restore suspended sale</h3>
                             {sales.length > 0 && (
-                                <React.Fragment>
-                                    <ControlledDropdown
-                                        value={saleID}
-                                        name="suspendedsales"
-                                        onChange={(val) => setSaleID(val)}
-                                        options={sales.map((s) => {
-                                            return {
-                                                key: s._id,
-                                                text: s.name,
-                                                value: s._id,
-                                            };
-                                        })}
-                                    />
-                                    <Button
-                                        primary
-                                        disabled={
-                                            disabled ||
-                                            !saleID ||
-                                            loadingBtn.restoreBtn
-                                        }
-                                        onClick={submitRestoreSale}
-                                    >
-                                        Restore Sale
-                                    </Button>
-                                </React.Fragment>
+                                <>
+                                    <div>
+                                        <ControlledDropdown
+                                            value={saleID}
+                                            name="suspendedsales"
+                                            onChange={(val) => setSaleID(val)}
+                                            options={sales.map((s) => {
+                                                return {
+                                                    key: s._id,
+                                                    text: s.name,
+                                                    value: s._id,
+                                                };
+                                            })}
+                                        />
+                                    </div>
+                                    <br />
+                                    <div>
+                                        <Button
+                                            primary
+                                            disabled={
+                                                disabled ||
+                                                !saleID ||
+                                                loadingBtn.restoreBtn
+                                            }
+                                            onClick={submitRestoreSale}
+                                        >
+                                            Restore Sale
+                                        </Button>
+                                    </div>
+                                </>
                             )}
                             {sales.length === 0 && (
                                 <Alert severity="info">

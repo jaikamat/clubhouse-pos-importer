@@ -8,10 +8,10 @@ import {
 } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import React, { FC, useEffect, useState } from 'react';
-import { DropdownProps, Form } from 'semantic-ui-react';
 import { SuspendedSale } from '../context/getSuspendedSaleQuery';
 import { SaleContext } from '../context/SaleContext';
 import Button from '../ui/Button';
+import ControlledDropdown from '../ui/ControlledDropdown';
 import TextField from '../ui/TextField';
 import getSuspendedSalesQuery from './getSuspendedSalesQuery';
 
@@ -127,98 +127,78 @@ const SuspendSaleButton: FC<Props> = ({
                 <DialogContent>
                     <Grid container spacing={2}>
                         {saleListLength > 0 && (
-                            <React.Fragment>
-                                <Grid item xs={6}>
-                                    <h3>Suspend Sale</h3>
-                                    {/* <Form> */}
-                                    <div>
-                                        <TextField
-                                            fullWidth
-                                            label="Customer Name"
-                                            placeholder="Jace, the Mind Sculptor"
-                                            value={customerName}
-                                            onChange={(e) => {
-                                                setCustomerName(
-                                                    e.target.value.substring(
-                                                        0,
-                                                        50
-                                                    )
-                                                );
-                                            }}
-                                        />
-                                    </div>
-                                    <CharLimit text={customerName} limit={50} />
-                                    <div>
-                                        <TextField
-                                            multiline
-                                            minRows={3}
-                                            fullWidth
-                                            label="Notes"
-                                            placeholder="Sometimes, I forget things..."
-                                            value={notes}
-                                            onChange={(e) => {
-                                                setNotes(
-                                                    e.target.value.substring(
-                                                        0,
-                                                        150
-                                                    )
-                                                );
-                                            }}
-                                        />
-                                    </div>
-                                    <CharLimit text={notes} limit={150} />
-                                    <Button
-                                        primary
-                                        disabled={
-                                            disabled ||
-                                            !customerName ||
-                                            loadingBtn.suspendBtn
-                                        }
-                                        onClick={submitSuspendSale}
-                                    >
-                                        Suspend Sale
-                                    </Button>
-                                    {/* </Form> */}
-                                </Grid>
-                            </React.Fragment>
+                            <Grid item xs={6}>
+                                <h3>Suspend Sale</h3>
+                                <div>
+                                    <TextField
+                                        fullWidth
+                                        label="Customer Name"
+                                        placeholder="Jace, the Mind Sculptor"
+                                        value={customerName}
+                                        onChange={(e) => {
+                                            setCustomerName(
+                                                e.target.value.substring(0, 50)
+                                            );
+                                        }}
+                                    />
+                                </div>
+                                <CharLimit text={customerName} limit={50} />
+                                <div>
+                                    <TextField
+                                        multiline
+                                        minRows={3}
+                                        fullWidth
+                                        label="Notes"
+                                        placeholder="Sometimes, I forget things..."
+                                        value={notes}
+                                        onChange={(e) => {
+                                            setNotes(
+                                                e.target.value.substring(0, 150)
+                                            );
+                                        }}
+                                    />
+                                </div>
+                                <CharLimit text={notes} limit={150} />
+                                <Button
+                                    primary
+                                    disabled={
+                                        disabled ||
+                                        !customerName ||
+                                        loadingBtn.suspendBtn
+                                    }
+                                    onClick={submitSuspendSale}
+                                >
+                                    Suspend Sale
+                                </Button>
+                            </Grid>
                         )}
                         <Grid item xs={6}>
                             <h3>Restore Sale</h3>
                             {sales.length > 0 && (
                                 <React.Fragment>
-                                    <Form>
-                                        <Form.Select
-                                            fluid
-                                            label="Previously suspended sales"
-                                            options={sales.map((s) => {
-                                                return {
-                                                    key: s._id,
-                                                    text: s.name,
-                                                    value: s._id,
-                                                };
-                                            })}
-                                            placeholder="Select a sale"
-                                            onChange={(
-                                                e,
-                                                { value }: DropdownProps
-                                            ) => {
-                                                if (typeof value === 'string') {
-                                                    setSaleID(value);
-                                                }
-                                            }}
-                                        />
-                                        <Form.Button
-                                            primary
-                                            disabled={
-                                                disabled ||
-                                                !saleID ||
-                                                loadingBtn.restoreBtn
-                                            }
-                                            onClick={submitRestoreSale}
-                                        >
-                                            Restore Sale
-                                        </Form.Button>
-                                    </Form>
+                                    <ControlledDropdown
+                                        value={saleID}
+                                        name="suspendedsales"
+                                        onChange={(val) => setSaleID(val)}
+                                        options={sales.map((s) => {
+                                            return {
+                                                key: s._id,
+                                                text: s.name,
+                                                value: s._id,
+                                            };
+                                        })}
+                                    />
+                                    <Button
+                                        primary
+                                        disabled={
+                                            disabled ||
+                                            !saleID ||
+                                            loadingBtn.restoreBtn
+                                        }
+                                        onClick={submitRestoreSale}
+                                    >
+                                        Restore Sale
+                                    </Button>
                                 </React.Fragment>
                             )}
                             {sales.length === 0 && (

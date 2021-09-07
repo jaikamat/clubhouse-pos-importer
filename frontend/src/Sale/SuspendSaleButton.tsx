@@ -1,12 +1,13 @@
 import {
+    Box,
     Dialog,
-    DialogActions,
     DialogContent,
     DialogTitle,
     Grid,
     IconButton,
     makeStyles,
 } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import React, { FC, useEffect, useState } from 'react';
@@ -118,7 +119,7 @@ const SuspendSaleButton: FC<Props> = ({
     };
 
     return (
-        <React.Fragment>
+        <>
             <div>
                 <IconButton
                     disabled={disabled}
@@ -129,12 +130,26 @@ const SuspendSaleButton: FC<Props> = ({
                 </IconButton>
             </div>
             <Dialog open={modalOpen} maxWidth="md" fullWidth>
-                <DialogTitle>Sales menu</DialogTitle>
+                <DialogTitle>
+                    <Box
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="center"
+                    >
+                        <h3>Sales menu</h3>
+                        <IconButton
+                            disabled={disabled}
+                            onClick={() => setModalOpen(false)}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                    </Box>
+                </DialogTitle>
                 <DialogContent>
                     <Grid container spacing={2}>
                         {saleListLength > 0 && (
                             <Grid item xs={6}>
-                                <h3>Suspend sale</h3>
+                                <h4>Suspend sale</h4>
                                 <div>
                                     <TextField
                                         fullWidth
@@ -167,6 +182,7 @@ const SuspendSaleButton: FC<Props> = ({
                                 <CharLimit text={notes} limit={150} />
                                 <br />
                                 <Button
+                                    fullWidth
                                     primary
                                     disabled={
                                         disabled ||
@@ -180,7 +196,7 @@ const SuspendSaleButton: FC<Props> = ({
                             </Grid>
                         )}
                         <Grid item xs={6}>
-                            <h3>Restore suspended sale</h3>
+                            <h4>Restore suspended sale</h4>
                             {sales.length > 0 && (
                                 <>
                                     <div>
@@ -199,17 +215,38 @@ const SuspendSaleButton: FC<Props> = ({
                                     </div>
                                     <br />
                                     <div>
-                                        <Button
-                                            primary
-                                            disabled={
-                                                disabled ||
-                                                !saleID ||
-                                                loadingBtn.restoreBtn
-                                            }
-                                            onClick={submitRestoreSale}
-                                        >
-                                            Restore Sale
-                                        </Button>
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={6}>
+                                                <Button
+                                                    fullWidth
+                                                    primary
+                                                    disabled={
+                                                        disabled ||
+                                                        !saleID ||
+                                                        loadingBtn.restoreBtn
+                                                    }
+                                                    onClick={submitRestoreSale}
+                                                >
+                                                    Restore Sale
+                                                </Button>
+                                            </Grid>
+                                            {!!id && (
+                                                <Grid item xs={6}>
+                                                    <Button
+                                                        fullWidth
+                                                        disabled={
+                                                            disabled ||
+                                                            loadingBtn.deleteBtn
+                                                        }
+                                                        onClick={
+                                                            submitDeleteSale
+                                                        }
+                                                    >
+                                                        Delete current Sale
+                                                    </Button>
+                                                </Grid>
+                                            )}
+                                        </Grid>
                                     </div>
                                 </>
                             )}
@@ -222,25 +259,8 @@ const SuspendSaleButton: FC<Props> = ({
                         </Grid>
                     </Grid>
                 </DialogContent>
-                <DialogActions>
-                    {!!id && (
-                        <Button
-                            disabled={disabled || loadingBtn.deleteBtn}
-                            onClick={submitDeleteSale}
-                        >
-                            Delete current Sale
-                        </Button>
-                    )}
-                    <Button
-                        primary
-                        disabled={disabled}
-                        onClick={() => setModalOpen(false)}
-                    >
-                        Cancel
-                    </Button>
-                </DialogActions>
             </Dialog>
-        </React.Fragment>
+        </>
     );
 };
 

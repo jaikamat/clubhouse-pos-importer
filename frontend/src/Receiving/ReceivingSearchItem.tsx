@@ -144,7 +144,7 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
                 />
             }
         >
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} noValidate>
                 <Grid container alignItems="center" spacing={2}>
                     <Grid item>
                         <TextField

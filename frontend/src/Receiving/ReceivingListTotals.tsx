@@ -1,8 +1,17 @@
-import { Box, Grid, Paper, Typography } from '@material-ui/core';
+import {
+    Box,
+    ButtonGroup,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    Grid,
+    Paper,
+    Typography,
+} from '@material-ui/core';
 import React, { FC, useState } from 'react';
-import { Button, Modal } from 'semantic-ui-react';
 import Price from '../common/Price';
 import { Trade, useReceivingContext } from '../context/ReceivingContext';
+import Button from '../ui/Button';
 import sum from '../utils/sum';
 import CashReport from './CashReport';
 import printCashReport from './printCashReport';
@@ -40,49 +49,45 @@ const ReceivingListTotals: FC<Props> = () => {
             <Box p={2}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} justify="space-between">
-                        <Button.Group fluid>
+                        <ButtonGroup fullWidth>
                             <Button
                                 id="select-all-cash"
                                 onClick={() => selectAll(Trade.Cash)}
                             >
                                 Select all cash
                             </Button>
-                            <Button.Or />
                             <Button
                                 id="select-all-credit"
                                 onClick={() => selectAll(Trade.Credit)}
                             >
                                 Select all credit
                             </Button>
-                        </Button.Group>
+                        </ButtonGroup>
                     </Grid>
                     <Grid item xs={12}>
-                        <Modal
-                            open={showCashModal}
-                            trigger={
-                                <Button
-                                    floated="right"
-                                    color={cashTotal > 0 ? 'green' : undefined}
-                                    disabled={cashTotal === 0}
-                                    onClick={openCashModal}
-                                >
-                                    Generate cash report
-                                </Button>
-                            }
-                        >
-                            <Modal.Content>
-                                <CashReport receivingList={receivingList} />
-                            </Modal.Content>
-                            <Modal.Actions>
-                                <Button
-                                    onClick={handlePrintCashReport}
-                                    color="blue"
-                                >
-                                    Print Report
-                                </Button>
-                                <Button onClick={closeCashModal}>Cancel</Button>
-                            </Modal.Actions>
-                        </Modal>
+                        {cashTotal > 0 && (
+                            <Button fullWidth onClick={openCashModal}>
+                                Generate cash report
+                            </Button>
+                        )}
+                        {showCashModal && (
+                            <Dialog open maxWidth="md" fullWidth>
+                                <DialogContent>
+                                    <CashReport receivingList={receivingList} />
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button
+                                        primary
+                                        onClick={handlePrintCashReport}
+                                    >
+                                        Print Report
+                                    </Button>
+                                    <Button onClick={closeCashModal}>
+                                        Cancel
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
+                        )}
                     </Grid>
                     <Grid item xs={12}>
                         <Box

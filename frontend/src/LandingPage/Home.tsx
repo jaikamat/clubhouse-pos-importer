@@ -1,10 +1,17 @@
-import { Button } from '@material-ui/core';
+import { Box, Button, withStyles } from '@material-ui/core';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import FacebookIcon from '@material-ui/icons/Facebook';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import PeopleIcon from '@material-ui/icons/People';
+import PhoneIcon from '@material-ui/icons/Phone';
+import RoomIcon from '@material-ui/icons/Room';
+import WatchLaterIcon from '@material-ui/icons/WatchLater';
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import ch2 from './ch2.jpg';
 import clubhouse_products from './clubhouse_products.png';
+import DiscordIcon from './DiscordIcon';
 import learn_to_play from './learn_to_play.jpg';
 import ch1 from './tables.jpg';
 
@@ -40,6 +47,23 @@ interface ImageProps {
     src: string;
     rounded?: boolean;
 }
+
+const CenterIcon = withStyles({
+    root: {
+        verticalAlign: 'middle',
+        display: 'inline',
+    },
+})(Box);
+
+const HeroIcon = withStyles({
+    root: {
+        '& > *': {
+            fontSize: 80,
+            color: '#ffffff',
+        },
+        display: 'inline',
+    },
+})(Box);
 
 const Image = styled.div<ImageProps>`
     background: url(${({ src }) => src});
@@ -249,7 +273,9 @@ const Home: FC = () => {
                 <ServicesContainer>
                     <div>
                         <IconContainer>
-                            <Icon name="box" size="huge" inverted />
+                            <HeroIcon>
+                                <LocalOfferIcon />
+                            </HeroIcon>
                             <SectionText>Large product selection</SectionText>
                         </IconContainer>
                         <br />
@@ -261,7 +287,9 @@ const Home: FC = () => {
                     </div>
                     <div>
                         <IconContainer>
-                            <Icon name="users" size="huge" inverted />
+                            <HeroIcon>
+                                <PeopleIcon />
+                            </HeroIcon>
                             <SectionText>Inclusive community</SectionText>
                         </IconContainer>
                         <br />
@@ -272,7 +300,9 @@ const Home: FC = () => {
                     </div>
                     <div>
                         <IconContainer>
-                            <Icon name="dollar sign" size="huge" inverted />
+                            <HeroIcon>
+                                <AttachMoneyIcon />
+                            </HeroIcon>
                             <SectionText>Cash or credit trade-ins</SectionText>
                         </IconContainer>
                         <br />
@@ -296,31 +326,25 @@ const Home: FC = () => {
                                     <SectionDivider />
                                     <div>
                                         <Description inverted>
-                                            <Icon
-                                                name="map marker alternate"
-                                                size="large"
-                                                inverted
-                                            />
+                                            <CenterIcon>
+                                                <RoomIcon fontSize="large" />
+                                            </CenterIcon>
                                             13895 SW Farmington Rd, Beaverton,
                                             OR 97005
                                         </Description>
                                         <br />
                                         <Description inverted>
-                                            <Icon
-                                                name="clock"
-                                                size="large"
-                                                inverted
-                                            />
+                                            <CenterIcon>
+                                                <WatchLaterIcon fontSize="large" />
+                                            </CenterIcon>
                                             Mon - Fri 12pm to 7pm, Sat - Sun
                                             11am to 7pm
                                         </Description>
                                         <br />
                                         <Description inverted>
-                                            <Icon
-                                                name="phone"
-                                                size="large"
-                                                inverted
-                                            />
+                                            <CenterIcon>
+                                                <PhoneIcon fontSize="large" />
+                                            </CenterIcon>
                                             (503) 268-1449
                                         </Description>
                                     </div>
@@ -336,31 +360,25 @@ const Home: FC = () => {
                                     <SectionDivider />
                                     <div>
                                         <Description inverted>
-                                            <Icon
-                                                name="map marker alternate"
-                                                size="large"
-                                                inverted
-                                            />
+                                            <CenterIcon>
+                                                <RoomIcon fontSize="large" />
+                                            </CenterIcon>
                                             1300 SW Oak St Suite B, Hillsboro,
                                             OR 97123
                                         </Description>
                                         <br />
                                         <Description inverted>
-                                            <Icon
-                                                name="clock"
-                                                size="large"
-                                                inverted
-                                            />
+                                            <CenterIcon>
+                                                <WatchLaterIcon fontSize="large" />
+                                            </CenterIcon>
                                             Mon - Fri 12pm to 7pm, Sat - Sun
                                             11am to 7pm
                                         </Description>
                                         <br />
                                         <Description inverted>
-                                            <Icon
-                                                name="phone"
-                                                size="large"
-                                                inverted
-                                            />
+                                            <CenterIcon>
+                                                <PhoneIcon fontSize="large" />
+                                            </CenterIcon>
                                             (971) 249-3096
                                         </Description>
                                     </div>
@@ -397,14 +415,18 @@ const Home: FC = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            <Icon link name="discord" size="huge" inverted />
+                            <HeroIcon>
+                                <DiscordIcon />
+                            </HeroIcon>
                         </a>
                         <a
                             href="https://www.facebook.com/RGTClubhouse/"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            <Icon link name="facebook" size="huge" inverted />
+                            <HeroIcon>
+                                <FacebookIcon />
+                            </HeroIcon>
                         </a>
                     </div>
                 </FlexRow>

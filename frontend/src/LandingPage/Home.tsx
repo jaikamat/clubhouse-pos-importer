@@ -1,6 +1,7 @@
+import { Button } from '@material-ui/core';
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Icon } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import ch2 from './ch2.jpg';
 import clubhouse_products from './clubhouse_products.png';
@@ -222,7 +223,11 @@ const Home: FC = () => {
                             </TextWidth>
                             <br />
                             <Link to="/public-inventory">
-                                <Button size="huge" primary>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    size="large"
+                                >
                                     Browse cards
                                 </Button>
                             </Link>
@@ -405,9 +410,7 @@ const Home: FC = () => {
                 </FlexRow>
                 <FlexRow justify="center">
                     <Link to="/login">
-                        <Button size="tiny" color="black">
-                            Staff login
-                        </Button>
+                        <Button color="primary">Staff login</Button>
                     </Link>
                 </FlexRow>
             </Footer>

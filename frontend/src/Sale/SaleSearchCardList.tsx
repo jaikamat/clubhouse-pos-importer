@@ -18,15 +18,15 @@ const BrowseCardList: FC<Props> = ({ loading, term, cards }) => {
         if (term && !cards.length) {
             // Check to make sure the user has searched and no results
             return (
-                <p>
+                <>
                     Zero results for <em>{term}</em>
-                </p>
+                </>
             );
         }
         return (
-            <p>
+            <>
                 <em>"Don't give the people what they want"</em>
-            </p>
+            </>
         );
     };
 

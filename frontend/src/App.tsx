@@ -1,4 +1,9 @@
-import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core';
+import {
+    createTheme,
+    CssBaseline,
+    makeStyles,
+    ThemeProvider,
+} from '@material-ui/core';
 import React, { FC } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import AdminRoute from './AuthenticatedRoute';
@@ -32,10 +37,19 @@ const useStyles = makeStyles(({ spacing }) => ({
     },
 }));
 
-const theme = createMuiTheme({
+const theme = createTheme({
     palette: {
         primary: {
             main: '#2185d0',
+        },
+    },
+    overrides: {
+        MuiCssBaseline: {
+            '@global': {
+                a: {
+                    textDecoration: 'none',
+                },
+            },
         },
     },
 });
@@ -46,6 +60,7 @@ const App: FC = () => {
     return (
         <AuthProvider>
             <ThemeProvider theme={theme}>
+                <CssBaseline />
                 <ToastProvider>
                     <NavBar />
                     <Switch>

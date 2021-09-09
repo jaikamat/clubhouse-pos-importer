@@ -101,7 +101,7 @@ const ReceivingListModal: FC<Props> = () => {
                 >
                     <DialogTitle>Receiving confirmation</DialogTitle>
                     <DialogContent>
-                        <Typography variant="h5">
+                        <Typography variant="h6">
                             Committing the following cards to inventory:
                         </Typography>
                         <ul>
@@ -115,7 +115,7 @@ const ReceivingListModal: FC<Props> = () => {
                                 );
                             })}
                         </ul>
-                        <Typography variant="h5">
+                        <Typography variant="h6">
                             The customer is owed:
                         </Typography>
                         <ul>

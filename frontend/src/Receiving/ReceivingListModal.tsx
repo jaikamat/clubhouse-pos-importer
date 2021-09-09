@@ -1,8 +1,17 @@
+import {
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Grid,
+    Typography,
+} from '@material-ui/core';
 import { FormikErrors, useFormik } from 'formik';
 import React, { FC, useState } from 'react';
-import { Button, Form, Header, List, Modal } from 'semantic-ui-react';
 import Price from '../common/Price';
 import { Trade, useReceivingContext } from '../context/ReceivingContext';
+import Button from '../ui/Button';
+import TextField from '../ui/TextField';
 import sum from '../utils/sum';
 
 interface Props {}
@@ -55,7 +64,7 @@ const ReceivingListModal: FC<Props> = () => {
         setLoading(false);
     };
 
-    const { handleChange, handleSubmit, errors } = useFormik({
+    const { handleChange, handleSubmit, errors, resetForm } = useFormik({
         initialValues: initialFormValues,
         validate,
         onSubmit,
@@ -76,87 +85,90 @@ const ReceivingListModal: FC<Props> = () => {
     return (
         <>
             <Button
-                fluid
-                color="blue"
+                primary
+                fullWidth
                 disabled={receivingList.length === 0}
                 onClick={() => setShowModal(true)}
             >
                 Commit to inventory
             </Button>
-            {setShowModal && (
-                <Modal
-                    closeOnDimmerClick={false}
-                    open={showModal}
+            {showModal && (
+                <Dialog
+                    maxWidth="md"
+                    fullWidth
+                    open
                     onClose={() => setShowModal(false)}
                 >
-                    <Modal.Header>Receiving confirmation</Modal.Header>
-                    <Modal.Content scrolling>
-                        <Header as="h5">
+                    <DialogTitle>Receiving confirmation</DialogTitle>
+                    <DialogContent>
+                        <Typography variant="h6">
                             Committing the following cards to inventory:
-                        </Header>
-                        <List>
+                        </Typography>
+                        <ul>
                             {receivingList.map((c) => {
                                 return (
-                                    <List.Item key={c.uuid_key}>
-                                        {`● ${c.name} | ${c.set_name} (
-                                        ${c.set.toUpperCase()})`}
-                                    </List.Item>
+                                    <li key={c.uuid_key}>
+                                        {`${c.name} | ${
+                                            c.set_name
+                                        } (${c.set.toUpperCase()})`}
+                                    </li>
                                 );
                             })}
-                        </List>
-                        <Header as="h5">The customer is owed:</Header>
-                        <List>
+                        </ul>
+                        <Typography variant="h6">
+                            The customer is owed:
+                        </Typography>
+                        <ul>
                             {cashTotal > 0 ? (
-                                <List.Item>
-                                    ● <Price num={cashTotal} /> in cold, hard
-                                    cash
-                                </List.Item>
+                                <li>
+                                    <Price num={cashTotal} /> in cold, hard cash
+                                </li>
                             ) : null}
                             {creditTotal > 0 ? (
-                                <List.Item>
-                                    ● <Price num={creditTotal} /> in store
-                                    credit
-                                </List.Item>
+                                <li>
+                                    <Price num={creditTotal} /> in store credit
+                                </li>
                             ) : null}
-                        </List>
-                    </Modal.Content>
-                    <Modal.Content>
-                        <Form>
-                            <Form.Group widths="equal">
-                                <Form.Field>
-                                    <label>Customer name</label>
-                                    <Form.Input
-                                        onChange={handleChange}
-                                        name="customerName"
-                                        error={errors.customerName}
-                                    />
-                                </Form.Field>
-                                <Form.Field>
-                                    <label>Customer contact (optional)</label>
-                                    <Form.Input
-                                        onChange={handleChange}
-                                        name="customerContact"
-                                        error={errors.customerContact}
-                                    />
-                                </Form.Field>
-                            </Form.Group>
-                        </Form>
-                    </Modal.Content>
-                    <Modal.Actions>
-                        <Button onClick={() => setShowModal(false)}>
+                        </ul>
+                        <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Customer name"
+                                    name="customerName"
+                                    onChange={handleChange}
+                                    error={errors.customerName}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Customer contact (optional)"
+                                    name="customerContact"
+                                    onChange={handleChange}
+                                />
+                            </Grid>
+                        </Grid>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={() => {
+                                resetForm();
+                                setShowModal(false);
+                            }}
+                        >
                             Cancel
                         </Button>
                         <Button
-                            color="blue"
+                            primary
                             type="submit"
-                            loading={loading}
                             disabled={loading}
                             onClick={() => handleSubmit()}
                         >
                             Submit
                         </Button>
-                    </Modal.Actions>
-                </Modal>
+                    </DialogActions>
+                </Dialog>
             )}
         </>
     );

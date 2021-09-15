@@ -1,4 +1,4 @@
-const card = {
+export default {
     object: 'card',
     id: 'f3d62dbd-63db-4ac9-950f-9852627f23f2',
     oracle_id: 'cac55e46-b730-4569-b92c-a4b5922fc20c',
@@ -17,21 +17,17 @@ const card = {
     highres_image: true,
     image_status: 'highres_scan',
     image_uris: {
-        small:
-            'https://c1.scryfall.com/file/scryfall-cards/small/front/f/3/f3d62dbd-63db-4ac9-950f-9852627f23f2.jpg?1562946525',
-        normal:
-            'https://c1.scryfall.com/file/scryfall-cards/normal/front/f/3/f3d62dbd-63db-4ac9-950f-9852627f23f2.jpg?1562946525',
-        large:
-            'https://c1.scryfall.com/file/scryfall-cards/large/front/f/3/f3d62dbd-63db-4ac9-950f-9852627f23f2.jpg?1562946525',
-        png:
-            'https://c1.scryfall.com/file/scryfall-cards/png/front/f/3/f3d62dbd-63db-4ac9-950f-9852627f23f2.png?1562946525',
+        small: 'https://c1.scryfall.com/file/scryfall-cards/small/front/f/3/f3d62dbd-63db-4ac9-950f-9852627f23f2.jpg?1562946525',
+        normal: 'https://c1.scryfall.com/file/scryfall-cards/normal/front/f/3/f3d62dbd-63db-4ac9-950f-9852627f23f2.jpg?1562946525',
+        large: 'https://c1.scryfall.com/file/scryfall-cards/large/front/f/3/f3d62dbd-63db-4ac9-950f-9852627f23f2.jpg?1562946525',
+        png: 'https://c1.scryfall.com/file/scryfall-cards/png/front/f/3/f3d62dbd-63db-4ac9-950f-9852627f23f2.png?1562946525',
         art_crop:
             'https://c1.scryfall.com/file/scryfall-cards/art_crop/front/f/3/f3d62dbd-63db-4ac9-950f-9852627f23f2.jpg?1562946525',
         border_crop:
             'https://c1.scryfall.com/file/scryfall-cards/border_crop/front/f/3/f3d62dbd-63db-4ac9-950f-9852627f23f2.jpg?1562946525',
     },
     mana_cost: '{4}{U}{U}',
-    cmc: 6,
+    cmc: 6.0,
     type_line: 'Sorcery',
     oracle_text:
         'Exile Time Spiral. Each player shuffles their hand and graveyard into their library, then draws seven cards. You untap up to six lands.',
@@ -51,6 +47,8 @@ const card = {
         penny: 'not_legal',
         commander: 'legal',
         brawl: 'not_legal',
+        historicbrawl: 'not_legal',
+        paupercommander: 'not_legal',
         duel: 'legal',
         oldschool: 'not_legal',
         premodern: 'banned',
@@ -59,10 +57,12 @@ const card = {
     reserved: true,
     foil: false,
     nonfoil: true,
+    finishes: ['nonfoil'],
     oversized: false,
     promo: false,
     reprint: false,
     variation: false,
+    set_id: 'c330df40-51db-4caf-bde6-48df6c181001',
     set: 'usg',
     set_name: "Urza's Saga",
     set_type: 'expansion',
@@ -88,13 +88,14 @@ const card = {
     textless: false,
     booster: true,
     story_spotlight: false,
-    edhrec_rank: 2095,
+    edhrec_rank: 2286,
     prices: {
-        usd: '233.35',
+        usd: '237.73',
         usd_foil: null,
-        eur: '178.50',
+        usd_etched: null,
+        eur: '125.00',
         eur_foil: null,
-        tix: '4.32',
+        tix: '4.65',
     },
     related_uris: {
         gatherer:
@@ -116,5 +117,3 @@ const card = {
             'https://www.cardhoarder.com/cards/12385?affiliate_id=scryfall&ref=card-profile&utm_campaign=affiliate&utm_medium=card&utm_source=scryfall',
     },
 };
-
-module.exports = card;

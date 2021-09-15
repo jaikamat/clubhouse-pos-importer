@@ -1,21 +1,31 @@
-const { MongoMemoryServer } = require('mongodb-memory-server');
-const {
-    default: wrapAddCardToInventoryReceiving,
-} = require('../built/interactors/addCardToInventoryReceiving');
-const getDatabaseConnection = require('../built/database').default;
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import { Trade } from '../common/types';
+import getDatabaseConnection from '../database';
+import addCardToInventoryReceiving from './addCardToInventoryReceiving';
 
 let mongoServer;
 let db;
 
 // Set up the mongo memory instance
 beforeAll(async () => {
-    mongoServer = new MongoMemoryServer();
-    const uri = await mongoServer.getUri();
+    mongoServer = await MongoMemoryServer.create();
+    const uri = mongoServer.getUri();
     db = await getDatabaseConnection(uri);
 });
 
+afterAll(async () => {
+    await mongoServer.stop();
+});
+
 test('Receive one', async () => {
-    await wrapAddCardToInventoryReceiving(
+    const tradeMetadata = {
+        cashPrice: 0,
+        creditPrice: 1.23,
+        marketPrice: 0,
+        tradeType: Trade.Credit,
+    };
+
+    await addCardToInventoryReceiving(
         [
             {
                 quantity: 1,
@@ -24,6 +34,7 @@ test('Receive one', async () => {
                 name: 'Black Lotus',
                 set_name: 'Limted Edition Alpha',
                 set: 'LEA',
+                ...tradeMetadata,
             },
             {
                 quantity: 4,
@@ -32,6 +43,7 @@ test('Receive one', async () => {
                 name: 'Mox Diamond',
                 set_name: 'Stronghold',
                 set: 'STH',
+                ...tradeMetadata,
             },
         ],
         'ch1'
@@ -65,6 +77,13 @@ test('Receive one', async () => {
 });
 
 test('Receive more', async () => {
+    const tradeMetadata = {
+        cashPrice: 0,
+        creditPrice: 1.23,
+        marketPrice: 0,
+        tradeType: Trade.Credit,
+    };
+
     const receiveMore = [
         {
             quantity: 1,
@@ -73,6 +92,7 @@ test('Receive more', async () => {
             name: 'Black Lotus',
             set_name: 'Limted Edition Alpha',
             set: 'LEA',
+            ...tradeMetadata,
         },
         {
             quantity: 4,
@@ -81,6 +101,7 @@ test('Receive more', async () => {
             name: 'Mox Diamond',
             set_name: 'Stronghold',
             set: 'STH',
+            ...tradeMetadata,
         },
         {
             quantity: 2,
@@ -89,10 +110,11 @@ test('Receive more', async () => {
             name: 'Crystal Quarry',
             set_name: 'Odyssey',
             set: 'ODY',
+            ...tradeMetadata,
         },
     ];
 
-    await wrapAddCardToInventoryReceiving(receiveMore, 'ch1');
+    await addCardToInventoryReceiving(receiveMore, 'ch1');
 
     // ch1 uses `card_inventory`, ch2 uses `card_inventory_ch2`
     const foundDocs = await db.collection('card_inventory').find({}).toArray();

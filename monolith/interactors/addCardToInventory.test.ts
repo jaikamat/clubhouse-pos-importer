@@ -1,19 +1,19 @@
-const { MongoMemoryServer } = require('mongodb-memory-server');
-// TODO: We currently require in the built code. We should be requiring the TS file,
-// but this will require some finagling with tooling configs
-const {
-    default: addCardToInventory,
-} = require('../built/interactors/addCardToInventory');
-const getDatabaseConnection = require('../built/database').default;
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import getDatabaseConnection from '../database';
+import addCardToInventory from './addCardToInventory';
 
 let mongoServer;
 let db;
 
 // Set up the mongo memory instance
 beforeAll(async () => {
-    mongoServer = new MongoMemoryServer();
-    const uri = await mongoServer.getUri();
+    mongoServer = await MongoMemoryServer.create();
+    const uri = mongoServer.getUri();
     db = await getDatabaseConnection(uri);
+});
+
+afterAll(async () => {
+    await mongoServer.stop();
 });
 
 test('Single card addition', async () => {

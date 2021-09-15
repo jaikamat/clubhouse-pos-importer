@@ -1,20 +1,15 @@
-const { MongoMemoryServer } = require('mongodb-memory-server');
-const { MongoClient } = require('mongodb');
-const {
-    default: addCardToInventory,
-} = require('../built/interactors/addCardToInventory');
-const {
-    updateInventoryCards,
-} = require('../built/interactors/updateInventoryCards');
-const getDatabaseConnection = require('../built/database').default;
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import getDatabaseConnection from '../database';
+import addCardToInventory from './addCardToInventory';
+import { updateInventoryCards } from './updateInventoryCards';
 
 let mongoServer;
 let db;
 
 // Set up the mongo memory instance
 beforeAll(async () => {
-    mongoServer = new MongoMemoryServer();
-    const uri = await mongoServer.getUri();
+    mongoServer = await MongoMemoryServer.create();
+    const uri = mongoServer.getUri();
     db = await getDatabaseConnection(uri);
 });
 

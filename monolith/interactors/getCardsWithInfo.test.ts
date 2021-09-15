@@ -1,14 +1,8 @@
-const { MongoMemoryServer } = require('mongodb-memory-server');
-// TODO: We currently require in the built code. We should be requiring the TS file,
-// but this will require some finagling with tooling configs
-const {
-    default: getCardsWithInfo,
-} = require('../built/interactors/getCardsWithInfo');
-const {
-    default: addCardToInventory,
-} = require('../built/interactors/addCardToInventory');
-const getDatabaseConnection = require('../built/database').default;
-const bulkCard = require('../fixtures/fixtures');
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import getDatabaseConnection from '../database';
+import bulkCard from '../fixtures/fixtures';
+import addCardToInventory from './addCardToInventory';
+import getCardsWithInfo from './getCardsWithInfo';
 
 const SCRYFALL_BULK = 'scryfall_bulk_cards';
 
@@ -17,8 +11,8 @@ let db;
 
 // Set up the mongo memory instance
 beforeAll(async () => {
-    mongoServer = new MongoMemoryServer();
-    const uri = await mongoServer.getUri();
+    mongoServer = await MongoMemoryServer.create();
+    const uri = mongoServer.getUri();
     db = await getDatabaseConnection(uri);
 
     // Create fake bulk collection
@@ -37,6 +31,10 @@ beforeAll(async () => {
         set: bulkCard.set,
         location: 'ch1',
     });
+});
+
+afterAll(async () => {
+    await mongoServer.stop();
 });
 
 test('Fetching the bulk card to ensure it persisted', async () => {

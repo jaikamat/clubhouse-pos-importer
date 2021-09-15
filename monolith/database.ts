@@ -1,7 +1,5 @@
 import { Db, MongoClient } from 'mongodb';
-import getDatabaseName from './lib/getDatabaseName';
 import mongoOptions from './lib/mongoOptions';
-const DATABASE_NAME = getDatabaseName();
 
 let _db: Db;
 let _connection: MongoClient;
@@ -24,9 +22,9 @@ const getDatabaseConnection = async (connectionUri?: string) => {
     // TODO: trycatch for errors
     _connection = await client.connect();
 
-    _db = await client.db(DATABASE_NAME);
+    _db = await client.db();
 
-    console.log(`Database connection established: ${DATABASE_NAME}`);
+    console.log(`Database connection established: ${_db.databaseName}`);
 
     return _db;
 };

@@ -8,7 +8,7 @@
         "build": "rm -r ./built && tsc -p . && echo \"Built TS source\"",
         "start-dev": "npm run build && PORT=7331 node ./built/bin/www",
         "deploy": "gcloud app deploy app.yaml --stop-previous-version",
-        "test": "npm run build && jest",
+        "test": "jest",
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
@@ -42,7 +42,7 @@
         "@types/morgan": "^1.9.2",
         "@types/request": "^2.48.5",
         "@types/request-promise-native": "^1.0.17",
-        "jest": "^26.6.3",
+        "jest": "^27.2.0",
         "mongodb-memory-server": "^7.4.0",
         "prettier": "2.4.1",
         "ts-jest": "^27.0.3",

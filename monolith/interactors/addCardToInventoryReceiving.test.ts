@@ -52,28 +52,27 @@ test('Receive one', async () => {
     // ch1 uses `card_inventory`, ch2 uses `card_inventory_ch2`
     const foundDocs = await db.collection('card_inventory').find({}).toArray();
 
-    expect(foundDocs).toMatchInlineSnapshot(`
-        Array [
-          Object {
-            "_id": "3678",
-            "name": "Black Lotus",
-            "qoh": Object {
-              "NONFOIL_NM": 1,
-            },
-            "set": "LEA",
-            "set_name": "Limted Edition Alpha",
-          },
-          Object {
-            "_id": "2386",
-            "name": "Mox Diamond",
-            "qoh": Object {
-              "NONFOIL_NM": 4,
-            },
-            "set": "STH",
-            "set_name": "Stronghold",
-          },
-        ]
-    `);
+    expect(foundDocs.length).toBe(2);
+
+    expect(foundDocs).toContainEqual({
+        _id: '3678',
+        name: 'Black Lotus',
+        qoh: {
+            NONFOIL_NM: 1,
+        },
+        set: 'LEA',
+        set_name: 'Limted Edition Alpha',
+    });
+
+    expect(foundDocs).toContainEqual({
+        _id: '2386',
+        name: 'Mox Diamond',
+        qoh: {
+            NONFOIL_NM: 4,
+        },
+        set: 'STH',
+        set_name: 'Stronghold',
+    });
 });
 
 test('Receive more', async () => {
@@ -119,35 +118,35 @@ test('Receive more', async () => {
     // ch1 uses `card_inventory`, ch2 uses `card_inventory_ch2`
     const foundDocs = await db.collection('card_inventory').find({}).toArray();
 
-    expect(foundDocs).toMatchInlineSnapshot(`
-        Array [
-          Object {
-            "_id": "3678",
-            "name": "Black Lotus",
-            "qoh": Object {
-              "NONFOIL_NM": 2,
-            },
-            "set": "LEA",
-            "set_name": "Limted Edition Alpha",
-          },
-          Object {
-            "_id": "2386",
-            "name": "Mox Diamond",
-            "qoh": Object {
-              "NONFOIL_NM": 8,
-            },
-            "set": "STH",
-            "set_name": "Stronghold",
-          },
-          Object {
-            "_id": "3456",
-            "name": "Crystal Quarry",
-            "qoh": Object {
-              "FOIL_NM": 2,
-            },
-            "set": "ODY",
-            "set_name": "Odyssey",
-          },
-        ]
-    `);
+    expect(foundDocs.length).toBe(3);
+
+    expect(foundDocs).toContainEqual({
+        _id: '3678',
+        name: 'Black Lotus',
+        qoh: {
+            NONFOIL_NM: 2,
+        },
+        set: 'LEA',
+        set_name: 'Limted Edition Alpha',
+    });
+
+    expect(foundDocs).toContainEqual({
+        _id: '2386',
+        name: 'Mox Diamond',
+        qoh: {
+            NONFOIL_NM: 8,
+        },
+        set: 'STH',
+        set_name: 'Stronghold',
+    });
+
+    expect(foundDocs).toContainEqual({
+        _id: '3456',
+        name: 'Crystal Quarry',
+        qoh: {
+            FOIL_NM: 2,
+        },
+        set: 'ODY',
+        set_name: 'Odyssey',
+    });
 });

@@ -10,8 +10,9 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "watch": "npm-watch functions",
         "functions": "cd ./src && npx @google-cloud/functions-framework --target getPriceFromTcg --port 3030",
-        "update-test-bulk": "node ./db_scripts/update_scryfall_bulk/index.js --database test",
-        "update-prod-bulk": "node ./db_scripts/update_scryfall_bulk/index.js --database clubhouse_collection_production"
+        "build": "rm -r ./built && tsc -p . && echo \"Built TS source\"",
+        "update-test-bulk": "npm run build && node ./built/db_scripts/update_scryfall_bulk/index.js --database test",
+        "update-prod-bulk": "npm run build && node ./built/db_scripts/update_scryfall_bulk/index.js --database clubhouse_collection_production"
     },
     "author": "",
     "license": "ISC",

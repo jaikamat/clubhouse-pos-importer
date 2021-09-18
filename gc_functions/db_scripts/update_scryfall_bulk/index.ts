@@ -1,8 +1,19 @@
-const argv = require("yargs").argv;
-const saveScryfallBulk = require("./saveScryfallBulk");
-const mongoBulkImport = require("./mongoBulkImport");
-const getLanguageCards = require("./getLanguageCards");
+import yargs from "yargs";
+import getLanguageCards from "./getLanguageCards";
+import mongoBulkImport from "./mongoBulkImport";
+import saveScryfallBulk from "./saveScryfallBulk";
 const SOURCE_JSON_URI = `${__dirname}/bulk_data/bulk_all_cards.json`;
+
+const argv = yargs
+    .option({
+        database: {
+            alias: "database",
+            choices: ["test", "clubhouse_collection_production"] as const,
+            demandOption: true,
+            description: "database to use",
+        },
+    })
+    .parseSync();
 
 async function init() {
     const { database } = argv;

@@ -1,10 +1,15 @@
-require('dotenv').config();
-const MongoClient = require('mongodb').MongoClient;
+require("dotenv").config();
+const MongoClient = require("mongodb").MongoClient;
 
 /**
  * Helper class for formatting card price
  */
 class CardPrice {
+    public usd: number | null;
+    public usd_foil: number | null;
+    public eur: number | null;
+    public tix: number | null;
+
     constructor({ usd = null, usd_foil = null, eur = null, tix = null }) {
         this.usd = Number(usd) || null;
         this.usd_foil = Number(usd_foil) || null;
@@ -24,11 +29,11 @@ function createBulkOp(scryfallCard) {
         updateOne: {
             filter: { _id: id }, // upsert the inserted cards to have a String _id rather than ObjectId
             update: {
-                $set: { ...scryfallCard, prices: new CardPrice(prices) }
+                $set: { ...scryfallCard, prices: new CardPrice(prices) },
             },
-            upsert: true
-        }
-    }
+            upsert: true,
+        },
+    };
 }
 
 /**
@@ -36,10 +41,10 @@ function createBulkOp(scryfallCard) {
  * @param {Array} cards - Array of cards from Scryfall
  * @param {String} database - test or production db name
  */
-module.exports = async function mongoBulkImport(cards, database) {
+async function mongoBulkImport(cards, database) {
     const BATCH_SIZE = 500; // Bulk import batch size
-    const COLLECTION = 'scryfall_bulk_cards';
-    const dbName = database || 'test'; // Default to test, not prod
+    const COLLECTION = "scryfall_bulk_cards";
+    const dbName = database || "test"; // Default to test, not prod
     const mongoSettings = { useNewUrlParser: true, useUnifiedTopology: true };
 
     try {
@@ -49,14 +54,18 @@ module.exports = async function mongoBulkImport(cards, database) {
 
         console.log(`Connected to MongoDB database: ${db.databaseName}`);
 
-        const bulkWriteOps = cards.map(d => createBulkOp(d));
+        const bulkWriteOps = cards.map((d) => createBulkOp(d));
         let bulkRound = 1;
         const numRounds = Math.ceil(cards.length / BATCH_SIZE);
 
         while (bulkWriteOps.length > 0) {
             const ops = bulkWriteOps.splice(0, BATCH_SIZE);
             await db.collection(COLLECTION).bulkWrite(ops);
-            console.log(`Bulkwrite: ${Math.round((bulkRound / numRounds) * 100)}% completed`);
+            console.log(
+                `Bulkwrite: ${Math.round(
+                    (bulkRound / numRounds) * 100
+                )}% completed`
+            );
             bulkRound += 1;
         }
 
@@ -65,6 +74,8 @@ module.exports = async function mongoBulkImport(cards, database) {
         throw err;
     } finally {
         await client.close();
-        console.log('Disconnected from MongoDB');
+        console.log("Disconnected from MongoDB");
     }
 }
+
+export default mongoBulkImport;

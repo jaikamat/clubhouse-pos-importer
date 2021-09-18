@@ -1,12 +1,12 @@
-const fs = require("fs");
-const JSONStream = require("JSONStream");
+import fs from "fs";
+import JSONStream from "JSONStream";
 
 /**
  * Yields paper-only cards from the source bulk for a single language using JSON streams
  * @param {String} bulkUri - location of the bulk-file to filter on
  * @param {String} language - language code used by Scryfall. See https://scryfall.com/docs/api/languages
  */
-function getLanguageCards(bulkUri, language) {
+function getLanguageCards(bulkUri, language): Promise<any[]> {
     const lang = language || "en";
 
     return new Promise((resolve, reject) => {
@@ -45,4 +45,4 @@ function getLanguageCards(bulkUri, language) {
     });
 }
 
-module.exports = getLanguageCards;
+export default getLanguageCards;

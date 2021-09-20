@@ -2,7 +2,7 @@ import moment from 'moment';
 import { ClubhouseLocation, FinishSaleCard } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import updateCardInventoryWithFlag from './updateCardInventoryWithFlag';
+import updateCardInventory from './updateCardInventory';
 
 /**
  * Validates a card's quantity-to-sell against available inventory
@@ -64,7 +64,7 @@ async function createSuspendedSale(
         // Removes the passed cards from inventory prior to creating
         const dbInserts = saleList.map(
             async (card) =>
-                await updateCardInventoryWithFlag(
+                await updateCardInventory(
                     { ...card, qtyToSell: -Math.abs(card.qtyToSell) },
                     location
                 )

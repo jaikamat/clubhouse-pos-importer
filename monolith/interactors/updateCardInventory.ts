@@ -7,7 +7,7 @@ import collectionFromLocation from '../lib/collectionFromLocation';
  * @param {Object} card - the card involved in the transaction
  * @param {String} CHANGE_FLAG = `INC` or `DEC`, determines whether to increase or decrease quantity, used for reserving inventory in suspension
  */
-async function updateCardInventoryWithFlag(
+async function updateCardInventory(
     card: FinishSaleCard,
     location: ClubhouseLocation
 ) {
@@ -45,4 +45,4 @@ async function updateCardInventoryWithFlag(
     }
 }
 
-export default updateCardInventoryWithFlag;
+export default updateCardInventory;

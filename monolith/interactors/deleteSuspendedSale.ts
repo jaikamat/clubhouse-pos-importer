@@ -1,13 +1,14 @@
 import { ObjectID } from 'mongodb';
+import { ClubhouseLocation } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import updateCardInventoryWithFlag from './updateCardInventoryWithFlag';
+import updateCardInventory from './updateCardInventory';
 
 /**
  * Deletes a single suspended sale
  * @param {string} id
  */
-async function deleteSuspendedSale(id, location) {
+async function deleteSuspendedSale(id: string, location: ClubhouseLocation) {
     try {
         const db = await getDatabaseConnection();
         const collection = db.collection(
@@ -21,7 +22,10 @@ async function deleteSuspendedSale(id, location) {
         // Adds the passed cards back to inventory prior to deleting
         const dbInserts = list.map(
             async (card) =>
-                await updateCardInventoryWithFlag(card, 'INC', location)
+                await updateCardInventory(
+                    { ...card, qtyToSell: Math.abs(card.qtyToSell) },
+                    location
+                )
         );
         await Promise.all(dbInserts);
 

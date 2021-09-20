@@ -1,18 +1,19 @@
 import moment from 'moment';
-import { ClubhouseLocation } from '../common/types';
+import { ClubhouseLocation, FinishSaleCard } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import updateCardInventoryWithFlag from './updateCardInventoryWithFlag';
+import updateCardInventory from './updateCardInventory';
 
 /**
  * Validates a card's quantity-to-sell against available inventory
  * @param {object} saleListCard properties - the card sent from the frontend with relevant qtyToSell, finishCondition, and id properties attached
  */
 async function validateInventory(
-    { qtyToSell, finishCondition, name, id },
+    saleCard: FinishSaleCard,
     location: ClubhouseLocation
 ) {
     try {
+        const { qtyToSell, finishCondition, name, id } = saleCard;
         const db = await getDatabaseConnection();
         const collection = db.collection(
             collectionFromLocation(location).cardInventory
@@ -22,7 +23,7 @@ async function validateInventory(
 
         const quantityOnHand = doc.qoh[finishCondition];
 
-        if (parseInt(qtyToSell) > parseInt(quantityOnHand)) {
+        if (qtyToSell > quantityOnHand) {
             throw new Error(
                 `${name}'s QOH of ${qtyToSell} exceeds inventory of ${quantityOnHand}`
             );
@@ -41,9 +42,9 @@ async function validateInventory(
  * @param {array} saleList - The array of card objects used on the frontend - translated directly from React state
  */
 async function createSuspendedSale(
-    customerName,
-    notes,
-    saleList,
+    customerName: string,
+    notes: string | null,
+    saleList: FinishSaleCard[],
     location: ClubhouseLocation
 ) {
     try {
@@ -63,7 +64,10 @@ async function createSuspendedSale(
         // Removes the passed cards from inventory prior to creating
         const dbInserts = saleList.map(
             async (card) =>
-                await updateCardInventoryWithFlag(card, 'DEC', location)
+                await updateCardInventory(
+                    { ...card, qtyToSell: -Math.abs(card.qtyToSell) },
+                    location
+                )
         );
         await Promise.all(dbInserts);
 

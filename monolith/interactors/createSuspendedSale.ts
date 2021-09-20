@@ -64,7 +64,10 @@ async function createSuspendedSale(
         // Removes the passed cards from inventory prior to creating
         const dbInserts = saleList.map(
             async (card) =>
-                await updateCardInventoryWithFlag(card, 'DEC', location)
+                await updateCardInventoryWithFlag(
+                    { ...card, qtyToSell: -Math.abs(card.qtyToSell) },
+                    location
+                )
         );
         await Promise.all(dbInserts);
 

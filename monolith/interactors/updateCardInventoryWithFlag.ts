@@ -1,4 +1,4 @@
-import { ClubhouseLocation } from '../common/types';
+import { ClubhouseLocation, FinishSaleCard } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 
@@ -8,24 +8,14 @@ import collectionFromLocation from '../lib/collectionFromLocation';
  * @param {String} CHANGE_FLAG = `INC` or `DEC`, determines whether to increase or decrease quantity, used for reserving inventory in suspension
  */
 async function updateCardInventoryWithFlag(
-    card,
-    CHANGE_FLAG,
+    card: FinishSaleCard,
     location: ClubhouseLocation
 ) {
     const { qtyToSell, finishCondition, id, name } = card;
-    let quantityChange;
-
-    if (CHANGE_FLAG === 'DEC') {
-        quantityChange = -Math.abs(qtyToSell);
-    } else if (CHANGE_FLAG === 'INC') {
-        quantityChange = Math.abs(qtyToSell);
-    } else {
-        throw new Error('CHANGE_FLAG was not provided');
-    }
 
     try {
         console.log(
-            `Suspend sale, ${CHANGE_FLAG}: QTY: ${qtyToSell}, ${finishCondition}, ${name}, ${id}, LOCATION: ${location}`
+            `Suspend sale, QTY: ${card.qtyToSell}, ${finishCondition}, ${name}, ${id}, LOCATION: ${location}`
         );
 
         const db = await getDatabaseConnection();
@@ -37,7 +27,7 @@ async function updateCardInventoryWithFlag(
             { _id: id },
             {
                 $inc: {
-                    [`qoh.${finishCondition}`]: quantityChange,
+                    [`qoh.${finishCondition}`]: qtyToSell,
                 },
             }
         );

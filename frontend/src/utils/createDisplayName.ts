@@ -6,29 +6,19 @@ type Card = Pick<
     | 'frame_effects'
     | 'border_color'
     | 'lang'
-    | 'set'
-    | 'foil'
-    | 'nonfoil'
+    | 'finishes'
     | 'promo_types'
 >;
 
 /** Computes the proper displayName for a card, depending on its properties */
 const createDisplayName = (card: Card) => {
-    const {
-        name,
-        frame_effects,
-        border_color,
-        lang,
-        set,
-        foil,
-        nonfoil,
-        promo_types,
-    } = card;
+    const { name, frame_effects, border_color, lang, finishes, promo_types } =
+        card;
 
     let displayName: string = name;
 
     // Covers strixhaven etched foil mystical archive cards
-    if (set === 'sta' && foil === true && nonfoil === false) {
+    if (finishes.includes('etched')) {
         displayName += ` (Etched foil)`;
     } else if (promo_types.includes('godzillaseries')) {
         // Covers cards like Godzilla series

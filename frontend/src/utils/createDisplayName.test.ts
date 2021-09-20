@@ -8,9 +8,7 @@ test('create display name', () => {
             frame_effects: ['normal'],
             border_color: 'black',
             lang: 'en',
-            set: 'abc',
-            foil: true,
-            nonfoil: true,
+            finishes: ['foil', 'nonfoil'],
         })
     ).toMatchInlineSnapshot(`"Card, the Name"`);
 
@@ -21,11 +19,9 @@ test('create display name', () => {
             frame_effects: ['normal'],
             border_color: 'black',
             lang: 'ja',
-            set: 'sta',
-            foil: true,
-            nonfoil: false,
+            finishes: ['foil'],
         })
-    ).toMatchInlineSnapshot(`"Card, the Name (Etched foil) (JA)"`);
+    ).toMatchInlineSnapshot(`"Card, the Name (JA)"`);
 
     expect(
         createDisplayName({
@@ -34,9 +30,7 @@ test('create display name', () => {
             frame_effects: ['normal'],
             border_color: 'black',
             lang: 'en',
-            set: 'abc',
-            foil: true,
-            nonfoil: true,
+            finishes: ['foil', 'nonfoil'],
         })
     ).toMatchInlineSnapshot(`"Card, the Name (IP series)"`);
 
@@ -47,9 +41,7 @@ test('create display name', () => {
             frame_effects: ['showcase'],
             border_color: 'black',
             lang: 'en',
-            set: 'abc',
-            foil: true,
-            nonfoil: true,
+            finishes: ['foil', 'nonfoil'],
         })
     ).toMatchInlineSnapshot(`"Card, the Name (Showcase)"`);
 
@@ -60,9 +52,7 @@ test('create display name', () => {
             frame_effects: ['extendedart'],
             border_color: 'black',
             lang: 'en',
-            set: 'abc',
-            foil: true,
-            nonfoil: true,
+            finishes: ['foil', 'nonfoil'],
         })
     ).toMatchInlineSnapshot(`"Card, the Name (Extended art)"`);
 });

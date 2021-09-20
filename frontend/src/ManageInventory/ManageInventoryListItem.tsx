@@ -12,7 +12,7 @@ import TextField from '../ui/TextField';
 import { useToastContext } from '../ui/ToastContext';
 import checkCardFinish from '../utils/checkCardFinish';
 import createFinishCondition from '../utils/createFinishCondtition';
-import { cardConditions, finishes } from '../utils/dropdownOptions';
+import { cardConditions, dropdownFinishes } from '../utils/dropdownOptions';
 import { Condition, Finish, ScryfallCard } from '../utils/ScryfallCard';
 import addCardToInventoryQuery from './addCardToInventoryQuery';
 
@@ -38,16 +38,16 @@ const validate = ({ quantity }: FormValues) => {
 
 const ManageInventoryListItem: FC<Props> = ({ card }) => {
     const createToast = useToastContext();
-    const { foil, nonfoil, name, set_name, set, id, cardImage } = card;
+    const { finishes, name, set_name, set, id, cardImage } = card;
 
     const [selectedFinish, setSelectedFinish] = useState<Finish>(
-        checkCardFinish(nonfoil, foil).selectedFinish
+        checkCardFinish(finishes).selectedFinish
     );
 
     const { changeCardQuantity } = useContext(InventoryContext);
 
     const initialFormValues: FormValues = {
-        selectedFinish: checkCardFinish(nonfoil, foil).selectedFinish,
+        selectedFinish: checkCardFinish(finishes).selectedFinish,
         selectedCondition: 'NM',
         quantity: '0',
     };
@@ -85,18 +85,13 @@ const ManageInventoryListItem: FC<Props> = ({ card }) => {
         }
     };
 
-    const {
-        values,
-        handleSubmit,
-        setFieldValue,
-        isSubmitting,
-        isValid,
-    } = useFormik({
-        initialValues: initialFormValues,
-        validate,
-        onSubmit,
-        validateOnMount: true,
-    });
+    const { values, handleSubmit, setFieldValue, isSubmitting, isValid } =
+        useFormik({
+            initialValues: initialFormValues,
+            validate,
+            onSubmit,
+            validateOnMount: true,
+        });
 
     return (
         <CardRowContainer
@@ -131,10 +126,8 @@ const ManageInventoryListItem: FC<Props> = ({ card }) => {
                             name="finish"
                             label="Finish"
                             value={values.selectedFinish}
-                            options={finishes}
-                            disabled={
-                                checkCardFinish(nonfoil, foil).finishDisabled
-                            }
+                            options={dropdownFinishes}
+                            disabled={checkCardFinish(finishes).finishDisabled}
                             onChange={(value) => {
                                 setSelectedFinish(value as Finish);
                                 setFieldValue('selectedFinish', value);

@@ -1,3 +1,5 @@
+import { Finishes } from '../../ScryfallCard';
+
 export default {
     object: 'card',
     id: 'a2985857-fee5-42a6-9b5d-e157ada52a03',
@@ -17,14 +19,10 @@ export default {
     highres_image: true,
     image_status: 'highres_scan',
     image_uris: {
-        small:
-            'https://c1.scryfall.com/file/scryfall-cards/small/front/a/2/a2985857-fee5-42a6-9b5d-e157ada52a03.jpg?1562244585',
-        normal:
-            'https://c1.scryfall.com/file/scryfall-cards/normal/front/a/2/a2985857-fee5-42a6-9b5d-e157ada52a03.jpg?1562244585',
-        large:
-            'https://c1.scryfall.com/file/scryfall-cards/large/front/a/2/a2985857-fee5-42a6-9b5d-e157ada52a03.jpg?1562244585',
-        png:
-            'https://c1.scryfall.com/file/scryfall-cards/png/front/a/2/a2985857-fee5-42a6-9b5d-e157ada52a03.png?1562244585',
+        small: 'https://c1.scryfall.com/file/scryfall-cards/small/front/a/2/a2985857-fee5-42a6-9b5d-e157ada52a03.jpg?1562244585',
+        normal: 'https://c1.scryfall.com/file/scryfall-cards/normal/front/a/2/a2985857-fee5-42a6-9b5d-e157ada52a03.jpg?1562244585',
+        large: 'https://c1.scryfall.com/file/scryfall-cards/large/front/a/2/a2985857-fee5-42a6-9b5d-e157ada52a03.jpg?1562244585',
+        png: 'https://c1.scryfall.com/file/scryfall-cards/png/front/a/2/a2985857-fee5-42a6-9b5d-e157ada52a03.png?1562244585',
         art_crop:
             'https://c1.scryfall.com/file/scryfall-cards/art_crop/front/a/2/a2985857-fee5-42a6-9b5d-e157ada52a03.jpg?1562244585',
         border_crop:
@@ -63,6 +61,7 @@ export default {
     reserved: false,
     foil: true,
     nonfoil: true,
+    finishes: ['foil', 'nonfoil'] as Finishes,
     oversized: false,
     promo: false,
     reprint: true,

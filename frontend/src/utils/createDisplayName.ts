@@ -18,9 +18,7 @@ const createDisplayName = (card: Card) => {
     let displayName: string = name;
 
     // Covers strixhaven etched foil mystical archive cards
-    if (finishes.includes('etched')) {
-        displayName += ` (Etched foil)`;
-    } else if (promo_types.includes('godzillaseries')) {
+    if (promo_types.includes('godzillaseries')) {
         // Covers cards like Godzilla series
         displayName += ` (IP series)`;
     } else if (frame_effects.includes('showcase')) {

@@ -1,25 +1,25 @@
 import checkCardFinish from './checkCardFinish';
 
 test('assertion', () => {
-    expect(checkCardFinish(true, false)).toMatchInlineSnapshot(`
+    expect(checkCardFinish(['nonfoil'])).toMatchInlineSnapshot(`
         Object {
           "finishDisabled": true,
           "selectedFinish": "NONFOIL",
         }
     `);
-    expect(checkCardFinish(true, true)).toMatchInlineSnapshot(`
+    expect(checkCardFinish(['nonfoil', 'foil'])).toMatchInlineSnapshot(`
         Object {
           "finishDisabled": false,
           "selectedFinish": "NONFOIL",
         }
     `);
-    expect(checkCardFinish(false, true)).toMatchInlineSnapshot(`
+    expect(checkCardFinish(['foil'])).toMatchInlineSnapshot(`
         Object {
           "finishDisabled": true,
           "selectedFinish": "FOIL",
         }
     `);
-    expect(checkCardFinish(false, false)).toMatchInlineSnapshot(`
+    expect(checkCardFinish(['nonfoil', 'foil'])).toMatchInlineSnapshot(`
         Object {
           "finishDisabled": false,
           "selectedFinish": "NONFOIL",

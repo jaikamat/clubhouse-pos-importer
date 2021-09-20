@@ -65,7 +65,7 @@ test('expect two finishes to yield selectable select', async () => {
 });
 
 test('expect foil-only to start with foil value', async () => {
-    const mockCard = new ScryfallCard({ ...bop, foil: true, nonfoil: false });
+    const mockCard = new ScryfallCard({ ...bop, finishes: ['foil'] });
 
     await render(<ReceivingSearchItem card={mockCard} />);
 

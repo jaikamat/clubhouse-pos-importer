@@ -1,4 +1,4 @@
-import { Finish } from '../utils/ScryfallCard';
+import { Finish, Finishes } from '../utils/ScryfallCard';
 
 interface CardFinishState {
     selectedFinish: Finish;
@@ -12,13 +12,13 @@ interface CardFinishState {
  * @param {Boolean} nonfoilProp
  * @param {Boolean} foilProp
  */
-export default function checkCardFinish(
-    nonfoil: boolean,
-    foil: boolean
-): CardFinishState {
-    if (!nonfoil && foil) {
+export default function checkCardFinish(finishes: Finishes): CardFinishState {
+    const isFoil = finishes.includes('foil');
+    const isNonfoil = finishes.includes('nonfoil');
+
+    if (!isNonfoil && isFoil) {
         return { selectedFinish: 'FOIL', finishDisabled: true };
-    } else if (nonfoil && !foil) {
+    } else if (isNonfoil && !isFoil) {
         return { selectedFinish: 'NONFOIL', finishDisabled: true };
     } else {
         return { selectedFinish: 'NONFOIL', finishDisabled: false };

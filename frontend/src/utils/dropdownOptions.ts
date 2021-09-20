@@ -1,4 +1,4 @@
-export const finishes = [
+export const dropdownFinishes = [
     { key: 'NONFOIL', text: 'Nonfoil', value: 'NONFOIL' },
     { key: 'FOIL', text: 'Foil', value: 'FOIL' },
 ];

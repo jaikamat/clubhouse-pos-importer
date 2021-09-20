@@ -10,21 +10,16 @@ export default [
         name: 'Emrakul, the Aeons Torn',
         lang: 'en',
         released_at: '2018-12-07',
-        uri:
-            'https://api.scryfall.com/cards/0e0d989d-7186-40dc-bdfe-cfbb77656bc8',
+        uri: 'https://api.scryfall.com/cards/0e0d989d-7186-40dc-bdfe-cfbb77656bc8',
         scryfall_uri:
             'https://scryfall.com/card/uma/4/emrakul-the-aeons-torn?utm_source=api',
         layout: 'normal',
         highres_image: true,
         image_uris: {
-            small:
-                'https://img.scryfall.com/cards/small/front/0/e/0e0d989d-7186-40dc-bdfe-cfbb77656bc8.jpg?1559959218',
-            normal:
-                'https://img.scryfall.com/cards/normal/front/0/e/0e0d989d-7186-40dc-bdfe-cfbb77656bc8.jpg?1559959218',
-            large:
-                'https://img.scryfall.com/cards/large/front/0/e/0e0d989d-7186-40dc-bdfe-cfbb77656bc8.jpg?1559959218',
-            png:
-                'https://img.scryfall.com/cards/png/front/0/e/0e0d989d-7186-40dc-bdfe-cfbb77656bc8.png?1559959218',
+            small: 'https://img.scryfall.com/cards/small/front/0/e/0e0d989d-7186-40dc-bdfe-cfbb77656bc8.jpg?1559959218',
+            normal: 'https://img.scryfall.com/cards/normal/front/0/e/0e0d989d-7186-40dc-bdfe-cfbb77656bc8.jpg?1559959218',
+            large: 'https://img.scryfall.com/cards/large/front/0/e/0e0d989d-7186-40dc-bdfe-cfbb77656bc8.jpg?1559959218',
+            png: 'https://img.scryfall.com/cards/png/front/0/e/0e0d989d-7186-40dc-bdfe-cfbb77656bc8.png?1559959218',
             art_crop:
                 'https://img.scryfall.com/cards/art_crop/front/0/e/0e0d989d-7186-40dc-bdfe-cfbb77656bc8.jpg?1559959218',
             border_crop:
@@ -58,6 +53,7 @@ export default [
         reserved: false,
         foil: true,
         nonfoil: true,
+        finishes: ['foil', 'nonfoil'],
         oversized: false,
         promo: false,
         reprint: true,
@@ -127,14 +123,10 @@ export default [
         id: '25b0b816-0583-44aa-9dc5-f3ff48993a51',
         illustration_id: '9f670261-15a3-4f13-a0f2-5a29982585e9',
         image_uris: {
-            small:
-                'https://img.scryfall.com/cards/small/front/2/5/25b0b816-0583-44aa-9dc5-f3ff48993a51.jpg?1562902898',
-            normal:
-                'https://img.scryfall.com/cards/normal/front/2/5/25b0b816-0583-44aa-9dc5-f3ff48993a51.jpg?1562902898',
-            large:
-                'https://img.scryfall.com/cards/large/front/2/5/25b0b816-0583-44aa-9dc5-f3ff48993a51.jpg?1562902898',
-            png:
-                'https://img.scryfall.com/cards/png/front/2/5/25b0b816-0583-44aa-9dc5-f3ff48993a51.png?1562902898',
+            small: 'https://img.scryfall.com/cards/small/front/2/5/25b0b816-0583-44aa-9dc5-f3ff48993a51.jpg?1562902898',
+            normal: 'https://img.scryfall.com/cards/normal/front/2/5/25b0b816-0583-44aa-9dc5-f3ff48993a51.jpg?1562902898',
+            large: 'https://img.scryfall.com/cards/large/front/2/5/25b0b816-0583-44aa-9dc5-f3ff48993a51.jpg?1562902898',
+            png: 'https://img.scryfall.com/cards/png/front/2/5/25b0b816-0583-44aa-9dc5-f3ff48993a51.png?1562902898',
             art_crop:
                 'https://img.scryfall.com/cards/art_crop/front/2/5/25b0b816-0583-44aa-9dc5-f3ff48993a51.jpg?1562902898',
             border_crop:
@@ -163,6 +155,7 @@ export default [
         multiverse_ids: [10422],
         name: "Gaea's Cradle",
         nonfoil: true,
+        finishes: ['nonfoil'],
         object: 'card',
         oracle_id: '7c427c3d-ecd8-45ef-bebd-8f10f4a311db',
         oracle_text: '{T}: Add {G} for each creature you control.',
@@ -203,8 +196,7 @@ export default [
         tcgplayer_id: 6883,
         textless: false,
         type_line: 'Legendary Land',
-        uri:
-            'https://api.scryfall.com/cards/25b0b816-0583-44aa-9dc5-f3ff48993a51',
+        uri: 'https://api.scryfall.com/cards/25b0b816-0583-44aa-9dc5-f3ff48993a51',
         variation: false,
         finishCondition: 'NONFOIL_NM',
         qtyToSell: 1,
@@ -222,21 +214,16 @@ export default [
         name: 'Sigarda, Host of Herons',
         lang: 'en',
         released_at: '2018-12-07',
-        uri:
-            'https://api.scryfall.com/cards/fcac0cff-efa6-4068-a69c-67ea4e7acea0',
+        uri: 'https://api.scryfall.com/cards/fcac0cff-efa6-4068-a69c-67ea4e7acea0',
         scryfall_uri:
             'https://scryfall.com/card/uma/206/sigarda-host-of-herons?utm_source=api',
         layout: 'normal',
         highres_image: true,
         image_uris: {
-            small:
-                'https://img.scryfall.com/cards/small/front/f/c/fcac0cff-efa6-4068-a69c-67ea4e7acea0.jpg?1559959280',
-            normal:
-                'https://img.scryfall.com/cards/normal/front/f/c/fcac0cff-efa6-4068-a69c-67ea4e7acea0.jpg?1559959280',
-            large:
-                'https://img.scryfall.com/cards/large/front/f/c/fcac0cff-efa6-4068-a69c-67ea4e7acea0.jpg?1559959280',
-            png:
-                'https://img.scryfall.com/cards/png/front/f/c/fcac0cff-efa6-4068-a69c-67ea4e7acea0.png?1559959280',
+            small: 'https://img.scryfall.com/cards/small/front/f/c/fcac0cff-efa6-4068-a69c-67ea4e7acea0.jpg?1559959280',
+            normal: 'https://img.scryfall.com/cards/normal/front/f/c/fcac0cff-efa6-4068-a69c-67ea4e7acea0.jpg?1559959280',
+            large: 'https://img.scryfall.com/cards/large/front/f/c/fcac0cff-efa6-4068-a69c-67ea4e7acea0.jpg?1559959280',
+            png: 'https://img.scryfall.com/cards/png/front/f/c/fcac0cff-efa6-4068-a69c-67ea4e7acea0.png?1559959280',
             art_crop:
                 'https://img.scryfall.com/cards/art_crop/front/f/c/fcac0cff-efa6-4068-a69c-67ea4e7acea0.jpg?1559959280',
             border_crop:
@@ -270,6 +257,7 @@ export default [
         reserved: false,
         foil: true,
         nonfoil: true,
+        finishes: ['foil', 'nonfoil'],
         oversized: false,
         promo: false,
         reprint: true,
@@ -330,21 +318,16 @@ export default [
         name: 'Colossal Dreadmaw',
         lang: 'en',
         released_at: '2018-01-19',
-        uri:
-            'https://api.scryfall.com/cards/d28056c7-c58d-4986-a45c-c9e55aed23a1',
+        uri: 'https://api.scryfall.com/cards/d28056c7-c58d-4986-a45c-c9e55aed23a1',
         scryfall_uri:
             'https://scryfall.com/card/rix/125/colossal-dreadmaw?utm_source=api',
         layout: 'normal',
         highres_image: true,
         image_uris: {
-            small:
-                'https://img.scryfall.com/cards/small/front/d/2/d28056c7-c58d-4986-a45c-c9e55aed23a1.jpg?1555040601',
-            normal:
-                'https://img.scryfall.com/cards/normal/front/d/2/d28056c7-c58d-4986-a45c-c9e55aed23a1.jpg?1555040601',
-            large:
-                'https://img.scryfall.com/cards/large/front/d/2/d28056c7-c58d-4986-a45c-c9e55aed23a1.jpg?1555040601',
-            png:
-                'https://img.scryfall.com/cards/png/front/d/2/d28056c7-c58d-4986-a45c-c9e55aed23a1.png?1555040601',
+            small: 'https://img.scryfall.com/cards/small/front/d/2/d28056c7-c58d-4986-a45c-c9e55aed23a1.jpg?1555040601',
+            normal: 'https://img.scryfall.com/cards/normal/front/d/2/d28056c7-c58d-4986-a45c-c9e55aed23a1.jpg?1555040601',
+            large: 'https://img.scryfall.com/cards/large/front/d/2/d28056c7-c58d-4986-a45c-c9e55aed23a1.jpg?1555040601',
+            png: 'https://img.scryfall.com/cards/png/front/d/2/d28056c7-c58d-4986-a45c-c9e55aed23a1.png?1555040601',
             art_crop:
                 'https://img.scryfall.com/cards/art_crop/front/d/2/d28056c7-c58d-4986-a45c-c9e55aed23a1.jpg?1555040601',
             border_crop:
@@ -378,6 +361,7 @@ export default [
         reserved: false,
         foil: true,
         nonfoil: true,
+        finishes: ['foil', 'nonfoil'],
         oversized: false,
         promo: false,
         reprint: true,
@@ -440,6 +424,7 @@ export default [
         digital: false,
         edhrec_rank: 547,
         foil: false,
+        finishes: ['nonfoil'],
         frame: '1993',
         full_art: false,
         games: ['paper'],
@@ -447,14 +432,10 @@ export default [
         id: '9052369f-840f-438e-b86d-e2f8d6339585',
         illustration_id: '2374c264-9c65-4961-84e4-ec44c241355c',
         image_uris: {
-            small:
-                'https://img.scryfall.com/cards/small/front/9/0/9052369f-840f-438e-b86d-e2f8d6339585.jpg?1559591625',
-            normal:
-                'https://img.scryfall.com/cards/normal/front/9/0/9052369f-840f-438e-b86d-e2f8d6339585.jpg?1559591625',
-            large:
-                'https://img.scryfall.com/cards/large/front/9/0/9052369f-840f-438e-b86d-e2f8d6339585.jpg?1559591625',
-            png:
-                'https://img.scryfall.com/cards/png/front/9/0/9052369f-840f-438e-b86d-e2f8d6339585.png?1559591625',
+            small: 'https://img.scryfall.com/cards/small/front/9/0/9052369f-840f-438e-b86d-e2f8d6339585.jpg?1559591625',
+            normal: 'https://img.scryfall.com/cards/normal/front/9/0/9052369f-840f-438e-b86d-e2f8d6339585.jpg?1559591625',
+            large: 'https://img.scryfall.com/cards/large/front/9/0/9052369f-840f-438e-b86d-e2f8d6339585.jpg?1559591625',
+            png: 'https://img.scryfall.com/cards/png/front/9/0/9052369f-840f-438e-b86d-e2f8d6339585.png?1559591625',
             art_crop:
                 'https://img.scryfall.com/cards/art_crop/front/9/0/9052369f-840f-438e-b86d-e2f8d6339585.jpg?1559591625',
             border_crop:
@@ -521,8 +502,7 @@ export default [
         tcgplayer_id: 8962,
         textless: false,
         type_line: 'Sorcery',
-        uri:
-            'https://api.scryfall.com/cards/9052369f-840f-438e-b86d-e2f8d6339585',
+        uri: 'https://api.scryfall.com/cards/9052369f-840f-438e-b86d-e2f8d6339585',
         variation: false,
         finishCondition: 'NONFOIL_NM',
         qtyToSell: 1,
@@ -540,21 +520,16 @@ export default [
         name: 'Necropotence',
         lang: 'en',
         released_at: '2017-11-17',
-        uri:
-            'https://api.scryfall.com/cards/c89c6895-b0f8-444a-9c89-c6b4fd027b3e',
+        uri: 'https://api.scryfall.com/cards/c89c6895-b0f8-444a-9c89-c6b4fd027b3e',
         scryfall_uri:
             'https://scryfall.com/card/ima/98/necropotence?utm_source=api',
         layout: 'normal',
         highres_image: true,
         image_uris: {
-            small:
-                'https://img.scryfall.com/cards/small/front/c/8/c89c6895-b0f8-444a-9c89-c6b4fd027b3e.jpg?1562853736',
-            normal:
-                'https://img.scryfall.com/cards/normal/front/c/8/c89c6895-b0f8-444a-9c89-c6b4fd027b3e.jpg?1562853736',
-            large:
-                'https://img.scryfall.com/cards/large/front/c/8/c89c6895-b0f8-444a-9c89-c6b4fd027b3e.jpg?1562853736',
-            png:
-                'https://img.scryfall.com/cards/png/front/c/8/c89c6895-b0f8-444a-9c89-c6b4fd027b3e.png?1562853736',
+            small: 'https://img.scryfall.com/cards/small/front/c/8/c89c6895-b0f8-444a-9c89-c6b4fd027b3e.jpg?1562853736',
+            normal: 'https://img.scryfall.com/cards/normal/front/c/8/c89c6895-b0f8-444a-9c89-c6b4fd027b3e.jpg?1562853736',
+            large: 'https://img.scryfall.com/cards/large/front/c/8/c89c6895-b0f8-444a-9c89-c6b4fd027b3e.jpg?1562853736',
+            png: 'https://img.scryfall.com/cards/png/front/c/8/c89c6895-b0f8-444a-9c89-c6b4fd027b3e.png?1562853736',
             art_crop:
                 'https://img.scryfall.com/cards/art_crop/front/c/8/c89c6895-b0f8-444a-9c89-c6b4fd027b3e.jpg?1562853736',
             border_crop:
@@ -586,6 +561,7 @@ export default [
         reserved: false,
         foil: true,
         nonfoil: true,
+        finishes: ['foil', 'nonfoil'],
         oversized: false,
         promo: false,
         reprint: true,
@@ -643,21 +619,16 @@ export default [
         name: 'Bazaar Trademage',
         lang: 'en',
         released_at: '2019-06-14',
-        uri:
-            'https://api.scryfall.com/cards/9d75faf7-fc27-4fc2-9e80-e35232c42542',
+        uri: 'https://api.scryfall.com/cards/9d75faf7-fc27-4fc2-9e80-e35232c42542',
         scryfall_uri:
             'https://scryfall.com/card/mh1/41/bazaar-trademage?utm_source=api',
         layout: 'normal',
         highres_image: true,
         image_uris: {
-            small:
-                'https://img.scryfall.com/cards/small/front/9/d/9d75faf7-fc27-4fc2-9e80-e35232c42542.jpg?1562201307',
-            normal:
-                'https://img.scryfall.com/cards/normal/front/9/d/9d75faf7-fc27-4fc2-9e80-e35232c42542.jpg?1562201307',
-            large:
-                'https://img.scryfall.com/cards/large/front/9/d/9d75faf7-fc27-4fc2-9e80-e35232c42542.jpg?1562201307',
-            png:
-                'https://img.scryfall.com/cards/png/front/9/d/9d75faf7-fc27-4fc2-9e80-e35232c42542.png?1562201307',
+            small: 'https://img.scryfall.com/cards/small/front/9/d/9d75faf7-fc27-4fc2-9e80-e35232c42542.jpg?1562201307',
+            normal: 'https://img.scryfall.com/cards/normal/front/9/d/9d75faf7-fc27-4fc2-9e80-e35232c42542.jpg?1562201307',
+            large: 'https://img.scryfall.com/cards/large/front/9/d/9d75faf7-fc27-4fc2-9e80-e35232c42542.jpg?1562201307',
+            png: 'https://img.scryfall.com/cards/png/front/9/d/9d75faf7-fc27-4fc2-9e80-e35232c42542.png?1562201307',
             art_crop:
                 'https://img.scryfall.com/cards/art_crop/front/9/d/9d75faf7-fc27-4fc2-9e80-e35232c42542.jpg?1562201307',
             border_crop:
@@ -691,6 +662,7 @@ export default [
         reserved: false,
         foil: true,
         nonfoil: true,
+        finishes: ['foil', 'nonfoil'],
         oversized: false,
         promo: false,
         reprint: false,
@@ -768,14 +740,10 @@ export default [
                 artist_id: '3852bbc9-11c0-4fe3-8722-a06ad7e2bcc5',
                 illustration_id: 'f90dd248-e671-4055-8031-c0f9938132ee',
                 image_uris: {
-                    small:
-                        'https://img.scryfall.com/cards/small/front/a/e/ae155ee2-008f-4dc6-82bf-476be7baa224.jpg?1576383667',
-                    normal:
-                        'https://img.scryfall.com/cards/normal/front/a/e/ae155ee2-008f-4dc6-82bf-476be7baa224.jpg?1576383667',
-                    large:
-                        'https://img.scryfall.com/cards/large/front/a/e/ae155ee2-008f-4dc6-82bf-476be7baa224.jpg?1576383667',
-                    png:
-                        'https://img.scryfall.com/cards/png/front/a/e/ae155ee2-008f-4dc6-82bf-476be7baa224.png?1576383667',
+                    small: 'https://img.scryfall.com/cards/small/front/a/e/ae155ee2-008f-4dc6-82bf-476be7baa224.jpg?1576383667',
+                    normal: 'https://img.scryfall.com/cards/normal/front/a/e/ae155ee2-008f-4dc6-82bf-476be7baa224.jpg?1576383667',
+                    large: 'https://img.scryfall.com/cards/large/front/a/e/ae155ee2-008f-4dc6-82bf-476be7baa224.jpg?1576383667',
+                    png: 'https://img.scryfall.com/cards/png/front/a/e/ae155ee2-008f-4dc6-82bf-476be7baa224.png?1576383667',
                     art_crop:
                         'https://img.scryfall.com/cards/art_crop/front/a/e/ae155ee2-008f-4dc6-82bf-476be7baa224.jpg?1576383667',
                     border_crop:
@@ -799,14 +767,10 @@ export default [
                 artist_id: '3852bbc9-11c0-4fe3-8722-a06ad7e2bcc5',
                 illustration_id: '7c028c56-e6d0-4ce9-aea9-994ba128245f',
                 image_uris: {
-                    small:
-                        'https://img.scryfall.com/cards/small/back/a/e/ae155ee2-008f-4dc6-82bf-476be7baa224.jpg?1576383667',
-                    normal:
-                        'https://img.scryfall.com/cards/normal/back/a/e/ae155ee2-008f-4dc6-82bf-476be7baa224.jpg?1576383667',
-                    large:
-                        'https://img.scryfall.com/cards/large/back/a/e/ae155ee2-008f-4dc6-82bf-476be7baa224.jpg?1576383667',
-                    png:
-                        'https://img.scryfall.com/cards/png/back/a/e/ae155ee2-008f-4dc6-82bf-476be7baa224.png?1576383667',
+                    small: 'https://img.scryfall.com/cards/small/back/a/e/ae155ee2-008f-4dc6-82bf-476be7baa224.jpg?1576383667',
+                    normal: 'https://img.scryfall.com/cards/normal/back/a/e/ae155ee2-008f-4dc6-82bf-476be7baa224.jpg?1576383667',
+                    large: 'https://img.scryfall.com/cards/large/back/a/e/ae155ee2-008f-4dc6-82bf-476be7baa224.jpg?1576383667',
+                    png: 'https://img.scryfall.com/cards/png/back/a/e/ae155ee2-008f-4dc6-82bf-476be7baa224.png?1576383667',
                     art_crop:
                         'https://img.scryfall.com/cards/art_crop/back/a/e/ae155ee2-008f-4dc6-82bf-476be7baa224.jpg?1576383667',
                     border_crop:
@@ -848,6 +812,7 @@ export default [
         multiverse_ids: [409741, 409742],
         name: 'Archangel Avacyn // Avacyn, the Purifier',
         nonfoil: true,
+        finishes: ['foil', 'nonfoil'],
         object: 'card',
         oracle_id: '432b37a5-d32a-4b78-91ab-860aa026b7cc',
         oversized: false,
@@ -887,8 +852,7 @@ export default [
         tcgplayer_id: 114848,
         textless: false,
         type_line: 'Legendary Creature — Angel // Legendary Creature — Angel',
-        uri:
-            'https://api.scryfall.com/cards/ae155ee2-008f-4dc6-82bf-476be7baa224',
+        uri: 'https://api.scryfall.com/cards/ae155ee2-008f-4dc6-82bf-476be7baa224',
         variation: false,
         finishCondition: 'NONFOIL_NM',
         qtyToSell: 1,
@@ -906,21 +870,16 @@ export default [
         name: 'World Breaker',
         lang: 'en',
         released_at: '2016-01-22',
-        uri:
-            'https://api.scryfall.com/cards/0020a124-ba76-4d40-84e9-9803268d9f16',
+        uri: 'https://api.scryfall.com/cards/0020a124-ba76-4d40-84e9-9803268d9f16',
         scryfall_uri:
             'https://scryfall.com/card/ogw/126/world-breaker?utm_source=api',
         layout: 'normal',
         highres_image: true,
         image_uris: {
-            small:
-                'https://c1.scryfall.com/file/scryfall-cards/small/front/0/0/0020a124-ba76-4d40-84e9-9803268d9f16.jpg?1562895014',
-            normal:
-                'https://c1.scryfall.com/file/scryfall-cards/normal/front/0/0/0020a124-ba76-4d40-84e9-9803268d9f16.jpg?1562895014',
-            large:
-                'https://c1.scryfall.com/file/scryfall-cards/large/front/0/0/0020a124-ba76-4d40-84e9-9803268d9f16.jpg?1562895014',
-            png:
-                'https://c1.scryfall.com/file/scryfall-cards/png/front/0/0/0020a124-ba76-4d40-84e9-9803268d9f16.png?1562895014',
+            small: 'https://c1.scryfall.com/file/scryfall-cards/small/front/0/0/0020a124-ba76-4d40-84e9-9803268d9f16.jpg?1562895014',
+            normal: 'https://c1.scryfall.com/file/scryfall-cards/normal/front/0/0/0020a124-ba76-4d40-84e9-9803268d9f16.jpg?1562895014',
+            large: 'https://c1.scryfall.com/file/scryfall-cards/large/front/0/0/0020a124-ba76-4d40-84e9-9803268d9f16.jpg?1562895014',
+            png: 'https://c1.scryfall.com/file/scryfall-cards/png/front/0/0/0020a124-ba76-4d40-84e9-9803268d9f16.png?1562895014',
             art_crop:
                 'https://c1.scryfall.com/file/scryfall-cards/art_crop/front/0/0/0020a124-ba76-4d40-84e9-9803268d9f16.jpg?1562895014',
             border_crop:
@@ -955,6 +914,7 @@ export default [
         reserved: false,
         foil: true,
         nonfoil: true,
+        finishes: ['foil', 'nonfoil'],
         oversized: false,
         promo: false,
         reprint: false,

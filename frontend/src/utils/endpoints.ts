@@ -42,7 +42,6 @@ export const GET_SET_NAMES = authedEndpoint('getDistinctSetNames');
 export const SUSPEND_SALE = authedEndpoint('suspendSale');
 export const GET_SALES_BY_TITLE = authedEndpoint('getSaleByTitle');
 export const RECEIVING = authedEndpoint('getReceivedCards');
-export const GET_ALL_SALES = authedEndpoint('allSales');
 export const GET_CARDS_WITH_INFO = authedEndpoint('getCardsWithInfo');
 export const GET_REPORT = authedEndpoint('getSalesReport');
 export const GET_BULK_CARDS = authedEndpoint('bulkSearch');

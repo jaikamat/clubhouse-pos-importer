@@ -2,7 +2,6 @@ require('dotenv').config();
 import express from 'express';
 import {
     addCardToInventoryController,
-    allSalesController,
     authController,
     bulkSearchController,
     createSuspendedSaleController,
@@ -27,7 +26,6 @@ router.use(authController);
 router.post('/addCardToInventory', addCardToInventoryController);
 router.post('/finishSale', finishSaleValidationController);
 router.post('/finishSale', finishSaleController);
-router.get('/allSales', allSalesController);
 router.get('/getSaleByTitle', getSalesByTitleController);
 router.post('/receiveCards', receiveCardsValidationController);
 router.post('/receiveCards', receiveCardsController);

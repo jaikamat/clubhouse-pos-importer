@@ -15,7 +15,7 @@ async function updateCardInventory(
 
     try {
         console.log(
-            `Suspend sale, QTY: ${card.qtyToSell}, ${finishCondition}, ${name}, ${id}, LOCATION: ${location}`
+            `Suspend sale, QTY: ${qtyToSell}, ${finishCondition}, ${name}, ${id}, LOCATION: ${location}`
         );
 
         const db = await getDatabaseConnection();

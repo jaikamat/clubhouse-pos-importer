@@ -1,5 +1,4 @@
 export { default as addCardToInventoryController } from './addCardToInventoryController';
-export { default as allSalesController } from './allSalesController';
 export { default as authController } from './authController';
 export { default as bulkSearchController } from './bulkSearchController';
 export { default as createSuspendedSaleController } from './createSuspendedSaleController';

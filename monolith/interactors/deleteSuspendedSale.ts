@@ -1,4 +1,5 @@
 import { ObjectID } from 'mongodb';
+import { ClubhouseLocation } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import updateCardInventoryWithFlag from './updateCardInventoryWithFlag';
@@ -7,7 +8,7 @@ import updateCardInventoryWithFlag from './updateCardInventoryWithFlag';
  * Deletes a single suspended sale
  * @param {string} id
  */
-async function deleteSuspendedSale(id, location) {
+async function deleteSuspendedSale(id: string, location: ClubhouseLocation) {
     try {
         const db = await getDatabaseConnection();
         const collection = db.collection(

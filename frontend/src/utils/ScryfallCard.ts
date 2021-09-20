@@ -25,7 +25,7 @@ export type Finish = 'FOIL' | 'NONFOIL';
 
 export type Condition = 'NM' | 'LP' | 'MP' | 'HP';
 
-export type FinishCondition = `${Finish}_${Condition}`
+export type FinishCondition = `${Finish}_${Condition}`;
 
 export type QOH = Partial<{
     FOIL_NM: number;
@@ -49,6 +49,8 @@ export interface CardFace {
     image_uris: ImageURIs;
 }
 
+export type Finishes = ('foil' | 'nonfoil' | 'etched' | 'glossy')[];
+
 export interface ScryfallApiCard {
     id: string;
     name: string;
@@ -58,8 +60,7 @@ export interface ScryfallApiCard {
     rarity: string;
     image_uris: ImageURIs;
     card_faces?: CardFace[];
-    nonfoil: boolean;
-    foil: boolean;
+    finishes: Finishes;
     colors: string[];
     type_line: string;
     frame_effects?: string[];
@@ -93,8 +94,7 @@ export class ScryfallCard {
     public rarity: string;
     public image_uris: { normal: string };
     public card_faces: CardFace[];
-    public nonfoil: boolean;
-    public foil: boolean;
+    public finishes: Finishes;
     public colors: string[];
     public type_line: string;
     public frame_effects: string[];
@@ -116,8 +116,7 @@ export class ScryfallCard {
         this.rarity = card.rarity;
         this.image_uris = card.image_uris || null;
         this.card_faces = card.card_faces || [];
-        this.nonfoil = card.nonfoil;
-        this.foil = card.foil;
+        this.finishes = card.finishes;
         this.colors = card.colors;
         this.type_line = card.type_line;
         this.frame_effects = card.frame_effects || [];

@@ -1,4 +1,4 @@
-import ScryfallCard from '../interactors/ScryfallCard';
+import ScryfallCard from '../common/ScryfallCard';
 
 /**
  * Creates a detailed user-friendly name for cards to discern what they are, without imagery

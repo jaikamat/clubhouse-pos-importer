@@ -1,4 +1,4 @@
-import ScryfallCard from '../interactors/ScryfallCard';
+import ScryfallCard from '../common/ScryfallCard';
 
 const cardImageUrl = (card: ScryfallCard) => {
     let myImage: string;

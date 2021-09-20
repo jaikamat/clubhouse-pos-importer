@@ -1,3 +1,4 @@
+import ScryfallCard from '../common/ScryfallCard';
 import {
     ClubhouseLocation,
     Collection,
@@ -8,7 +9,6 @@ import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import isNonfoil from '../lib/isNonfoil';
 import parseQoh from '../lib/parseQoh';
-import ScryfallCard from './ScryfallCard';
 
 interface CountByPrinting {
     _id: {

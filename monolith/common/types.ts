@@ -22,6 +22,10 @@ export const finishConditions = [
     'FOIL_LP',
     'FOIL_MP',
     'FOIL_HP',
+    'ETCHED_NM',
+    'ETCHED_LP',
+    'ETCHED_MP',
+    'ETCHED_HP',
 ] as const;
 
 export type FinishCondition = typeof finishConditions[number];
@@ -44,7 +48,7 @@ export const formatLegalities = [
 
 export type FormatLegality = typeof formatLegalities[number];
 
-export const finish = ['FOIL', 'NONFOIL'] as const;
+export const finish = ['FOIL', 'NONFOIL', 'ETCHED'] as const;
 
 export type Finish = typeof finish[number];
 
@@ -86,6 +90,10 @@ export type QOH = Partial<{
     NONFOIL_LP: number;
     NONFOIL_MP: number;
     NONFOIL_HP: number;
+    ETCHED_NM: number;
+    ETCHED_LP: number;
+    ETCHED_MP: number;
+    ETCHED_HP: number;
 }>;
 
 export interface RequestWithUserInfo extends Request {

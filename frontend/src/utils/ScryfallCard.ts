@@ -21,7 +21,7 @@ export type LanguageCode =
     | 'sa'
     | 'px';
 
-export type Finish = 'FOIL' | 'NONFOIL';
+export type Finish = 'FOIL' | 'NONFOIL' | 'ETCHED';
 
 export type Condition = 'NM' | 'LP' | 'MP' | 'HP';
 
@@ -36,6 +36,10 @@ export type QOH = Partial<{
     NONFOIL_LP: number;
     NONFOIL_MP: number;
     NONFOIL_HP: number;
+    ETCHED_NM: number;
+    ETCHED_LP: number;
+    ETCHED_MP: number;
+    ETCHED_HP: number;
 }>;
 
 export interface ImageURIs {

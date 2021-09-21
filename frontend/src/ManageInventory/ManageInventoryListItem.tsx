@@ -10,9 +10,12 @@ import CardRowContainer from '../ui/CardRowContainer';
 import ControlledDropdown from '../ui/ControlledDropdown';
 import TextField from '../ui/TextField';
 import { useToastContext } from '../ui/ToastContext';
-import checkCardFinish from '../utils/checkCardFinish';
 import createFinishCondition from '../utils/createFinishCondtition';
-import { cardConditions, dropdownFinishes } from '../utils/dropdownOptions';
+import {
+    cardConditions,
+    createDropdownFinishOptions,
+    finishDropdownDisabled,
+} from '../utils/dropdownOptions';
 import { Condition, Finish, ScryfallCard } from '../utils/ScryfallCard';
 import addCardToInventoryQuery from './addCardToInventoryQuery';
 
@@ -40,14 +43,15 @@ const ManageInventoryListItem: FC<Props> = ({ card }) => {
     const createToast = useToastContext();
     const { finishes, name, set_name, set, id, cardImage } = card;
 
-    const [selectedFinish, setSelectedFinish] = useState<Finish>(
-        checkCardFinish(finishes).selectedFinish
-    );
+    const dropdownFinishes = createDropdownFinishOptions(finishes);
+    const initialFinish = dropdownFinishes[0].value;
+
+    const [selectedFinish, setSelectedFinish] = useState<Finish>(initialFinish);
 
     const { changeCardQuantity } = useContext(InventoryContext);
 
     const initialFormValues: FormValues = {
-        selectedFinish: checkCardFinish(finishes).selectedFinish,
+        selectedFinish: initialFinish,
         selectedCondition: 'NM',
         quantity: '0',
     };
@@ -127,7 +131,7 @@ const ManageInventoryListItem: FC<Props> = ({ card }) => {
                             label="Finish"
                             value={values.selectedFinish}
                             options={dropdownFinishes}
-                            disabled={finishes.length === 1}
+                            disabled={finishDropdownDisabled(finishes)}
                             onChange={(value) => {
                                 setSelectedFinish(value as Finish);
                                 setFieldValue('selectedFinish', value);

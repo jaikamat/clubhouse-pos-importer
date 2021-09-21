@@ -10,9 +10,12 @@ import CardRowContainer from '../ui/CardRowContainer';
 import ControlledDropdown from '../ui/ControlledDropdown';
 import TextField from '../ui/TextField';
 import { useToastContext } from '../ui/ToastContext';
-import checkCardFinish from '../utils/checkCardFinish';
 import createFinishCondition from '../utils/createFinishCondtition';
-import { cardConditions, dropdownFinishes } from '../utils/dropdownOptions';
+import {
+    cardConditions,
+    createDropdownFinishOptions,
+    finishDropdownDisabled,
+} from '../utils/dropdownOptions';
 import { Condition, Finish, ScryfallCard } from '../utils/ScryfallCard';
 
 interface Props {
@@ -62,6 +65,9 @@ const validate = ({
 };
 
 const ReceivingSearchItem: FC<Props> = ({ card }) => {
+    const dropdownFinishes = createDropdownFinishOptions(card.finishes);
+    const initialFinish = dropdownFinishes[0].value;
+
     const createToast = useToastContext();
     const initialValues: FormValues = {
         quantity: 1,
@@ -69,11 +75,8 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
         creditPrice: 0,
         marketPrice: 0,
         selectedCondition: 'NM',
-        selectedFinish: checkCardFinish(card.finishes).selectedFinish,
+        selectedFinish: initialFinish,
     };
-
-    // Determines whether the select finish dropdown is permanently disabled, seeded from props
-    const finishDisabled = card.finishes.length === 1;
 
     const { addToList } = useReceivingContext();
 
@@ -206,7 +209,7 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
                             onChange={(v) => {
                                 setFieldValue('selectedFinish', v);
                             }}
-                            disabled={finishDisabled}
+                            disabled={finishDropdownDisabled(card.finishes)}
                         />
                     </Grid>
                     <Grid item>

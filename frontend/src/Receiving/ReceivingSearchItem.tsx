@@ -73,7 +73,7 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
     };
 
     // Determines whether the select finish dropdown is permanently disabled, seeded from props
-    const finishDisabled = checkCardFinish(card.finishes).finishDisabled;
+    const finishDisabled = card.finishes.length === 1;
 
     const { addToList } = useReceivingContext();
 

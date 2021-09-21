@@ -127,7 +127,7 @@ const ManageInventoryListItem: FC<Props> = ({ card }) => {
                             label="Finish"
                             value={values.selectedFinish}
                             options={dropdownFinishes}
-                            disabled={checkCardFinish(finishes).finishDisabled}
+                            disabled={finishes.length === 1}
                             onChange={(value) => {
                                 setSelectedFinish(value as Finish);
                                 setFieldValue('selectedFinish', value);

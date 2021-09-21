@@ -56,6 +56,7 @@ export default interface ScryfallCard {
     related_uris: RelatedUris;
     purchase_uris: PurchaseUris;
     image_uris?: ImageUris;
+    finishes: ('foil' | 'nonfoil' | 'etched' | 'glossy')[];
 }
 
 export interface CardFacesEntity {

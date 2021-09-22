@@ -5,7 +5,7 @@ import Price from '../common/Price';
 import CardImageTooltip from '../ui/CardImageTooltip';
 import SetIcon from '../ui/SetIcon';
 import displayFinishCondition from '../utils/finishCondition';
-import { Condition, Finish } from '../utils/ScryfallCard';
+import { Finish } from '../utils/ScryfallCard';
 import { ResponseCard } from './filteredCardsQuery';
 
 interface Props {
@@ -25,7 +25,6 @@ const BrowseInventoryRow: FC<Props> = ({
     },
 }) => {
     const finish = finishCondition.split('_')[0] as Finish;
-    const condition = finishCondition.split('_')[1] as Condition;
 
     return (
         <TableRow>

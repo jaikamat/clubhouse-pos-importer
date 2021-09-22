@@ -6,9 +6,11 @@ import { QOH } from '../common/types';
 export default function parseQoh(qoh: QOH): {
     foilQty: number;
     nonfoilQty: number;
+    etchedQty: number;
 } {
     let foilQty = 0;
     let nonfoilQty = 0;
+    let etchedQty = 0;
 
     foilQty =
         (qoh?.FOIL_NM || 0) +
@@ -22,8 +24,15 @@ export default function parseQoh(qoh: QOH): {
         (qoh?.NONFOIL_MP || 0) +
         (qoh?.NONFOIL_HP || 0);
 
+    etchedQty =
+        (qoh?.ETCHED_NM || 0) +
+        (qoh?.ETCHED_LP || 0) +
+        (qoh?.ETCHED_MP || 0) +
+        (qoh?.ETCHED_HP || 0);
+
     return {
         foilQty,
         nonfoilQty,
+        etchedQty,
     };
 }

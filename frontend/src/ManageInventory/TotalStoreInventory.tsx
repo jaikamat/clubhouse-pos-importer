@@ -19,7 +19,7 @@ const useStyles = makeStyles(({ spacing }) => ({
         '& > *': {
             display: 'inline',
         },
-        '& > *:first-child': {
+        '& > *:not(:last-child)': {
             paddingRight: spacing(1),
         },
     },
@@ -33,8 +33,8 @@ interface Props {
 const TotalStoreInventory: FC<Props> = ({ title, searchResults }) => {
     const { labelContainer, chipContainer } = useStyles();
     const [quantities, setQuantities] = useState<ResponseData>({
-        ch1: { foilQty: 0, nonfoilQty: 0 },
-        ch2: { foilQty: 0, nonfoilQty: 0 },
+        ch1: { foilQty: 0, nonfoilQty: 0, etchedQty: 0 },
+        ch2: { foilQty: 0, nonfoilQty: 0, etchedQty: 0 },
     });
 
     const [loading, setLoading] = useState(false);
@@ -80,6 +80,10 @@ const TotalStoreInventory: FC<Props> = ({ title, searchResults }) => {
                         label="Nonfoil"
                         quantity={quantities.ch1.nonfoilQty}
                     />
+                    <InventoryChip
+                        label="Etched"
+                        quantity={quantities.ch1.etchedQty}
+                    />
                 </Box>
             </div>
             <div>
@@ -92,6 +96,10 @@ const TotalStoreInventory: FC<Props> = ({ title, searchResults }) => {
                     <InventoryChip
                         label="Nonfoil"
                         quantity={quantities.ch2.nonfoilQty}
+                    />
+                    <InventoryChip
+                        label="Etched"
+                        quantity={quantities.ch2.etchedQty}
                     />
                 </Box>
             </div>

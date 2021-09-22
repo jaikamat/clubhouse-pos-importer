@@ -9,24 +9,26 @@ async function getCardFromAllLocations(title: string) {
         // Add up the [foil, nonfoil] quantities of each card's QOH
         const ch1Combined = ch1.reduce(
             (acc, c) => {
-                const { foilQty, nonfoilQty } = parseQoh(c.qoh);
+                const { foilQty, nonfoilQty, etchedQty } = parseQoh(c.qoh);
                 return {
                     foilQty: acc.foilQty + foilQty,
                     nonfoilQty: acc.nonfoilQty + nonfoilQty,
+                    etchedQty: acc.etchedQty + etchedQty,
                 };
             },
-            { foilQty: 0, nonfoilQty: 0 }
+            { foilQty: 0, nonfoilQty: 0, etchedQty: 0 }
         );
 
         const ch2Combined = ch2.reduce(
             (acc, c) => {
-                const { foilQty, nonfoilQty } = parseQoh(c.qoh);
+                const { foilQty, nonfoilQty, etchedQty } = parseQoh(c.qoh);
                 return {
                     foilQty: acc.foilQty + foilQty,
                     nonfoilQty: acc.nonfoilQty + nonfoilQty,
+                    etchedQty: acc.etchedQty + etchedQty,
                 };
             },
-            { foilQty: 0, nonfoilQty: 0 }
+            { foilQty: 0, nonfoilQty: 0, etchedQty: 0 }
         );
 
         return {

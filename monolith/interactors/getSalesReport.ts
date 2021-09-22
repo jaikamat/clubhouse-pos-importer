@@ -155,6 +155,7 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
                     _id: id,
                     scryfall_id: c._id.scryfall_id,
                     finish_condition: c._id.finish_condition,
+                    // TODO: support etched
                     finish: nonfoil ? 'NONFOIL' : 'FOIL',
                     quantity_on_hand: nonfoil ? nonfoilQty : foilQty,
                     estimated_price: nonfoil

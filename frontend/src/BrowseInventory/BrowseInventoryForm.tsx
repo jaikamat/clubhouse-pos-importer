@@ -5,7 +5,7 @@ import {
     TextField,
     withStyles,
 } from '@material-ui/core';
-import { FormikHelpers, useFormik } from 'formik';
+import { useFormik } from 'formik';
 import React, { FC, useEffect, useState } from 'react';
 import Button from '../ui/Button';
 import ControlledDropdown, { DropdownOption } from '../ui/ControlledDropdown';
@@ -29,13 +29,6 @@ const formatDropdownOptions: DropdownOption[] = [
     { key: 'df', value: 'brawl', text: 'Brawl' },
     { key: 'fg', value: 'duel', text: 'Duel' },
     { key: 'gh', value: 'oldschool', text: 'Oldschool' },
-];
-
-const priceOperatorDropdownOptions: DropdownOption[] = [
-    { key: 'gte', value: 'gte', text: '>=' },
-    { key: 'lte', value: 'lte', text: '<=' },
-    { key: 'gtx', value: 'gt', text: '>' },
-    { key: 'ltx', value: 'lt', text: '<' },
 ];
 
 const finishDropdownOptions: DropdownOption[] = [
@@ -139,10 +132,7 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
         DropdownOption[]
     >([]);
 
-    const onSubmit = async (
-        values: FormValues,
-        {}: FormikHelpers<FormValues>
-    ) => {
+    const onSubmit = async (values: FormValues) => {
         try {
             await doSubmit(
                 values,

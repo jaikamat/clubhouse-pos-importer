@@ -31,6 +31,7 @@ const CardImage: FC<Props> = ({ image, hover }) => {
 
     return (
         <img
+            alt="card-surface"
             src={image}
             className={clsx(imageStyle, {
                 [hoveredStyle]: hovered,

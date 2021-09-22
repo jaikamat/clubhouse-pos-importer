@@ -12,10 +12,13 @@ export const createInventoryLineItems = (
     const matches = matchStrings
         .map((finishCondition) => {
             const quantity = inventoryQty[finishCondition];
-            if (quantity && quantity > 0)
+            if (quantity && quantity > 0) {
                 return `${displayFinishCondition(
                     finishCondition
                 )}: ${quantity}`;
+            } else {
+                return null;
+            }
         })
         .filter((m): m is string => !!m);
 

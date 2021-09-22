@@ -120,14 +120,8 @@ const BrowseInventory: FC = () => {
         }
     };
 
-    const {
-        cards,
-        isLoading,
-        currentPage,
-        numPages,
-        count,
-        cachedFilters,
-    } = state;
+    const { cards, isLoading, currentPage, numPages, count, cachedFilters } =
+        state;
 
     return (
         <Container>
@@ -173,7 +167,7 @@ const BrowseInventory: FC = () => {
                             <TableRow>
                                 <TableCell>Name</TableCell>
                                 <TableCell>Edition</TableCell>
-                                <TableCell>Condition</TableCell>
+                                <TableCell>Finish (Condition)</TableCell>
                                 <TableCell>Quantity</TableCell>
                                 <TableCell>Estimated Price</TableCell>
                             </TableRow>

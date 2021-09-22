@@ -186,6 +186,8 @@ const getCardsByFilter = async (
                                 then: '$prices.usd_foil',
                             },
                         ],
+                        // TODO: Need to support etched pricing
+                        default: 0.0,
                     },
                 },
                 colors_string_length: { $strLenCP: '$colors_string' },

@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import React, { createContext, FC, useState } from 'react';
 import { useToastContext } from '../ui/ToastContext';
-import { ScryfallCard } from '../utils/ScryfallCard';
+import { FinishCondition, ScryfallCard } from '../utils/ScryfallCard';
 import sortSaleList from '../utils/sortSaleList';
 import cardSearchQuery from './cardSearchQuery';
 import createSuspendedSaleQuery from './createSuspendedSaleQuery';
@@ -17,7 +17,7 @@ interface SuspendSaleArgs {
 }
 
 export type SaleListCard = ScryfallCard & {
-    finishCondition: string;
+    finishCondition: FinishCondition;
     qtyToSell: number;
     price: number;
 };
@@ -30,7 +30,7 @@ export interface SaleContext {
     handleResultSelect: (term: string) => void;
     addToSaleList: (
         card: ScryfallCard,
-        finishCondition: string,
+        finishCondition: FinishCondition,
         qtyToSell: number,
         price: number
     ) => void;
@@ -69,9 +69,8 @@ export const SaleProvider: FC<Props> = ({ children }) => {
     const [saleListCards, setSaleListCards] = useState<SaleListCard[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [searchResults, setSearchResults] = useState<ScryfallCard[]>([]);
-    const [suspendedSale, setSuspendedSale] = useState<SuspendedSale>(
-        defaultSuspendedSale
-    );
+    const [suspendedSale, setSuspendedSale] =
+        useState<SuspendedSale>(defaultSuspendedSale);
 
     /**
      * Executes after a user selects an autocompleted suggestion
@@ -95,7 +94,7 @@ export const SaleProvider: FC<Props> = ({ children }) => {
      */
     const addToSaleList = (
         card: ScryfallCard,
-        finishCondition: string,
+        finishCondition: FinishCondition,
         qtyToSell: number,
         price: number
     ) => {

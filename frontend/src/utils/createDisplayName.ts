@@ -12,8 +12,7 @@ type Card = Pick<
 
 /** Computes the proper displayName for a card, depending on its properties */
 const createDisplayName = (card: Card) => {
-    const { name, frame_effects, border_color, lang, finishes, promo_types } =
-        card;
+    const { name, frame_effects, border_color, lang, promo_types } = card;
 
     let displayName: string = name;
 

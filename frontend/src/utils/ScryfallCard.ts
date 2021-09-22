@@ -27,20 +27,7 @@ export type Condition = 'NM' | 'LP' | 'MP' | 'HP';
 
 export type FinishCondition = `${Finish}_${Condition}`;
 
-export type QOH = Partial<{
-    FOIL_NM: number;
-    FOIL_LP: number;
-    FOIL_MP: number;
-    FOIL_HP: number;
-    NONFOIL_NM: number;
-    NONFOIL_LP: number;
-    NONFOIL_MP: number;
-    NONFOIL_HP: number;
-    ETCHED_NM: number;
-    ETCHED_LP: number;
-    ETCHED_MP: number;
-    ETCHED_HP: number;
-}>;
+export type QOH = Partial<Record<FinishCondition, number>>;
 
 export interface ImageURIs {
     normal: string;

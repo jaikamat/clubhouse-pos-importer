@@ -17,18 +17,17 @@ const createDisplayName = (card: Card) => {
 
     let displayName: string = name;
 
-    // Covers strixhaven etched foil mystical archive cards
+    // Covers cards like Godzilla series
     if (promo_types.includes('godzillaseries')) {
-        // Covers cards like Godzilla series
         displayName += ` (IP series)`;
-    } else if (frame_effects.includes('showcase')) {
         // Covers showcase cards like comic-art Illuna, Apex of Wishes
+    } else if (frame_effects.includes('showcase')) {
         displayName += ` (Showcase)`;
-    } else if (frame_effects.length === 0 && border_color === 'borderless') {
         // Covers cards like comic-art Vivien, Monsters' Advocate
+    } else if (frame_effects.length === 0 && border_color === 'borderless') {
         displayName += ` (Borderless)`;
-    } else if (frame_effects.includes('extendedart')) {
         // Covers cards with extended left and roght border art
+    } else if (frame_effects.includes('extendedart')) {
         displayName += ` (Extended art)`;
     }
 

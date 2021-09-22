@@ -89,11 +89,13 @@ const QohLabels: FC<Props> = ({ inventoryQty }) => {
                 quantity={nonfoilQuantity}
                 popupLineItems={nonfoilLineItems}
             />
-            <LabelWithPopup
-                label="Etched"
-                quantity={etchedQuantity}
-                popupLineItems={etchedLineItems}
-            />
+            {etchedQuantity > 0 && (
+                <LabelWithPopup
+                    label="Etched"
+                    quantity={etchedQuantity}
+                    popupLineItems={etchedLineItems}
+                />
+            )}
         </>
     );
 };

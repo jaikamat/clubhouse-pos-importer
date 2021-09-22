@@ -67,40 +67,34 @@ const TotalStoreInventory: FC<Props> = ({ title, searchResults }) => {
         );
     }
 
+    const { ch1, ch2 } = quantities;
+
     return (
         <div className={labelContainer}>
             <div>
                 <Typography>Beaverton totals:</Typography>
                 <Box className={chipContainer}>
-                    <InventoryChip
-                        label="Foil"
-                        quantity={quantities.ch1.foilQty}
-                    />
-                    <InventoryChip
-                        label="Nonfoil"
-                        quantity={quantities.ch1.nonfoilQty}
-                    />
-                    <InventoryChip
-                        label="Etched"
-                        quantity={quantities.ch1.etchedQty}
-                    />
+                    <InventoryChip label="Foil" quantity={ch1.foilQty} />
+                    <InventoryChip label="Nonfoil" quantity={ch1.nonfoilQty} />
+                    {ch1.etchedQty > 0 && (
+                        <InventoryChip
+                            label="Etched"
+                            quantity={ch1.etchedQty}
+                        />
+                    )}
                 </Box>
             </div>
             <div>
                 <Typography>Hillsboro totals:</Typography>
                 <Box className={chipContainer}>
-                    <InventoryChip
-                        label="Foil"
-                        quantity={quantities.ch2.foilQty}
-                    />
-                    <InventoryChip
-                        label="Nonfoil"
-                        quantity={quantities.ch2.nonfoilQty}
-                    />
-                    <InventoryChip
-                        label="Etched"
-                        quantity={quantities.ch2.etchedQty}
-                    />
+                    <InventoryChip label="Foil" quantity={ch2.foilQty} />
+                    <InventoryChip label="Nonfoil" quantity={ch2.nonfoilQty} />
+                    {ch2.etchedQty > 0 && (
+                        <InventoryChip
+                            label="Etched"
+                            quantity={ch2.etchedQty}
+                        />
+                    )}
                 </Box>
             </div>
         </div>

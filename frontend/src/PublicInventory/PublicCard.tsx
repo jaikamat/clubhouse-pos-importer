@@ -57,14 +57,10 @@ const useStyles = makeStyles(() => ({
 }));
 
 const PublicCard: FC<Props> = ({ card }) => {
-    const {
-        imageWrapper,
-        inventoryRow,
-        inventoryWrapper,
-        wrapper,
-    } = useStyles();
+    const { imageWrapper, inventoryRow, inventoryWrapper, wrapper } =
+        useStyles();
     const { id, cardImage } = card;
-    const [foilQty, nonfoilQty] = parseQoh(card.qoh);
+    const [foilQty, nonfoilQty, etchedQty] = parseQoh(card.qoh);
 
     return (
         <div className={wrapper}>
@@ -89,6 +85,17 @@ const PublicCard: FC<Props> = ({ card }) => {
                         <MarketPrice
                             id={id}
                             finish="NONFOIL"
+                            round
+                            showMid={false}
+                        />
+                    </div>
+                )}
+                {etchedQty > 0 && (
+                    <div className={inventoryRow}>
+                        <InventoryChip quantity={etchedQty} label="Etched" />
+                        <MarketPrice
+                            id={id}
+                            finish="ETCHED"
                             round
                             showMid={false}
                         />

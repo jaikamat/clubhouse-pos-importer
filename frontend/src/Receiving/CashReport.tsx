@@ -10,6 +10,7 @@ import _ from 'lodash';
 import React, { FC } from 'react';
 import Price from '../common/Price';
 import { ReceivingCard } from '../context/ReceivingContext';
+import displayFinishCondition from '../utils/finishCondition';
 
 interface Props {
     receivingList: ReceivingCard[];
@@ -64,7 +65,7 @@ const CashReport: FC<Props> = ({ receivingList }) => {
                         <TableRow>
                             <TableCell>Card Name</TableCell>
                             <TableCell>Market Value</TableCell>
-                            <TableCell>Condition</TableCell>
+                            <TableCell>Finish (Condition)</TableCell>
                             <TableCell>Quantity</TableCell>
                             <TableCell>Cash Offer</TableCell>
                             <TableCell>Cash Out</TableCell>
@@ -78,7 +79,11 @@ const CashReport: FC<Props> = ({ receivingList }) => {
                                     <TableCell>
                                         <Price num={c.marketPrice} />
                                     </TableCell>
-                                    <TableCell>{c.finishCondition}</TableCell>
+                                    <TableCell>
+                                        {displayFinishCondition(
+                                            c.finishCondition
+                                        )}
+                                    </TableCell>
                                     <TableCell>{c.tradeQty}</TableCell>
                                     <TableCell>
                                         <Price num={c.cashPrice} />

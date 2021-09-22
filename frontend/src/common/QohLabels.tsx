@@ -53,7 +53,8 @@ const LabelWithPopup: FC<LabelWithPopupProps> = ({
 
 // This component parses the `qoh` object from mongo into something more presentable
 const QohLabels: FC<Props> = ({ inventoryQty }) => {
-    const [foilQuantity, nonfoilQuantity] = parseQoh(inventoryQty);
+    const [foilQuantity, nonfoilQuantity, etchedQuantity] =
+        parseQoh(inventoryQty);
 
     const foilLineItems = createInventoryLineItems(inventoryQty, [
         'FOIL_NM',
@@ -69,6 +70,13 @@ const QohLabels: FC<Props> = ({ inventoryQty }) => {
         'NONFOIL_HP',
     ]);
 
+    const etchedLineItems = createInventoryLineItems(inventoryQty, [
+        'ETCHED_NM',
+        'ETCHED_LP',
+        'ETCHED_MP',
+        'ETCHED_HP',
+    ]);
+
     return (
         <>
             <LabelWithPopup
@@ -80,6 +88,11 @@ const QohLabels: FC<Props> = ({ inventoryQty }) => {
                 label="Nonfoil"
                 quantity={nonfoilQuantity}
                 popupLineItems={nonfoilLineItems}
+            />
+            <LabelWithPopup
+                label="Etched"
+                quantity={etchedQuantity}
+                popupLineItems={etchedLineItems}
             />
         </>
     );

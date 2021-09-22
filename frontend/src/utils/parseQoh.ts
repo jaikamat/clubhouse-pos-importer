@@ -13,5 +13,11 @@ export default function parseQoh(qoh: QOH) {
         (qoh?.NONFOIL_MP || 0) +
         (qoh?.NONFOIL_HP || 0);
 
-    return [foilQty, nonfoilQty] as const;
+    const etchedQty =
+        (qoh?.ETCHED_NM || 0) +
+        (qoh?.ETCHED_LP || 0) +
+        (qoh?.ETCHED_MP || 0) +
+        (qoh?.ETCHED_HP || 0);
+
+    return [foilQty, nonfoilQty, etchedQty] as const;
 }

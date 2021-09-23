@@ -1,4 +1,5 @@
 import yargs from "yargs";
+import collectionUpkeep from "./collectionUpkeep";
 import getLanguageCards from "./getLanguageCards";
 import mongoBulkImport from "./mongoBulkImport";
 import saveScryfallBulk from "./saveScryfallBulk";
@@ -25,20 +26,19 @@ async function init() {
 
         await saveScryfallBulk("all_cards"); // Save all_cards locally
 
+        await collectionUpkeep(database); // Maintain indexes and clear documents
+
+        // Add English cards
         console.log("Collating English cards...");
         const sourceEnglish = await getLanguageCards(SOURCE_JSON_URI, "en"); // Grab all English cards
         console.log(`Updating bulk for ${sourceEnglish.length} cards...`);
         await mongoBulkImport(sourceEnglish, database); // Persist them
 
-        /**
-         * Uncomment this if Japanese cards are required
-         *
-         * We might think about separating this out as another package.json command, but it's rarely used
-         */
-        // console.log("Collating Japanese cards...");
-        // const sourceJapanese = await getLanguageCards(SOURCE_JSON_URI, "ja"); // Grab all Japanese cards
-        // console.log(`Updating bulk for ${sourceJapanese.length} cards...`);
-        // await mongoBulkImport(sourceJapanese, database); // Persist them
+        // Add Japanese cards
+        console.log("Collating Japanese cards...");
+        const sourceJapanese = await getLanguageCards(SOURCE_JSON_URI, "ja"); // Grab all Japanese cards
+        console.log(`Updating bulk for ${sourceJapanese.length} cards...`);
+        await mongoBulkImport(sourceJapanese, database); // Persist them
 
         console.timeEnd("bulkUpdate");
         console.log(

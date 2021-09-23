@@ -7,7 +7,7 @@ async function collectionUpkeep(databaseName: string) {
 
     try {
         const { MONGO_URI } = process.env;
-        var client = await MongoClient.connect(MONGO_URI, mongoSettings); // 'const' scopes to the block, we need access in 'finally' to close the connection
+        var client = await MongoClient.connect(MONGO_URI, mongoSettings);
         const db = await client.db(databaseName || "test");
 
         console.log(`Connected to MongoDB database: ${db.databaseName}`);

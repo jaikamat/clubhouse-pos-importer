@@ -27,6 +27,7 @@ const CardImageTooltip: FC<Props> = ({ cardImage, children }) => {
             placement="bottom-start"
             title={
                 <img
+                    alt="card-surface"
                     className={clsx(borderRounded, imageSize)}
                     src={cardImage}
                 />

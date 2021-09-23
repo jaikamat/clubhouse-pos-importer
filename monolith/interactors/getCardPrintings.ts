@@ -11,8 +11,7 @@ class BulkCard {
     public set_abbreviation: string;
     public set_name: string;
     public rarity: string;
-    public foil_printing: boolean;
-    public nonfoil_printing: boolean;
+    public finishes: string[];
     public frame: string;
     public image: string;
 
@@ -23,8 +22,7 @@ class BulkCard {
         this.set_abbreviation = card.set;
         this.set_name = card.set_name;
         this.rarity = card.rarity;
-        this.foil_printing = card.foil;
-        this.nonfoil_printing = card.nonfoil;
+        this.finishes = card.finishes;
         this.frame = card.frame;
         this.image = cardImageUrl(card);
     }

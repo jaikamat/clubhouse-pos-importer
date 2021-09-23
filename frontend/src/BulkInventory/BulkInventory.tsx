@@ -17,7 +17,10 @@ import IntegerInput from '../ui/IntegerInput';
 import { useToastContext } from '../ui/ToastContext';
 import { SectionText } from '../ui/Typography';
 import createFinishCondition from '../utils/createFinishCondtition';
-import { cardConditions } from '../utils/dropdownOptions';
+import {
+    cardConditions,
+    createDropdownFinishOptions,
+} from '../utils/dropdownOptions';
 import { Condition, Finish } from '../utils/ScryfallCard';
 import { BulkCard } from './bulkInventoryQuery';
 import BulkSearchBar from './BulkSearchBar';
@@ -85,21 +88,21 @@ const BulkInventory: FC = () => {
         }
     };
 
-    const {
-        values,
-        setFieldValue,
-        handleSubmit,
-        resetForm,
-        isSubmitting,
-    } = useFormik<FormValues>({
-        initialValues: {
-            bulkCard: null,
-            finish: 'NONFOIL',
-            quantity: '1',
-            condition: 'NM',
-        },
-        onSubmit,
-    });
+    const { values, setFieldValue, handleSubmit, resetForm, isSubmitting } =
+        useFormik<FormValues>({
+            initialValues: {
+                bulkCard: null,
+                finish: 'NONFOIL',
+                quantity: '1',
+                condition: 'NM',
+            },
+            onSubmit,
+        });
+
+    // Create the list of valid dropdown selections for finishes from card metadata
+    const dropdownFinishOptions = values.bulkCard
+        ? createDropdownFinishOptions(values.bulkCard.finishes)
+        : [];
 
     useEffect(() => {
         if (values.bulkCard) {
@@ -109,18 +112,8 @@ const BulkInventory: FC = () => {
             // Reset quantity when cards change
             setFieldValue('quantity', '1');
 
-            // If _only_ a foil printing exists, set to foil
-            if (!values.bulkCard.nonfoil_printing) {
-                setFieldValue('finish', 'FOIL');
-                return;
-            }
-            // If _only_ a nonfoil printing exists, set to nonfoil
-            if (!values.bulkCard.foil_printing) {
-                setFieldValue('finish', 'NONFOIL');
-                return;
-            }
-            // Otherwise both exist, default to nonfoil
-            setFieldValue('finish', 'NONFOIL');
+            // Reset the currently selected finish to the first valid element
+            setFieldValue('finish', dropdownFinishOptions[0].value);
         }
     }, [values.bulkCard]);
 
@@ -161,25 +154,14 @@ const BulkInventory: FC = () => {
                                             )
                                         }
                                     >
-                                        <MenuItem
-                                            key="nonfoil"
-                                            value="FOIL"
-                                            disabled={
-                                                !values.bulkCard?.foil_printing
-                                            }
-                                        >
-                                            Foil
-                                        </MenuItem>
-                                        <MenuItem
-                                            key="foil"
-                                            value="NONFOIL"
-                                            disabled={
-                                                !values.bulkCard
-                                                    ?.nonfoil_printing
-                                            }
-                                        >
-                                            Nonfoil
-                                        </MenuItem>
+                                        {dropdownFinishOptions.map((d) => (
+                                            <MenuItem
+                                                key={d.key}
+                                                value={d.value}
+                                            >
+                                                {d.text}
+                                            </MenuItem>
+                                        ))}
                                     </Select>
                                 </FormControl>
                             </Grid>

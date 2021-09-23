@@ -1,5 +1,6 @@
 import http from '../common/http';
 import { GET_BULK_CARDS } from '../utils/endpoints';
+import { Finishes } from '../utils/ScryfallCard';
 
 export interface BulkCard {
     scryfall_id: string;
@@ -8,8 +9,7 @@ export interface BulkCard {
     set_abbreviation: string;
     set_name: string;
     rarity: string;
-    foil_printing: boolean;
-    nonfoil_printing: boolean;
+    finishes: Finishes;
     frame: string;
     image: string;
 }

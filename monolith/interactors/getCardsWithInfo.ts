@@ -70,6 +70,10 @@ async function getCardsWithInfo(
                     { 'qoh.NONFOIL_LP': { $gt: 0 } },
                     { 'qoh.NONFOIL_MP': { $gt: 0 } },
                     { 'qoh.NONFOIL_HP': { $gt: 0 } },
+                    { 'qoh.ETCHED_NM': { $gt: 0 } },
+                    { 'qoh.ETCHED_LP': { $gt: 0 } },
+                    { 'qoh.ETCHED_MP': { $gt: 0 } },
+                    { 'qoh.ETCHED_HP': { $gt: 0 } },
                 ],
             },
         };

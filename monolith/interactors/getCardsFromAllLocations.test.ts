@@ -67,15 +67,27 @@ test('Correctly returns appropriate inventory quantities', async () => {
         location: 'ch2',
     });
 
+    await addCardToInventory({
+        quantity: 2,
+        finishCondition: 'ETCHED_HP',
+        id,
+        name,
+        set_name,
+        set,
+        location: 'ch2',
+    });
+
     const combinedInventory = await getCardFromAllLocations(name);
 
     expect(combinedInventory).toMatchInlineSnapshot(`
 Object {
   "ch1": Object {
+    "etchedQty": 0,
     "foilQty": 4,
     "nonfoilQty": 5,
   },
   "ch2": Object {
+    "etchedQty": 2,
     "foilQty": 0,
     "nonfoilQty": 7,
   },

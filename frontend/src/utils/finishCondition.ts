@@ -12,6 +12,10 @@ const displayFinishCondition = (finishCondition: keyof QOH) => {
         NONFOIL_LP: 'Nonfoil (LP)',
         NONFOIL_MP: 'Nonfoil (MP)',
         NONFOIL_HP: 'Nonfoil (HP)',
+        ETCHED_NM: 'Etched (NM)',
+        ETCHED_LP: 'Etched (LP)',
+        ETCHED_MP: 'Etched (MP)',
+        ETCHED_HP: 'Etched (HP)',
     };
 
     return finishConditionLabels[finishCondition];

@@ -45,6 +45,15 @@ test('Receive one', async () => {
                 set: 'STH',
                 ...tradeMetadata,
             },
+            {
+                quantity: 7,
+                finishCondition: 'ETCHED_LP',
+                id: '9987',
+                name: 'Mox Diamond',
+                set_name: 'Stronghold',
+                set: 'STH',
+                ...tradeMetadata,
+            },
         ],
         'ch1'
     );
@@ -52,7 +61,7 @@ test('Receive one', async () => {
     // ch1 uses `card_inventory`, ch2 uses `card_inventory_ch2`
     const foundDocs = await db.collection('card_inventory').find({}).toArray();
 
-    expect(foundDocs.length).toBe(2);
+    expect(foundDocs.length).toBe(3);
 
     expect(foundDocs).toContainEqual({
         _id: '3678',
@@ -69,6 +78,16 @@ test('Receive one', async () => {
         name: 'Mox Diamond',
         qoh: {
             NONFOIL_NM: 4,
+        },
+        set: 'STH',
+        set_name: 'Stronghold',
+    });
+
+    expect(foundDocs).toContainEqual({
+        _id: '9987',
+        name: 'Mox Diamond',
+        qoh: {
+            ETCHED_LP: 7,
         },
         set: 'STH',
         set_name: 'Stronghold',
@@ -118,7 +137,7 @@ test('Receive more', async () => {
     // ch1 uses `card_inventory`, ch2 uses `card_inventory_ch2`
     const foundDocs = await db.collection('card_inventory').find({}).toArray();
 
-    expect(foundDocs.length).toBe(3);
+    expect(foundDocs.length).toBe(4);
 
     expect(foundDocs).toContainEqual({
         _id: '3678',
@@ -148,5 +167,15 @@ test('Receive more', async () => {
         },
         set: 'ODY',
         set_name: 'Odyssey',
+    });
+
+    expect(foundDocs).toContainEqual({
+        _id: '9987',
+        name: 'Mox Diamond',
+        qoh: {
+            ETCHED_LP: 7,
+        },
+        set: 'STH',
+        set_name: 'Stronghold',
     });
 });

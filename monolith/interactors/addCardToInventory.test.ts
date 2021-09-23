@@ -68,21 +68,33 @@ test('Multiple card additions', async () => {
         location: 'ch1',
     });
 
+    // Third addition
+    await addCardToInventory({
+        quantity: 5,
+        finishCondition: 'ETCHED_LP',
+        id: '2345',
+        name: 'CardName',
+        set_name: 'SetName',
+        set: 'SNM',
+        location: 'ch1',
+    });
+
     const foundDoc = await db
         .collection('card_inventory')
         .findOne({ _id: '2345' });
 
     expect(foundDoc).toMatchInlineSnapshot(`
-        Object {
-          "_id": "2345",
-          "name": "CardName",
-          "qoh": Object {
-            "FOIL_NM": 0,
-          },
-          "set": "SNM",
-          "set_name": "SetName",
-        }
-    `);
+Object {
+  "_id": "2345",
+  "name": "CardName",
+  "qoh": Object {
+    "ETCHED_LP": 5,
+    "FOIL_NM": 0,
+  },
+  "set": "SNM",
+  "set_name": "SetName",
+}
+`);
 });
 
 test('Attempt negative card addition', async () => {
@@ -118,6 +130,46 @@ test('Attempt negative card addition', async () => {
           "name": "CardName",
           "qoh": Object {
             "FOIL_NM": 0,
+          },
+          "set": "SNM",
+          "set_name": "SetName",
+        }
+    `);
+});
+
+test('Attempt negative etched card addition', async () => {
+    // First addition
+    await addCardToInventory({
+        quantity: 2,
+        finishCondition: 'ETCHED_NM',
+        id: '5678',
+        name: 'CardName',
+        set_name: 'SetName',
+        set: 'SNM',
+        location: 'ch1',
+    });
+
+    // Second addition
+    await addCardToInventory({
+        quantity: -5,
+        finishCondition: 'ETCHED_NM',
+        id: '5678',
+        name: 'CardName',
+        set_name: 'SetName',
+        set: 'SNM',
+        location: 'ch1',
+    });
+
+    const foundDoc = await db
+        .collection('card_inventory')
+        .findOne({ _id: '5678' });
+
+    expect(foundDoc).toMatchInlineSnapshot(`
+        Object {
+          "_id": "5678",
+          "name": "CardName",
+          "qoh": Object {
+            "ETCHED_NM": 0,
           },
           "set": "SNM",
           "set_name": "SetName",

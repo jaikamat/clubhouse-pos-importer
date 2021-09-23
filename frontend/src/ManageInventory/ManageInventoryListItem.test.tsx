@@ -84,7 +84,7 @@ test('disables finish when appropriate', async () => {
 
 test('auto selects foil if no nonfoil option available', async () => {
     // A foil-only black lotus! Lol...
-    const mockCard = new ScryfallCard({ ...lotus, nonfoil: false, foil: true });
+    const mockCard = new ScryfallCard({ ...lotus, finishes: ['foil'] });
 
     await render(<ManageInventoryListItem card={mockCard} />);
 

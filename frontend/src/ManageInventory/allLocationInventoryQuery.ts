@@ -4,6 +4,7 @@ import { GET_CARD_FROM_ALL_LOCATIONS } from '../utils/endpoints';
 interface Quantities {
     foilQty: number;
     nonfoilQty: number;
+    etchedQty: number;
 }
 
 export interface ResponseData {

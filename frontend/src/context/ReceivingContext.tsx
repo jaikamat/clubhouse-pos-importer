@@ -2,7 +2,7 @@ import { sortBy } from 'lodash';
 import React, { createContext, FC, useContext, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { useToastContext } from '../ui/ToastContext';
-import { ScryfallCard } from '../utils/ScryfallCard';
+import { FinishCondition, ScryfallCard } from '../utils/ScryfallCard';
 import cardSearchQuery from './cardSearchQuery';
 import receivingQuery from './receivingQuery';
 
@@ -18,7 +18,7 @@ const TRADE_TYPES = { CASH: Trade.Cash, CREDIT: Trade.Credit };
 
 export type ReceivingCard = ScryfallCard & {
     uuid_key: string;
-    finishCondition: string;
+    finishCondition: FinishCondition;
     cashPrice: number | null;
     marketPrice: number | null;
     creditPrice: number | null;
@@ -60,7 +60,7 @@ interface AddToListMeta {
     cashPrice: number | null;
     marketPrice: number | null;
     creditPrice: number | null;
-    finishCondition: string;
+    finishCondition: FinishCondition;
 }
 
 const ReceivingContext = createContext<Context>(defaultContext);

@@ -19,7 +19,7 @@ const useStyles = makeStyles(({ spacing }) => ({
         '& > *': {
             display: 'inline',
         },
-        '& > *:first-child': {
+        '& > *:not(:last-child)': {
             paddingRight: spacing(1),
         },
     },
@@ -33,8 +33,8 @@ interface Props {
 const TotalStoreInventory: FC<Props> = ({ title, searchResults }) => {
     const { labelContainer, chipContainer } = useStyles();
     const [quantities, setQuantities] = useState<ResponseData>({
-        ch1: { foilQty: 0, nonfoilQty: 0 },
-        ch2: { foilQty: 0, nonfoilQty: 0 },
+        ch1: { foilQty: 0, nonfoilQty: 0, etchedQty: 0 },
+        ch2: { foilQty: 0, nonfoilQty: 0, etchedQty: 0 },
     });
 
     const [loading, setLoading] = useState(false);
@@ -67,32 +67,34 @@ const TotalStoreInventory: FC<Props> = ({ title, searchResults }) => {
         );
     }
 
+    const { ch1, ch2 } = quantities;
+
     return (
         <div className={labelContainer}>
             <div>
                 <Typography>Beaverton totals:</Typography>
                 <Box className={chipContainer}>
-                    <InventoryChip
-                        label="Foil"
-                        quantity={quantities.ch1.foilQty}
-                    />
-                    <InventoryChip
-                        label="Nonfoil"
-                        quantity={quantities.ch1.nonfoilQty}
-                    />
+                    <InventoryChip label="Foil" quantity={ch1.foilQty} />
+                    <InventoryChip label="Nonfoil" quantity={ch1.nonfoilQty} />
+                    {ch1.etchedQty > 0 && (
+                        <InventoryChip
+                            label="Etched"
+                            quantity={ch1.etchedQty}
+                        />
+                    )}
                 </Box>
             </div>
             <div>
                 <Typography>Hillsboro totals:</Typography>
                 <Box className={chipContainer}>
-                    <InventoryChip
-                        label="Foil"
-                        quantity={quantities.ch2.foilQty}
-                    />
-                    <InventoryChip
-                        label="Nonfoil"
-                        quantity={quantities.ch2.nonfoilQty}
-                    />
+                    <InventoryChip label="Foil" quantity={ch2.foilQty} />
+                    <InventoryChip label="Nonfoil" quantity={ch2.nonfoilQty} />
+                    {ch2.etchedQty > 0 && (
+                        <InventoryChip
+                            label="Etched"
+                            quantity={ch2.etchedQty}
+                        />
+                    )}
                 </Box>
             </div>
         </div>

@@ -10,9 +10,12 @@ import CardRowContainer from '../ui/CardRowContainer';
 import ControlledDropdown from '../ui/ControlledDropdown';
 import TextField from '../ui/TextField';
 import { useToastContext } from '../ui/ToastContext';
-import checkCardFinish from '../utils/checkCardFinish';
 import createFinishCondition from '../utils/createFinishCondtition';
-import { cardConditions, finishes } from '../utils/dropdownOptions';
+import {
+    cardConditions,
+    createDropdownFinishOptions,
+    finishDropdownDisabled,
+} from '../utils/dropdownOptions';
 import { Condition, Finish, ScryfallCard } from '../utils/ScryfallCard';
 
 interface Props {
@@ -62,6 +65,9 @@ const validate = ({
 };
 
 const ReceivingSearchItem: FC<Props> = ({ card }) => {
+    const dropdownFinishes = createDropdownFinishOptions(card.finishes);
+    const initialFinish = dropdownFinishes[0].value;
+
     const createToast = useToastContext();
     const initialValues: FormValues = {
         quantity: 1,
@@ -69,12 +75,8 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
         creditPrice: 0,
         marketPrice: 0,
         selectedCondition: 'NM',
-        selectedFinish: checkCardFinish(card.nonfoil, card.foil).selectedFinish,
+        selectedFinish: initialFinish,
     };
-
-    // Determines whether the select finish dropdown is permanently disabled, seeded from props
-    const finishDisabled = checkCardFinish(card.nonfoil, card.foil)
-        .finishDisabled;
 
     const { addToList } = useReceivingContext();
 
@@ -111,21 +113,16 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
         $('#searchBar').focus().select();
     };
 
-    const {
-        handleSubmit,
-        setFieldValue,
-        values,
-        isValid,
-        handleChange,
-    } = useFormik({
-        initialValues,
-        validate,
-        onSubmit: (v, { resetForm }) => {
-            handleInventoryAdd(v);
-            resetForm();
-        },
-        validateOnMount: true,
-    });
+    const { handleSubmit, setFieldValue, values, isValid, handleChange } =
+        useFormik({
+            initialValues,
+            validate,
+            onSubmit: (v, { resetForm }) => {
+                handleInventoryAdd(v);
+                resetForm();
+            },
+            validateOnMount: true,
+        });
 
     const { cardImage } = card;
 
@@ -207,12 +204,12 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
                         <ControlledDropdown
                             name="selectedFinish"
                             label="Finish"
-                            options={finishes}
+                            options={dropdownFinishes}
                             value={values.selectedFinish}
                             onChange={(v) => {
                                 setFieldValue('selectedFinish', v);
                             }}
-                            disabled={finishDisabled}
+                            disabled={finishDropdownDisabled(card.finishes)}
                         />
                     </Grid>
                     <Grid item>

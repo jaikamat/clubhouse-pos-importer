@@ -49,6 +49,18 @@ const MarketPrice: FC<Props> = ({ id, finish, round, showMid = true }) => {
 
     const loader = <span>Loading...</span>;
 
+    /**
+     * TODO: Remove this once we support etched pricing, and integrate properly
+     */
+    if (finish === 'ETCHED') {
+        return (
+            <Chip
+                size="small"
+                label={loading ? loader : <span>Mkt. N/A</span>}
+            />
+        );
+    }
+
     return (
         <>
             <Chip

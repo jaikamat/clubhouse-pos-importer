@@ -35,26 +35,33 @@ const SubmittedCardsTable: FC<Props> = ({ cards }) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {cards.map((c) => {
-                        if (c.bulkCard) {
-                            const { bulkCard, quantity, finish, condition } = c;
+                    {cards
+                        .filter((c) => !!c.bulkCard)
+                        .map((c) => {
+                            if (c.bulkCard) {
+                                const {
+                                    bulkCard,
+                                    quantity,
+                                    finish,
+                                    condition,
+                                } = c;
 
-                            return (
-                                <TableRow
-                                    key={`${
-                                        c.bulkCard.scryfall_id
-                                    }-${Math.random()}`}
-                                >
-                                    <TableCell>
-                                        {bulkCard.display_name}
-                                    </TableCell>
-                                    <TableCell>{quantity}</TableCell>
-                                    <TableCell>{finish}</TableCell>
-                                    <TableCell>{condition}</TableCell>
-                                </TableRow>
-                            );
-                        }
-                    })}
+                                return (
+                                    <TableRow
+                                        key={`${
+                                            c.bulkCard.scryfall_id
+                                        }-${Math.random()}`}
+                                    >
+                                        <TableCell>
+                                            {bulkCard.display_name}
+                                        </TableCell>
+                                        <TableCell>{quantity}</TableCell>
+                                        <TableCell>{finish}</TableCell>
+                                        <TableCell>{condition}</TableCell>
+                                    </TableRow>
+                                );
+                            } else return null;
+                        })}
                 </TableBody>
             </Table>
         </TableContainer>

@@ -4,15 +4,9 @@ import React, { FC } from 'react';
 import Price from '../common/Price';
 import CardImageTooltip from '../ui/CardImageTooltip';
 import SetIcon from '../ui/SetIcon';
-import { Condition, Finish } from '../utils/ScryfallCard';
+import displayFinishCondition from '../utils/finishCondition';
+import { Finish } from '../utils/ScryfallCard';
 import { ResponseCard } from './filteredCardsQuery';
-
-const conditionMap: Record<Condition, string> = {
-    NM: 'Near Mint',
-    LP: 'Light Play',
-    MP: 'Moderate Play',
-    HP: 'Heavy Play',
-};
 
 interface Props {
     card: ResponseCard;
@@ -31,7 +25,6 @@ const BrowseInventoryRow: FC<Props> = ({
     },
 }) => {
     const finish = finishCondition.split('_')[0] as Finish;
-    const condition = finishCondition.split('_')[1] as Condition;
 
     return (
         <TableRow>
@@ -52,7 +45,7 @@ const BrowseInventoryRow: FC<Props> = ({
                 <SetIcon set={set} rarity={rarity} />
                 {set_name}
             </TableCell>
-            <TableCell>{conditionMap[condition]}</TableCell>
+            <TableCell>{displayFinishCondition(finishCondition)}</TableCell>
             <TableCell>{quantityInStock}</TableCell>
             <TableCell>
                 <Price num={price} />

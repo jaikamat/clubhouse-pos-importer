@@ -33,8 +33,10 @@ describe('Sort function', () => {
               "Necropotence",
               "Wheel of Fortune",
               "Colossal Dreadmaw",
+              "Curious Pair // Treats to Share",
               "World Breaker",
               "Sigarda, Host of Herons",
+              "Dimir Keyrune",
               "Emrakul, the Aeons Torn",
               "Gaea's Cradle",
             ]

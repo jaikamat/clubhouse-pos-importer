@@ -29,14 +29,16 @@ export type FinishCondition = `${Finish}_${Condition}`;
 
 export type QOH = Partial<Record<FinishCondition, number>>;
 
+type Color = 'W' | 'U' | 'B' | 'R' | 'G';
+
 export interface ImageURIs {
     normal: string;
 }
 
 export interface CardFace {
-    colors: string[];
+    colors: Color[];
     type_line: string;
-    color_identity: string[];
+    color_identity: Color[];
     image_uris: ImageURIs;
 }
 
@@ -52,14 +54,14 @@ export interface ScryfallApiCard {
     image_uris: ImageURIs;
     card_faces?: CardFace[];
     finishes: Finishes;
-    colors: string[];
+    colors: Color[];
     type_line: string;
     frame_effects?: string[];
     lang: LanguageCode;
     border_color: string;
     display_name?: string;
     cardImage?: string;
-    color_identity: string[];
+    color_identity: Color[];
     qoh?: QOH;
     quantity?: number;
     qtyToSell?: number;
@@ -67,6 +69,7 @@ export interface ScryfallApiCard {
     price?: number;
     promo_types?: string[];
     tcgplayer_id?: number;
+    keywords: string[];
 }
 
 /**
@@ -86,16 +89,17 @@ export class ScryfallCard {
     public image_uris: { normal: string };
     public card_faces: CardFace[];
     public finishes: Finishes;
-    public colors: string[];
+    public colors: Color[];
     public type_line: string;
     public frame_effects: string[];
     public lang: LanguageCode;
     public border_color: string;
     public display_name: string;
     public cardImage: string;
-    public color_identity: string[];
+    public color_identity: Color[];
     public promo_types: string[];
     public tcgplayer_id: number | null;
+    public keywords: string[];
     public qoh: QOH;
 
     public constructor(card: ScryfallApiCard) {
@@ -115,6 +119,7 @@ export class ScryfallCard {
         this.border_color = card.border_color;
         this.color_identity = card.color_identity || null;
         this.promo_types = card.promo_types || [];
+        this.keywords = card.keywords || [];
         this.cardImage = getCardImage(this);
         this.display_name = createDisplayName(this);
         this.tcgplayer_id = card.tcgplayer_id || null;

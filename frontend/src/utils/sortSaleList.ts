@@ -1,76 +1,63 @@
 import { ScryfallCard } from './ScryfallCard';
 
+const ORDER = ['W', 'U', 'B', 'R', 'G', 'MULTI', 'COLORLESS', 'LAND'] as const;
+
+type Order = typeof ORDER[number];
+
+/**
+ * Main helper function that manages sort order
+ * @param {Object} card
+ */
+function helpSort(card: ScryfallCard): Order {
+    let cardFace = null;
+
+    // First, get correct card face
+    if (
+        card.card_faces &&
+        card.card_faces.length > 1 &&
+        card.card_faces[0].colors // Adventure cards do not have a `colors` property on their faces
+    ) {
+        cardFace = card.card_faces[0];
+    } else {
+        cardFace = card;
+    }
+
+    /**
+     * Devoid cards are an edge-case.
+     *
+     * If we know a card has no color and is devoid, we default to its color identity as a pip descriptor
+     */
+    if (card.keywords.includes('Devoid')) {
+        if (cardFace.color_identity.length > 1) {
+            return 'MULTI';
+        } else {
+            return cardFace.color_identity[0];
+        }
+    }
+
+    if (cardFace.colors.length > 1) {
+        return 'MULTI';
+    }
+
+    if (cardFace.colors.length === 0) {
+        if (cardFace.type_line.includes('Land')) {
+            return 'LAND';
+        } else {
+            return 'COLORLESS';
+        }
+    }
+
+    return cardFace.colors[0];
+}
+
 /**
  * Takes in an unordered group of cards and sorts them according to The Clubhouse's specs:
  * WUBRG, then multicolor, then colorless, then land, alphabetically within each color/category
  */
 export default function sortSaleList<T extends ScryfallCard>(cards: T[]) {
-    const ORDER = ['W', 'U', 'B', 'R', 'G', 'MULTI', 'COLORLESS', 'LAND'];
+    const alphaSort = cards.sort((a, b) => a.name.localeCompare(b.name));
 
-    /**
-     * Main helper function that manages sort order
-     * @param {Object} card
-     */
-    function helpSort(card: ScryfallCard) {
-        let arrayConst = null;
-
-        let colorsLength = null;
-        let cardFace = null;
-
-        try {
-            // If colors don't exist, it's a flip card or storybook frame
-            colorsLength = card.colors.length;
-            cardFace = card;
-        } catch (e) {
-            try {
-                // Storybook frames from Eldraine may throw error
-                colorsLength = card.card_faces[0].colors.length;
-                cardFace = card.card_faces[0];
-            } catch (e) {
-                colorsLength = card.colors.length;
-                cardFace = card;
-            }
-        }
-
-        // Apply logic to return correct constant enum
-        if (colorsLength === 0) {
-            arrayConst = 'COLORLESS';
-        } else if (colorsLength === 1) {
-            arrayConst = cardFace.colors[0];
-        } else if (colorsLength > 1) {
-            arrayConst = 'MULTI';
-        }
-
-        // Drill into colorless cards, if they are lands or not
-        if (arrayConst === 'COLORLESS') {
-            if (cardFace.color_identity) {
-                if (cardFace.color_identity.length === 1) {
-                    arrayConst = cardFace.color_identity[0];
-                }
-                if (cardFace.color_identity.length > 1) {
-                    arrayConst = 'MULTI';
-                }
-            }
-            if (cardFace.type_line.includes('Land')) {
-                arrayConst = 'LAND';
-            }
-        }
-
-        // Final check to guard against a null arrayConst
-        if (!arrayConst) {
-            arrayConst = 'LAND';
-        }
-
-        return arrayConst;
-    }
-
-    const alphaSort = cards.sort((a, b) => {
-        return a.name.localeCompare(b.name);
-    });
-
-    const sorted = alphaSort.sort((a, b) => {
+    return alphaSort.sort((a, b) => {
         return ORDER.indexOf(helpSort(a)) - ORDER.indexOf(helpSort(b));
     });
-
-    return sorted;
 }

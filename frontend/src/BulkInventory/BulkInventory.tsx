@@ -120,9 +120,9 @@ const BulkInventory: FC = () => {
                 });
             }
 
-            setSubmittedCards([
-                ...submittedCards.filter((c) => c.uuid !== values.uuid),
-            ]);
+            setSubmittedCards(
+                submittedCards.filter((c) => c.uuid !== values.uuid)
+            );
         } catch (err) {
             console.log(err);
             createToast({

@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 import { useFormik } from 'formik';
 import React, { FC, useEffect, useState } from 'react';
+import { v4 as uuid } from 'uuid';
 import CardImage from '../common/CardImage';
 import addCardToInventoryQuery from '../ManageInventory/addCardToInventoryQuery';
 import Button from '../ui/Button';
@@ -42,19 +43,24 @@ const useStyles = makeStyles(({ palette }) => ({
     },
 }));
 
-export interface FormValues {
+interface FormValues {
     bulkCard: BulkCard | null;
     finish: Finish;
     quantity: string;
     condition: Condition;
 }
 
+export type AddedCard = FormValues & { uuid: string };
+
 const BulkInventory: FC = () => {
     const { imageContainer, placeholderImage } = useStyles();
     const [currentCardImage, setCurrentCardImage] = useState<string>('');
-    const [submittedCards, setSubmittedCards] = useState<FormValues[]>([]);
+    const [submittedCards, setSubmittedCards] = useState<AddedCard[]>([]);
     const createToast = useToastContext();
 
+    /**
+     * Adds a card to inventory
+     */
     const onSubmit = async (values: FormValues) => {
         try {
             if (values.bulkCard) {
@@ -77,12 +83,50 @@ const BulkInventory: FC = () => {
                     severity: 'success',
                 });
             }
-            setSubmittedCards([values, ...submittedCards]);
+            setSubmittedCards([{ ...values, uuid: uuid() }, ...submittedCards]);
             resetForm();
         } catch (err) {
             console.log(err);
             createToast({
                 message: `Error adding card`,
+                severity: 'error',
+            });
+        }
+    };
+
+    /**
+     * Removes a card from inventory as well as the array of added cards
+     */
+    const onRemove = async (values: AddedCard) => {
+        try {
+            if (values.bulkCard) {
+                await addCardToInventoryQuery({
+                    quantity: -Number(values.quantity),
+                    finishCondition: createFinishCondition(
+                        values.finish,
+                        values.condition
+                    ),
+                    cardInfo: {
+                        id: values.bulkCard.scryfall_id,
+                        name: values.bulkCard.name,
+                        set_name: values.bulkCard.set_name,
+                        set: values.bulkCard.set_abbreviation,
+                    },
+                });
+
+                createToast({
+                    message: `Removed ${values.quantity}x ${values.bulkCard.name} from inventory`,
+                    severity: 'success',
+                });
+            }
+
+            setSubmittedCards(
+                submittedCards.filter((c) => c.uuid !== values.uuid)
+            );
+        } catch (err) {
+            console.log(err);
+            createToast({
+                message: `Error removing card`,
                 severity: 'error',
             });
         }
@@ -219,7 +263,10 @@ const BulkInventory: FC = () => {
             {submittedCards.length > 0 && (
                 <div>
                     <SectionText>Recently added cards</SectionText>
-                    <SubmittedCardsTable cards={submittedCards} />
+                    <SubmittedCardsTable
+                        cards={submittedCards}
+                        onRemove={onRemove}
+                    />
                 </div>
             )}
         </Container>

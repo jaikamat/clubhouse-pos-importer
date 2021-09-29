@@ -7,14 +7,29 @@ import {
     TableHead,
     TableRow,
 } from '@material-ui/core';
-import React, { FC } from 'react';
-import { FormValues } from './BulkInventory';
+import React, { FC, useState } from 'react';
+import Button from '../ui/Button';
+import { AddedCard } from './BulkInventory';
 
 interface Props {
-    cards: FormValues[];
+    cards: AddedCard[];
+    onRemove: (values: AddedCard) => void;
 }
 
-const SubmittedCardsTable: FC<Props> = ({ cards }) => {
+const SubmittedCardsTable: FC<Props> = ({ cards, onRemove }) => {
+    const [onRemoveLoading, setOnRemoveLoading] = useState<boolean>(false);
+
+    const doRemove = async (card: AddedCard) => {
+        try {
+            setOnRemoveLoading(true);
+            await onRemove(card);
+        } catch (e) {
+            console.log(e);
+        } finally {
+            setOnRemoveLoading(false);
+        }
+    };
+
     return (
         <TableContainer component={Paper} variant="outlined">
             <Table size="small">
@@ -32,6 +47,7 @@ const SubmittedCardsTable: FC<Props> = ({ cards }) => {
                         <TableCell>
                             <b>Condition</b>
                         </TableCell>
+                        <TableCell />
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -58,6 +74,14 @@ const SubmittedCardsTable: FC<Props> = ({ cards }) => {
                                         <TableCell>{quantity}</TableCell>
                                         <TableCell>{finish}</TableCell>
                                         <TableCell>{condition}</TableCell>
+                                        <TableCell align="right">
+                                            <Button
+                                                onClick={() => doRemove(c)}
+                                                disabled={onRemoveLoading}
+                                            >
+                                                Remove
+                                            </Button>
+                                        </TableCell>
                                     </TableRow>
                                 );
                             } else return null;

@@ -30,7 +30,7 @@
         "analyze": "source-map-explorer 'build/static/js/*.js'",
         "start": "react-scripts start",
         "build": "react-scripts build",
-        "build-pages": "rm -r ../docs && npm run build && mv ./build ../docs",
+        "build-pages": "npm version minor && rm -r ../docs && npm run build && mv ./build ../docs",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "typecheck": "tsc --noEmit"

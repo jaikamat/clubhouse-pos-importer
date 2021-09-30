@@ -29,8 +29,6 @@ async function saveScryfallBulk(bulkType) {
         );
         const writer = fs.createWriteStream(myPath);
 
-        console.log("Fetching Scryfall bulk...");
-
         const response = await axios({
             url: defaultCardsUri,
             method: "GET",
@@ -41,7 +39,6 @@ async function saveScryfallBulk(bulkType) {
 
         return new Promise<void>((resolve, reject) => {
             writer.on("finish", () => {
-                console.log("Scryfall bulk downloaded and written");
                 resolve();
             });
 

@@ -1,6 +1,6 @@
 import yargs from "yargs";
+import aggregateValidCards from "./aggregateValidCards";
 import collectionUpkeep from "./collectionUpkeep";
-import getLanguageCards from "./getLanguageCards";
 import mongoBulkImport from "./mongoBulkImport";
 import saveScryfallBulk from "./saveScryfallBulk";
 const SOURCE_JSON_URI = `${__dirname}/bulk_data/bulk_all_cards.json`;
@@ -24,21 +24,23 @@ async function init() {
     try {
         console.time("bulkUpdate");
 
-        await saveScryfallBulk("all_cards"); // Save all_cards locally
+        // Save all_cards locally
+        console.log("Fetching Scryfall bulk...");
+        await saveScryfallBulk("all_cards");
+        console.log("Scryfall bulk downloaded and written");
 
-        await collectionUpkeep(database); // Maintain indexes and clear documents
+        // Clean collections and rebuilt indexes if required
+        console.log("Deleting collection documents...");
+        await collectionUpkeep(database);
+        console.log("Documents deleted, collection is clean");
 
-        // Add English cards
-        console.log("Collating English cards...");
-        const sourceEnglish = await getLanguageCards(SOURCE_JSON_URI, "en"); // Grab all English cards
-        console.log(`Updating bulk for ${sourceEnglish.length} cards...`);
-        await mongoBulkImport(sourceEnglish, database); // Persist them
+        // Aggregate valid cards
+        console.log("Aggregating cards...");
+        const source = await aggregateValidCards(SOURCE_JSON_URI);
 
-        // Add Japanese cards
-        console.log("Collating Japanese cards...");
-        const sourceJapanese = await getLanguageCards(SOURCE_JSON_URI, "ja"); // Grab all Japanese cards
-        console.log(`Updating bulk for ${sourceJapanese.length} cards...`);
-        await mongoBulkImport(sourceJapanese, database); // Persist them
+        // Persist the aggregated cards
+        console.log(`Updating bulk for ${source.length} cards...`);
+        await mongoBulkImport(source, database);
 
         console.timeEnd("bulkUpdate");
         console.log(

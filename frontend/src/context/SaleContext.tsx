@@ -243,8 +243,6 @@ export const SaleProvider: FC<Props> = ({ children }) => {
                 severity: 'error',
                 message: 'Sale was not created',
             });
-
-            resetSaleState();
         }
     };
 

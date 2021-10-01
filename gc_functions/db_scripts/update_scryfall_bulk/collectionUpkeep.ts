@@ -13,7 +13,6 @@ async function collectionUpkeep(databaseName: string) {
         console.log(`Connected to MongoDB database: ${db.databaseName}`);
 
         // Recreate desired collection indexes
-        console.log("Recreating collection indexes...");
         await db
             .collection(COLLECTION)
             .createIndexes([
@@ -21,12 +20,9 @@ async function collectionUpkeep(databaseName: string) {
                 { key: { name: 1, games: 1 } },
                 { key: { name: 1 } },
             ]);
-        console.log("Collection indexes recreated");
 
         // Delete all elements in the collection
-        console.log("Deleting collection documents...");
         await db.collection(COLLECTION).deleteMany({});
-        console.log("Documents deleted, preparing to insert fresh cards");
     } catch (error) {
         throw error;
     } finally {

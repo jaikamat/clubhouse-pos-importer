@@ -7,7 +7,7 @@
         "functions": "./src/*.js"
     },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "jest",
         "watch": "npm-watch functions",
         "functions": "cd ./src && npx @google-cloud/functions-framework --target getPriceFromTcg --port 3030",
         "build": "rm -r ./built && tsc -p . && echo \"Built TS source\"",

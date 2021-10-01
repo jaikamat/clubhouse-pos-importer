@@ -1,32 +1,15 @@
-import { isAcceptedForeign, isAcceptedLang } from "./aggregateValidCards";
+import { acceptedLangs, BulkCard } from "./cardValidators";
 
-test("isAcceptedForeign", () => {
-    expect(isAcceptedForeign({ lang: "en", set: "war" })).toBeFalsy();
-    expect(isAcceptedForeign({ lang: "ja", set: "foo" })).toBeFalsy();
-    expect(isAcceptedForeign({ lang: "ja", set: "war" })).toBeTruthy();
-});
+test("accepted languages / sets", () => {
+    const bulkCardA = { lang: "ja", set: "sta" } as BulkCard;
 
-test("isAcceptedLang", () => {
-    expect(isAcceptedLang({ lang: "kl" })).toBeFalsy();
-    expect(isAcceptedLang({ lang: "en" })).toBeTruthy();
-});
+    expect(acceptedLangs(bulkCardA)).toBeTruthy();
 
-test("combine", () => {
-    const bulkCardA = { lang: "ja", set: "sta" };
+    const bulkCardB = { lang: "en", set: "sta" } as BulkCard;
 
-    expect(
-        isAcceptedForeign(bulkCardA) || isAcceptedLang(bulkCardA)
-    ).toBeTruthy();
+    expect(acceptedLangs(bulkCardB)).toBeTruthy();
 
-    const bulkCardB = { lang: "en", set: "sta" };
+    const bulkCardC = { lang: "ja", set: "foo" } as BulkCard;
 
-    expect(
-        isAcceptedForeign(bulkCardB) || isAcceptedLang(bulkCardB)
-    ).toBeTruthy();
-
-    const bulkCardC = { lang: "ja", set: "foo" };
-
-    expect(
-        isAcceptedForeign(bulkCardC) || isAcceptedLang(bulkCardC)
-    ).toBeFalsy();
+    expect(acceptedLangs(bulkCardC)).toBeFalsy();
 });

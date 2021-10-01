@@ -179,7 +179,23 @@ export const SaleProvider: FC<Props> = ({ children }) => {
             const data = await createSuspendedSaleQuery({
                 customerName: customerName,
                 notes: notes,
-                saleList: saleListCards,
+                saleList: saleListCards.map(
+                    ({
+                        id,
+                        price,
+                        qtyToSell,
+                        finishCondition,
+                        name,
+                        set_name,
+                    }) => ({
+                        id,
+                        price,
+                        qtyToSell,
+                        finishCondition,
+                        name,
+                        set_name,
+                    })
+                ),
             });
 
             resetSaleState();

@@ -39,10 +39,7 @@ const createSuspendedSaleController: Controller<ReqWithSuspendSale> = async (
 
     const { error }: JoiValidation<SuspendSaleBody> = schema.validate(
         req.body,
-        {
-            abortEarly: false,
-            allowUnknown: true,
-        }
+        { abortEarly: false }
     );
 
     if (error) {

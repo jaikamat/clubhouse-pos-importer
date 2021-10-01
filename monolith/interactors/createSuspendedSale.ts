@@ -1,5 +1,7 @@
 import moment from 'moment';
-import { ClubhouseLocation, FinishSaleCard } from '../common/types';
+import { ScryfallCard } from '../common/ScryfallApiCard';
+import ApiCard from '../common/ScryfallCard';
+import { ClubhouseLocation, Collection, FinishSaleCard } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import updateCardInventory from './updateCardInventory';
@@ -36,6 +38,24 @@ async function validateInventory(
 }
 
 /**
+ * Finds a bulk card by its associated `_id`
+ */
+async function findBulkById(id: string): Promise<ApiCard> {
+    try {
+        const db = await getDatabaseConnection();
+
+        const card: ApiCard = await db
+            .collection(Collection.scryfallBulkCards)
+            .findOne({ _id: id });
+
+        return card;
+    } catch (err) {
+        throw err;
+    }
+}
+
+/**
+ * // TODO: Is this true??
  * Creates a suspended sale. Note that the DB has a TTL index on `createdAt` that wipes documents more than one week old
  * @param {string} customerName - Name of the customer
  * @param {string} notes - Optional notes
@@ -71,11 +91,31 @@ async function createSuspendedSale(
         );
         await Promise.all(dbInserts);
 
+        // Aggregate bulk of all the target cards
+        const promisedCards = saleList.map((card) => findBulkById(card.id));
+        const bulkCards = await Promise.all(promisedCards);
+
+        // Zip them up with the received sale metadata
+        const transformedCards = bulkCards.map((bc, idx) => {
+            const currentSaleListCard = saleList[idx];
+            const { price, qtyToSell, finishCondition, name, set_name } =
+                currentSaleListCard;
+
+            return {
+                ...new ScryfallCard(bc),
+                price,
+                qtyToSell,
+                finishCondition,
+                name,
+                set_name,
+            };
+        });
+
         return await collection.insertOne({
             createdAt: moment().utc().toDate(),
             name: customerName,
             notes: notes,
-            list: saleList,
+            list: transformedCards,
         });
     } catch (e) {
         throw e;

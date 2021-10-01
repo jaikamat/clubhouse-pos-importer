@@ -57,6 +57,8 @@ export default interface ScryfallCard {
     purchase_uris: PurchaseUris;
     image_uris?: ImageUris;
     finishes: ('foil' | 'nonfoil' | 'etched' | 'glossy')[];
+    printed_name?: string;
+    colors: string[];
 }
 
 export interface CardFacesEntity {
@@ -66,6 +68,7 @@ export interface CardFacesEntity {
     type_line: string;
     oracle_text: string;
     colors?: string[] | null;
+    color_identity?: string[] | null;
     power: string;
     toughness: string;
     artist: string;

@@ -1,12 +1,22 @@
 import fs from "fs";
 import JSONStream from "JSONStream";
 
+export const isAcceptedForeign = (bulkCard: any) => {
+    const isJapanese = bulkCard.lang === "ja";
+    const isAcceptedSet = bulkCard.set === "war" || bulkCard.set === "sta";
+
+    return isJapanese && isAcceptedSet;
+};
+
+export const isAcceptedLang = (bulkCard: any) =>
+    ["en", "ph"].includes(bulkCard.lang);
+
 /**
  * Determines what cards will ultimately be committed to the `bulk_cards` collection
  */
 function isValidCard(bulkCard: any) {
-    /** We support English, Japanese, and Phyrexian cards */
-    const isSupportedLang = ["en", "ja", "ph"].includes(bulkCard.lang);
+    const acceptedLangs =
+        isAcceptedForeign(bulkCard) || isAcceptedLang(bulkCard);
     /** Tests against art series cards */
     const isArtSeries = bulkCard.layout === "art_series";
     /** We don't support glossy-only cards yet */
@@ -33,7 +43,7 @@ function isValidCard(bulkCard: any) {
         bulkCard.games.length === 0 || bulkCard.games.includes("paper");
 
     return [
-        isSupportedLang,
+        acceptedLangs,
         noGamesOrPaperGames,
         !isArtSeries,
         !isOnlyGlossy,

@@ -2,6 +2,7 @@ import createDisplayName from '../lib/createDisplayName';
 import getCardImage from '../lib/getCardImage';
 import RawScryfallCard, { CardFacesEntity } from './RawScryfallCard';
 
+// TODO: This belongs in RawScryfallCard
 // Language codes from Scryfall. See https://scryfall.com/docs/api/languages for reference.
 export type LanguageCode =
     | 'en'
@@ -22,8 +23,10 @@ export type LanguageCode =
     | 'sa'
     | 'px';
 
+// TODO: This belongs in RawScryfallCard
 type Color = 'W' | 'U' | 'B' | 'R' | 'G';
 
+// TODO: This belongs in RawScryfallCard
 type Finishes = ('foil' | 'nonfoil' | 'etched' | 'glossy')[];
 
 export class ScryfallApiCard {

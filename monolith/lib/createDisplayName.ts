@@ -1,7 +1,7 @@
-import { ScryfallCard } from '../common/ScryfallApiCard';
+import { ScryfallApiCard } from '../common/ScryfallApiCard';
 
 type Card = Pick<
-    ScryfallCard,
+    ScryfallApiCard,
     | 'name'
     | 'frame_effects'
     | 'border_color'

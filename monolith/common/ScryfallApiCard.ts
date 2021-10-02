@@ -26,7 +26,7 @@ type Color = 'W' | 'U' | 'B' | 'R' | 'G';
 
 type Finishes = ('foil' | 'nonfoil' | 'etched' | 'glossy')[];
 
-export class ScryfallCard {
+export class ScryfallApiCard {
     public id: string;
     public name: string;
     public printed_name: string | null;

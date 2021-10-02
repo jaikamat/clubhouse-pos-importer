@@ -1,6 +1,6 @@
 import moment from 'moment';
 import RawScryfallCard from '../common/RawScryfallCard';
-import { ScryfallCard } from '../common/ScryfallApiCard';
+import { ScryfallApiCard } from '../common/ScryfallApiCard';
 import { ClubhouseLocation, Collection, FinishSaleCard } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
@@ -102,7 +102,7 @@ async function createSuspendedSale(
                 currentSaleListCard;
 
             return {
-                ...new ScryfallCard(bc),
+                ...new ScryfallApiCard(bc),
                 price,
                 qtyToSell,
                 finishCondition,

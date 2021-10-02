@@ -1,6 +1,6 @@
-import { ScryfallCard } from '../common/ScryfallApiCard';
+import { ScryfallApiCard } from '../common/ScryfallApiCard';
 
-const getCardImage = (card: ScryfallCard) => {
+const getCardImage = (card: ScryfallApiCard) => {
     let myImage: string;
 
     try {

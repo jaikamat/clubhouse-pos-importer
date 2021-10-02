@@ -1,4 +1,4 @@
-import ScryfallCard from '../common/ScryfallCard';
+import RawScryfallCard from '../common/RawScryfallCard';
 import {
     ClubhouseLocation,
     Collection,
@@ -17,7 +17,7 @@ interface CountByPrinting {
     };
     quantity_sold: number;
     card_title: string;
-    card_metadata: ScryfallCard;
+    card_metadata: RawScryfallCard;
     quantity_on_hand: QOH;
 }
 

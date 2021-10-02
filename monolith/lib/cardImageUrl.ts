@@ -1,6 +1,6 @@
-import ScryfallCard from '../common/ScryfallCard';
+import RawScryfallCard from '../common/RawScryfallCard';
 
-const cardImageUrl = (card: ScryfallCard) => {
+const cardImageUrl = (card: RawScryfallCard) => {
     let myImage: string;
 
     try {

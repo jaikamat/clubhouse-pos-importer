@@ -1,6 +1,6 @@
 import createDisplayName from '../lib/createDisplayName';
 import getCardImage from '../lib/getCardImage';
-import RawScryfallCard, { CardFacesEntity } from './ScryfallCard';
+import RawScryfallCard, { CardFacesEntity } from './RawScryfallCard';
 
 // Language codes from Scryfall. See https://scryfall.com/docs/api/languages for reference.
 export type LanguageCode =

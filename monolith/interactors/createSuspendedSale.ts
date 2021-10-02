@@ -1,6 +1,6 @@
 import moment from 'moment';
+import RawScryfallCard from '../common/RawScryfallCard';
 import { ScryfallCard } from '../common/ScryfallApiCard';
-import ApiCard from '../common/ScryfallCard';
 import { ClubhouseLocation, Collection, FinishSaleCard } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
@@ -40,11 +40,11 @@ async function validateInventory(
 /**
  * Finds a bulk card by its associated `_id`
  */
-async function findBulkById(id: string): Promise<ApiCard> {
+async function findBulkById(id: string): Promise<RawScryfallCard> {
     try {
         const db = await getDatabaseConnection();
 
-        const card: ApiCard = await db
+        const card: RawScryfallCard = await db
             .collection(Collection.scryfallBulkCards)
             .findOne({ _id: id });
 

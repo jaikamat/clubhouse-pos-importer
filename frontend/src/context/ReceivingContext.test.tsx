@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { FC } from 'react';
-import { ScryfallCard } from '../utils/ScryfallCard';
+import { ClientCard } from '../utils/ClientCard';
 import currentButton from '../utils/testing/currentButton';
 import bop from '../utils/testing/fixtures/birdsOfParadise';
 import lotus from '../utils/testing/fixtures/blackLotus';
@@ -24,7 +24,7 @@ const ToggleTrade = () => {
     );
 };
 
-const AddButton: FC<{ card: ScryfallCard }> = ({ card }) => {
+const AddButton: FC<{ card: ClientCard }> = ({ card }) => {
     const { addToList } = useReceivingContext();
 
     const onAdd = () =>

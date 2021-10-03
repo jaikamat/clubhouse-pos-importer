@@ -1,6 +1,6 @@
 import http from '../common/http';
+import { Finishes } from '../utils/ClientCard';
 import { GET_BULK_CARDS } from '../utils/endpoints';
-import { Finishes } from '../utils/ScryfallCard';
 
 export interface BulkCard {
     scryfall_id: string;

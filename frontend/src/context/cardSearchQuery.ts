@@ -1,6 +1,6 @@
 import http from '../common/http';
+import { ClientCard } from '../utils/ClientCard';
 import { GET_CARDS_WITH_INFO } from '../utils/endpoints';
-import { ScryfallCard } from '../utils/ScryfallCard';
 
 interface Params {
     cardName: string;
@@ -13,7 +13,7 @@ interface Params {
  */
 const cardSearchQuery = async ({ cardName, inStockOnly }: Params) => {
     try {
-        const { data } = await http.get<ScryfallCard[]>(GET_CARDS_WITH_INFO, {
+        const { data } = await http.get<ClientCard[]>(GET_CARDS_WITH_INFO, {
             params: {
                 title: cardName,
                 matchInStock: inStockOnly,

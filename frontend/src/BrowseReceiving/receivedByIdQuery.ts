@@ -1,8 +1,8 @@
 import http from '../common/http';
 import { ClubhouseLocation } from '../context/AuthProvider';
 import { Trade } from '../context/ReceivingContext';
+import { ClientCard, FinishCondition } from '../utils/ClientCard';
 import { RECEIVING } from '../utils/endpoints';
-import { FinishCondition, ScryfallCard } from '../utils/ScryfallCard';
 
 interface ReceivedUser {
     _id: string;
@@ -23,7 +23,7 @@ export interface ReceivedCard {
     tradeType: Trade;
     finishCondition: FinishCondition;
     // TODO: this casing difference is mildly irritating...
-    bulk_card_data: ScryfallCard;
+    bulk_card_data: ClientCard;
 }
 
 export interface Received {

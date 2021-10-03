@@ -10,17 +10,17 @@ import CardRowContainer from '../ui/CardRowContainer';
 import ControlledDropdown from '../ui/ControlledDropdown';
 import TextField from '../ui/TextField';
 import { useToastContext } from '../ui/ToastContext';
+import { ClientCard, Condition, Finish } from '../utils/ClientCard';
 import createFinishCondition from '../utils/createFinishCondtition';
 import {
     cardConditions,
     createDropdownFinishOptions,
     finishDropdownDisabled,
 } from '../utils/dropdownOptions';
-import { Condition, Finish, ScryfallCard } from '../utils/ScryfallCard';
 import addCardToInventoryQuery from './addCardToInventoryQuery';
 
 interface Props {
-    card: ScryfallCard;
+    card: ClientCard;
 }
 
 interface FormValues {

@@ -4,8 +4,8 @@ import React, { FC } from 'react';
 import Price from '../common/Price';
 import CardImageTooltip from '../ui/CardImageTooltip';
 import SetIcon from '../ui/SetIcon';
+import { Finish } from '../utils/ClientCard';
 import displayFinishCondition from '../utils/finishCondition';
-import { Finish } from '../utils/ScryfallCard';
 import { ResponseCard } from './filteredCardsQuery';
 
 interface Props {

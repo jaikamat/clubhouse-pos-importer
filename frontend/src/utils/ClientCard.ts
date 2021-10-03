@@ -41,7 +41,7 @@ export interface CardFace {
 
 export type Finishes = ('foil' | 'nonfoil' | 'etched' | 'glossy')[];
 
-export interface ScryfallCard {
+export interface ClientCard {
     id: string;
     name: string;
     printed_name: string | null;

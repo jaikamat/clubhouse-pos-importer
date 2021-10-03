@@ -1,4 +1,4 @@
-import { QOH } from '../utils/ScryfallCard';
+import { QOH } from './ClientCard';
 
 type FinishConditionLabels = Record<keyof QOH, string>;
 

@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { Finishes } from '../utils/ScryfallCard';
+import { Finishes } from '../utils/ClientCard';
 import currentButton from '../utils/testing/currentButton';
 import currentByLabelText from '../utils/testing/currentByLabelText';
 import bop from '../utils/testing/fixtures/birdsOfParadise';

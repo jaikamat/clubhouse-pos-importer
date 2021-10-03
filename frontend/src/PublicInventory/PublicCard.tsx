@@ -3,11 +3,11 @@ import React, { FC } from 'react';
 import CardImage from '../common/CardImage';
 import MarketPrice from '../common/MarketPrice';
 import InventoryChip from '../ui/InventoryChip';
+import { ClientCard } from '../utils/ClientCard';
 import parseQoh from '../utils/parseQoh';
-import { ScryfallCard } from '../utils/ScryfallCard';
 
 interface Props {
-    card: ScryfallCard;
+    card: ClientCard;
 }
 
 // These numbers were the originally calculated px values

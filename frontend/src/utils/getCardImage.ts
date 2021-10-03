@@ -1,6 +1,6 @@
-import { ScryfallCard } from './ScryfallCard';
+import { ClientCard } from './ClientCard';
 
-const getCardImage = (card: ScryfallCard) => {
+const getCardImage = (card: ClientCard) => {
     let myImage: string;
 
     try {

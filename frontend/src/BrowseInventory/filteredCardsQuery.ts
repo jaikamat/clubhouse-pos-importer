@@ -1,6 +1,6 @@
 import http from '../common/http';
+import { FinishCondition } from '../utils/ClientCard';
 import { GET_CARDS_BY_FILTER } from '../utils/endpoints';
-import { FinishCondition } from '../utils/ScryfallCard';
 
 export interface Filters {
     title?: string;

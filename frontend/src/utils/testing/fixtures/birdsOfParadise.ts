@@ -1,6 +1,6 @@
-import { Finishes, ScryfallCard } from '../../ScryfallCard';
+import { ClientCard, Finishes } from '../../ClientCard';
 
-const card: ScryfallCard = {
+const card: ClientCard = {
     id: 'a2985857-fee5-42a6-9b5d-e157ada52a03',
     name: 'Birds of Paradise',
     lang: 'en' as const,

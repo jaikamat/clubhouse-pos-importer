@@ -3,13 +3,13 @@ import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import React, { FC } from 'react';
 import MarketPrice from '../common/MarketPrice';
 import QohLabels from '../common/QohLabels';
+import { ClientCard, Finish } from '../utils/ClientCard';
 import language from '../utils/Language';
-import { Finish, ScryfallCard } from '../utils/ScryfallCard';
 import Button from './Button';
 import SetIcon from './SetIcon';
 
 interface Props {
-    card: ScryfallCard;
+    card: ClientCard;
     selectedFinish: Finish;
     showMid?: boolean;
     round?: boolean;
@@ -50,16 +50,8 @@ const CardHeader: FC<Props> = ({
     showMid = false,
     round = false,
 }) => {
-    const {
-        id,
-        display_name,
-        set,
-        rarity,
-        set_name,
-        qoh,
-        lang,
-        tcgplayer_id,
-    } = card;
+    const { id, display_name, set, rarity, set_name, qoh, lang, tcgplayer_id } =
+        card;
 
     return (
         <Box>

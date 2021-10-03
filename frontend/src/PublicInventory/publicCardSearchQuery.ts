@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ClubhouseLocation } from '../context/AuthProvider';
+import { ClientCard } from '../utils/ClientCard';
 import { GET_CARDS_WITH_INFO_PUBLIC } from '../utils/endpoints';
-import { ScryfallCard } from '../utils/ScryfallCard';
 
 interface Params {
     title: string;
@@ -15,7 +15,7 @@ interface Params {
  */
 const publicCardSearchQuery = async (params: Params) => {
     try {
-        const { data } = await axios.get<ScryfallCard[]>(
+        const { data } = await axios.get<ClientCard[]>(
             GET_CARDS_WITH_INFO_PUBLIC,
             {
                 params,

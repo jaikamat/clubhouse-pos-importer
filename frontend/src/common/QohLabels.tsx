@@ -1,9 +1,9 @@
 import { Tooltip, Typography } from '@material-ui/core';
 import React, { FC } from 'react';
 import InventoryChip from '../ui/InventoryChip';
+import { QOH } from '../utils/ClientCard';
 import displayFinishCondition from '../utils/finishCondition';
 import parseQoh from '../utils/parseQoh';
-import { QOH } from '../utils/ScryfallCard';
 
 export const createInventoryLineItems = (
     inventoryQty: QOH,

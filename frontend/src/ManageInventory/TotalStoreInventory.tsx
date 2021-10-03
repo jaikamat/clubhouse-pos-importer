@@ -1,7 +1,7 @@
 import { Box, makeStyles, Typography } from '@material-ui/core';
 import React, { FC, useEffect, useState } from 'react';
 import InventoryChip from '../ui/InventoryChip';
-import { ScryfallCard } from '../utils/ScryfallCard';
+import { ClientCard } from '../utils/ClientCard';
 import allLocationInventoryQuery, {
     ResponseData,
 } from './allLocationInventoryQuery';
@@ -27,7 +27,7 @@ const useStyles = makeStyles(({ spacing }) => ({
 
 interface Props {
     title: string;
-    searchResults: ScryfallCard[];
+    searchResults: ClientCard[];
 }
 
 const TotalStoreInventory: FC<Props> = ({ title, searchResults }) => {

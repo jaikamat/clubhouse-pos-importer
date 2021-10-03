@@ -1,6 +1,6 @@
 import http from '../common/http';
+import { ClientCard, Finish, FinishCondition } from '../utils/ClientCard';
 import { GET_REPORT } from '../utils/endpoints';
-import { Finish, FinishCondition, ScryfallCard } from '../utils/ScryfallCard';
 
 export interface ResponseData {
     countByPrinting: Array<{
@@ -8,7 +8,7 @@ export interface ResponseData {
         scryfall_id: string;
         quantity_sold: number;
         card_title: string;
-        card_metadata: ScryfallCard;
+        card_metadata: ClientCard;
         quantity_on_hand: number;
         finish: Finish;
         finish_condition: FinishCondition;

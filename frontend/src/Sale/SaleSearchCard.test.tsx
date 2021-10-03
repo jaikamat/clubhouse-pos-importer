@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { QOH } from '../utils/ScryfallCard';
+import { QOH } from '../utils/ClientCard';
 import currentButton from '../utils/testing/currentButton';
 import currentByLabelText from '../utils/testing/currentByLabelText';
 import dropdownOptionClick from '../utils/testing/dropdownOptionClick';

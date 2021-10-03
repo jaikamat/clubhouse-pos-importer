@@ -1,6 +1,6 @@
-import { ScryfallCard } from '../../ScryfallCard';
+import { ClientCard } from '../../ClientCard';
 
-const mockData: ScryfallCard[] = [
+const mockData: ClientCard[] = [
     {
         id: '7f78a570-d776-42f2-a609-6da0156c8de7',
         tcgplayer_id: 198863,

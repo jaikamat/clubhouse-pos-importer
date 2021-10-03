@@ -1,4 +1,4 @@
-import { LanguageCode } from './ScryfallCard';
+import { LanguageCode } from './ClientCard';
 
 const LANG_CODES: Record<LanguageCode, string> = {
     en: 'English',

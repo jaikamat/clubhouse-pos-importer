@@ -1,7 +1,7 @@
-import { ScryfallCard } from './ScryfallCard';
+import { ClientCard } from './ClientCard';
 
 type Card = Pick<
-    ScryfallCard,
+    ClientCard,
     | 'name'
     | 'frame_effects'
     | 'border_color'

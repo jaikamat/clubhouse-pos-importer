@@ -8,12 +8,12 @@ import ControlledDropdown from '../ui/ControlledDropdown';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
 import Placeholder from '../ui/Placeholder';
 import { HeaderText } from '../ui/Typography';
-import { ScryfallCard } from '../utils/ScryfallCard';
+import { ClientCard } from '../utils/ClientCard';
 import PublicCard from './PublicCard';
 import publicCardSearchQuery from './publicCardSearchQuery';
 
 interface State {
-    searchResults: ScryfallCard[];
+    searchResults: ClientCard[];
     searchTerm: string;
     selectedLocation: ClubhouseLocation;
 }

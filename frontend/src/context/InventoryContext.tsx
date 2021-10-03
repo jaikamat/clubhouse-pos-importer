@@ -1,11 +1,11 @@
 import React, { createContext, FC, useState } from 'react';
-import { QOH, ScryfallCard } from '../utils/ScryfallCard';
+import { ClientCard, QOH } from '../utils/ClientCard';
 import cardSearchQuery from './cardSearchQuery';
 
 interface Props {}
 
 interface Context {
-    searchResults: ScryfallCard[];
+    searchResults: ClientCard[];
     changeCardQuantity: (id: string, qoh: QOH) => void;
     handleSearchSelect: (term: string) => void;
 }
@@ -17,7 +17,7 @@ export const InventoryContext = createContext<Context>({
 });
 
 const InventoryProvider: FC<Props> = ({ children }) => {
-    const [searchResults, setSearchResults] = useState<ScryfallCard[]>([]);
+    const [searchResults, setSearchResults] = useState<ClientCard[]>([]);
 
     const handleSearchSelect = async (term: string) => {
         const cards = await cardSearchQuery({

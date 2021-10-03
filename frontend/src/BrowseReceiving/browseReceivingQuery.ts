@@ -1,8 +1,8 @@
 import http from '../common/http';
 import { ClubhouseLocation } from '../context/AuthProvider';
 import { Trade } from '../context/ReceivingContext';
+import { FinishCondition } from '../utils/ClientCard';
 import { RECEIVING } from '../utils/endpoints';
-import { FinishCondition } from '../utils/ScryfallCard';
 
 export interface ReceivedCard {
     quantity: number;

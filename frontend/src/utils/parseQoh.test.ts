@@ -1,5 +1,5 @@
+import { QOH } from './ClientCard';
 import parseQoh from './parseQoh';
-import { QOH } from './ScryfallCard';
 
 test('Parse QOH', () => {
     const mock: QOH = {

@@ -1,6 +1,6 @@
-import { Finishes, ScryfallCard } from '../../ScryfallCard';
+import { ClientCard, Finishes } from '../../ClientCard';
 
-const card: ScryfallCard = {
+const card: ClientCard = {
     id: 'b3a69a1c-c80f-4413-a6fd-ae54cabbce28',
     tcgplayer_id: 8687,
     name: 'Black Lotus',

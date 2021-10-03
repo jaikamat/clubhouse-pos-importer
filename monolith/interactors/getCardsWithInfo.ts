@@ -1,13 +1,17 @@
-import { ClubhouseLocation, Collection } from '../common/types';
+import RawScryfallCard from '../common/RawScryfallCard';
+import { ScryfallApiCard } from '../common/ScryfallApiCard';
+import { ClubhouseLocation, Collection, QOH } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
+
+type AggregationCard = RawScryfallCard & { qoh: QOH };
 
 async function getCardsWithInfo(
     title: string,
     // if matchInStock is false, we get all cards, even those with no stock
     matchInStock: boolean = false,
     location: ClubhouseLocation
-) {
+): Promise<ScryfallApiCard[]> {
     try {
         const db = await getDatabaseConnection();
 
@@ -83,10 +87,16 @@ async function getCardsWithInfo(
         pipeline.push(addFields);
         if (matchInStock) pipeline.push(inventoryMatch);
 
-        return await db
+        const cards: AggregationCard[] = await db
             .collection(Collection.scryfallBulkCards)
             .aggregate(pipeline)
             .toArray();
+
+        // Transform the bulk cards and reattach existing QOH
+        return cards.map((c) => ({
+            ...new ScryfallApiCard(c),
+            qoh: c.qoh,
+        }));
     } catch (err) {
         console.log(err);
         throw err;

@@ -64,31 +64,3 @@ export interface ScryfallCard {
     keywords: string[];
     qoh: QOH;
 }
-
-export interface RawScryfallCard {
-    id: string;
-    name: string;
-    printed_name?: string;
-    set: string;
-    set_name: string;
-    rarity: string;
-    image_uris: ImageURIs;
-    card_faces?: CardFace[];
-    finishes: Finishes;
-    colors: Color[];
-    type_line: string;
-    frame_effects?: string[];
-    lang: LanguageCode;
-    border_color: string;
-    display_name?: string;
-    cardImage?: string;
-    color_identity: Color[];
-    qoh?: QOH;
-    quantity?: number;
-    qtyToSell?: number;
-    finishCondition?: string;
-    price?: number;
-    promo_types?: string[];
-    tcgplayer_id?: number;
-    keywords: string[];
-}

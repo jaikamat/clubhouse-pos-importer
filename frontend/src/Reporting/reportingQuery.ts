@@ -3,7 +3,7 @@ import { GET_REPORT } from '../utils/endpoints';
 import {
     Finish,
     FinishCondition,
-    ScryfallApiCard,
+    RawScryfallCard,
 } from '../utils/ScryfallCard';
 
 export interface ResponseData {
@@ -12,7 +12,7 @@ export interface ResponseData {
         scryfall_id: string;
         quantity_sold: number;
         card_title: string;
-        card_metadata: ScryfallApiCard;
+        card_metadata: RawScryfallCard;
         quantity_on_hand: number;
         finish: Finish;
         finish_condition: FinishCondition;

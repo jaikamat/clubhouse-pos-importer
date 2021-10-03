@@ -1,6 +1,3 @@
-import createDisplayName from './createDisplayName';
-import getCardImage from './getCardImage';
-
 // Language codes from Scryfall. See https://scryfall.com/docs/api/languages for reference.
 export type LanguageCode =
     | 'en'
@@ -29,7 +26,7 @@ export type FinishCondition = `${Finish}_${Condition}`;
 
 export type QOH = Partial<Record<FinishCondition, number>>;
 
-type Color = 'W' | 'U' | 'B' | 'R' | 'G';
+export type Color = 'W' | 'U' | 'B' | 'R' | 'G';
 
 export interface ImageURIs {
     normal: string;
@@ -44,7 +41,31 @@ export interface CardFace {
 
 export type Finishes = ('foil' | 'nonfoil' | 'etched' | 'glossy')[];
 
-export interface ScryfallApiCard {
+export interface ScryfallCard {
+    id: string;
+    name: string;
+    printed_name: string | null;
+    set: string;
+    set_name: string;
+    rarity: string;
+    image_uris: { normal: string };
+    card_faces: CardFace[];
+    finishes: Finishes;
+    colors: Color[];
+    type_line: string;
+    frame_effects: string[];
+    lang: LanguageCode;
+    border_color: string;
+    display_name: string;
+    cardImage: string;
+    color_identity: Color[];
+    promo_types: string[];
+    tcgplayer_id: number | null;
+    keywords: string[];
+    qoh: QOH;
+}
+
+export interface RawScryfallCard {
     id: string;
     name: string;
     printed_name?: string;
@@ -70,59 +91,4 @@ export interface ScryfallApiCard {
     promo_types?: string[];
     tcgplayer_id?: number;
     keywords: string[];
-}
-
-/**
- * TODO: We should return this from the API. The backend should control this data shape
- *
- * This class wraps the Scryfall API request data and models it to something we can control.
- * Also acts as a safeguard for any future updates to Scryfall's API data model and makes
- * the code easier to maintain and debug.
- */
-export class ScryfallCard {
-    public id: string;
-    public name: string;
-    public printed_name: string | null;
-    public set: string;
-    public set_name: string;
-    public rarity: string;
-    public image_uris: { normal: string };
-    public card_faces: CardFace[];
-    public finishes: Finishes;
-    public colors: Color[];
-    public type_line: string;
-    public frame_effects: string[];
-    public lang: LanguageCode;
-    public border_color: string;
-    public display_name: string;
-    public cardImage: string;
-    public color_identity: Color[];
-    public promo_types: string[];
-    public tcgplayer_id: number | null;
-    public keywords: string[];
-    public qoh: QOH;
-
-    public constructor(card: ScryfallApiCard) {
-        this.id = card.id;
-        this.name = card.name;
-        this.printed_name = card.printed_name || null;
-        this.set = card.set;
-        this.set_name = card.set_name;
-        this.rarity = card.rarity;
-        this.image_uris = card.image_uris || null;
-        this.card_faces = card.card_faces || [];
-        this.finishes = card.finishes;
-        this.colors = card.colors;
-        this.type_line = card.type_line;
-        this.frame_effects = card.frame_effects || [];
-        this.lang = card.lang;
-        this.border_color = card.border_color;
-        this.color_identity = card.color_identity || null;
-        this.promo_types = card.promo_types || [];
-        this.keywords = card.keywords || [];
-        this.cardImage = getCardImage(this);
-        this.display_name = createDisplayName(this);
-        this.tcgplayer_id = card.tcgplayer_id || null;
-        this.qoh = card.qoh ? card.qoh : {};
-    }
 }

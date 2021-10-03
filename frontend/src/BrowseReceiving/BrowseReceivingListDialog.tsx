@@ -19,7 +19,6 @@ import displayEmpty from '../utils/displayEmpty';
 import displayFinishCondition from '../utils/finishCondition';
 import formatDate from '../utils/formatDate';
 import { price } from '../utils/price';
-import { ScryfallCard } from '../utils/ScryfallCard';
 import receivedByIdQuery, { Received } from './receivedByIdQuery';
 
 interface Props {
@@ -100,17 +99,8 @@ const BrowseReceivingListDialog: FC<Props> = ({ receivedId, onClose }) => {
                             marketPrice,
                         } = card;
 
-                        const modeledCard = new ScryfallCard(
-                            card.bulk_card_data
-                        );
-
-                        const {
-                            name,
-                            cardImage,
-                            set,
-                            set_name,
-                            rarity,
-                        } = modeledCard;
+                        const { name, cardImage, set, set_name, rarity } =
+                            card.bulk_card_data;
 
                         return (
                             <ListItem>

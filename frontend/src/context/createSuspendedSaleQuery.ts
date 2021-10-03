@@ -1,11 +1,20 @@
 import http from '../common/http';
 import { SUSPEND_SALE } from '../utils/endpoints';
-import { SaleListCard } from './SaleContext';
+import { FinishCondition } from '../utils/ScryfallCard';
+
+interface FinishSaleCard {
+    id: string;
+    price: number;
+    qtyToSell: number;
+    finishCondition: FinishCondition;
+    name: string;
+    set_name: string;
+}
 
 interface Payload {
     customerName: string;
     notes: string;
-    saleList: SaleListCard[];
+    saleList: FinishSaleCard[];
 }
 
 interface ResponseData {

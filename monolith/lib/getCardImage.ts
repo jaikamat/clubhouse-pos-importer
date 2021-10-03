@@ -1,6 +1,6 @@
-import RawScryfallCard from '../common/RawScryfallCard';
+import { ScryfallApiCard } from '../common/ScryfallApiCard';
 
-const cardImageUrl = (card: RawScryfallCard) => {
+const getCardImage = (card: ScryfallApiCard) => {
     let myImage: string;
 
     try {
@@ -12,5 +12,4 @@ const cardImageUrl = (card: RawScryfallCard) => {
 
     return myImage;
 };
-
-export default cardImageUrl;
+export default getCardImage;

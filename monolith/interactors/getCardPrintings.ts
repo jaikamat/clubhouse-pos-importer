@@ -1,4 +1,4 @@
-import ScryfallCard from '../common/ScryfallCard';
+import RawScryfallCard from '../common/RawScryfallCard';
 import { Collection } from '../common/types';
 import getDatabaseConnection from '../database';
 import cardDisplayName from '../lib/cardDisplayName';
@@ -15,7 +15,7 @@ class BulkCard {
     public frame: string;
     public image: string;
 
-    constructor(card: ScryfallCard) {
+    constructor(card: RawScryfallCard) {
         this.scryfall_id = card.id;
         this.name = card.name;
         this.display_name = cardDisplayName(card);

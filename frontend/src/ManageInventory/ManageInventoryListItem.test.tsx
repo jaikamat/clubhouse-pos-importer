@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { Finishes } from '../utils/ScryfallCard';
 import dropdownOptionClick from '../utils/testing/dropdownOptionClick';
 import bop from '../utils/testing/fixtures/birdsOfParadise';
 import lotus from '../utils/testing/fixtures/blackLotus';
@@ -83,7 +84,7 @@ test('disables finish when appropriate', async () => {
 
 test('auto selects foil if no nonfoil option available', async () => {
     // A foil-only black lotus! Lol...
-    const mockCard = { ...lotus, finishes: ['foil'] };
+    const mockCard = { ...lotus, finishes: ['foil'] as Finishes };
 
     await render(<ManageInventoryListItem card={mockCard} />);
 

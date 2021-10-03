@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { Finishes } from '../utils/ScryfallCard';
 import currentButton from '../utils/testing/currentButton';
 import currentByLabelText from '../utils/testing/currentByLabelText';
 import bop from '../utils/testing/fixtures/birdsOfParadise';
@@ -64,7 +65,7 @@ test('expect two finishes to yield selectable select', async () => {
 });
 
 test('expect foil-only to start with foil value', async () => {
-    const mockCard = { ...bop, finishes: ['foil'] };
+    const mockCard = { ...bop, finishes: ['foil'] as Finishes };
 
     await render(<ReceivingSearchItem card={mockCard} />);
 

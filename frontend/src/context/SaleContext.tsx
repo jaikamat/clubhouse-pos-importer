@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import React, { createContext, FC, useState } from 'react';
+import sortSaleList from '../Sale/sortSaleList';
 import { useToastContext } from '../ui/ToastContext';
 import { FinishCondition, ScryfallCard } from '../utils/ScryfallCard';
-import sortSaleList from '../utils/sortSaleList';
 import cardSearchQuery from './cardSearchQuery';
 import createSuspendedSaleQuery from './createSuspendedSaleQuery';
 import deleteSuspendedSaleQuery from './deleteSuspendedSaleQuery';

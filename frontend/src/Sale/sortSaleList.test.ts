@@ -1,4 +1,4 @@
-import mockData from './mockData';
+import mockData from '../utils/testing/fixtures/mockData';
 import sortSaleList from './sortSaleList';
 
 /**

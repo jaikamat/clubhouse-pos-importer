@@ -1,4 +1,4 @@
-import { ScryfallCard } from './ScryfallCard';
+import { ScryfallCard } from '../utils/ScryfallCard';
 
 const ORDER = ['W', 'U', 'B', 'R', 'G', 'MULTI', 'COLORLESS', 'LAND'] as const;
 

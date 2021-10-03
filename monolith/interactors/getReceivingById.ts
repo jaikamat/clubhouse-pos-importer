@@ -98,12 +98,13 @@ async function getReceivingById(id: string, location: ClubhouseLocation) {
 
         const received = doc[0];
 
-        // Transform all bulk cards in receiving list
         return {
             ...received,
-            received_cards_list: received.received_cards_list.map(
-                (r) => new ScryfallApiCard(r)
-            ),
+            received_cards: received.received_cards.map((r) => ({
+                ...r,
+                // Transform all bulk cards in the received list
+                bulk_card_data: new ScryfallApiCard(r.bulk_card_data),
+            })),
         };
     } catch (e) {
         throw e;

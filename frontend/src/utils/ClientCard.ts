@@ -41,6 +41,10 @@ export interface CardFace {
 
 export type Finishes = ('foil' | 'nonfoil' | 'etched' | 'glossy')[];
 
+/**
+ * This interface is identical to the backend's ScryfallApiCard,
+ * except it includes QOH, which is added in interactors.
+ */
 export interface ClientCard {
     id: string;
     name: string;

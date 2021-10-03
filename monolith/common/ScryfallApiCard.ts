@@ -29,6 +29,10 @@ type Color = 'W' | 'U' | 'B' | 'R' | 'G';
 // TODO: This belongs in RawScryfallCard
 type Finishes = ('foil' | 'nonfoil' | 'etched' | 'glossy')[];
 
+/**
+ * This class produces a type that is identical to the frontend's ClientCard,
+ * except it does not include QOH. We add QOH in the interactors.
+ */
 export class ScryfallApiCard {
     public id: string;
     public name: string;

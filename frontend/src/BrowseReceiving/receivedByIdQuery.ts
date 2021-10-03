@@ -39,7 +39,6 @@ export interface Received {
 const receivedByIdQuery = async (receivedId: string) => {
     const { data } = await http.get<Received>(`${RECEIVING}/${receivedId}`);
 
-    // We still need to convert ScryfallApiCard to ScryfallCard downstream
     return data;
 };
 

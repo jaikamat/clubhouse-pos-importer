@@ -1,5 +1,4 @@
 import mockData from './mockData';
-import { ScryfallCard } from './ScryfallCard';
 import sortSaleList from './sortSaleList';
 
 /**
@@ -18,7 +17,7 @@ function randomizeArray(arr: any[]) {
         output.push(randomCard[0]);
     }
 
-    return output.map((c) => new ScryfallCard(c));
+    return output;
 }
 
 describe('Sort function', () => {

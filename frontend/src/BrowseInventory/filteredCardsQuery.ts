@@ -9,7 +9,7 @@ export interface Filters {
     minPrice?: number;
     maxPrice?: number;
     finish?: string;
-    colors?: string;
+    colors?: string[];
     colorSpecificity?: string;
     type?: string;
     frame?: string;

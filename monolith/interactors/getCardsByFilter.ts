@@ -62,6 +62,25 @@ const getCardsByFilter = async (
             },
         });
 
+        /**
+         * Use this placeholder value for finding documents with a valid $lookup match
+         */
+        aggregation.push({
+            $addFields: {
+                bulk_match_length: { $size: '$bulk_match' },
+            },
+        });
+
+        /**
+         * We only want to analyze inventory cards that join with bulk_match, without $lookup errors.
+         * Therefore only match cards that have a $lookup result
+         */
+        aggregation.push({
+            $match: {
+                bulk_match_length: { $gt: 0 },
+            },
+        });
+
         // Merge the bulk and pricing collection properties
         aggregation.push({
             $replaceRoot: {
@@ -106,32 +125,12 @@ const getCardsByFilter = async (
                     },
                 ],
             },
-            // NOTE: This is dependent on Scryfall sorting their color arrays in 'BGRUW' order
-            colors_string: {
+            card_face_colors: {
                 $ifNull: [
+                    '$colors',
                     {
-                        $reduce: {
-                            input: '$colors',
-                            initialValue: '',
-                            in: { $concat: ['$$value', '$$this'] },
-                        },
-                    },
-                    {
-                        // If the card is a flip card, its colors will be nested in the card_faces property.
-                        // We use the $let operator to evaluate its contents to a temp variable `colors` and extract the colors array
-                        $let: {
-                            vars: {
-                                colors: { $arrayElemAt: ['$card_faces', 0] },
-                            },
-                            // Here, we concat the array to a single string to $match on a substring
-                            in: {
-                                $reduce: {
-                                    input: '$$colors.colors',
-                                    initialValue: '',
-                                    in: { $concat: ['$$value', '$$this'] },
-                                },
-                            },
-                        },
+                        // This notation will attempt to pluck `.colors` from the first array element
+                        $arrayElemAt: ['$card_faces.colors', 0],
                     },
                 ],
             },
@@ -190,7 +189,9 @@ const getCardsByFilter = async (
                         default: 0.0,
                     },
                 },
-                colors_string_length: { $strLenCP: '$colors_string' },
+                card_face_colors_length: {
+                    $size: '$card_face_colors',
+                },
             },
         });
 
@@ -230,7 +231,9 @@ const getCardsByFilter = async (
         // End match colors matching logic
         if (colors) {
             aggregation.push({
-                $match: { colors_string: colors },
+                $match: {
+                    card_face_colors: { $all: colors, $size: colors.length },
+                },
             });
         }
 
@@ -238,17 +241,17 @@ const getCardsByFilter = async (
         if (colorSpecificity) {
             if (colorSpecificity === 'colorless') {
                 aggregation.push({
-                    $match: { colors_string_length: { $eq: 0 } },
+                    $match: { card_face_colors_length: { $eq: 0 } },
                 });
             }
             if (colorSpecificity === 'mono') {
                 aggregation.push({
-                    $match: { colors_string_length: { $eq: 1 } },
+                    $match: { card_face_colors_length: { $eq: 1 } },
                 });
             }
             if (colorSpecificity === 'multi') {
                 aggregation.push({
-                    $match: { colors_string_length: { $gt: 1 } },
+                    $match: { card_face_colors_length: { $gt: 1 } },
                 });
             }
         }

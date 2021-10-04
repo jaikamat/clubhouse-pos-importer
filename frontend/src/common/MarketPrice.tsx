@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Finish } from '../utils/ScryfallCard';
+import { Finish } from '../utils/ClientCard';
 import Chip from './Chip';
 import marketPriceQuery from './marketPriceQuery';
 

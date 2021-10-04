@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import React, { createContext, FC, useState } from 'react';
+import sortSaleList from '../Sale/sortSaleList';
 import { useToastContext } from '../ui/ToastContext';
-import { FinishCondition, ScryfallCard } from '../utils/ScryfallCard';
-import sortSaleList from '../utils/sortSaleList';
+import { ClientCard, FinishCondition } from '../utils/ClientCard';
 import cardSearchQuery from './cardSearchQuery';
 import createSuspendedSaleQuery from './createSuspendedSaleQuery';
 import deleteSuspendedSaleQuery from './deleteSuspendedSaleQuery';
@@ -16,7 +16,7 @@ interface SuspendSaleArgs {
     notes: string;
 }
 
-export type SaleListCard = ScryfallCard & {
+export type SaleListCard = ClientCard & {
     finishCondition: FinishCondition;
     qtyToSell: number;
     price: number;
@@ -24,12 +24,12 @@ export type SaleListCard = ScryfallCard & {
 
 export interface SaleContext {
     saleListCards: SaleListCard[];
-    searchResults: ScryfallCard[];
+    searchResults: ClientCard[];
     searchTerm: string;
     suspendedSale: SuspendedSale;
     handleResultSelect: (term: string) => void;
     addToSaleList: (
-        card: ScryfallCard,
+        card: ClientCard,
         finishCondition: FinishCondition,
         qtyToSell: number,
         price: number
@@ -68,7 +68,7 @@ export const SaleProvider: FC<Props> = ({ children }) => {
     const createToast = useToastContext();
     const [saleListCards, setSaleListCards] = useState<SaleListCard[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const [searchResults, setSearchResults] = useState<ScryfallCard[]>([]);
+    const [searchResults, setSearchResults] = useState<ClientCard[]>([]);
     const [suspendedSale, setSuspendedSale] =
         useState<SuspendedSale>(defaultSuspendedSale);
 
@@ -93,7 +93,7 @@ export const SaleProvider: FC<Props> = ({ children }) => {
      * Adds product to the sale list
      */
     const addToSaleList = (
-        card: ScryfallCard,
+        card: ClientCard,
         finishCondition: FinishCondition,
         qtyToSell: number,
         price: number

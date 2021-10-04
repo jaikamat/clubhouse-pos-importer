@@ -10,8 +10,8 @@ import CardHeader from '../ui/CardHeader';
 import CardRowContainer from '../ui/CardRowContainer';
 import ControlledDropdown from '../ui/ControlledDropdown';
 import TextField from '../ui/TextField';
+import { ClientCard, Finish, QOH } from '../utils/ClientCard';
 import roundPrice from '../utils/roundPrice';
-import { Finish, QOH, ScryfallCard } from '../utils/ScryfallCard';
 
 interface ConditionOptions {
     text: string;
@@ -49,7 +49,7 @@ const handleFocus = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     e.target.select();
 
 interface Props {
-    card: ScryfallCard;
+    card: ClientCard;
 }
 
 const SaleSearchCard: FC<Props> = ({ card }) => {
@@ -110,18 +110,13 @@ const SaleSearchCard: FC<Props> = ({ card }) => {
         return errors;
     };
 
-    const {
-        handleChange,
-        handleSubmit,
-        setFieldValue,
-        values,
-        isValid,
-    } = useFormik({
-        initialValues: initialFormValues,
-        validate,
-        onSubmit,
-        validateOnMount: true,
-    });
+    const { handleChange, handleSubmit, setFieldValue, values, isValid } =
+        useFormik({
+            initialValues: initialFormValues,
+            validate,
+            onSubmit,
+            validateOnMount: true,
+        });
 
     return (
         <CardRowContainer

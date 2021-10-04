@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { ScryfallCard } from '../utils/ScryfallCard';
+import { Finishes } from '../utils/ClientCard';
 import dropdownOptionClick from '../utils/testing/dropdownOptionClick';
 import bop from '../utils/testing/fixtures/birdsOfParadise';
 import lotus from '../utils/testing/fixtures/blackLotus';
@@ -16,7 +16,7 @@ const data = {
 jest.mock('axios', () => mockHttp(data));
 
 test('manage inventory list item', async () => {
-    const mockCard = new ScryfallCard(bop);
+    const mockCard = bop;
 
     await render(<ManageInventoryListItem card={mockCard} />);
 
@@ -31,7 +31,7 @@ test('manage inventory list item', async () => {
 });
 
 test('select condition', async () => {
-    const mockCard = new ScryfallCard(lotus);
+    const mockCard = lotus;
 
     await render(<ManageInventoryListItem card={mockCard} />);
 
@@ -45,7 +45,7 @@ test('select condition', async () => {
 });
 
 test('select finish', async () => {
-    const mockCard = new ScryfallCard(bop);
+    const mockCard = bop;
 
     await render(<ManageInventoryListItem card={mockCard} />);
 
@@ -61,7 +61,7 @@ test('select finish', async () => {
 });
 
 test('finish is selectable when allowed', async () => {
-    const mockCard = new ScryfallCard(bop);
+    const mockCard = bop;
 
     await render(<ManageInventoryListItem card={mockCard} />);
 
@@ -72,7 +72,7 @@ test('finish is selectable when allowed', async () => {
 });
 
 test('disables finish when appropriate', async () => {
-    const mockCard = new ScryfallCard(lotus);
+    const mockCard = lotus;
 
     await render(<ManageInventoryListItem card={mockCard} />);
 
@@ -84,7 +84,7 @@ test('disables finish when appropriate', async () => {
 
 test('auto selects foil if no nonfoil option available', async () => {
     // A foil-only black lotus! Lol...
-    const mockCard = new ScryfallCard({ ...lotus, finishes: ['foil'] });
+    const mockCard = { ...lotus, finishes: ['foil'] as Finishes };
 
     await render(<ManageInventoryListItem card={mockCard} />);
 
@@ -95,7 +95,7 @@ test('auto selects foil if no nonfoil option available', async () => {
 });
 
 test('submission is disabled by default', async () => {
-    const mockCard = new ScryfallCard(lotus);
+    const mockCard = lotus;
 
     await render(<ManageInventoryListItem card={mockCard} />);
 
@@ -106,7 +106,7 @@ test('submission is disabled by default', async () => {
 });
 
 test('submission button not disabled with valid quantity', async () => {
-    const mockCard = new ScryfallCard(lotus);
+    const mockCard = lotus;
 
     await render(<ManageInventoryListItem card={mockCard} />);
 

@@ -1,4 +1,5 @@
 import { ObjectID } from 'mongodb';
+import { ScryfallApiCard } from '../common/ScryfallApiCard';
 import { ClubhouseLocation, Collection } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
@@ -95,7 +96,16 @@ async function getReceivingById(id: string, location: ClubhouseLocation) {
             .aggregate(aggregation)
             .toArray();
 
-        return doc[0]; // Return first element of array
+        const received = doc[0];
+
+        return {
+            ...received,
+            received_cards: received.received_cards.map((r) => ({
+                ...r,
+                // Transform all bulk cards in the received list
+                bulk_card_data: new ScryfallApiCard(r.bulk_card_data),
+            })),
+        };
     } catch (e) {
         throw e;
     }

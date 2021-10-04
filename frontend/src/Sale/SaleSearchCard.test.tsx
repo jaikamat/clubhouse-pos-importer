@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { QOH, ScryfallCard } from '../utils/ScryfallCard';
+import { QOH } from '../utils/ClientCard';
 import currentButton from '../utils/testing/currentButton';
 import currentByLabelText from '../utils/testing/currentByLabelText';
 import dropdownOptionClick from '../utils/testing/dropdownOptionClick';
@@ -18,7 +18,7 @@ jest.mock('axios', () => mockHttp(data));
 
 test('list item title and metadata', async () => {
     const qoh: QOH = { NONFOIL_NM: 2, NONFOIL_HP: 7 };
-    const mockCard = new ScryfallCard({ ...bop, qoh });
+    const mockCard = { ...bop, qoh };
 
     await render(<SaleSearchCard card={mockCard} />);
 
@@ -28,7 +28,7 @@ test('list item title and metadata', async () => {
 
 test('list item prices', async () => {
     const qoh: QOH = { NONFOIL_NM: 2, NONFOIL_HP: 7 };
-    const mockCard = new ScryfallCard({ ...bop, qoh });
+    const mockCard = { ...bop, qoh };
 
     await render(<SaleSearchCard card={mockCard} />);
 
@@ -38,7 +38,7 @@ test('list item prices', async () => {
 
 test('list item with 2 conditions', async () => {
     const qoh: QOH = { NONFOIL_NM: 2, NONFOIL_HP: 7 };
-    const mockCard = new ScryfallCard({ ...bop, qoh });
+    const mockCard = { ...bop, qoh };
 
     await render(<SaleSearchCard card={mockCard} />);
 
@@ -47,7 +47,7 @@ test('list item with 2 conditions', async () => {
 
 test('list item with 1 condition', async () => {
     const qoh: QOH = { NONFOIL_HP: 7 };
-    const mockCard = new ScryfallCard({ ...bop, qoh });
+    const mockCard = { ...bop, qoh };
 
     await render(<SaleSearchCard card={mockCard} />);
 
@@ -56,7 +56,7 @@ test('list item with 1 condition', async () => {
 
 test('list item condition change', async () => {
     const qoh: QOH = { NONFOIL_NM: 2, NONFOIL_HP: 7 };
-    const mockCard = new ScryfallCard({ ...bop, qoh });
+    const mockCard = { ...bop, qoh };
 
     await render(<SaleSearchCard card={mockCard} />);
 
@@ -70,7 +70,7 @@ test('list item condition change', async () => {
 
 test('list item quantity change', async () => {
     const qoh: QOH = { NONFOIL_NM: 2, NONFOIL_HP: 7 };
-    const mockCard = new ScryfallCard({ ...bop, qoh });
+    const mockCard = { ...bop, qoh };
 
     await render(<SaleSearchCard card={mockCard} />);
 
@@ -82,7 +82,7 @@ test('list item quantity change', async () => {
 
 test('list item price change', async () => {
     const qoh: QOH = { NONFOIL_NM: 2, NONFOIL_HP: 7 };
-    const mockCard = new ScryfallCard({ ...bop, qoh });
+    const mockCard = { ...bop, qoh };
 
     await render(<SaleSearchCard card={mockCard} />);
 
@@ -94,7 +94,7 @@ test('list item price change', async () => {
 
 test('button submission only on valid price and quantity', async () => {
     const qoh: QOH = { NONFOIL_NM: 2, NONFOIL_HP: 7 };
-    const mockCard = new ScryfallCard({ ...bop, qoh });
+    const mockCard = { ...bop, qoh };
 
     await render(<SaleSearchCard card={mockCard} />);
 
@@ -113,7 +113,7 @@ test('button submission only on valid price and quantity', async () => {
 
 test('cannot increase sold quantity past availability', async () => {
     const qoh: QOH = { NONFOIL_NM: 2 };
-    const mockCard = new ScryfallCard({ ...bop, qoh });
+    const mockCard = { ...bop, qoh };
 
     await render(<SaleSearchCard card={mockCard} />);
 

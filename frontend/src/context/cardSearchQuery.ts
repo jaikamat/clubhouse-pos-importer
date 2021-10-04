@@ -1,6 +1,6 @@
 import http from '../common/http';
+import { ClientCard } from '../utils/ClientCard';
 import { GET_CARDS_WITH_INFO } from '../utils/endpoints';
-import { ScryfallApiCard, ScryfallCard } from '../utils/ScryfallCard';
 
 interface Params {
     cardName: string;
@@ -13,17 +13,14 @@ interface Params {
  */
 const cardSearchQuery = async ({ cardName, inStockOnly }: Params) => {
     try {
-        const { data } = await http.get<ScryfallApiCard[]>(
-            GET_CARDS_WITH_INFO,
-            {
-                params: {
-                    title: cardName,
-                    matchInStock: inStockOnly,
-                },
-            }
-        );
+        const { data } = await http.get<ClientCard[]>(GET_CARDS_WITH_INFO, {
+            params: {
+                title: cardName,
+                matchInStock: inStockOnly,
+            },
+        });
 
-        return data.map((d) => new ScryfallCard(d));
+        return data;
     } catch (err) {
         throw err;
     }

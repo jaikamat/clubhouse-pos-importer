@@ -1,6 +1,6 @@
 import http from '../common/http';
+import { FinishCondition, QOH } from '../utils/ClientCard';
 import { ADD_CARD_TO_INVENTORY } from '../utils/endpoints';
-import { FinishCondition, QOH } from '../utils/ScryfallCard';
 
 interface CardInfo {
     id: string;

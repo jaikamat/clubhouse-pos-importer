@@ -1,34 +1,16 @@
 import createDisplayName from '../lib/createDisplayName';
 import getCardImage from '../lib/getCardImage';
-import RawScryfallCard, { CardFacesEntity } from './RawScryfallCard';
+import RawScryfallCard, {
+    CardFacesEntity,
+    Color,
+    Finishes,
+    LanguageCode,
+} from './RawScryfallCard';
 
-// TODO: This belongs in RawScryfallCard
-// Language codes from Scryfall. See https://scryfall.com/docs/api/languages for reference.
-export type LanguageCode =
-    | 'en'
-    | 'es'
-    | 'fr'
-    | 'de'
-    | 'it'
-    | 'pt'
-    | 'ja'
-    | 'ko'
-    | 'ru'
-    | 'zhs'
-    | 'zht'
-    | 'he'
-    | 'la'
-    | 'grc'
-    | 'ar'
-    | 'sa'
-    | 'px';
-
-// TODO: This belongs in RawScryfallCard
-type Color = 'W' | 'U' | 'B' | 'R' | 'G';
-
-// TODO: This belongs in RawScryfallCard
-type Finishes = ('foil' | 'nonfoil' | 'etched' | 'glossy')[];
-
+/**
+ * This class produces a type that is identical to the frontend's ClientCard,
+ * except it does not include QOH. We add QOH in the interactors.
+ */
 export class ScryfallApiCard {
     public id: string;
     public name: string;
@@ -61,12 +43,12 @@ export class ScryfallApiCard {
         this.image_uris = card.image_uris || null;
         this.card_faces = card.card_faces || [];
         this.finishes = card.finishes;
-        this.colors = (card.colors || []) as Color[];
+        this.colors = card.colors || [];
         this.type_line = card.type_line;
         this.frame_effects = card.frame_effects || [];
-        this.lang = card.lang as LanguageCode;
+        this.lang = card.lang;
         this.border_color = card.border_color;
-        this.color_identity = (card.color_identity || null) as Color[];
+        this.color_identity = card.color_identity || null;
         this.promo_types = card.promo_types || [];
         this.keywords = card.keywords || [];
         this.cardImage = getCardImage(this);

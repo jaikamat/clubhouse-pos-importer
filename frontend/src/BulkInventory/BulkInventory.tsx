@@ -17,12 +17,12 @@ import ControlledDropdown from '../ui/ControlledDropdown';
 import IntegerInput from '../ui/IntegerInput';
 import { useToastContext } from '../ui/ToastContext';
 import { SectionText } from '../ui/Typography';
+import { Condition, Finish } from '../utils/ClientCard';
 import createFinishCondition from '../utils/createFinishCondtition';
 import {
     cardConditions,
     createDropdownFinishOptions,
 } from '../utils/dropdownOptions';
-import { Condition, Finish } from '../utils/ScryfallCard';
 import { BulkCard } from './bulkInventoryQuery';
 import BulkSearchBar from './BulkSearchBar';
 import SubmittedCardsTable from './SubmittedCardsTable';

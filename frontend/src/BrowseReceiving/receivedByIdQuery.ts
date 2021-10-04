@@ -1,8 +1,8 @@
 import http from '../common/http';
 import { ClubhouseLocation } from '../context/AuthProvider';
 import { Trade } from '../context/ReceivingContext';
+import { ClientCard, FinishCondition } from '../utils/ClientCard';
 import { RECEIVING } from '../utils/endpoints';
-import { FinishCondition, ScryfallApiCard } from '../utils/ScryfallCard';
 
 interface ReceivedUser {
     _id: string;
@@ -23,7 +23,7 @@ export interface ReceivedCard {
     tradeType: Trade;
     finishCondition: FinishCondition;
     // TODO: this casing difference is mildly irritating...
-    bulk_card_data: ScryfallApiCard;
+    bulk_card_data: ClientCard;
 }
 
 export interface Received {
@@ -39,7 +39,6 @@ export interface Received {
 const receivedByIdQuery = async (receivedId: string) => {
     const { data } = await http.get<Received>(`${RECEIVING}/${receivedId}`);
 
-    // We still need to convert ScryfallApiCard to ScryfallCard downstream
     return data;
 };
 

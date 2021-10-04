@@ -1,4 +1,4 @@
-import { Finish, Finishes } from './ScryfallCard';
+import { Finish, Finishes } from './ClientCard';
 
 interface DropdownOption {
     key: string;

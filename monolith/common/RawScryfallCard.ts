@@ -1,3 +1,29 @@
+// Language codes from Scryfall. See https://scryfall.com/docs/api/languages for reference.
+export type LanguageCode =
+    | 'en'
+    | 'es'
+    | 'fr'
+    | 'de'
+    | 'it'
+    | 'pt'
+    | 'ja'
+    | 'ko'
+    | 'ru'
+    | 'zhs'
+    | 'zht'
+    | 'he'
+    | 'la'
+    | 'grc'
+    | 'ar'
+    | 'sa'
+    | 'px';
+
+// TODO: This belongs in RawScryfallCard
+export type Color = 'W' | 'U' | 'B' | 'R' | 'G';
+
+// TODO: This belongs in RawScryfallCard
+export type Finishes = ('foil' | 'nonfoil' | 'etched' | 'glossy')[];
+
 export default interface RawScryfallCard {
     object: string;
     id: string;
@@ -8,7 +34,7 @@ export default interface RawScryfallCard {
     tcgplayer_id: number;
     cardmarket_id: number;
     name: string;
-    lang: string;
+    lang: LanguageCode;
     released_at: string;
     uri: string;
     scryfall_uri: string;
@@ -17,7 +43,7 @@ export default interface RawScryfallCard {
     image_status: string;
     cmc: number;
     type_line: string;
-    color_identity?: string[] | null;
+    color_identity?: Color[] | null;
     keywords?: string[] | null;
     card_faces?: CardFacesEntity[] | null;
     legalities: Legalities;
@@ -56,9 +82,9 @@ export default interface RawScryfallCard {
     related_uris: RelatedUris;
     purchase_uris: PurchaseUris;
     image_uris?: ImageUris;
-    finishes: ('foil' | 'nonfoil' | 'etched' | 'glossy')[];
+    finishes: Finishes;
     printed_name?: string;
-    colors: string[];
+    colors: Color[];
 }
 
 export interface CardFacesEntity {
@@ -67,8 +93,8 @@ export interface CardFacesEntity {
     mana_cost: string;
     type_line: string;
     oracle_text: string;
-    colors?: string[] | null;
-    color_identity?: string[] | null;
+    colors?: Color[] | null;
+    color_identity?: Color[] | null;
     power: string;
     toughness: string;
     artist: string;

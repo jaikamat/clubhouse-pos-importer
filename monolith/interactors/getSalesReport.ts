@@ -1,4 +1,5 @@
 import RawScryfallCard from '../common/RawScryfallCard';
+import { ScryfallApiCard } from '../common/ScryfallApiCard';
 import {
     ClubhouseLocation,
     Collection,
@@ -161,6 +162,7 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
                     estimated_price: nonfoil
                         ? c.card_metadata.prices.usd
                         : c.card_metadata.prices.usd_foil,
+                    card_metadata: new ScryfallApiCard(c.card_metadata),
                 };
             }),
             countByCardName: result.countByCardName,

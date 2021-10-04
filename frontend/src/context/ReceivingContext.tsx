@@ -2,7 +2,7 @@ import { sortBy } from 'lodash';
 import React, { createContext, FC, useContext, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { useToastContext } from '../ui/ToastContext';
-import { FinishCondition, ScryfallCard } from '../utils/ScryfallCard';
+import { ClientCard, FinishCondition } from '../utils/ClientCard';
 import cardSearchQuery from './cardSearchQuery';
 import receivingQuery from './receivingQuery';
 
@@ -16,7 +16,7 @@ export enum Trade {
 // Customers can only receive cash or credit for their assets
 const TRADE_TYPES = { CASH: Trade.Cash, CREDIT: Trade.Credit };
 
-export type ReceivingCard = ScryfallCard & {
+export type ReceivingCard = ClientCard & {
     uuid_key: string;
     finishCondition: FinishCondition;
     cashPrice: number | null;
@@ -26,12 +26,12 @@ export type ReceivingCard = ScryfallCard & {
 };
 
 interface Context {
-    searchResults: ScryfallCard[];
+    searchResults: ClientCard[];
     receivingList: ReceivingCard[];
     handleSearchSelect: (term: string) => void;
     addToList: (
         quantity: number,
-        card: ScryfallCard,
+        card: ClientCard,
         meta: AddToListMeta
     ) => void;
     removeFromList: (card: ReceivingCard) => void;
@@ -67,7 +67,7 @@ const ReceivingContext = createContext<Context>(defaultContext);
 
 const ReceivingProvider: FC<Props> = ({ children }) => {
     const createToast = useToastContext();
-    const [searchResults, setSearchResults] = useState<ScryfallCard[]>([]);
+    const [searchResults, setSearchResults] = useState<ClientCard[]>([]);
     const [receivingList, setReceivingList] = useState<ReceivingCard[]>([]);
 
     const handleSearchSelect = async (term: string) => {
@@ -84,7 +84,7 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
      */
     const addToList = (
         quantity: number,
-        card: ScryfallCard,
+        card: ClientCard,
         { cashPrice, marketPrice, creditPrice, finishCondition }: AddToListMeta
     ) => {
         const previousState = [...receivingList];

@@ -1,4 +1,4 @@
-import { QOH } from './ScryfallCard';
+import { QOH } from './ClientCard';
 
 export default function parseQoh(qoh: QOH) {
     const foilQty =

@@ -1,4 +1,4 @@
-import { ScryfallCard } from './ScryfallCard';
+import { ClientCard } from '../utils/ClientCard';
 
 const ORDER = ['W', 'U', 'B', 'R', 'G', 'MULTI', 'COLORLESS', 'LAND'] as const;
 
@@ -8,7 +8,7 @@ type Order = typeof ORDER[number];
  * Main helper function that manages sort order
  * @param {Object} card
  */
-function helpSort(card: ScryfallCard): Order {
+function helpSort(card: ClientCard): Order {
     let cardFace = null;
 
     // First, get correct card face
@@ -54,7 +54,7 @@ function helpSort(card: ScryfallCard): Order {
  * Takes in an unordered group of cards and sorts them according to The Clubhouse's specs:
  * WUBRG, then multicolor, then colorless, then land, alphabetically within each color/category
  */
-export default function sortSaleList<T extends ScryfallCard>(cards: T[]) {
+export default function sortSaleList<T extends ClientCard>(cards: T[]) {
     const alphaSort = cards.sort((a, b) => a.name.localeCompare(b.name));
 
     return alphaSort.sort((a, b) => {

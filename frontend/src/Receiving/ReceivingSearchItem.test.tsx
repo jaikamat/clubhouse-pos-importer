@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { ScryfallCard } from '../utils/ScryfallCard';
+import { Finishes } from '../utils/ClientCard';
 import currentButton from '../utils/testing/currentButton';
 import currentByLabelText from '../utils/testing/currentByLabelText';
 import bop from '../utils/testing/fixtures/birdsOfParadise';
@@ -17,7 +17,7 @@ const data = {
 jest.mock('axios', () => mockHttp(data));
 
 test('list item title and metadata', async () => {
-    const mockCard = new ScryfallCard(bop);
+    const mockCard = bop;
 
     await render(<ReceivingSearchItem card={mockCard} />);
 
@@ -26,7 +26,7 @@ test('list item title and metadata', async () => {
 });
 
 test('list item prices', async () => {
-    const mockCard = new ScryfallCard(bop);
+    const mockCard = bop;
 
     await render(<ReceivingSearchItem card={mockCard} />);
 
@@ -35,7 +35,7 @@ test('list item prices', async () => {
 });
 
 test('list item initial quantity at 1', async () => {
-    const mockCard = new ScryfallCard(bop);
+    const mockCard = bop;
 
     await render(<ReceivingSearchItem card={mockCard} />);
 
@@ -43,7 +43,7 @@ test('list item initial quantity at 1', async () => {
 });
 
 test('expect one finish to yield disabled select', async () => {
-    const mockCard = new ScryfallCard(blackLotus);
+    const mockCard = blackLotus;
 
     await render(<ReceivingSearchItem card={mockCard} />);
 
@@ -54,7 +54,7 @@ test('expect one finish to yield disabled select', async () => {
 });
 
 test('expect two finishes to yield selectable select', async () => {
-    const mockCard = new ScryfallCard(bop);
+    const mockCard = bop;
 
     await render(<ReceivingSearchItem card={mockCard} />);
 
@@ -65,7 +65,7 @@ test('expect two finishes to yield selectable select', async () => {
 });
 
 test('expect foil-only to start with foil value', async () => {
-    const mockCard = new ScryfallCard({ ...bop, finishes: ['foil'] });
+    const mockCard = { ...bop, finishes: ['foil'] as Finishes };
 
     await render(<ReceivingSearchItem card={mockCard} />);
 
@@ -76,7 +76,7 @@ test('expect foil-only to start with foil value', async () => {
 });
 
 test('market price input disabled initially', async () => {
-    const mockCard = new ScryfallCard(bop);
+    const mockCard = bop;
 
     await render(<ReceivingSearchItem card={mockCard} />);
     const marketPriceInput = await screen.findByLabelText('Market Price');
@@ -85,7 +85,7 @@ test('market price input disabled initially', async () => {
 });
 
 test('market price input not disabled when cash > 0', async () => {
-    const mockCard = new ScryfallCard(bop);
+    const mockCard = bop;
 
     await render(<ReceivingSearchItem card={mockCard} />);
     const cashPriceInput = currentByLabelText('Cash Price');
@@ -99,7 +99,7 @@ test('market price input not disabled when cash > 0', async () => {
 });
 
 test('submission button disabling correctly', async () => {
-    const mockCard = new ScryfallCard(bop);
+    const mockCard = bop;
 
     await render(<ReceivingSearchItem card={mockCard} />);
     const cashPriceInput = currentByLabelText('Cash Price');
@@ -123,7 +123,7 @@ test('submission button disabling correctly', async () => {
 });
 
 test('should not be allowed to enter negative prices', async () => {
-    const mockCard = new ScryfallCard(bop);
+    const mockCard = bop;
 
     await render(<ReceivingSearchItem card={mockCard} />);
     const creditPriceInput = currentByLabelText('Credit Price');

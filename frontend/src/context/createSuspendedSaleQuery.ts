@@ -1,6 +1,6 @@
 import http from '../common/http';
+import { FinishCondition } from '../utils/ClientCard';
 import { SUSPEND_SALE } from '../utils/endpoints';
-import { FinishCondition } from '../utils/ScryfallCard';
 
 interface FinishSaleCard {
     id: string;

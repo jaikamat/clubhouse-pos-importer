@@ -33,3 +33,5 @@ export const validPrice = Joi.number().min(0).required();
 export const validTradeType = Joi.string()
     .valid(Trade.Cash, Trade.Credit)
     .required();
+const validColor = Joi.string().valid('W', 'U', 'B', 'R', 'G');
+export const validColors = Joi.array().items(validColor);

@@ -18,7 +18,7 @@ const LIMIT = 100;
  * sortBy - `name` or `price`
  * sortByDirection - `1` or `-1`
  * page - used to modify internal SKIP constant for pagination
- * colors - a sorted string, used to identify cards by one or more colors
+ * colors - an array of colors
  * type - the typeline search, like `Artifact` or `Creature`
  * frame - the desired frame effect filter (borderless, extended-art, showcase, etc)
  */

@@ -75,20 +75,17 @@ const BrowseInventory: FC = () => {
                 finish: filters.finish || undefined,
                 colors:
                     filters.colorsArray.length > 0
-                        ? filters.colorsArray
-                              .map((c) => {
-                                  const colorsMap: Record<string, string> = {
-                                      White: 'W',
-                                      Blue: 'U',
-                                      Black: 'B',
-                                      Red: 'R',
-                                      Green: 'G',
-                                  };
+                        ? filters.colorsArray.map((c) => {
+                              const colorsMap: Record<string, string> = {
+                                  White: 'W',
+                                  Blue: 'U',
+                                  Black: 'B',
+                                  Red: 'R',
+                                  Green: 'G',
+                              };
 
-                                  return colorsMap[c];
-                              })
-                              .sort()
-                              .join('')
+                              return colorsMap[c];
+                          })
                         : undefined,
                 colorSpecificity: filters.colorSpecificity || undefined,
                 type: filters.typeLine || undefined,

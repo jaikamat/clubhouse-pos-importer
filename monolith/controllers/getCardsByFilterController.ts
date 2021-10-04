@@ -13,6 +13,7 @@ import {
     TypeLine,
 } from '../common/types';
 import {
+    validColors,
     validColorSpecificity,
     validFinish,
     validFormatLegalities,
@@ -29,7 +30,7 @@ export interface GetCardsByFilterQuery {
     setName?: string;
     format?: FormatLegality;
     finish?: Finish;
-    colors?: string;
+    colors?: string[];
     sortBy?: SortBy;
     colorSpecificity?: ColorSpecificity;
     type?: TypeLine;
@@ -49,7 +50,7 @@ const getCardsByFilterController: Controller<RequestWithUserInfo> = async (
         setName: validString,
         format: validFormatLegalities,
         finish: validFinish,
-        colors: validString,
+        colors: validColors,
         sortBy: validSort,
         colorSpecificity: validColorSpecificity,
         type: validTypeline,

@@ -1,8 +1,8 @@
 import { Box, Grid } from '@material-ui/core';
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Prompt } from 'react-router';
 import TotalCardsLabel from '../common/TotalCardsLabel';
-import { SaleContext } from '../context/SaleContext';
+import { useSaleContext } from '../context/SaleContext';
 import TotalStoreInventory from '../ManageInventory/TotalStoreInventory';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
 import { HeaderText } from '../ui/Typography';
@@ -28,7 +28,7 @@ const Sale: FC<Props> = () => {
         restoreSale,
         deleteSuspendedSale,
         suspendSale,
-    } = useContext(SaleContext);
+    } = useSaleContext();
 
     /**
      * Maintains whether or not we show the exit prompt on tab close or refresh

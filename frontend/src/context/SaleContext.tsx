@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import React, { createContext, FC, useState } from 'react';
+import React, { createContext, FC, useContext, useState } from 'react';
 import sortSaleList from '../Sale/sortSaleList';
 import { useToastContext } from '../ui/ToastContext';
 import { ClientCard, FinishCondition } from '../utils/ClientCard';
@@ -49,7 +49,7 @@ const defaultSuspendedSale: SuspendedSale = {
     list: [],
 };
 
-export const SaleContext = createContext<ISaleContext>({
+const SaleContext = createContext<ISaleContext>({
     saleListCards: [],
     searchResults: [],
     searchTerm: '',
@@ -290,3 +290,5 @@ export const SaleProvider: FC<Props> = ({ children }) => {
         </SaleContext.Provider>
     );
 };
+
+export const useSaleContext = () => useContext(SaleContext);

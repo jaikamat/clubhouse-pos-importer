@@ -1,9 +1,9 @@
 import { Box, Grid, IconButton, ListItem, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import Chip from '../common/Chip';
 import Price from '../common/Price';
-import { SaleContext, SaleListCard } from '../context/SaleContext';
+import { SaleListCard, useSaleContext } from '../context/SaleContext';
 import CardImageTooltip from '../ui/CardImageTooltip';
 import SetIcon from '../ui/SetIcon';
 
@@ -23,7 +23,7 @@ const SaleCartItem: FC<Props> = ({
         cardImage,
     },
 }) => {
-    const { removeFromSaleList } = useContext(SaleContext);
+    const { removeFromSaleList } = useSaleContext();
 
     return (
         <ListItem>

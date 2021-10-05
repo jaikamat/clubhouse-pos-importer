@@ -5,8 +5,8 @@ import {
     DialogTitle,
     Typography,
 } from '@material-ui/core';
-import React, { FC, useContext, useState } from 'react';
-import { SaleContext } from '../context/SaleContext';
+import React, { FC, useState } from 'react';
+import { useSaleContext } from '../context/SaleContext';
 import Button from '../ui/Button';
 
 interface Props {}
@@ -14,7 +14,7 @@ interface Props {}
 const FinishSale: FC<Props> = () => {
     const [submit, setSubmit] = useState({ loading: false, disabled: false });
     const [showModal, setShowModal] = useState(false);
-    const { finalizeSale } = useContext(SaleContext);
+    const { finalizeSale } = useSaleContext();
 
     const handleFinalizeSale = async () => {
         setSubmit({ loading: true, disabled: true });

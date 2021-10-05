@@ -1,5 +1,6 @@
 require('dotenv').config();
 import express from 'express';
+import errorBoundary from '../common/errorBoundary';
 import {
     addCardToInventoryController,
     authController,
@@ -20,7 +21,6 @@ import {
     salesReportController,
     suspendedSaleByIdController,
 } from '../controllers';
-import errorBoundary from '../controllers/errorBoundary';
 const router = express.Router();
 
 router.use(authController);

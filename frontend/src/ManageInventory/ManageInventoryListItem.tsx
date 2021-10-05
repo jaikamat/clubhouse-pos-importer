@@ -16,7 +16,7 @@ interface Props {
 }
 
 const ManageInventoryListItem: FC<Props> = ({ card }) => {
-    const createToast = useToastContext();
+    const { createToast } = useToastContext();
     const { finishes, name, set_name, set, id, cardImage } = card;
 
     // Defaults to 'NONFOIL', but the form component will manage this for us

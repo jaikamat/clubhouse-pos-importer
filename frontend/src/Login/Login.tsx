@@ -62,7 +62,7 @@ const validate = ({ username, password, location }: FormValues) => {
 const Login = () => {
     const { formGap } = useStyles();
     const { isLoggedIn, handleLogin } = useAuthContext();
-    const createToast = useToastContext();
+    const { createToast } = useToastContext();
 
     const onSubmit = async ({ username, password, location }: FormValues) => {
         if (!location) return;

@@ -15,7 +15,7 @@ interface Props {
 }
 
 const ReceivingSearchItem: FC<Props> = ({ card }) => {
-    const createToast = useToastContext();
+    const { createToast } = useToastContext();
     const { addToList } = useReceivingContext();
     const { cardImage, finishes, name } = card;
     // Defaults to 'NONFOIL', but the form component will manage this for us

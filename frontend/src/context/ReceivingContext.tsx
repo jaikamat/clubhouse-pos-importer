@@ -66,7 +66,7 @@ interface AddToListMeta {
 const ReceivingContext = createContext<Context>(defaultContext);
 
 const ReceivingProvider: FC<Props> = ({ children }) => {
-    const createToast = useToastContext();
+    const { createToast } = useToastContext();
     const [searchResults, setSearchResults] = useState<ClientCard[]>([]);
     const [receivingList, setReceivingList] = useState<ReceivingCard[]>([]);
 

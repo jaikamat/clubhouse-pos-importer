@@ -65,7 +65,7 @@ const SaleContext = createContext<Context>({
 });
 
 export const SaleProvider: FC<Props> = ({ children }) => {
-    const createToast = useToastContext();
+    const { createToast } = useToastContext();
     const [saleListCards, setSaleListCards] = useState<SaleListCard[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [searchResults, setSearchResults] = useState<ClientCard[]>([]);

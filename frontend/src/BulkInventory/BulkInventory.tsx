@@ -56,7 +56,7 @@ const BulkInventory: FC = () => {
     const { imageContainer, placeholderImage } = useStyles();
     const [currentCardImage, setCurrentCardImage] = useState<string>('');
     const [submittedCards, setSubmittedCards] = useState<AddedCard[]>([]);
-    const createToast = useToastContext();
+    const { createToast } = useToastContext();
 
     /**
      * Adds a card to inventory

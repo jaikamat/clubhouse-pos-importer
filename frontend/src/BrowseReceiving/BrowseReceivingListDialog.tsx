@@ -17,7 +17,7 @@ import MetaData from '../ui/MetaData';
 import SetIcon from '../ui/SetIcon';
 import { useToastContext } from '../ui/ToastContext';
 import displayEmpty from '../utils/displayEmpty';
-import displayFinishCondition from '../utils/finishCondition';
+import displayFinishCondition from '../utils/displayFinishCondition';
 import formatDate from '../utils/formatDate';
 import { price } from '../utils/price';
 import receivedByIdQuery, { Received } from './receivedByIdQuery';

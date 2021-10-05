@@ -5,6 +5,7 @@ import { useReactToPrint } from 'react-to-print';
 import styled from 'styled-components';
 import Price from '../common/Price';
 import { SaleListCard } from '../context/SaleContext';
+import displayFinishCondition from '../utils/displayFinishCondition';
 import SaleCartPriceTotal from './SaleCartPriceTotal';
 
 interface Props {
@@ -16,7 +17,7 @@ const PrintWrapper = styled.div`
         background-color: white;
         margin: 0;
         padding: 0;
-        font-size: 30px;
+        font-size: 20px;
         line-height: 40px;
         z-index: 5000;
         overflow: hidden;
@@ -43,12 +44,20 @@ const PrintList: FC<Props> = ({ saleListCards }) => {
             <PrintWrapper ref={componentRef}>
                 <ul>
                     {saleListCards.map((slc) => {
+                        const {
+                            id,
+                            display_name,
+                            qtyToSell,
+                            finishCondition,
+                            set_name,
+                            price,
+                        } = slc;
                         return (
-                            <li key={slc.id}>
+                            <li key={id}>
                                 <b>
-                                    {slc.display_name} | x{slc.qtyToSell} |{' '}
-                                    {slc.finishCondition} | {slc.set_name} |{' '}
-                                    <Price num={slc.price} />
+                                    {display_name} | x{qtyToSell} |{' '}
+                                    {displayFinishCondition(finishCondition)} |{' '}
+                                    {set_name} | <Price num={price} />
                                 </b>
                             </li>
                         );

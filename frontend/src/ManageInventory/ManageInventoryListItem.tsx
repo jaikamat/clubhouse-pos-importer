@@ -16,7 +16,7 @@ interface Props {
 }
 
 const ManageInventoryListItem: FC<Props> = ({ card }) => {
-    const createToast = useToastContext();
+    const { createToast, createErrorToast } = useToastContext();
     const { finishes, name, set_name, set, id, cardImage } = card;
 
     // Defaults to 'NONFOIL', but the form component will manage this for us
@@ -52,6 +52,7 @@ const ManageInventoryListItem: FC<Props> = ({ card }) => {
             $('#searchBar').focus().select();
         } catch (err) {
             console.log(err);
+            createErrorToast(err);
         }
     };
 

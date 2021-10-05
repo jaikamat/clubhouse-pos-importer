@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 import React, { FC, useState } from 'react';
 import Button from '../ui/Button';
+import { useToastContext } from '../ui/ToastContext';
 import { AddedCard } from './BulkInventory';
 
 interface Props {
@@ -17,14 +18,16 @@ interface Props {
 }
 
 const SubmittedCardsTable: FC<Props> = ({ cards, onRemove }) => {
+    const { createErrorToast } = useToastContext();
     const [onRemoveLoading, setOnRemoveLoading] = useState<boolean>(false);
 
     const doRemove = async (card: AddedCard) => {
         try {
             setOnRemoveLoading(true);
             await onRemove(card);
-        } catch (e) {
-            console.log(e);
+        } catch (err) {
+            console.log(err);
+            createErrorToast(err);
         } finally {
             setOnRemoveLoading(false);
         }

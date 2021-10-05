@@ -1,6 +1,7 @@
 import { Box, makeStyles, Typography } from '@material-ui/core';
 import React, { FC, useEffect, useState } from 'react';
 import InventoryChip from '../ui/InventoryChip';
+import { useToastContext } from '../ui/ToastContext';
 import { ClientCard } from '../utils/ClientCard';
 import allLocationInventoryQuery, {
     ResponseData,
@@ -31,6 +32,7 @@ interface Props {
 }
 
 const TotalStoreInventory: FC<Props> = ({ title, searchResults }) => {
+    const { createErrorToast } = useToastContext();
     const { labelContainer, chipContainer } = useStyles();
     const [quantities, setQuantities] = useState<ResponseData>({
         ch1: { foilQty: 0, nonfoilQty: 0, etchedQty: 0 },
@@ -48,6 +50,7 @@ const TotalStoreInventory: FC<Props> = ({ title, searchResults }) => {
                 setLoading(false);
             } catch (err) {
                 console.log(err);
+                createErrorToast(err);
             }
         })();
     }, [title, searchResults]);

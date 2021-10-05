@@ -56,7 +56,7 @@ const BulkInventory: FC = () => {
     const { imageContainer, placeholderImage } = useStyles();
     const [currentCardImage, setCurrentCardImage] = useState<string>('');
     const [submittedCards, setSubmittedCards] = useState<AddedCard[]>([]);
-    const createToast = useToastContext();
+    const { createToast, createErrorToast } = useToastContext();
 
     /**
      * Adds a card to inventory
@@ -87,10 +87,7 @@ const BulkInventory: FC = () => {
             resetForm();
         } catch (err) {
             console.log(err);
-            createToast({
-                message: `Error adding card`,
-                severity: 'error',
-            });
+            createErrorToast(err);
         }
     };
 
@@ -125,10 +122,7 @@ const BulkInventory: FC = () => {
             );
         } catch (err) {
             console.log(err);
-            createToast({
-                message: `Error removing card`,
-                severity: 'error',
-            });
+            createErrorToast(err);
         }
     };
 

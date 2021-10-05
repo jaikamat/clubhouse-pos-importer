@@ -11,10 +11,12 @@ interface ToastArgs {
 
 interface IToastContext {
     createToast: ({ severity, message }: ToastArgs) => void;
+    createErrorToast: (err: any) => void;
 }
 
 const ToastContext = createContext<IToastContext>({
     createToast: () => null,
+    createErrorToast: () => null,
 });
 
 const ToastProvider: FC = ({ children }) => {
@@ -29,8 +31,19 @@ const ToastProvider: FC = ({ children }) => {
         setOpen(true);
     };
 
+    /**
+     * We can't make any assumptions about error objects when caught at runtime,
+     * so here we create a toast and stringify the object for convenience
+     */
+    const createErrorToast = (err: any) => {
+        createToast({
+            severity: 'error',
+            message: JSON.stringify(err, null, 2),
+        });
+    };
+
     return (
-        <ToastContext.Provider value={{ createToast }}>
+        <ToastContext.Provider value={{ createToast, createErrorToast }}>
             <Snackbar
                 open={open}
                 autoHideDuration={3000}
@@ -44,9 +57,6 @@ const ToastProvider: FC = ({ children }) => {
     );
 };
 
-export const useToastContext = () => {
-    const { createToast } = useContext(ToastContext);
-    return createToast;
-};
+export const useToastContext = () => useContext(ToastContext);
 
 export default ToastProvider;

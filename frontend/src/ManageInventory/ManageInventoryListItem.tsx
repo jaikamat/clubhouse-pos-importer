@@ -58,7 +58,7 @@ const ManageInventoryListItem: FC<Props> = ({ card }) => {
     return (
         <CardRowContainer
             image={
-                <Box width={100}>
+                <Box width={125}>
                     <CardImage image={cardImage} hover />
                 </Box>
             }

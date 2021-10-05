@@ -15,7 +15,7 @@ interface Props {
 
 const SaleSearchCard: FC<Props> = ({ card }) => {
     const { addToSaleList } = useSaleContext();
-    const { id, qoh } = card;
+    const { id, qoh, cardImage } = card;
 
     // Defaults to 'NONFOIL', but the form component will manage this for us
     const [selectedFinish, setSelectedFinish] = useState<Finish>('NONFOIL');
@@ -41,8 +41,8 @@ const SaleSearchCard: FC<Props> = ({ card }) => {
     return (
         <CardRowContainer
             image={
-                <Box width={100}>
-                    <CardImage image={card.cardImage} />
+                <Box width={125}>
+                    <CardImage image={cardImage} hover />
                 </Box>
             }
             header={

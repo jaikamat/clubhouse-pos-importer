@@ -34,7 +34,7 @@ router.post('/jwt', async (req: JwtRequest, res) => {
 
         const token = await getJwt(username, password, currentLocation);
 
-        res.status(200).send(token);
+        res.status(200).json(token);
     } catch (err) {
         console.log(err);
         res.status(500).json(err);
@@ -63,7 +63,7 @@ router.get('/autocomplete', async (req, res) => {
 
     try {
         const results = await autocomplete(value.title);
-        res.status(200).send(results);
+        res.status(200).json(results);
     } catch (err) {
         console.log(err);
         res.status(500).json(err);
@@ -98,7 +98,7 @@ router.get('/getCardsWithInfo', async (req, res) => {
         const { title, matchInStock, location } = value;
 
         const message = await getCardsWithInfo(title, matchInStock, location);
-        res.status(200).send(message);
+        res.status(200).json(message);
     } catch (err) {
         console.log(err);
         res.status(500).json(err);
@@ -125,7 +125,7 @@ router.get('/getCardFromAllLocations', async (req, res) => {
 
     try {
         const message = await getCardFromAllLocations(value.title);
-        res.status(200).send(message);
+        res.status(200).json(message);
     } catch (err) {
         console.log(err);
         res.status(500).json(err);

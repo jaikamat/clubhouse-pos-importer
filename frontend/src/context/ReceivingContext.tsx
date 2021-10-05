@@ -66,7 +66,7 @@ interface AddToListMeta {
 const ReceivingContext = createContext<Context>(defaultContext);
 
 const ReceivingProvider: FC<Props> = ({ children }) => {
-    const { createToast } = useToastContext();
+    const { createToast, createErrorToast } = useToastContext();
     const [searchResults, setSearchResults] = useState<ClientCard[]>([]);
     const [receivingList, setReceivingList] = useState<ReceivingCard[]>([]);
 
@@ -192,12 +192,9 @@ const ReceivingProvider: FC<Props> = ({ children }) => {
                 severity: 'success',
                 message: `${receivingList.length} cards were added to inventory!`,
             });
-        } catch (e) {
-            console.log(e);
-            createToast({
-                severity: 'error',
-                message: 'Error receiving cards',
-            });
+        } catch (err) {
+            console.log(err);
+            createErrorToast(err);
         }
     };
 

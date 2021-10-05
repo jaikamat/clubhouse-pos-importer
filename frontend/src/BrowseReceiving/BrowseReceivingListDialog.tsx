@@ -15,6 +15,7 @@ import CardImageTooltip from '../ui/CardImageTooltip';
 import Loading from '../ui/Loading';
 import MetaData from '../ui/MetaData';
 import SetIcon from '../ui/SetIcon';
+import { useToastContext } from '../ui/ToastContext';
 import displayEmpty from '../utils/displayEmpty';
 import displayFinishCondition from '../utils/finishCondition';
 import formatDate from '../utils/formatDate';
@@ -38,6 +39,7 @@ function displayTrade(trade: Trade) {
 }
 
 const BrowseReceivingListDialog: FC<Props> = ({ receivedId, onClose }) => {
+    const { createErrorToast } = useToastContext();
     const [loading, setLoading] = useState<boolean>(false);
     const [data, setData] = useState<Received | null>(null);
 
@@ -50,6 +52,7 @@ const BrowseReceivingListDialog: FC<Props> = ({ receivedId, onClose }) => {
                 setLoading(false);
             } catch (err) {
                 console.log(err);
+                createErrorToast(err);
             }
         })();
     }, []);

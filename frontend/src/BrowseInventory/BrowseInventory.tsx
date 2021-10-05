@@ -18,6 +18,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Pagination from '@material-ui/lab/Pagination';
 import React, { FC, useState } from 'react';
 import Placeholder from '../ui/Placeholder';
+import { useToastContext } from '../ui/ToastContext';
 import BrowseInventoryForm, {
     FormValues,
     initialFilters,
@@ -47,6 +48,7 @@ interface State {
 }
 
 const BrowseInventory: FC = () => {
+    const { createToast, createErrorToast } = useToastContext();
     const [state, setState] = useState<State>({
         cards: [],
         count: 0,
@@ -114,6 +116,7 @@ const BrowseInventory: FC = () => {
             });
         } catch (err) {
             console.log(err);
+            createErrorToast(err);
         }
     };
 

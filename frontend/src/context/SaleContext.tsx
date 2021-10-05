@@ -65,7 +65,7 @@ const SaleContext = createContext<Context>({
 });
 
 export const SaleProvider: FC<Props> = ({ children }) => {
-    const { createToast } = useToastContext();
+    const { createToast, createErrorToast } = useToastContext();
     const [saleListCards, setSaleListCards] = useState<SaleListCard[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [searchResults, setSearchResults] = useState<ClientCard[]>([]);
@@ -150,12 +150,9 @@ export const SaleProvider: FC<Props> = ({ children }) => {
                 severity: 'success',
                 message: `You are viewing ${sale.name}'s sale`,
             });
-        } catch (e) {
-            console.log(e);
-            createToast({
-                severity: 'error',
-                message: `Error`,
-            });
+        } catch (err) {
+            console.log(err);
+            createErrorToast(err);
         }
     };
 
@@ -204,12 +201,9 @@ export const SaleProvider: FC<Props> = ({ children }) => {
                 severity: 'success',
                 message: `${data.ops[0].name}'s sale was suspended`,
             });
-        } catch (e) {
-            console.log(e);
-            createToast({
-                severity: 'error',
-                message: 'Error suspending sale',
-            });
+        } catch (err) {
+            console.log(err);
+            createErrorToast(err);
         }
     };
 
@@ -224,12 +218,9 @@ export const SaleProvider: FC<Props> = ({ children }) => {
                 severity: 'success',
                 message: `${name}'s sale was deleted`,
             });
-        } catch (e) {
-            console.log(e);
-            createToast({
-                severity: 'error',
-                message: 'Error deleting suspended sale',
-            });
+        } catch (err) {
+            console.log(err);
+            createErrorToast(err);
         }
     };
 
@@ -253,12 +244,9 @@ export const SaleProvider: FC<Props> = ({ children }) => {
             });
 
             resetSaleState();
-        } catch (e) {
-            console.log(e);
-            createToast({
-                severity: 'error',
-                message: 'Sale was not created',
-            });
+        } catch (err) {
+            console.log(err);
+            createErrorToast(err);
         }
     };
 

@@ -11,6 +11,7 @@ import Button from '../ui/Button';
 import ControlledDropdown, { DropdownOption } from '../ui/ControlledDropdown';
 import ControlledMultiSelect from '../ui/ControlledMultiSelect';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
+import { useToastContext } from '../ui/ToastContext';
 import { SectionText } from '../ui/Typography';
 import setNameQuery from './setNameQuery';
 
@@ -128,6 +129,7 @@ const FormContainer = withStyles(({ spacing }) => ({
 }))(Paper);
 
 const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
+    const { createErrorToast } = useToastContext();
     const [editionDropdownOptions, setEditionDropdownOptions] = useState<
         DropdownOption[]
     >([]);
@@ -141,6 +143,7 @@ const BrowseInventoryForm: FC<Props> = ({ doSubmit }) => {
             );
         } catch (err) {
             console.log(err);
+            createErrorToast(err);
         }
     };
 

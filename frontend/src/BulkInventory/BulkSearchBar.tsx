@@ -13,6 +13,7 @@ import React, {
     useState,
 } from 'react';
 import SetIcon from '../ui/SetIcon';
+import { useToastContext } from '../ui/ToastContext';
 import bulkInventoryQuery, { BulkCard } from './bulkInventoryQuery';
 
 export type Option = BulkCard;
@@ -34,6 +35,7 @@ interface Props {
 
 const BulkSearchBar: FC<Props> = ({ value, onChange, onHighlight }) => {
     const classes = useStyles();
+    const { createErrorToast } = useToastContext();
     const [loading, setLoading] = useState<boolean>(false);
     const [options, setOptions] = useState<Option[]>([]);
     const [internalValue, setInternalValue] = useState<Option | null>(value);
@@ -87,8 +89,9 @@ const BulkSearchBar: FC<Props> = ({ value, onChange, onHighlight }) => {
             setInternalValue(value);
             await onChange(value);
             setLoading(false);
-        } catch (e) {
-            console.log(e);
+        } catch (err) {
+            console.log(err);
+            createErrorToast(err);
         }
     };
 

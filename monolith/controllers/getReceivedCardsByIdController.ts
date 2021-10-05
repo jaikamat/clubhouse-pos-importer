@@ -13,7 +13,7 @@ const getReceivedCardsByIdController: Controller<RequestWithUserInfo> = async (
         res.status(200).send(message);
     } catch (err) {
         console.error(new Error(err));
-        res.status(500).json(err.message);
+        res.status(500).json(err);
     }
 };
 

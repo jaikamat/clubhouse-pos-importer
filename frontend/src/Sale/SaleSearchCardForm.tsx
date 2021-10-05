@@ -5,7 +5,7 @@ import React, { ChangeEvent, FC, useEffect } from 'react';
 import Button from '../ui/Button';
 import ControlledDropdown from '../ui/ControlledDropdown';
 import TextField from '../ui/TextField';
-import { Finish, FinishCondition, Finishes, QOH } from '../utils/ClientCard';
+import { Finish, FinishCondition, QOH } from '../utils/ClientCard';
 
 interface ConditionOptions {
     text: string;
@@ -45,7 +45,6 @@ export interface FormValues {
 interface Props {
     onSubmit: (values: FormValues) => void;
     onFinishSelect: (finish: Finish) => void;
-    cardFinishes: Finishes;
     cardId: string;
     cardQoh: QOH;
 }
@@ -53,7 +52,6 @@ interface Props {
 const SaleSearchCardForm: FC<Props> = ({
     onSubmit,
     onFinishSelect,
-    cardFinishes,
     cardId,
     cardQoh,
 }) => {

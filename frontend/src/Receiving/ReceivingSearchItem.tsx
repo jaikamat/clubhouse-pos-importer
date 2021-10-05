@@ -15,9 +15,11 @@ interface Props {
 }
 
 const ReceivingSearchItem: FC<Props> = ({ card }) => {
-    const { cardImage, finishes, name } = card;
     const createToast = useToastContext();
     const { addToList } = useReceivingContext();
+    const { cardImage, finishes, name } = card;
+    // Defaults to 'NONFOIL', but the form component will manage this for us
+    const [selectedFinish, setSelectedFinish] = useState<Finish>('NONFOIL');
 
     const handleInventoryAdd = ({
         quantity,
@@ -47,9 +49,6 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
         // Highlight the input after successful card add
         $('#searchBar').focus().select();
     };
-
-    // Defaults to 'NONFOIL', but the form component will manage this for us
-    const [selectedFinish, setSelectedFinish] = useState<Finish>('NONFOIL');
 
     return (
         <CardRowContainer

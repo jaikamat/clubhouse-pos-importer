@@ -15,6 +15,10 @@ interface Props {
 
 const SaleSearchCard: FC<Props> = ({ card }) => {
     const { addToSaleList } = useSaleContext();
+    const { id, qoh } = card;
+
+    // Defaults to 'NONFOIL', but the form component will manage this for us
+    const [selectedFinish, setSelectedFinish] = useState<Finish>('NONFOIL');
 
     const onSubmit = ({
         selectedFinishCondition,
@@ -34,9 +38,6 @@ const SaleSearchCard: FC<Props> = ({ card }) => {
         $('#searchBar').focus().select();
     };
 
-    // Defaults to 'NONFOIL', but the form component will manage this for us
-    const [selectedFinish, setSelectedFinish] = useState<Finish>('NONFOIL');
-
     return (
         <CardRowContainer
             image={
@@ -54,9 +55,8 @@ const SaleSearchCard: FC<Props> = ({ card }) => {
             }
         >
             <SaleSearchCardForm
-                cardId={card.id}
-                cardQoh={card.qoh}
-                cardFinishes={card.finishes}
+                cardId={id}
+                cardQoh={qoh}
                 onFinishSelect={(f) => setSelectedFinish(f)}
                 onSubmit={onSubmit}
             />

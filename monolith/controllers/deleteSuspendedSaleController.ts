@@ -8,13 +8,8 @@ const deleteSuspendedSaleController: Controller<RequestWithUserInfo> = async (
 ) => {
     const { id } = req.params;
 
-    try {
-        const message = await deleteSuspendedSale(id, req.currentLocation);
-        res.status(200).send(message);
-    } catch (err) {
-        console.error(new Error(err));
-        res.status(500).json(err);
-    }
+    const message = await deleteSuspendedSale(id, req.currentLocation);
+    res.status(200).send(message);
 };
 
 export default deleteSuspendedSaleController;

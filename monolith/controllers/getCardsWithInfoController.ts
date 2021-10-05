@@ -31,19 +31,14 @@ const getCardsWithInfoController: Controller<RequestWithUserInfo> = async (
         return res.status(400).json(error);
     }
 
-    try {
-        const { title, matchInStock } = value;
+    const { title, matchInStock } = value;
 
-        const message = await getCardsWithInfo(
-            title,
-            matchInStock,
-            req.currentLocation
-        );
-        res.status(200).send(message);
-    } catch (err) {
-        console.log(err);
-        res.status(500).json(err);
-    }
+    const message = await getCardsWithInfo(
+        title,
+        matchInStock,
+        req.currentLocation
+    );
+    res.status(200).send(message);
 };
 
 export default getCardsWithInfoController;

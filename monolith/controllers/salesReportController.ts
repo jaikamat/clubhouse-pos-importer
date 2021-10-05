@@ -34,18 +34,13 @@ const salesReportController: Controller<RequestWithUserInfo> = async (
 
     const { startDate, endDate } = value;
 
-    try {
-        const message = await getSalesReport({
-            location: req.currentLocation,
-            startDate: moment(startDate).utc().startOf('day').toDate(),
-            endDate: moment(endDate).utc().startOf('day').toDate(),
-        });
+    const message = await getSalesReport({
+        location: req.currentLocation,
+        startDate: moment(startDate).utc().startOf('day').toDate(),
+        endDate: moment(endDate).utc().startOf('day').toDate(),
+    });
 
-        res.status(200).send(message);
-    } catch (err) {
-        console.error(new Error(err));
-        res.status(500).json(err);
-    }
+    res.status(200).send(message);
 };
 
 export default salesReportController;

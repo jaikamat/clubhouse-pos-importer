@@ -70,16 +70,11 @@ const getCardsByFilterController: Controller<RequestWithUserInfo> = async (
         return res.status(400).json(error);
     }
 
-    try {
-        const { currentLocation } = req;
+    const { currentLocation } = req;
 
-        const message = await getCardsByFilter(value, currentLocation);
+    const message = await getCardsByFilter(value, currentLocation);
 
-        res.status(200).json(message);
-    } catch (err) {
-        console.log(err);
-        res.status(500).json(err);
-    }
+    res.status(200).json(message);
 };
 
 export default getCardsByFilterController;

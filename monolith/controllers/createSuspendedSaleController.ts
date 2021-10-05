@@ -46,18 +46,13 @@ const createSuspendedSaleController: Controller<ReqWithSuspendSale> = async (
         return res.status(400).json(error);
     }
 
-    try {
-        const message = await createSuspendedSale(
-            customerName,
-            notes,
-            saleList,
-            req.currentLocation
-        );
-        res.status(200).send(message);
-    } catch (err) {
-        console.error(new Error(err));
-        res.status(500).json(err);
-    }
+    const message = await createSuspendedSale(
+        customerName,
+        notes,
+        saleList,
+        req.currentLocation
+    );
+    res.status(200).send(message);
 };
 
 export default createSuspendedSaleController;

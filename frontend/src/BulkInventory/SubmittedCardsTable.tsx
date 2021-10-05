@@ -10,6 +10,8 @@ import {
 import React, { FC, useState } from 'react';
 import Button from '../ui/Button';
 import { useToastContext } from '../ui/ToastContext';
+import createFinishCondition from '../utils/createFinishCondtition';
+import displayFinishCondition from '../utils/displayFinishCondition';
 import { AddedCard } from './BulkInventory';
 
 interface Props {
@@ -45,10 +47,7 @@ const SubmittedCardsTable: FC<Props> = ({ cards, onRemove }) => {
                             <b>Quantity</b>
                         </TableCell>
                         <TableCell>
-                            <b>Finish</b>
-                        </TableCell>
-                        <TableCell>
-                            <b>Condition</b>
+                            <b>Finish (Condition)</b>
                         </TableCell>
                         <TableCell />
                     </TableRow>
@@ -75,8 +74,14 @@ const SubmittedCardsTable: FC<Props> = ({ cards, onRemove }) => {
                                             {bulkCard.display_name}
                                         </TableCell>
                                         <TableCell>{quantity}</TableCell>
-                                        <TableCell>{finish}</TableCell>
-                                        <TableCell>{condition}</TableCell>
+                                        <TableCell>
+                                            {displayFinishCondition(
+                                                createFinishCondition(
+                                                    finish,
+                                                    condition
+                                                )
+                                            )}
+                                        </TableCell>
                                         <TableCell align="right">
                                             <Button
                                                 onClick={() => doRemove(c)}

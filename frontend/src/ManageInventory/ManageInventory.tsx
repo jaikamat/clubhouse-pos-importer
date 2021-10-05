@@ -1,7 +1,7 @@
 import { Grid } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import React, { useContext, useEffect, useState } from 'react';
-import { InventoryContext } from '../context/InventoryContext';
+import React, { useEffect, useState } from 'react';
+import { useInventoryContext } from '../context/InventoryContext';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
 import Loading from '../ui/Loading';
 import Placeholder from '../ui/Placeholder';
@@ -12,7 +12,7 @@ import TotalStoreInventory from './TotalStoreInventory';
 export default function ManageInventory() {
     const [term, setTerm] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
-    const { searchResults, handleSearchSelect } = useContext(InventoryContext);
+    const { searchResults, handleSearchSelect } = useInventoryContext();
 
     useEffect(() => {
         if (term) {

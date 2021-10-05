@@ -1,4 +1,4 @@
-import React, { createContext, FC, useState } from 'react';
+import React, { createContext, FC, useContext, useState } from 'react';
 import { ClientCard, QOH } from '../utils/ClientCard';
 import cardSearchQuery from './cardSearchQuery';
 
@@ -10,7 +10,7 @@ interface Context {
     handleSearchSelect: (term: string) => void;
 }
 
-export const InventoryContext = createContext<Context>({
+const InventoryContext = createContext<Context>({
     searchResults: [],
     changeCardQuantity: () => null,
     handleSearchSelect: () => null,
@@ -43,5 +43,7 @@ const InventoryProvider: FC<Props> = ({ children }) => {
         </InventoryContext.Provider>
     );
 };
+
+export const useInventoryContext = () => useContext(InventoryContext);
 
 export default InventoryProvider;

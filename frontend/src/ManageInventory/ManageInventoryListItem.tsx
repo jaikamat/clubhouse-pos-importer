@@ -1,9 +1,9 @@
 import { Box, Grid } from '@material-ui/core';
 import { FormikErrors, FormikHelpers, useFormik } from 'formik';
 import $ from 'jquery';
-import React, { ChangeEvent, FC, useContext, useState } from 'react';
+import React, { ChangeEvent, FC, useState } from 'react';
 import CardImage from '../common/CardImage';
-import { InventoryContext } from '../context/InventoryContext';
+import { useInventoryContext } from '../context/InventoryContext';
 import Button from '../ui/Button';
 import CardHeader from '../ui/CardHeader';
 import CardRowContainer from '../ui/CardRowContainer';
@@ -48,7 +48,7 @@ const ManageInventoryListItem: FC<Props> = ({ card }) => {
 
     const [selectedFinish, setSelectedFinish] = useState<Finish>(initialFinish);
 
-    const { changeCardQuantity } = useContext(InventoryContext);
+    const { changeCardQuantity } = useInventoryContext();
 
     const initialFormValues: FormValues = {
         selectedFinish: initialFinish,

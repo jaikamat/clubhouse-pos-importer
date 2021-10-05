@@ -28,39 +28,39 @@ const authController: Controller<RequestWithUserInfo> = async (
         token = token.slice(7, token.length);
     }
 
-    if (token) {
-        try {
-            // Will throw error if validation fails
-            const { userId, currentLocation } = jwt.verify(
-                token,
-                process.env.PRIVATE_KEY
-            ) as DecodedToken;
+    if (!token) {
+        return res.status(401).json('no token present on request');
+    }
 
-            const user: User = await getUserById(userId);
+    try {
+        // Will throw error if validation fails
+        const { userId, currentLocation } = jwt.verify(
+            token,
+            process.env.PRIVATE_KEY
+        ) as DecodedToken;
 
-            // Attach current location information to the req
-            // TODO: This should eventually just be a "store id"
-            req.currentLocation = currentLocation;
+        const user: User = await getUserById(userId);
 
-            // Attach user information
-            req.userId = userId;
-            req.locations = user.locations;
-            req.lightspeedEmployeeNumber = user.lightspeedEmployeeNumber;
+        // Attach current location information to the req
+        // TODO: This should eventually just be a "store id"
+        req.currentLocation = currentLocation;
 
-            // Flag admins
-            req.isAdmin = user.locations.length === 2;
+        // Attach user information
+        req.userId = userId;
+        req.locations = user.locations;
+        req.lightspeedEmployeeNumber = user.lightspeedEmployeeNumber;
 
-            console.log(
-                `Operation started by ${user.username} at location ${currentLocation}`
-            );
+        // Flag admins
+        req.isAdmin = user.locations.length === 2;
 
-            return next();
-        } catch (err) {
-            console.log(err);
-            res.status(401).send('Invalid token');
-        }
-    } else {
-        res.status(401).send('No token present on request');
+        console.log(
+            `Operation started by ${user.username} at location ${currentLocation}`
+        );
+
+        return next();
+    } catch (err) {
+        console.log(err);
+        res.status(401).json('invalid token');
     }
 };
 

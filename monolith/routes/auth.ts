@@ -23,7 +23,7 @@ import {
 } from '../controllers';
 const router = express.Router();
 
-router.use(authController);
+router.use(errorBoundary(authController));
 router.post('/addCardToInventory', errorBoundary(addCardToInventoryController));
 router.post('/finishSale', errorBoundary(finishSaleValidationController));
 router.post('/finishSale', errorBoundary(finishSaleController));

@@ -6,13 +6,8 @@ const distinctSetNamesController: Controller<RequestWithUserInfo> = async (
     req,
     res
 ) => {
-    try {
-        const names = await getDistinctSetNames(req.currentLocation);
-        res.status(200).send(names);
-    } catch (err) {
-        console.log(err);
-        res.status(500).json(err);
-    }
+    const names = await getDistinctSetNames(req.currentLocation);
+    res.status(200).send(names);
 };
 
 export default distinctSetNamesController;

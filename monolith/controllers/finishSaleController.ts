@@ -6,21 +6,16 @@ const finishSaleController: Controller<ReqWithFinishSaleCards> = async (
     req,
     res
 ) => {
-    try {
-        const { cards } = req.body;
-        const { currentLocation, lightspeedEmployeeNumber } = req;
+    const { cards } = req.body;
+    const { currentLocation, lightspeedEmployeeNumber } = req;
 
-        const data = await finishSale(
-            cards,
-            currentLocation,
-            lightspeedEmployeeNumber
-        );
+    const data = await finishSale(
+        cards,
+        currentLocation,
+        lightspeedEmployeeNumber
+    );
 
-        res.status(200).send(data);
-    } catch (err) {
-        console.log(err);
-        res.status(500).json(err);
-    }
+    res.status(200).send(data);
 };
 
 export default finishSaleController;

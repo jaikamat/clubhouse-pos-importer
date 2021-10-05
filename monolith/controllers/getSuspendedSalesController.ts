@@ -6,13 +6,8 @@ const getSuspendedSalesController: Controller<RequestWithUserInfo> = async (
     req,
     res
 ) => {
-    try {
-        const message = await getSuspendedSales(req.currentLocation);
-        res.status(200).send(message);
-    } catch (err) {
-        console.error(new Error(err));
-        res.status(500).json(err);
-    }
+    const message = await getSuspendedSales(req.currentLocation);
+    res.status(200).send(message);
 };
 
 export default getSuspendedSalesController;

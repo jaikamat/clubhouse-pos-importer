@@ -38,19 +38,14 @@ const getReceivedCardsController: Controller<RequestWithUserInfo> = async (
 
     const { startDate, endDate, cardName } = value;
 
-    try {
-        const message = await getCardsFromReceiving({
-            location: req.currentLocation,
-            startDate: moment(startDate).utc().startOf('day').toDate(),
-            endDate: moment(endDate).utc().endOf('day').toDate(),
-            cardName: cardName || null,
-        });
+    const message = await getCardsFromReceiving({
+        location: req.currentLocation,
+        startDate: moment(startDate).utc().startOf('day').toDate(),
+        endDate: moment(endDate).utc().endOf('day').toDate(),
+        cardName: cardName || null,
+    });
 
-        res.status(200).send(message);
-    } catch (err) {
-        console.log(err);
-        res.status(500).json(err);
-    }
+    res.status(200).send(message);
 };
 
 export default getReceivedCardsController;

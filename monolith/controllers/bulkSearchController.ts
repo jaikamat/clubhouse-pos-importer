@@ -29,13 +29,8 @@ const bulkSearchController: Controller<RequestWithUserInfo> = async (
         return res.status(400).json(error);
     }
 
-    try {
-        const cards = await getCardPrintings(value.cardName);
-        res.status(200).json(cards);
-    } catch (err) {
-        console.error(new Error(err));
-        res.status(500).json(err);
-    }
+    const cards = await getCardPrintings(value.cardName);
+    res.status(200).json(cards);
 };
 
 export default bulkSearchController;

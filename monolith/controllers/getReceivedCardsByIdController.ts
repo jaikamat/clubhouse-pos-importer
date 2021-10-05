@@ -8,13 +8,8 @@ const getReceivedCardsByIdController: Controller<RequestWithUserInfo> = async (
 ) => {
     const { id } = req.params;
 
-    try {
-        const message = await getReceivingById(id, req.currentLocation);
-        res.status(200).send(message);
-    } catch (err) {
-        console.error(new Error(err));
-        res.status(500).json(err);
-    }
+    const message = await getReceivingById(id, req.currentLocation);
+    res.status(200).send(message);
 };
 
 export default getReceivedCardsByIdController;

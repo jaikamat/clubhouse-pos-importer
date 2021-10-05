@@ -44,20 +44,15 @@ const receiveCardsValidationController: Controller<ReqWithReceivingCards> = (
         cards: Joi.array().items(receivingCardSchema),
     });
 
-    try {
-        const { error }: JoiValidation<ReceivingCard> = schema.validate(
-            req.body,
-            { abortEarly: false }
-        );
+    const { error }: JoiValidation<ReceivingCard> = schema.validate(req.body, {
+        abortEarly: false,
+    });
 
-        if (error) {
-            return res.status(400).json(error);
-        }
-
-        return next();
-    } catch (err) {
-        res.status(400).json(err);
+    if (error) {
+        return res.status(400).json(error);
     }
+
+    return next();
 };
 
 export default receiveCardsValidationController;

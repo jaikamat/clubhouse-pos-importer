@@ -32,26 +32,18 @@ const finishSaleValidationController: Controller<ReqWithFinishSaleCards> = (
 
     const { cards } = req.body;
 
-    try {
-        for (let card of cards) {
-            const { error }: JoiValidation<FinishSaleCard> = schema.validate(
-                card,
-                {
-                    abortEarly: false,
-                    allowUnknown: true,
-                }
-            );
+    for (let card of cards) {
+        const { error }: JoiValidation<FinishSaleCard> = schema.validate(card, {
+            abortEarly: false,
+            allowUnknown: true,
+        });
 
-            if (error) {
-                return res.status(400).json(error);
-            }
+        if (error) {
+            return res.status(400).json(error);
         }
-
-        return next();
-    } catch (err) {
-        console.log(err);
-        res.status(400).json(err);
     }
+
+    return next();
 };
 
 export default finishSaleValidationController;

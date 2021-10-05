@@ -10,7 +10,7 @@ import _ from 'lodash';
 import React, { FC } from 'react';
 import Price from '../common/Price';
 import { ReceivingCard } from '../context/ReceivingContext';
-import displayFinishCondition from '../utils/finishCondition';
+import displayFinishCondition from '../utils/displayFinishCondition';
 
 interface Props {
     receivingList: ReceivingCard[];

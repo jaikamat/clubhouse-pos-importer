@@ -15,7 +15,7 @@ import moment from 'moment';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import Loading from '../ui/Loading';
 import { HeaderText, SectionText } from '../ui/Typography';
-import displayFinishCondition from '../utils/finishCondition';
+import displayFinishCondition from '../utils/displayFinishCondition';
 import { price } from '../utils/price';
 import reportingQuery, { ResponseData } from './reportingQuery';
 

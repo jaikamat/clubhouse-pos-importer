@@ -31,7 +31,7 @@ app.use(function (req, res, next) {
 // Error handlers
 app.use(errorLogger); // Only logs the error, doesn't handle it
 app.use(function (err, req, res, next) {
-    res.status(err.status || 500).json(err.message);
+    res.status(err.status || 500).json(err);
 });
 
 export default app;

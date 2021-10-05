@@ -19,7 +19,7 @@ const finishSaleController: Controller<ReqWithFinishSaleCards> = async (
         res.status(200).send(data);
     } catch (err) {
         console.log(err);
-        res.status(500).send(err.message);
+        res.status(500).json(err);
     }
 };
 

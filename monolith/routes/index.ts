@@ -37,7 +37,7 @@ router.post('/jwt', async (req: JwtRequest, res) => {
         res.status(200).send(token);
     } catch (err) {
         console.log(err);
-        res.status(500).send(err);
+        res.status(500).json(err);
     }
 });
 
@@ -66,7 +66,7 @@ router.get('/autocomplete', async (req, res) => {
         res.status(200).send(results);
     } catch (err) {
         console.log(err);
-        res.status(500).send(err);
+        res.status(500).json(err);
     }
 });
 
@@ -101,7 +101,7 @@ router.get('/getCardsWithInfo', async (req, res) => {
         res.status(200).send(message);
     } catch (err) {
         console.log(err);
-        res.status(500).send(err);
+        res.status(500).json(err);
     }
 });
 
@@ -128,7 +128,7 @@ router.get('/getCardFromAllLocations', async (req, res) => {
         res.status(200).send(message);
     } catch (err) {
         console.log(err);
-        res.status(500).send(err);
+        res.status(500).json(err);
     }
 });
 

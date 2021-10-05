@@ -56,7 +56,7 @@ const createSuspendedSaleController: Controller<ReqWithSuspendSale> = async (
         res.status(200).send(message);
     } catch (err) {
         console.error(new Error(err));
-        res.status(500).send(err.message);
+        res.status(500).json(err);
     }
 };
 

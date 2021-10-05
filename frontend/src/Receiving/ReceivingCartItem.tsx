@@ -12,6 +12,7 @@ import {
 } from '../context/ReceivingContext';
 import CardImageTooltip from '../ui/CardImageTooltip';
 import SetIcon from '../ui/SetIcon';
+import displayFinishCondition from '../utils/displayFinishCondition';
 
 interface Props {
     card: ReceivingCard;
@@ -47,12 +48,7 @@ const ReceivingCartItem: FC<Props> = ({ card }) => {
                             <Chip size="small" label={set.toUpperCase()} />
                         </Box>
                     </CardImageTooltip>
-                    {finishCondition && (
-                        <span>
-                            {finishCondition.split('_')[1]} {' | '}
-                            {finishCondition.split('_')[0]}
-                        </span>
-                    )}
+                    <span>{displayFinishCondition(finishCondition)}</span>
                     <div>
                         <span style={{ whiteSpace: 'nowrap' }}>
                             Cash:{' '}

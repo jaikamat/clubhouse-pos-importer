@@ -6,6 +6,7 @@ import Price from '../common/Price';
 import { SaleListCard, useSaleContext } from '../context/SaleContext';
 import CardImageTooltip from '../ui/CardImageTooltip';
 import SetIcon from '../ui/SetIcon';
+import displayFinishCondition from '../utils/displayFinishCondition';
 
 interface Props {
     card: SaleListCard;
@@ -41,12 +42,7 @@ const SaleCartItem: FC<Props> = ({
                     <div className="line-item-price">
                         {qtyToSell}x @ <Price num={price} />
                         {' • '}
-                        {finishCondition && (
-                            <span>
-                                {finishCondition.split('_')[1]} {' | '}
-                                {finishCondition.split('_')[0]}
-                            </span>
-                        )}
+                        <span>{displayFinishCondition(finishCondition)}</span>
                     </div>
                 </Grid>
                 <Grid item>

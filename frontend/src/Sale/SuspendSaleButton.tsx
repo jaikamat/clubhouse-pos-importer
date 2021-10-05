@@ -12,7 +12,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import React, { FC, useEffect, useState } from 'react';
 import { SuspendedSale } from '../context/getSuspendedSaleQuery';
-import { SaleContext } from '../context/SaleContext';
+import { ISaleContext } from '../context/SaleContext';
 import Button from '../ui/Button';
 import ControlledDropdown from '../ui/ControlledDropdown';
 import TextField from '../ui/TextField';
@@ -22,9 +22,9 @@ interface Props {
     /** The suspended sale ID */
     id: string;
     saleListLength: number;
-    restoreSale: SaleContext['restoreSale'];
-    deleteSuspendedSale: SaleContext['deleteSuspendedSale'];
-    suspendSale: SaleContext['suspendSale'];
+    restoreSale: ISaleContext['restoreSale'];
+    deleteSuspendedSale: ISaleContext['deleteSuspendedSale'];
+    suspendSale: ISaleContext['suspendSale'];
 }
 
 interface SuspendButtonState {

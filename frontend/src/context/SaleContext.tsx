@@ -22,7 +22,7 @@ export type SaleListCard = ClientCard & {
     price: number;
 };
 
-export interface SaleContext {
+export interface ISaleContext {
     saleListCards: SaleListCard[];
     searchResults: ClientCard[];
     searchTerm: string;
@@ -49,7 +49,7 @@ const defaultSuspendedSale: SuspendedSale = {
     list: [],
 };
 
-export const SaleContext = createContext<SaleContext>({
+export const SaleContext = createContext<ISaleContext>({
     saleListCards: [],
     searchResults: [],
     searchTerm: '',

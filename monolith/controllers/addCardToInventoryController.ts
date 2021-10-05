@@ -69,7 +69,7 @@ const addCardToInventoryController: Controller<AddCardToInventoryReq> = async (
         res.status(200).send(message);
     } catch (err) {
         console.log(err);
-        res.status(500).send(err);
+        res.status(500).json(err);
     }
 };
 

@@ -11,7 +11,7 @@ const distinctSetNamesController: Controller<RequestWithUserInfo> = async (
         res.status(200).send(names);
     } catch (err) {
         console.log(err);
-        res.status(500).send(err);
+        res.status(500).json(err);
     }
 };
 

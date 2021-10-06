@@ -36,6 +36,7 @@ const finishDropdownOptions: DropdownOption[] = [
     { key: 'nonfoil_foil', value: '', text: 'None' },
     { key: 'nonfoil', value: 'NONFOIL', text: 'Nonfoil' },
     { key: 'foil', value: 'FOIL', text: 'Foil' },
+    { key: 'etched', value: 'ETCHED', text: 'Etched' },
 ];
 
 const sortByDropdownOptions: DropdownOption[] = [
@@ -81,6 +82,7 @@ const frameOptions: DropdownOption[] = [
     { key: 'borderless', value: 'borderless', text: 'Borderless' },
     { key: 'extendedArt', value: 'extendedArt', text: 'Extended Art' },
     { key: 'showcase', value: 'showcase', text: 'Showcase' },
+    { key: 'retro', value: 'retro', text: 'Retro' },
 ];
 
 export interface FormValues {

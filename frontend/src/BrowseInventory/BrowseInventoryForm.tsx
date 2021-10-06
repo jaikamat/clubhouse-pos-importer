@@ -82,6 +82,7 @@ const frameOptions: DropdownOption[] = [
     { key: 'borderless', value: 'borderless', text: 'Borderless' },
     { key: 'extendedArt', value: 'extendedArt', text: 'Extended Art' },
     { key: 'showcase', value: 'showcase', text: 'Showcase' },
+    { key: 'retro', value: 'retro', text: 'Retro' },
 ];
 
 export interface FormValues {

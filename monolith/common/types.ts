@@ -77,7 +77,12 @@ export const typeLines = [
 
 export type TypeLine = typeof typeLines[number];
 
-export const frames = ['borderless', 'extendedArt', 'showcase'] as const;
+export const frames = [
+    'borderless',
+    'extendedArt',
+    'showcase',
+    'retro',
+] as const;
 
 export type Frame = typeof frames[number];
 

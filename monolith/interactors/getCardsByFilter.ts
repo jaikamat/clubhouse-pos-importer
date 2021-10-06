@@ -100,13 +100,33 @@ const getCardsByFilter = async (
         const showcaseMatch = { frame_effects: 'showcase' };
         const extendedArtMatch = { frame_effects: 'extendedart' };
 
-        if (title) aggregation.push({ $match: nameMatch });
-        if (setName) aggregation.push({ $match: setNameMatch });
-        if (type) aggregation.push({ $match: typeMatch });
-        if (frame === 'borderless') aggregation.push({ $match: borderMatch });
-        if (frame === 'showcase') aggregation.push({ $match: showcaseMatch });
-        if (frame === 'extendedArt')
+        if (title) {
+            aggregation.push({ $match: nameMatch });
+        }
+        if (setName) {
+            aggregation.push({ $match: setNameMatch });
+        }
+        if (type) {
+            aggregation.push({ $match: typeMatch });
+        }
+        if (frame === 'borderless') {
+            aggregation.push({ $match: borderMatch });
+        }
+        if (frame === 'showcase') {
+            aggregation.push({ $match: showcaseMatch });
+        }
+        if (frame === 'extendedArt') {
             aggregation.push({ $match: extendedArtMatch });
+        }
+        if (frame === 'retro') {
+            aggregation.push({
+                $match: {
+                    frame: {
+                        $in: ['1993', '1997'],
+                    },
+                },
+            });
+        }
 
         // Pre-unwind, we add these fields
         const addFields = {
@@ -204,7 +224,8 @@ const getCardsByFilter = async (
                     },
                 },
             });
-        } else if (finish === 'NONFOIL') {
+        }
+        if (finish === 'NONFOIL') {
             aggregation.push({
                 $match: {
                     'inventory.k': {
@@ -217,7 +238,8 @@ const getCardsByFilter = async (
                     },
                 },
             });
-        } else if (finish === 'ETCHED') {
+        }
+        if (finish === 'ETCHED') {
             aggregation.push({
                 $match: {
                     'inventory.k': {

@@ -217,6 +217,19 @@ const getCardsByFilter = async (
                     },
                 },
             });
+        } else if (finish === 'ETCHED') {
+            aggregation.push({
+                $match: {
+                    'inventory.k': {
+                        $in: [
+                            'ETCHED_NM',
+                            'ETCHED_LP',
+                            'ETCHED_MP',
+                            'ETCHED_HP',
+                        ],
+                    },
+                },
+            });
         }
 
         // End match format legality logic

@@ -36,6 +36,7 @@ const finishDropdownOptions: DropdownOption[] = [
     { key: 'nonfoil_foil', value: '', text: 'None' },
     { key: 'nonfoil', value: 'NONFOIL', text: 'Nonfoil' },
     { key: 'foil', value: 'FOIL', text: 'Foil' },
+    { key: 'etched', value: 'ETCHED', text: 'Etched' },
 ];
 
 const sortByDropdownOptions: DropdownOption[] = [

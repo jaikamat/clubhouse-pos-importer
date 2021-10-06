@@ -38,7 +38,7 @@ const ToastProvider: FC = ({ children }) => {
     const createErrorToast = (err: any) => {
         createToast({
             severity: 'error',
-            message: JSON.stringify(err, null, 2),
+            message: err.message ? err.message : JSON.stringify(err, null, 2),
         });
     };
 

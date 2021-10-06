@@ -3,7 +3,6 @@ import {
     FormControl,
     Grid,
     InputLabel,
-    makeStyles,
     MenuItem,
     Select,
 } from '@material-ui/core';
@@ -27,22 +26,6 @@ import { BulkCard } from './bulkInventoryQuery';
 import BulkSearchBar from './BulkSearchBar';
 import SubmittedCardsTable from './SubmittedCardsTable';
 
-const useStyles = makeStyles(({ palette }) => ({
-    imageContainer: { maxWidth: 200, height: 'auto' },
-    placeholderImage: {
-        background: `repeating-linear-gradient(
-            45deg,
-            ${palette.grey[200]},
-            ${palette.grey[200]} 10px,
-            ${palette.grey[300]} 10px,
-            ${palette.grey[300]} 20px
-          )`,
-        borderRadius: 10,
-        height: 280,
-        width: 200,
-    },
-}));
-
 interface FormValues {
     bulkCard: BulkCard | null;
     finish: Finish;
@@ -53,7 +36,6 @@ interface FormValues {
 export type AddedCard = FormValues & { uuid: string };
 
 const BulkInventory: FC = () => {
-    const { imageContainer, placeholderImage } = useStyles();
     const [currentCardImage, setCurrentCardImage] = useState<string>('');
     const [submittedCards, setSubmittedCards] = useState<AddedCard[]>([]);
     const { createToast, createErrorToast } = useToastContext();
@@ -243,13 +225,7 @@ const BulkInventory: FC = () => {
                 <Grid item xs={4}>
                     <SectionText>Card preview</SectionText>
                     <br />
-                    {currentCardImage ? (
-                        <CardImage image={currentCardImage} width={200} />
-                    ) : (
-                        <div className={imageContainer}>
-                            <div className={placeholderImage} />
-                        </div>
-                    )}
+                    <CardImage image={currentCardImage} width={200} />
                 </Grid>
             </Grid>
             {submittedCards.length > 0 && (

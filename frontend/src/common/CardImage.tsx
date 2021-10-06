@@ -1,7 +1,8 @@
 import { Box, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import placeholder from '../assets/placeholder.png';
+import useHover from './useHover';
 import useImageLoaded from './useImageLoaded';
 
 interface Props {
@@ -26,13 +27,8 @@ const useStyles = makeStyles(({ zIndex }) => ({
 
 const CardImage: FC<Props> = ({ source, hover, width }) => {
     const { imageStyle, hoveredStyle } = useStyles();
-    const [hovered, setHovered] = useState<boolean>(false);
     const [ref, loaded, onLoad] = useImageLoaded();
-
-    const onHover = (val: boolean) => {
-        if (!hover) return;
-        setHovered(val);
-    };
+    const [hovered, onMouseOver, onMouseOut] = useHover();
 
     if (!source) {
         return (
@@ -64,8 +60,8 @@ const CardImage: FC<Props> = ({ source, hover, width }) => {
                 className={clsx(imageStyle, {
                     [hoveredStyle]: hovered,
                 })}
-                onMouseOver={() => onHover(true)}
-                onMouseOut={() => onHover(false)}
+                onMouseOver={() => hover && onMouseOver()}
+                onMouseOut={() => hover && onMouseOut()}
             />
         </Box>
     );

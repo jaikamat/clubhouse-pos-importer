@@ -48,7 +48,7 @@ interface State {
 }
 
 const BrowseInventory: FC = () => {
-    const { createToast, createErrorToast } = useToastContext();
+    const { createErrorToast } = useToastContext();
     const [state, setState] = useState<State>({
         cards: [],
         count: 0,

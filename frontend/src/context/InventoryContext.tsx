@@ -1,4 +1,5 @@
 import React, { createContext, FC, useContext, useState } from 'react';
+import { useToastContext } from '../ui/ToastContext';
 import { ClientCard, QOH } from '../utils/ClientCard';
 import cardSearchQuery from './cardSearchQuery';
 
@@ -18,14 +19,20 @@ const InventoryContext = createContext<Context>({
 
 const InventoryProvider: FC<Props> = ({ children }) => {
     const [searchResults, setSearchResults] = useState<ClientCard[]>([]);
+    const { createErrorToast } = useToastContext();
 
     const handleSearchSelect = async (term: string) => {
-        const cards = await cardSearchQuery({
-            cardName: term,
-            inStockOnly: false,
-        });
+        try {
+            const cards = await cardSearchQuery({
+                cardName: term,
+                inStockOnly: false,
+            });
 
-        setSearchResults(cards);
+            setSearchResults(cards);
+        } catch (err) {
+            console.log(err);
+            createErrorToast(err);
+        }
     };
 
     const changeCardQuantity = (id: string, qoh: QOH) => {

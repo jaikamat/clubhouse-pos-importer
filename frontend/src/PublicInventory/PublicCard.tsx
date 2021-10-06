@@ -65,7 +65,7 @@ const PublicCard: FC<Props> = ({ card }) => {
     return (
         <div className={wrapper}>
             <div className={imageWrapper}>
-                <CardImage image={cardImage} />
+                <CardImage source={cardImage} width={cardImageWidth} />
             </div>
             <div className={inventoryWrapper}>
                 {foilQty > 0 && (

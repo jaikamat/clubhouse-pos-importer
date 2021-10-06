@@ -1,4 +1,3 @@
-import { Box } from '@material-ui/core';
 import $ from 'jquery';
 import React, { FC, useState } from 'react';
 import CardImage from '../common/CardImage';
@@ -52,11 +51,7 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
 
     return (
         <CardRowContainer
-            image={
-                <Box width={125}>
-                    <CardImage image={cardImage} hover />
-                </Box>
-            }
+            image={<CardImage source={cardImage} width={125} hover />}
             header={
                 <CardHeader
                     card={card}

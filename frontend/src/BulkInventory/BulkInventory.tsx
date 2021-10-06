@@ -225,7 +225,7 @@ const BulkInventory: FC = () => {
                 <Grid item xs={4}>
                     <SectionText>Card preview</SectionText>
                     <br />
-                    <CardImage image={currentCardImage} width={200} />
+                    <CardImage source={currentCardImage} width={200} />
                 </Grid>
             </Grid>
             {submittedCards.length > 0 && (

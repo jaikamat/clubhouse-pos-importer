@@ -5,7 +5,7 @@ import placeholder from '../assets/placeholder.png';
 import useImageLoaded from './useImageLoaded';
 
 interface Props {
-    image: string;
+    source: string;
     width: number;
     hover?: boolean;
 }
@@ -24,7 +24,7 @@ const useStyles = makeStyles(({ zIndex }) => ({
     },
 }));
 
-const CardImage: FC<Props> = ({ image, hover, width }) => {
+const CardImage: FC<Props> = ({ source, hover, width }) => {
     const { imageStyle, hoveredStyle } = useStyles();
     const [hovered, setHovered] = useState<boolean>(false);
     const [ref, loaded, onLoad] = useImageLoaded();
@@ -34,7 +34,7 @@ const CardImage: FC<Props> = ({ image, hover, width }) => {
         setHovered(val);
     };
 
-    if (!image) {
+    if (!source) {
         return (
             <Box width={width}>
                 <img
@@ -60,7 +60,7 @@ const CardImage: FC<Props> = ({ image, hover, width }) => {
                 ref={ref}
                 onLoad={onLoad}
                 alt="card-surface"
-                src={image}
+                src={source}
                 className={clsx(imageStyle, {
                     [hoveredStyle]: hovered,
                 })}

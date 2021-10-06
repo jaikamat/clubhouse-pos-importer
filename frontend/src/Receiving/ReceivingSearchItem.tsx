@@ -51,7 +51,7 @@ const ReceivingSearchItem: FC<Props> = ({ card }) => {
 
     return (
         <CardRowContainer
-            image={<CardImage image={cardImage} width={125} hover />}
+            image={<CardImage source={cardImage} width={125} hover />}
             header={
                 <CardHeader
                     card={card}

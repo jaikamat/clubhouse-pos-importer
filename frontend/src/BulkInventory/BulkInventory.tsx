@@ -244,9 +244,7 @@ const BulkInventory: FC = () => {
                     <SectionText>Card preview</SectionText>
                     <br />
                     {currentCardImage ? (
-                        <div className={imageContainer}>
-                            <CardImage image={currentCardImage} />
-                        </div>
+                        <CardImage image={currentCardImage} width={200} />
                     ) : (
                         <div className={imageContainer}>
                             <div className={placeholderImage} />

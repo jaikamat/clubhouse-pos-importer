@@ -3,7 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import createError from 'http-errors';
 import path from 'path';
-import logger, { errorLogger } from './common/logger';
+import { errorLogger } from './common/logger';
 import authRouter from './routes/auth';
 import indexRouter from './routes/index';
 
@@ -13,7 +13,6 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(logger);
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false, limit: '50mb' }));
 app.use(cookieParser());

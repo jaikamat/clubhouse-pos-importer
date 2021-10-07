@@ -1,6 +1,7 @@
 require('dotenv').config();
 import express from 'express';
 import errorBoundary from '../common/errorBoundary';
+import logger from '../common/logger';
 import {
     addCardToInventoryController,
     authController,
@@ -24,6 +25,8 @@ import {
 const router = express.Router();
 
 router.use(errorBoundary(authController));
+// Log after the authController so we have user and location metadata
+router.use(logger);
 router.post('/addCardToInventory', errorBoundary(addCardToInventoryController));
 router.post('/finishSale', errorBoundary(finishSaleValidationController));
 router.post('/finishSale', errorBoundary(finishSaleController));

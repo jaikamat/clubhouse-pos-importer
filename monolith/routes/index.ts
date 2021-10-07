@@ -1,5 +1,6 @@
 import express from 'express';
 import Joi from 'joi';
+import logger from '../common/logger';
 import {
     ClubhouseLocation,
     JoiValidation,
@@ -12,6 +13,9 @@ import getCardFromAllLocations from '../interactors/getCardFromAllLocations';
 import getCardsWithInfo from '../interactors/getCardsWithInfo';
 import getJwt from '../interactors/getJwt';
 const router = express.Router();
+
+// Use logging for this endpoint
+router.use(logger);
 
 router.post('/jwt', async (req: JwtRequest, res) => {
     const schema = Joi.object<JwtBody>({

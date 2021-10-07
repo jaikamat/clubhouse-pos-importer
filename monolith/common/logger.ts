@@ -1,5 +1,6 @@
 import expressWinston from 'express-winston';
 import winston, { transports } from 'winston';
+import { RequestWithUserInfo } from './types';
 
 const options: transports.ConsoleTransportOptions = {
     handleExceptions: true,
@@ -19,6 +20,20 @@ const logger = expressWinston.logger({
     meta: true,
     expressFormat: true,
     colorize: false,
+    /**
+     * Log user data if we're in the authController middleware
+     */
+    dynamicMeta: function (req: RequestWithUserInfo, res) {
+        return {
+            currentLocation: req.currentLocation ? req.currentLocation : null,
+            userId: req.userId ? req.userId : null,
+            locations: req.locations ? req.locations : null,
+            lightspeedEmployeeNumber: req.lightspeedEmployeeNumber
+                ? req.lightspeedEmployeeNumber
+                : null,
+            isAdmin: req.isAdmin ? req.isAdmin : null,
+        };
+    },
 });
 
 export const errorLogger = expressWinston.errorLogger({

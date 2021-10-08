@@ -69,7 +69,9 @@ test('Suspending sale with invalid available inventory', async () => {
         error = e;
     }
 
-    expect(error.message).toBe(`Time Spiral's QOH of 5 exceeds inventory of 4`);
+    expect(error.message).toBe(
+        `Time Spiral's quantity of 5 exceeds available inventory of 4`
+    );
 });
 
 test('Suspending sale with available inventory', async () => {

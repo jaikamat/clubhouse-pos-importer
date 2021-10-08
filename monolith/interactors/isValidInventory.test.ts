@@ -16,11 +16,11 @@ beforeAll(async () => {
     // Seed card in inventory with lower quantity
     await addCardToInventory({
         quantity: 2,
-        finishCondition: 'FOIL_NM',
-        id: '1234',
-        name: 'CardName',
-        set_name: 'SetName',
-        set: 'SNM',
+        finishCondition: 'NONFOIL_NM',
+        id: '49585',
+        name: 'MyFooCard',
+        set_name: 'MyFooSet',
+        set: 'MFS',
         location: 'ch1',
     });
 });
@@ -31,12 +31,12 @@ afterAll(async () => {
 
 test('Validates inventory correctly', async () => {
     const salelistCard: FinishSaleCard = {
-        id: '1234',
+        id: '49585',
         price: 3.45,
         qtyToSell: 4,
-        finishCondition: 'FOIL_NM',
-        name: 'CardName',
-        set_name: 'SNM',
+        finishCondition: 'NONFOIL_NM',
+        name: 'MyFooCard',
+        set_name: 'MFS',
     };
 
     const isValid = async () => await isValidInventory(salelistCard, 'ch1');

@@ -45,6 +45,9 @@ test('Validates inventory correctly', async () => {
      * We access `rejects` here because `toThrow` is used for synchronous functions
      *
      * `.rejects` unwraps the promise rejection reason for testing
+     *
+     * TODO: Should isValidInventory even throw? Perhaps we should return false.
+     * The implementation point is simply a Promise.all() chain testing for truthiness, after all
      */
     expect(isValid).rejects.toThrow();
 });

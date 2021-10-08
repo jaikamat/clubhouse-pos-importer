@@ -17,8 +17,12 @@ const FinishSale: FC<Props> = () => {
     const { finalizeSale } = useSaleContext();
 
     const handleFinalizeSale = async () => {
-        setSubmit({ loading: true, disabled: true });
-        await finalizeSale();
+        try {
+            setSubmit({ loading: true, disabled: true });
+            await finalizeSale();
+        } catch (err) {
+            setSubmit({ loading: false, disabled: false });
+        }
     };
 
     return (

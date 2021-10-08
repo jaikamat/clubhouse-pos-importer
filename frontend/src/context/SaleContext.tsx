@@ -245,8 +245,8 @@ export const SaleProvider: FC<Props> = ({ children }) => {
 
             resetSaleState();
         } catch (err) {
-            console.log(err);
             createErrorToast(err);
+            throw err;
         }
     };
 

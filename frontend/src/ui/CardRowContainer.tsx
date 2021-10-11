@@ -6,20 +6,25 @@ interface Props {
     header: ReactNode;
 }
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, zIndex }) => ({
     headerContainer: {
         paddingBottom: spacing(3),
+    },
+    imageContainer: {
+        zIndex: zIndex.mobileStepper,
     },
 }));
 
 const CardRowContainer: FC<Props> = ({ image, header, children }) => {
-    const { headerContainer } = useStyles();
+    const { headerContainer, imageContainer } = useStyles();
 
     return (
         <Paper variant="outlined">
             <Box p={2}>
                 <Grid container spacing={2}>
-                    <Grid item>{image}</Grid>
+                    <Grid item className={imageContainer}>
+                        {image}
+                    </Grid>
                     <Grid item xs={10}>
                         <div className={headerContainer}>{header}</div>
                         <div>{children}</div>

@@ -34,10 +34,7 @@ const finishSaleValidationController: Controller<ReqWithFinishSaleCards> =
         for (let card of cards) {
             const { error }: JoiValidation<FinishSaleCard> = schema.validate(
                 card,
-                {
-                    abortEarly: false,
-                    allowUnknown: true,
-                }
+                { abortEarly: false }
             );
 
             if (error) {

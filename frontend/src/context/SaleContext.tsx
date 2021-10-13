@@ -235,7 +235,14 @@ export const SaleProvider: FC<Props> = ({ children }) => {
             if (!!_id) await deleteSuspendedSaleQuery(_id);
 
             const { sale_data } = await finishSaleQuery({
-                cards: saleListCards,
+                cards: saleListCards.map((slc) => ({
+                    id: slc.id,
+                    price: slc.price,
+                    qtyToSell: slc.qtyToSell,
+                    name: slc.name,
+                    set_name: slc.set_name,
+                    finishCondition: slc.finishCondition,
+                })),
             });
 
             createToast({

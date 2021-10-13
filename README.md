@@ -1,68 +1,66 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# CHCollector
 
-## Available Scripts
+CHCollector is a bespoke inventory-management tool, acting as a source of truth for LGS (Local Game Store) inventories that primarily contain cards from the collectible card game, Magic: The Gathering (MTG).
 
-In the project directory, you can run:
+## Motivation
 
-### `yarn start`
+My LGS had been receiving cards through analog means (pencil/paper), and tracking inventory through uncontrolled, unmaintained and legacy solutions, and I chose to help them out by creating something tailored to their business needs.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Challenges
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+The project, in its infancy, built upon a very uninformed database collection structure that is currently difficult to migrate. Ultimately, to reproduce the project, it needs to be replicated va tribal knowledge, as much of the backend interactor and controller architecture is deeply intertwined. I hope to encapsulate these soon, which should improve system stability and performance.
 
-### `yarn test`
+There exist legacy patterns between the client and server that I naturally grew out of as my skillset improved, which I occasionally fix from time to time! For example, old sections of the API are not entirely RESTful. Additionally, portions of the directory structure should be carefully extracted and/or renamed to improve readability going forward.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Major tools used
 
-### `yarn build`
+Client: React, TypeScript, Material-UI, Axios, Formik
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+API: Node, TypeScript, Express, MongoDB, Winston
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## Structure
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The repo is monolithic and is separated into several sections:
 
-### `yarn eject`
+Client - `frontend/`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+API - `monolith/`
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Cloud functions - `gc_functions/src/`
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Database maintenance scripts - `gc_functions/db_scripts/` (I know, I know, this hierarchy needs fixing)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+GitHub Pages build - `docs/`
 
-## Learn More
+## API setup
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+1. Pull down the repo and navigate to `monolith/`
+2. Include API keys and env variables at the appropriate levels in the directory structure (contact the repo owner for details)
+3. Run `npm install` to install all dependencies
+4. Run `npm run test` to ensure tests pass. Interactors (functions that govern touching the persistence layer) are unit-tested against an in-memory MongoDB instance
+5. Run `npm run start-dev` to build the TS source and locally serve from `7331`
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Client setup
 
-### Code Splitting
+1. Pull down the repo and navigate to `frontend/`
+2. Include API keys and env variables at the appropriate levels in the directory structure (contact the repo owner for details)
+3. Run `npm install` to install all dependencies
+4. Run `npm test` to run unit tests
+5. Run `npm start` to serve the application locally
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+## Database setup
 
-### Analyzing the Bundle Size
+[Scryfall](https://scryfall.com/), an open-source data provider and MTG search engine, acts as our source of truth for card information and metadata in CHCollector. Thank you, Scryfall team!
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+1. Obtain a MongoDB Atlas instance, and create a `test` database for local development. CHCollector uses a custom collection structure, so you'll need to replicate that. Contact the repo owner for details
+2. Run `npm run update-test-bulk`, which will hit the Scryfall API for its bulk dataset, perform transformation, and bulk-insert the data into the appropriate collection (ETL, basically)
 
-### Making a Progressive Web App
+## Deployment
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+Client - The client is served via GitHub Pages. To create a production build, navigate to `frontend/` and run `npm run build-pages`, which will automatically version bump and recreate the `docs/` directory as appropriate. A PR can be made and merged in from there.
 
-### Advanced Configuration
+API - The API is hosted on Google Cloud Platform. Navigate to `monolith/`. Then, running `npm run deploy` with an appropriately-formatted `app.yaml` file will deploy the service using the Google Cloud CLI.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+## Contributing
 
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Pull requests are welcome, but I suggest that we open an issue first to discuss changes beforehand

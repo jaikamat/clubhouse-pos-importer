@@ -1,9 +1,18 @@
 import http from '../common/http';
+import { FinishCondition } from '../utils/ClientCard';
 import { FINISH_SALE } from '../utils/endpoints';
-import { SaleListCard } from './SaleContext';
+
+interface QueryCard {
+    id: string;
+    price: number;
+    qtyToSell: number;
+    name: string;
+    set_name: string;
+    finishCondition: FinishCondition;
+}
 
 interface Payload {
-    cards: SaleListCard[];
+    cards: QueryCard[];
 }
 
 interface ResponseData {

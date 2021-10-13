@@ -1,8 +1,10 @@
 import request from 'request-promise-native';
-import { ClubhouseLocation } from '../common/types';
+import { ScryfallApiCard } from '../common/ScryfallApiCard';
+import { ClubhouseLocation, FinishSaleCard } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import createLightspeedSale from './createLightspeedSale';
+import findBulkById from './findBulkById';
 
 /**
  * Updates a single card's QOH based on qtyToSell, finishCondition, id, name
@@ -11,7 +13,7 @@ import createLightspeedSale from './createLightspeedSale';
  */
 async function updateCardInventory(
     database,
-    card,
+    card: FinishSaleCard,
     location: ClubhouseLocation
 ) {
     const { qtyToSell, finishCondition, id, name } = card;
@@ -78,7 +80,10 @@ async function updateCardInventory(
 /**
  * Exposes the DB and passes it down to child queries; wraps the promises
  */
-export async function updateInventoryCards(cards, location: ClubhouseLocation) {
+export async function updateInventoryCards(
+    cards: FinishSaleCard[],
+    location: ClubhouseLocation
+) {
     try {
         const db = await getDatabaseConnection();
         const dbInserts = cards.map((card) =>
@@ -98,15 +103,40 @@ export async function updateInventoryCards(cards, location: ClubhouseLocation) {
  * @param saleData - the data returned by Lightspeed when creating a sale
  * @param cardList - an array of cards that were involved in the sale
  */
-async function createSale(saleData, cardList, location: ClubhouseLocation) {
+async function createSale(
+    saleData,
+    cardList: FinishSaleCard[],
+    location: ClubhouseLocation
+) {
     try {
         const db = await getDatabaseConnection();
+
+        // Aggregate bulk of all the target cards
+        const promisedCards = cardList.map((card) => findBulkById(card.id));
+        const bulkCards = await Promise.all(promisedCards);
+
+        // Zip the bulk up with the sale list metadata
+        const transformedCards = bulkCards.map((bc, idx) => {
+            const currentSaleListCard = cardList[idx];
+
+            const { price, qtyToSell, finishCondition, name, set_name } =
+                currentSaleListCard;
+
+            return {
+                ...new ScryfallApiCard(bc),
+                price,
+                qtyToSell,
+                finishCondition,
+                name,
+                set_name,
+            };
+        });
 
         return await db
             .collection(collectionFromLocation(location).salesData)
             .insertOne({
                 sale_data: saleData,
-                card_list: cardList,
+                card_list: transformedCards,
             });
     } catch (err) {
         console.log(err);
@@ -119,7 +149,7 @@ async function createSale(saleData, cardList, location: ClubhouseLocation) {
  * @param {Array} cards - the cards involved in the transaction
  */
 async function finishSale(
-    cards,
+    cards: FinishSaleCard[],
     location: ClubhouseLocation,
     lightspeedEmployeeNumber: number
 ) {

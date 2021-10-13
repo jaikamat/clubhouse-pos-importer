@@ -51,6 +51,7 @@ async function createSuspendedSale(
         // Zip them up with the received sale metadata
         const transformedCards = bulkCards.map((bc, idx) => {
             const currentSaleListCard = saleList[idx];
+
             const { price, qtyToSell, finishCondition, name, set_name } =
                 currentSaleListCard;
 

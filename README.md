@@ -28,7 +28,7 @@ API - `monolith/`
 
 Cloud functions - `gc_functions/src/`
 
-Database maintenance scripts - `gc_functions/db_scripts/` (I know, I know, this hierarchy needs fixing)
+Database maintenance scripts - `db_scripts/`
 
 GitHub Pages build - `docs/`
 
@@ -39,6 +39,11 @@ GitHub Pages build - `docs/`
 3. Run `npm install` to install all dependencies
 4. Run `npm run test` to ensure tests pass. Interactors (functions that govern touching the persistence layer) are unit-tested against an in-memory MongoDB instance
 5. Run `npm run start-dev` to build the TS source and locally serve from `7331`
+
+To run the pricing cloud function locally:
+
+1. Navigate to `gc_functions`
+2. Run `npm run watch`
 
 ## Client setup
 

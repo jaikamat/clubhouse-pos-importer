@@ -1,28 +1,11 @@
 import moment from 'moment';
-import RawScryfallCard from '../common/RawScryfallCard';
 import { ScryfallApiCard } from '../common/ScryfallApiCard';
-import { ClubhouseLocation, Collection, FinishSaleCard } from '../common/types';
+import { ClubhouseLocation, FinishSaleCard } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
+import findBulkById from './findBulkById';
 import isValidInventory from './isValidInventory';
 import updateCardInventory from './updateCardInventory';
-
-/**
- * Finds a bulk card by its associated `_id`
- */
-async function findBulkById(id: string): Promise<RawScryfallCard> {
-    try {
-        const db = await getDatabaseConnection();
-
-        const card: RawScryfallCard = await db
-            .collection(Collection.scryfallBulkCards)
-            .findOne({ _id: id });
-
-        return card;
-    } catch (err) {
-        throw err;
-    }
-}
 
 /**
  * // TODO: Is this true??

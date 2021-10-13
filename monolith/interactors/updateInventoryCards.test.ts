@@ -1,4 +1,5 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import { FinishSaleCard } from '../common/types';
 import getDatabaseConnection from '../database';
 import addCardToInventory from './addCardToInventory';
 import { updateInventoryCards } from './updateInventoryCards';
@@ -38,18 +39,22 @@ test('Ensure multiple update', async () => {
         location: 'ch1',
     });
 
-    const cardsInSale = [
+    const cardsInSale: FinishSaleCard[] = [
         {
             qtyToSell: 1,
             finishCondition: 'NONFOIL_NM',
             id: '1337',
             name: 'Black Lotus',
+            price: 1.23,
+            set_name: 'LEA',
         },
         {
             qtyToSell: 3,
             finishCondition: 'NONFOIL_NM',
             id: '5699',
             name: 'Mox Diamond',
+            price: 1.23,
+            set_name: 'STH',
         },
     ];
 

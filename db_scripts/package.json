@@ -3,9 +3,6 @@
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
-    "watch": {
-        "functions": "./src/*.js"
-    },
     "scripts": {
         "test": "jest",
         "build": "rm -r ./built && tsc -p . && echo \"Built TS source\"",

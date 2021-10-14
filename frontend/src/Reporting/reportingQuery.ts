@@ -18,6 +18,7 @@ export interface ResponseData {
         _id: string;
         quantity_sold: number;
         card_name: string;
+        total_qoh: number;
     }>;
 }
 

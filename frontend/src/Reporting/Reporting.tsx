@@ -98,6 +98,9 @@ const Reporting = () => {
                                         <TableCell>
                                             <b>Card name</b>
                                         </TableCell>
+                                        <TableCell>
+                                            <b>Combined quantity on hand</b>
+                                        </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -107,6 +110,7 @@ const Reporting = () => {
                                                 {c.quantity_sold}
                                             </TableCell>
                                             <TableCell>{c.card_name}</TableCell>
+                                            <TableCell>{c.total_qoh}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>

@@ -65,10 +65,7 @@ const Reporting = () => {
                 <div>
                     <HeaderText>Reporting</HeaderText>
                     <Typography>
-                        {' '}
-                        Viewing data from {formatDate(
-                            searchDates.startDate
-                        )}{' '}
+                        Viewing data from {formatDate(searchDates.startDate)}{' '}
                         through {formatDate(searchDates.endDate)}
                     </Typography>
                 </div>

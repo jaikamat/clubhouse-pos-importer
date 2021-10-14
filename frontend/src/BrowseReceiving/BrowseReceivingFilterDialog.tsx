@@ -51,7 +51,7 @@ const BrowseReceivingFilterDialog: FC<Props> = ({ onSubmit, filters }) => {
         <>
             <Button
                 disableElevation
-                variant="contained"
+                variant="outlined"
                 color="primary"
                 onClick={onDialogOpen}
             >

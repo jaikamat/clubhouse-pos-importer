@@ -3,7 +3,9 @@ import moment from 'moment';
 import React, { FC, useEffect, useState } from 'react';
 import Loading from '../ui/Loading';
 import Placeholder from '../ui/Placeholder';
-import { HeaderText, SectionText } from '../ui/Typography';
+import { HeaderText } from '../ui/Typography';
+import formatDate from '../utils/formatDate';
+import shallowCompare from '../utils/shallowCompare';
 import BrowseReceivingFilterDialog, {
     FormValues,
 } from './BrowseReceivingFilterDialog';
@@ -21,10 +23,6 @@ const initialFilters: Filters = {
     startDate: moment().subtract(30, 'days').format('YYYY-MM-DD'),
     endDate: moment().format('YYYY-MM-DD'),
 };
-
-function shallowCompare(obj1: Filters, obj2: Filters) {
-    return JSON.stringify(obj1) === JSON.stringify(obj2);
-}
 
 const BrowseReceiving: FC = () => {
     const [filters, setFilters] = useState<Filters>(initialFilters);
@@ -58,35 +56,37 @@ const BrowseReceiving: FC = () => {
 
     return (
         <Container>
-            <Box pb={2}>
-                <HeaderText>Browse Receiving</HeaderText>
+            <Box
+                pb={2}
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+            >
+                <div>
+                    <HeaderText>Browse Receiving</HeaderText>
+                    <Typography>
+                        Viewing data from {formatDate(filters.startDate)}{' '}
+                        through {formatDate(filters.endDate)}
+                    </Typography>
+                </div>
+                <div>
+                    {!shallowCompare(initialFilters, filters) && (
+                        <Button color="primary" onClick={onClearFilters}>
+                            Clear filters
+                        </Button>
+                    )}
+                    <BrowseReceivingFilterDialog
+                        filters={filters}
+                        onSubmit={onSubmit}
+                    />
+                </div>
             </Box>
             <Box>
                 <Box
                     display="flex"
                     justifyContent="space-between"
                     alignItems="center"
-                >
-                    <div>
-                        <SectionText>Results</SectionText>
-                        <Typography color="textSecondary">
-                            {`Searching ${
-                                filters.cardName || 'all cards'
-                            } from ${filters.startDate} to ${filters.endDate}`}
-                        </Typography>
-                    </div>
-                    <div>
-                        {!shallowCompare(initialFilters, filters) && (
-                            <Button color="primary" onClick={onClearFilters}>
-                                Clear filters
-                            </Button>
-                        )}
-                        <BrowseReceivingFilterDialog
-                            filters={filters}
-                            onSubmit={onSubmit}
-                        />
-                    </div>
-                </Box>
+                ></Box>
             </Box>
             <Grid container justify="space-between" spacing={2}>
                 <Grid item alignItems="center" md={12} lg={6}></Grid>

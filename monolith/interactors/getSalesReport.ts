@@ -3,33 +3,64 @@ import { ScryfallApiCard } from '../common/ScryfallApiCard';
 import {
     ClubhouseLocation,
     Collection,
+    Finish,
     FinishCondition,
     QOH,
 } from '../common/types';
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
-import isNonfoil from '../lib/isNonfoil';
 import parseQoh from '../lib/parseQoh';
 
-interface CountByPrinting {
+/**
+ * Extracts finish from a given finishCondition string
+ */
+function pluckFinish(finishCondition: FinishCondition): Finish {
+    return finishCondition.split('_')[0] as Finish;
+}
+
+/**
+ * Given a finish, returns the associated quantity
+ */
+function quantityFromFinish(finish: Finish, qoh: QOH): number {
+    const { foilQty, nonfoilQty, etchedQty } = parseQoh(qoh);
+
+    if (finish === 'ETCHED') return etchedQty;
+    if (finish === 'FOIL') return foilQty;
+    if (finish === 'NONFOIL') return nonfoilQty;
+}
+
+/**
+ * Given a finish, return the appropriate price from Scryfall data
+ */
+function priceFromFinish(
+    finish: Finish,
+    prices: RawScryfallCard['prices']
+): number | null {
+    // TODO: Etched!
+    if (finish === 'ETCHED') return null;
+    if (finish === 'FOIL') return Number(prices.usd_foil);
+    if (finish === 'NONFOIL') return Number(prices.usd);
+}
+
+interface DataPerPrint {
     _id: {
         scryfall_id: string;
         finish_condition: FinishCondition;
     };
     quantity_sold: number;
-    card_title: string;
+    card_name: string;
     card_metadata: RawScryfallCard;
     quantity_on_hand: QOH;
 }
 
-interface CountByCardName {
+interface DataPerTitle {
     quantity_sold: number;
-    card_title: string;
+    card_name: string;
 }
 
 interface QueryResult {
-    countByPrinting: Array<CountByPrinting>;
-    countByCardName: Array<CountByCardName>;
+    dataPerPrinting: Array<DataPerPrint>;
+    dataPerTitle: Array<DataPerTitle>;
 }
 
 interface Args {
@@ -53,7 +84,7 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
         const project = {
             created_at: { $toDate: '$_id' },
             scryfall_id: '$card_list.id',
-            card_title: '$card_list.name',
+            card_name: '$card_list.name',
             quantity_sold: '$card_list.qtyToSell',
             finish_condition: '$card_list.finishCondition',
         };
@@ -69,7 +100,7 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
         const limit = 100;
 
         const facet = {
-            countByPrinting: [
+            dataPerPrinting: [
                 {
                     $group: {
                         _id: {
@@ -77,7 +108,7 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
                             finish_condition: '$finish_condition',
                         },
                         quantity_sold: { $sum: '$quantity_sold' },
-                        card_title: { $first: '$card_title' },
+                        card_name: { $first: '$card_name' },
                     },
                 },
                 { $sort: sort },
@@ -112,12 +143,12 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
                     },
                 },
             ],
-            countByCardName: [
+            dataPerTitle: [
                 {
                     $group: {
-                        _id: '$card_title',
+                        _id: '$card_name',
                         quantity_sold: { $sum: '$quantity_sold' },
-                        card_title: { $first: '$card_title' },
+                        card_name: { $first: '$card_name' },
                     },
                 },
                 { $sort: sort },
@@ -142,30 +173,29 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
          * and infer quantity on hand for the indicated finish_condition
          */
         return {
-            countByPrinting: result.countByPrinting.map((c) => {
+            dataPerPrinting: result.dataPerPrinting.map((c) => {
                 const id = `${c._id.scryfall_id}-${c._id.finish_condition}`;
 
-                // Infer finish from the finish_condition
-                const nonfoil = isNonfoil(c._id.finish_condition);
-
-                // Parse the entire QOH to use with inferred finish
-                const { foilQty, nonfoilQty } = parseQoh(c.quantity_on_hand);
+                const finish = pluckFinish(c._id.finish_condition);
 
                 return {
                     ...c,
                     _id: id,
                     scryfall_id: c._id.scryfall_id,
                     finish_condition: c._id.finish_condition,
-                    // TODO: support etched
-                    finish: nonfoil ? 'NONFOIL' : 'FOIL',
-                    quantity_on_hand: nonfoil ? nonfoilQty : foilQty,
-                    estimated_price: nonfoil
-                        ? c.card_metadata.prices.usd
-                        : c.card_metadata.prices.usd_foil,
+                    finish: finish,
+                    quantity_on_hand: quantityFromFinish(
+                        finish,
+                        c.quantity_on_hand
+                    ),
+                    estimated_price: priceFromFinish(
+                        finish,
+                        c.card_metadata.prices
+                    ),
                     card_metadata: new ScryfallApiCard(c.card_metadata),
                 };
             }),
-            countByCardName: result.countByCardName,
+            dataPerTitle: result.dataPerTitle,
         };
     } catch (e) {
         throw e;

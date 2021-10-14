@@ -9,6 +9,8 @@ import {
 import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import parseQoh from '../lib/parseQoh';
+import sum from '../lib/sum';
+import getCardsWithInfo from './getCardsWithInfo';
 
 /**
  * Extracts finish from a given finishCondition string
@@ -56,6 +58,7 @@ interface DataPerPrint {
 interface DataPerTitle {
     quantity_sold: number;
     card_name: string;
+    total_qoh: number;
 }
 
 interface QueryResult {
@@ -97,7 +100,7 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
         };
 
         const sort = { quantity_sold: -1 };
-        const limit = 500;
+        const limit = 200;
 
         const facet = {
             dataPerPrinting: [
@@ -191,6 +194,33 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
 
         const result: QueryResult = doc[0];
 
+        const cardsWithInfo = result.dataPerTitle.map(async (dpt) => {
+            const { card_name } = dpt;
+
+            // Get all in-stock cards by title
+            const cardsWithMeta = await getCardsWithInfo(
+                card_name,
+                true,
+                location
+            );
+
+            // Combine the aggregated metadata with qoh for all cards that match the title
+            return {
+                ...dpt,
+                total_qoh: sum(
+                    cardsWithMeta.map((cwm) => {
+                        const { foilQty, nonfoilQty, etchedQty } = parseQoh(
+                            cwm.qoh
+                        );
+
+                        return foilQty + nonfoilQty + etchedQty;
+                    })
+                ),
+            };
+        });
+
+        const promisedCardsWithInfo = await Promise.all(cardsWithInfo);
+
         /**
          * Transform the data with a custom _id for client use and
          * and infer quantity on hand for the indicated finish_condition
@@ -214,7 +244,7 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
                     estimated_price: priceFromFinish(finish, c.prices),
                 };
             }),
-            dataPerTitle: result.dataPerTitle,
+            dataPerTitle: promisedCardsWithInfo,
         };
     } catch (e) {
         throw e;

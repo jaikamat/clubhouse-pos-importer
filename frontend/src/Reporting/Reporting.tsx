@@ -1,22 +1,23 @@
 import {
     Box,
+    Container,
     Grid,
-    MenuItem,
     Paper,
-    Select,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
     TableRow,
+    Typography,
 } from '@material-ui/core';
 import moment from 'moment';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Loading from '../ui/Loading';
 import { HeaderText, SectionText } from '../ui/Typography';
 import displayFinishCondition from '../utils/displayFinishCondition';
 import { price } from '../utils/price';
+import ReportingFilterDialog, { FormValues } from './ReportingFilterDialog';
 import reportingQuery, { ResponseData } from './reportingQuery';
 
 interface SearchDates {
@@ -24,70 +25,61 @@ interface SearchDates {
     endDate: string;
 }
 
-enum RangeName {
-    ALL_TIME = 'All time',
-    LAST_MONTH = 'Last 30 days',
-}
-
-const allTimeDates: SearchDates = {
-    startDate: moment().year(1999).toISOString(),
-    endDate: moment().add(1, 'days').toISOString(),
-};
-
-const lastMonthDates: SearchDates = {
-    startDate: moment().subtract(30, 'days').toISOString(),
-    endDate: moment().add(1, 'days').toISOString(),
+const initialDates: SearchDates = {
+    startDate: moment().year(2018).format('YYYY-MM-DD'),
+    endDate: moment().add(1, 'days').format('YYYY-MM-DD'),
 };
 
 const Reporting = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [report, setReport] = useState<ResponseData | null>(null);
-    const [searchName, setSearchName] = useState<RangeName>(RangeName.ALL_TIME);
-    const [searchDates, setSearchDates] = useState<SearchDates>(allTimeDates);
+    const [searchDates, setSearchDates] = useState<SearchDates>(initialDates);
+
+    const onSubmit = (values: FormValues) => {
+        setSearchDates(values);
+    };
 
     useEffect(() => {
         (async () => {
-            setLoading(true);
-            const data = await reportingQuery(searchDates);
-            setLoading(false);
-            setReport(data);
+            try {
+                setLoading(true);
+                const data = await reportingQuery(searchDates);
+                setLoading(false);
+                setReport(data);
+            } catch (err) {
+                setLoading(false);
+                throw err;
+            }
         })();
-    }, [searchName, searchDates]);
-
-    const onChange = (e: ChangeEvent<{ value: unknown }>) => {
-        if (e.target.value === RangeName.ALL_TIME) {
-            setSearchName(RangeName.ALL_TIME);
-            setSearchDates(allTimeDates);
-        } else if (e.target.value === RangeName.LAST_MONTH) {
-            setSearchName(RangeName.LAST_MONTH);
-            setSearchDates(lastMonthDates);
-        } else {
-            throw new Error('Range selection not found');
-        }
-    };
+    }, [searchDates]);
 
     return (
-        <div>
+        <Container>
             <Box
                 pb={2}
                 display="flex"
                 alignItems="center"
                 justifyContent="space-between"
             >
-                <HeaderText>Reporting</HeaderText>
-                <Select value={searchName} onChange={onChange}>
-                    <MenuItem value={RangeName.ALL_TIME}>All time</MenuItem>
-                    <MenuItem value={RangeName.LAST_MONTH}>
-                        Last 30 days
-                    </MenuItem>
-                </Select>
+                <div>
+                    <HeaderText>Reporting</HeaderText>
+                    <Typography>
+                        {' '}
+                        Viewing data from {searchDates.startDate} to{' '}
+                        {searchDates.endDate}
+                    </Typography>
+                </div>
+                <ReportingFilterDialog
+                    onSubmit={onSubmit}
+                    filters={searchDates}
+                />
             </Box>
             {loading || !report ? (
                 <Loading />
             ) : (
                 <Grid container spacing={2}>
-                    <Grid item xs={12} md={4}>
-                        <SectionText>Top cards sold by name</SectionText>
+                    <Grid item xs={12}>
+                        <SectionText>Top cards sold (card title)</SectionText>
                         <TableContainer component={Paper} variant="outlined">
                             <Table size="small">
                                 <TableHead>
@@ -117,9 +109,9 @@ const Reporting = () => {
                             </Table>
                         </TableContainer>
                     </Grid>
-                    <Grid item xs={12} md={8}>
+                    <Grid item xs={12}>
                         <SectionText>
-                            Top cards sold by a single printing
+                            Top cards sold (single printing)
                         </SectionText>
                         <TableContainer component={Paper} variant="outlined">
                             <Table size="small">
@@ -175,7 +167,7 @@ const Reporting = () => {
                     </Grid>
                 </Grid>
             )}
-        </div>
+        </Container>
     );
 };
 

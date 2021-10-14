@@ -194,10 +194,10 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
 
         const result: QueryResult = doc[0];
 
-        const cardsWithInfo = result.dataPerTitle.map(async (dpt) => {
+        // Map all in-stock cards by title
+        const cardsFromTitleWithQoh = result.dataPerTitle.map(async (dpt) => {
             const { card_name } = dpt;
 
-            // Get all in-stock cards by title
             const cardsWithMeta = await getCardsWithInfo(
                 card_name,
                 true,
@@ -219,32 +219,35 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
             };
         });
 
-        const promisedCardsWithInfo = await Promise.all(cardsWithInfo);
+        const promisedCardsFromTitleWithQoh = await Promise.all(
+            cardsFromTitleWithQoh
+        );
 
         /**
          * Transform the data with a custom _id for client use and
          * and infer quantity on hand for the indicated finish_condition
          */
+        const cardsFromPrinting = result.dataPerPrinting.map((c) => {
+            const id = `${c._id.scryfall_id}-${c._id.finish_condition}`;
+            const finish = pluckFinish(c._id.finish_condition);
+
+            return {
+                ...c,
+                _id: id,
+                scryfall_id: c._id.scryfall_id,
+                finish_condition: c._id.finish_condition,
+                finish: finish,
+                quantity_on_hand: quantityFromFinish(
+                    finish,
+                    c.quantity_on_hand
+                ),
+                estimated_price: priceFromFinish(finish, c.prices),
+            };
+        });
+
         return {
-            dataPerPrinting: result.dataPerPrinting.map((c) => {
-                const id = `${c._id.scryfall_id}-${c._id.finish_condition}`;
-
-                const finish = pluckFinish(c._id.finish_condition);
-
-                return {
-                    ...c,
-                    _id: id,
-                    scryfall_id: c._id.scryfall_id,
-                    finish_condition: c._id.finish_condition,
-                    finish: finish,
-                    quantity_on_hand: quantityFromFinish(
-                        finish,
-                        c.quantity_on_hand
-                    ),
-                    estimated_price: priceFromFinish(finish, c.prices),
-                };
-            }),
-            dataPerTitle: promisedCardsWithInfo,
+            dataPerPrinting: cardsFromPrinting,
+            dataPerTitle: promisedCardsFromTitleWithQoh,
         };
     } catch (e) {
         throw e;

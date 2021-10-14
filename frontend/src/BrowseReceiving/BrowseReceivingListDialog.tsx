@@ -18,7 +18,7 @@ import SetIcon from '../ui/SetIcon';
 import { useToastContext } from '../ui/ToastContext';
 import displayEmpty from '../utils/displayEmpty';
 import displayFinishCondition from '../utils/displayFinishCondition';
-import formatDate from '../utils/formatDate';
+import formatDateTime from '../utils/formatDateTime';
 import { price } from '../utils/price';
 import receivedByIdQuery, { Received } from './receivedByIdQuery';
 
@@ -82,7 +82,7 @@ const BrowseReceivingListDialog: FC<Props> = ({ receivedId, onClose }) => {
                 Received cards
                 <Typography color="textSecondary">
                     <MetaData>
-                        <span>{formatDate(created_at)}</span>
+                        <span>{formatDateTime(created_at)}</span>
                         <span>Received by {created_by.username}</span>
                         <span>Customer: {displayEmpty(customer_name)}</span>
                         <span>

@@ -1,6 +1,6 @@
 import { TableCell, TableRow } from '@material-ui/core';
 import React, { FC } from 'react';
-import formatDate from '../utils/formatDate';
+import formatDateTime from '../utils/formatDateTime';
 import sum from '../utils/sum';
 import { Sale } from './browseSalesQuery';
 
@@ -16,7 +16,7 @@ const BrowseSalesItem: FC<Props> = ({ sale }) => {
     return (
         <TableRow>
             <TableCell>{sale_data.saleID}</TableCell>
-            <TableCell>{formatDate(sale_data.createTime)}</TableCell>
+            <TableCell>{formatDateTime(sale_data.createTime)}</TableCell>
             <TableCell>{quantitySold}</TableCell>
         </TableRow>
     );

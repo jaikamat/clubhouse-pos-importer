@@ -16,6 +16,7 @@ import React, { useEffect, useState } from 'react';
 import Loading from '../ui/Loading';
 import { HeaderText, SectionText } from '../ui/Typography';
 import displayFinishCondition from '../utils/displayFinishCondition';
+import formatDate from '../utils/formatDate';
 import { price } from '../utils/price';
 import ReportingFilterDialog, { FormValues } from './ReportingFilterDialog';
 import reportingQuery, { ResponseData } from './reportingQuery';
@@ -65,8 +66,10 @@ const Reporting = () => {
                     <HeaderText>Reporting</HeaderText>
                     <Typography>
                         {' '}
-                        Viewing data from {searchDates.startDate} to{' '}
-                        {searchDates.endDate}
+                        Viewing data from {formatDate(
+                            searchDates.startDate
+                        )}{' '}
+                        through {formatDate(searchDates.endDate)}
                     </Typography>
                 </div>
                 <ReportingFilterDialog
@@ -91,7 +94,7 @@ const Reporting = () => {
                                             <b>Card name</b>
                                         </TableCell>
                                         <TableCell>
-                                            <b>Combined quantity on hand</b>
+                                            <b>Quantity on hand (Combined)</b>
                                         </TableCell>
                                     </TableRow>
                                 </TableHead>

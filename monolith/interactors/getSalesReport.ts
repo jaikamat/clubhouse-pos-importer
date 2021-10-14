@@ -212,7 +212,6 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
                         c.quantity_on_hand
                     ),
                     estimated_price: priceFromFinish(finish, c.prices),
-                    // card_metadata: new ScryfallApiCard(c.card_metadata),
                 };
             }),
             dataPerTitle: result.dataPerTitle,

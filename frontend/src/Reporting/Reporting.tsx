@@ -148,9 +148,7 @@ const Reporting = () => {
                                                 {c.quantity_sold}
                                             </TableCell>
                                             <TableCell>{c.card_name}</TableCell>
-                                            <TableCell>
-                                                {c.card_metadata.set_name}
-                                            </TableCell>
+                                            <TableCell>{c.set_name}</TableCell>
                                             <TableCell>
                                                 {displayFinishCondition(
                                                     c.finish_condition

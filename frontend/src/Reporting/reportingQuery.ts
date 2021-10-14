@@ -1,5 +1,5 @@
 import http from '../common/http';
-import { ClientCard, Finish, FinishCondition } from '../utils/ClientCard';
+import { Finish, FinishCondition } from '../utils/ClientCard';
 import { GET_REPORT } from '../utils/endpoints';
 
 export interface ResponseData {
@@ -8,7 +8,7 @@ export interface ResponseData {
         scryfall_id: string;
         quantity_sold: number;
         card_name: string;
-        card_metadata: ClientCard;
+        set_name: string;
         quantity_on_hand: number;
         finish: Finish;
         finish_condition: FinishCondition;

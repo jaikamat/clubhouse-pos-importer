@@ -1,5 +1,4 @@
 import RawScryfallCard from '../common/RawScryfallCard';
-import { ScryfallApiCard } from '../common/ScryfallApiCard';
 import {
     ClubhouseLocation,
     Collection,
@@ -49,8 +48,9 @@ interface DataPerPrint {
     };
     quantity_sold: number;
     card_name: string;
-    card_metadata: RawScryfallCard;
+    prices: RawScryfallCard['prices'];
     quantity_on_hand: QOH;
+    set_name: string;
 }
 
 interface DataPerTitle {
@@ -97,7 +97,7 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
         };
 
         const sort = { quantity_sold: -1 };
-        const limit = 100;
+        const limit = 500;
 
         const facet = {
             dataPerPrinting: [
@@ -140,6 +140,22 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
                 {
                     $addFields: {
                         quantity_on_hand: '$inventory.qoh',
+                        prices: '$card_metadata.prices',
+                        set_name: '$card_metadata.set_name',
+                    },
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        scryfall_id: 1,
+                        quantity_sold: 1,
+                        card_name: 1,
+                        quantity_on_hand: 1,
+                        finish: 1,
+                        finish_condition: 1,
+                        estimated_price: 1,
+                        prices: 1,
+                        set_name: 1,
                     },
                 },
             ],
@@ -153,6 +169,13 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
                 },
                 { $sort: sort },
                 { $limit: limit },
+                {
+                    $project: {
+                        _id: 1,
+                        quantity_sold: 1,
+                        card_name: 1,
+                    },
+                },
             ],
         };
 
@@ -188,11 +211,8 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
                         finish,
                         c.quantity_on_hand
                     ),
-                    estimated_price: priceFromFinish(
-                        finish,
-                        c.card_metadata.prices
-                    ),
-                    card_metadata: new ScryfallApiCard(c.card_metadata),
+                    estimated_price: priceFromFinish(finish, c.prices),
+                    // card_metadata: new ScryfallApiCard(c.card_metadata),
                 };
             }),
             dataPerTitle: result.dataPerTitle,

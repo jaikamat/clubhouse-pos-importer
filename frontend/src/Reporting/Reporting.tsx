@@ -101,14 +101,12 @@ const Reporting = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {report.countByCardName.map((c) => (
+                                    {report.dataPerTitle.map((c) => (
                                         <TableRow key={c._id}>
                                             <TableCell>
                                                 {c.quantity_sold}
                                             </TableCell>
-                                            <TableCell>
-                                                {c.card_title}
-                                            </TableCell>
+                                            <TableCell>{c.card_name}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -144,14 +142,12 @@ const Reporting = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {report.countByPrinting.map((c) => (
+                                    {report.dataPerPrinting.map((c) => (
                                         <TableRow key={c._id}>
                                             <TableCell>
                                                 {c.quantity_sold}
                                             </TableCell>
-                                            <TableCell>
-                                                {c.card_title}
-                                            </TableCell>
+                                            <TableCell>{c.card_name}</TableCell>
                                             <TableCell>
                                                 {c.card_metadata.set_name}
                                             </TableCell>
@@ -161,7 +157,8 @@ const Reporting = () => {
                                                 )}
                                             </TableCell>
                                             <TableCell>
-                                                {c.estimated_price !== null
+                                                {c.estimated_price !== null &&
+                                                c.estimated_price > 0
                                                     ? price(c.estimated_price)
                                                     : '—'}
                                             </TableCell>

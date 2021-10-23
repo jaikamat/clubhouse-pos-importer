@@ -198,13 +198,14 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
         const cardsFromTitleWithQoh = result.dataPerTitle.map(async (dpt) => {
             const { card_name } = dpt;
 
+            // Retrieve all cards with that name, because we're only targeting name, not printing
             const cardsWithMeta = await getCardsWithInfo(
                 card_name,
                 true,
                 location
             );
 
-            // Combine the aggregated metadata with qoh for all cards that match the title
+            // Combine the aggregated metadata with qoh for all cards
             return {
                 ...dpt,
                 total_qoh: sum(

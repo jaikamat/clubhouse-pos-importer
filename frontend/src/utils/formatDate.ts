@@ -1,7 +1,7 @@
 import moment from 'moment';
 
-function formatDate(date: string) {
-    return moment(date).format('MM/DD/YYYY - h:mm A');
-}
+const formatDate = (dateString: string) => {
+    return moment(dateString).format('MMMM Do, YYYY');
+};
 
 export default formatDate;

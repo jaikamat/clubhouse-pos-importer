@@ -8,11 +8,9 @@ import {
 } from '@material-ui/core';
 import { useFormik } from 'formik';
 import React, { FC, useState } from 'react';
-import ControlledSearchBar from '../ui/ControlledSearchBar';
 import FormikNativeDatePicker from '../ui/FormikNativeDatePicker';
 
 export interface FormValues {
-    cardName: string;
     startDate: string;
     endDate: string;
 }
@@ -22,29 +20,24 @@ interface Props {
     filters: FormValues;
 }
 
-// No validations needed for now
+// TODO: Validations
 const validate = () => {
     return {};
 };
 
-const BrowseReceivingFilterDialog: FC<Props> = ({ onSubmit, filters }) => {
+const ReportingFilterDialog: FC<Props> = ({ onSubmit, filters }) => {
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
     const onDialogOpen = () => setDialogOpen(true);
     const onDialogClose = () => setDialogOpen(false);
 
-    const { handleChange, values, setFieldValue, handleSubmit } = useFormik({
+    const { handleChange, values, handleSubmit } = useFormik({
         initialValues: filters,
         validate,
         onSubmit: async (v: FormValues) => {
             await onSubmit(v);
             onDialogClose();
         },
-        /**
-         * Formik will not update `initialValues` from externally-controlled sources (ie. props) if changed,
-         * even if the component is unmounted. We have to flip this switch to initialize with updated prop values
-         */
-        enableReinitialize: true,
     });
 
     return (
@@ -55,22 +48,14 @@ const BrowseReceivingFilterDialog: FC<Props> = ({ onSubmit, filters }) => {
                 color="primary"
                 onClick={onDialogOpen}
             >
-                Filter
+                Filter dates
             </Button>
             {dialogOpen && (
                 <Dialog open onClose={onDialogClose} maxWidth="sm" fullWidth>
-                    <DialogTitle>Receiving search</DialogTitle>
+                    <DialogTitle>Choose report dates</DialogTitle>
                     <DialogContent>
                         <form>
                             <Grid container spacing={2}>
-                                <Grid item xs={12}>
-                                    <ControlledSearchBar
-                                        value={values.cardName}
-                                        onChange={(v) =>
-                                            setFieldValue('cardName', v)
-                                        }
-                                    />
-                                </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <FormikNativeDatePicker
                                         label="Start date"
@@ -111,4 +96,4 @@ const BrowseReceivingFilterDialog: FC<Props> = ({ onSubmit, filters }) => {
     );
 };
 
-export default BrowseReceivingFilterDialog;
+export default ReportingFilterDialog;

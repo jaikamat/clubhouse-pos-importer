@@ -411,7 +411,7 @@ const Home: FC = () => {
                     <Description inverted>© 2021 The Clubhouse</Description>
                     <div>
                         <a
-                            href="https://discord.gg/Wpej7dQ"
+                            href="https://discord.gg/2mT47yycB4"
                             target="_blank"
                             rel="noopener noreferrer"
                         >

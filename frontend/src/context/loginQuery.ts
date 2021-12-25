@@ -5,6 +5,7 @@ type ClubhouseLocation = 'ch1' | 'ch2';
 
 interface ResponseData {
     token: string;
+    admin: boolean;
 }
 
 const loginQuery = async (

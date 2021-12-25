@@ -10,6 +10,7 @@ export type ClubhouseLocation = 'ch1' | 'ch2';
 const tokenKey = 'clubhouse_JWT';
 const locationKey = 'currentLocation';
 const userKey = 'currentUser';
+const adminKey = 'admin';
 
 interface Context {
     handleLogin: (
@@ -22,12 +23,14 @@ interface Context {
     authToken: string | null;
     currentLocation: ClubhouseLocation | null;
     currentUser: string | null;
+    admin: boolean | null;
 }
 
 export const AuthContext = React.createContext<Context>({
     authToken: null,
     currentLocation: null,
     currentUser: null,
+    admin: null,
     isLoggedIn: () => false,
     handleLogout: () => null,
     handleLogin: () => new Promise(() => null),
@@ -42,17 +45,20 @@ const AuthProvider: FC<Props> = ({ children }) => {
         localStorage.getItem(tokenKey)
     );
 
-    const [
-        currentLocation,
-        setCurrentLocation,
-    ] = useLocalStorage<ClubhouseLocation | null>(
-        locationKey,
-        localStorage.getItem(locationKey) as ClubhouseLocation
-    );
+    const [currentLocation, setCurrentLocation] =
+        useLocalStorage<ClubhouseLocation | null>(
+            locationKey,
+            localStorage.getItem(locationKey) as ClubhouseLocation
+        );
 
     const [currentUser, setCurrentUser] = useLocalStorage<string | null>(
         userKey,
         localStorage.getItem(userKey)
+    );
+
+    const [admin, setAdmin] = useLocalStorage<boolean | null>(
+        adminKey,
+        JSON.parse(String(localStorage.getItem(adminKey)))
     );
 
     /**
@@ -85,6 +91,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
                 setAuthToken(data.token);
                 setCurrentLocation(currentLocation);
                 setCurrentUser(username);
+                setAdmin(data.admin);
             }
 
             return data;
@@ -97,6 +104,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
         setAuthToken(null);
         setCurrentLocation(null);
         setCurrentUser(null);
+        setAdmin(null);
 
         history.push('/login');
     };
@@ -109,6 +117,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
                 authToken,
                 currentLocation,
                 currentUser,
+                admin,
                 handleLogin,
                 handleLogout,
                 isLoggedIn,

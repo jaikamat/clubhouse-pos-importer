@@ -7,6 +7,7 @@ export interface User {
     username: string;
     locations: string[];
     lightspeedEmployeeNumber: number;
+    admin: boolean;
 }
 
 export default async function getUserByName(username: string): Promise<User> {

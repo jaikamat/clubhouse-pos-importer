@@ -1,1 +1,1 @@
-exports.getPriceFromTcg = require("./getPriceFromTcg").getPriceFromTcg;
+export { getPriceFromTcg } from "./getPriceFromTcg";

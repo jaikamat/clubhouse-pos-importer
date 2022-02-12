@@ -152,4 +152,4 @@ app.use((err, req, res, next) => {
     });
 });
 
-exports.getPriceFromTcg = app;
+export const getPriceFromTcg = app;

@@ -10,7 +10,8 @@
         "test": "jest",
         "watch": "npm-watch functions",
         "functions": "npm run build && cd ./built/src && npx @google-cloud/functions-framework --target getPriceFromTcg --port 3030",
-        "build": "rm -r ./built && tsc -p . && echo \"Built TS source\""
+        "build": "rm -r ./built && tsc -p . && echo \"Built TS source\"",
+        "gcp-build": "tsc -p ."
     },
     "author": "",
     "license": "ISC",

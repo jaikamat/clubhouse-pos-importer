@@ -1,42 +1,73 @@
-const express = require("express");
-const cors = require("cors");
-const axios = require("axios");
+import axios from "axios";
+import cors from "cors";
+import express from "express";
 
-interface Price {
-    normal?: number;
-    foil?: number;
+interface TcgPriceData {
+    normal: number | null;
+    foil: number | null;
 }
 
-const app = express();
-app.use(cors());
+interface TcgPlayerIds {
+    standard: string | null;
+    etched: string | null;
+}
 
-const scryfallEndpoint = (scryfallId) =>
+interface ChcollectorPrice {
+    normal: number | null;
+    foil: number | null;
+    etched: number | null;
+}
+
+interface Result {
+    marketPrices: ChcollectorPrice;
+    medianPrices: ChcollectorPrice;
+}
+
+type UrlCreator<T> = (arg: T) => T;
+
+const scryfallEndpoint: UrlCreator<string> = (scryfallId) =>
     `https://api.scryfall.com/cards/${scryfallId}`;
 
-const pricingEndpoint = (sku) =>
+const pricingEndpoint: UrlCreator<string> = (sku) =>
     `https://mpapi.tcgplayer.com/v2/product/${sku}/pricepoints`;
 
 /**
  * Retrieves the SKU from a card by querying Scryfall's API
- * @param {String} scryfallId - a card's Scryfall ID
  */
-async function fetchSku(scryfallId) {
+const fetchTcgPlayerSkus = async (
+    scryfallId: string
+): Promise<TcgPlayerIds> => {
     try {
+        const result: TcgPlayerIds = {
+            standard: null,
+            etched: null,
+        };
+
         const { data } = await axios.get(scryfallEndpoint(scryfallId));
 
-        if (!data.tcgplayer_id) {
-            return null;
+        if (data.tcgplayer_id) {
+            result.standard = data.tcgplayer_id;
         }
 
-        return data.tcgplayer_id;
+        if (data.tcgplayer_etched_id) {
+            result.etched = data.tcgplayer_etched_id;
+        }
+
+        return result;
     } catch (err) {
         throw err;
     }
-}
+};
 
-async function fetchPrices(sku) {
-    const marketPrices: Price = {};
-    const medianPrices: Price = {};
+const fetchPrices = async (sku: string) => {
+    const marketPrices: TcgPriceData = {
+        normal: null,
+        foil: null,
+    };
+    const medianPrices: TcgPriceData = {
+        normal: null,
+        foil: null,
+    };
 
     if (!sku) {
         return { marketPrices, medianPrices };
@@ -44,8 +75,6 @@ async function fetchPrices(sku) {
 
     try {
         const { data } = await axios.get(pricingEndpoint(sku));
-
-        console.log({ data });
 
         // Need to convert prices to our app's data shape
         const normalTcgPrices = data.find((d) => d.printingType === "Normal");
@@ -65,16 +94,50 @@ async function fetchPrices(sku) {
     } catch (err) {
         throw err;
     }
-}
+};
+
+// Create server and configure
+const app = express();
+app.use(cors());
 
 // Route handler
 app.get("/", async (req, res, next) => {
     try {
-        const { scryfallId } = req.query;
-        const sku = await fetchSku(scryfallId);
-        const prices = await fetchPrices(sku);
+        const result: Result = {
+            marketPrices: {
+                normal: null,
+                foil: null,
+                etched: null,
+            },
+            medianPrices: {
+                normal: null,
+                foil: null,
+                etched: null,
+            },
+        };
 
-        res.json(prices);
+        const { scryfallId } = req.query;
+        const tcgplayerIds = await fetchTcgPlayerSkus(scryfallId);
+
+        if (tcgplayerIds.standard) {
+            const standardPrices = await fetchPrices(tcgplayerIds.standard);
+
+            result.marketPrices.normal = standardPrices.marketPrices.normal;
+            result.marketPrices.foil = standardPrices.marketPrices.foil;
+
+            result.medianPrices.normal = standardPrices.medianPrices.normal;
+            result.medianPrices.foil = standardPrices.medianPrices.foil;
+        }
+
+        if (tcgplayerIds.etched) {
+            const etchedPrices = await fetchPrices(tcgplayerIds.etched);
+
+            // TcgPlayer doesn't make an `etched` distinction, they are `foil` in their API
+            result.marketPrices.etched = etchedPrices.marketPrices.foil;
+            result.medianPrices.etched = etchedPrices.medianPrices.foil;
+        }
+
+        res.json(result);
     } catch (err) {
         next(err);
     }

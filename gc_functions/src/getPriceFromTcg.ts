@@ -2,6 +2,11 @@ const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
 
+interface Price {
+    normal?: number;
+    foil?: number;
+}
+
 const app = express();
 app.use(cors());
 
@@ -30,8 +35,8 @@ async function fetchSku(scryfallId) {
 }
 
 async function fetchPrices(sku) {
-    const marketPrices = {};
-    const medianPrices = {};
+    const marketPrices: Price = {};
+    const medianPrices: Price = {};
 
     if (!sku) {
         return { marketPrices, medianPrices };
@@ -39,6 +44,8 @@ async function fetchPrices(sku) {
 
     try {
         const { data } = await axios.get(pricingEndpoint(sku));
+
+        console.log({ data });
 
         // Need to convert prices to our app's data shape
         const normalTcgPrices = data.find((d) => d.printingType === "Normal");

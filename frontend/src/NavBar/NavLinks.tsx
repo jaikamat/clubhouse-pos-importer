@@ -1,5 +1,4 @@
 import { Divider, List, ListItem, ListItemIcon } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
@@ -18,18 +17,6 @@ const NavLinks: FC<{}> = () => {
 
     return (
         <List>
-            <ListItem
-                button
-                component={RouterLink}
-                to="/manage-inventory"
-                selected={pathname === '/manage-inventory'}
-                replace
-            >
-                <ListItemIcon>
-                    <AddIcon color="primary" />
-                </ListItemIcon>
-                Manage Inventory
-            </ListItem>
             <ListItem
                 button
                 component={RouterLink}

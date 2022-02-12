@@ -17,7 +17,6 @@ test('Correct link navigation', async () => {
         </MemoryRouter>
     );
 
-    await screen.findByText('Manage Inventory');
     await screen.findByText('New Sale');
     await screen.findByText('Receiving');
     await screen.findByText('Browse Inventory');
@@ -25,7 +24,6 @@ test('Correct link navigation', async () => {
     await screen.findByText('Browse Receiving');
     await screen.findByText('Log Out');
 
-    await fireEvent.click(await screen.findByText('Manage Inventory'));
     await fireEvent.click(await screen.findByText('New Sale'));
     await fireEvent.click(await screen.findByText('Receiving'));
     await fireEvent.click(await screen.findByText('Browse Inventory'));
@@ -36,7 +34,6 @@ test('Correct link navigation', async () => {
     expect(pathHistory).toMatchInlineSnapshot(`
         Array [
           "/",
-          "/manage-inventory",
           "/new-sale",
           "/receiving",
           "/browse-inventory",

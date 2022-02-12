@@ -12,12 +12,10 @@ import BrowseReceiving from './BrowseReceiving/BrowseReceiving';
 import BrowseSales from './BrowseSales/BrowseSales';
 import BulkInventory from './BulkInventory/BulkInventory';
 import AuthProvider from './context/AuthProvider';
-import InventoryProvider from './context/InventoryContext';
 import ReceivingProvider from './context/ReceivingContext';
 import { SaleProvider } from './context/SaleContext';
 import Home from './LandingPage/Home';
 import Login from './Login/Login';
-import ManageInventory from './ManageInventory/ManageInventory';
 import NavBar from './NavBar/NavBar';
 import PublicInventory from './PublicInventory/PublicInventory';
 import Receiving from './Receiving/Receiving';
@@ -67,11 +65,6 @@ const App: FC = () => {
                         <Route exact path="/" component={Home} />
                         <div className={backgroundColor}>
                             <div className={contentContainer}>
-                                <AdminRoute exact path="/manage-inventory">
-                                    <InventoryProvider>
-                                        <ManageInventory />
-                                    </InventoryProvider>
-                                </AdminRoute>
                                 <AdminRoute exact path="/new-sale">
                                     <SaleProvider>
                                         <Sale />

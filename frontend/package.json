@@ -1,6 +1,6 @@
 {
     "name": "clubhouse-pos-importer",
-    "version": "1.24.0",
+    "version": "1.25.0",
     "private": true,
     "homepage": "http://www.chcollector.com/",
     "dependencies": {

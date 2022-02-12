@@ -1,0 +1,1 @@
+export { getPriceFromTcg } from "./getPriceFromTcg";

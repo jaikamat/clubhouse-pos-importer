@@ -1,12 +1,13 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { connect } from 'mongoose';
-import getDatabaseConnection from '../database';
+import getDatabaseConnection, { Connection } from '../database';
 import bulkCard from '../fixtures/fixtures';
 import ScryfallCard from '../models/ScryfallCard';
 import findBulkById from './findBulkById';
 
 let mongoServer;
 let db;
+let mongooseDb;
 
 // Set up the mongo memory instance
 beforeAll(async () => {
@@ -16,6 +17,7 @@ beforeAll(async () => {
 
     // Separately connect with mongoose
     await connect(uri);
+    mongooseDb = await Connection.open(uri);
 
     // Create a new bulk card, the db seed script overwrites `_id` with scryfall's `id`
     const BulkCard = new ScryfallCard({ _id: bulkCard.id, ...bulkCard });

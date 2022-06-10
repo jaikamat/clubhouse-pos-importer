@@ -7,7 +7,7 @@
 import debugImport from 'debug';
 import http from 'http';
 import app from '../app';
-import getDatabaseConnection from '../database';
+import getDatabaseConnection, { Connection } from '../database';
 const debug = debugImport('monolith:server');
 require('dotenv').config(); // load local env vars
 
@@ -16,6 +16,7 @@ const init = async () => {
      * Connect to the database first
      */
     await getDatabaseConnection();
+    await Connection.open();
 
     /**
      * Get port from environment and store in Express.

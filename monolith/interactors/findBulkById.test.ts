@@ -1,6 +1,6 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose, { connect } from 'mongoose';
-import { Connection } from '../database';
+import Connection from '../database';
 import bulkCard from '../fixtures/fixtures';
 import ScryfallCard from '../models/ScryfallCard';
 import findBulkById from './findBulkById';

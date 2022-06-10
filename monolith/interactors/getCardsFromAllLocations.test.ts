@@ -1,7 +1,7 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import { Collection } from '../common/types';
-import { Connection } from '../database';
+import Connection from '../database';
 import bulkCard from '../fixtures/fixtures';
 import addCardToInventory from './addCardToInventory';
 import getCardFromAllLocations from './getCardFromAllLocations';

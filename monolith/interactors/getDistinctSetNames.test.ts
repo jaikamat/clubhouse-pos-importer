@@ -1,6 +1,6 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-import { Connection } from '../database';
+import Connection from '../database';
 import addCardToInventory from './addCardToInventory';
 import getDistinctSetNames from './getDistinctSetNames';
 

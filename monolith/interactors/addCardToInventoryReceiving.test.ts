@@ -1,7 +1,7 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import { Trade } from '../common/types';
-import { Connection } from '../database';
+import Connection from '../database';
 import addCardToInventoryReceiving from './addCardToInventoryReceiving';
 
 let mongoServer;

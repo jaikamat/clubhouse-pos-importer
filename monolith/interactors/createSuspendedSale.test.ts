@@ -1,7 +1,7 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import { FinishSaleCard } from '../common/types';
-import { Connection } from '../database';
+import Connection from '../database';
 import timeSpiral from '../fixtures/fixtures';
 import addCardToInventory from './addCardToInventory';
 import createSuspendedSale from './createSuspendedSale';

@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import { Collection } from '../common/types';
 import Connection from '../database';
 import bulkCard from '../fixtures/fixtures';
-import ScryfallCard from '../models/ScryfallCardModel';
+import ScryfallCardModel from '../models/ScryfallCardModel';
 import addCardToInventory from './addCardToInventory';
 import getCardFromAllLocations from './getCardFromAllLocations';
 
@@ -25,7 +25,7 @@ afterAll(async () => {
 
 test('Correctly returns appropriate inventory quantities', async () => {
     // Seed with bulk card information
-    await ScryfallCard.insertMany({ _id: bulkCard.id, ...bulkCard });
+    await ScryfallCardModel.insertMany({ _id: bulkCard.id, ...bulkCard });
 
     // Seed inventory with data
     const { id, name, set_name, set } = bulkCard;

@@ -1,4 +1,3 @@
-import { ObjectID } from 'mongodb';
 import mongoose from 'mongoose';
 import { ClubhouseLocation } from '../common/types';
 import collectionFromLocation from '../lib/collectionFromLocation';
@@ -17,7 +16,9 @@ async function deleteSuspendedSale(id: string, location: ClubhouseLocation) {
 
         console.log(`Deleting suspended sale _id: ${id} at ${location}`);
 
-        const { list } = await collection.findOne({ _id: new ObjectID(id) });
+        const { list } = await collection.findOne({
+            _id: new mongoose.Types.ObjectId(id),
+        });
 
         // Adds the passed cards back to inventory prior to deleting
         const dbInserts = list.map(
@@ -29,7 +30,9 @@ async function deleteSuspendedSale(id: string, location: ClubhouseLocation) {
         );
         await Promise.all(dbInserts);
 
-        return await collection.deleteOne({ _id: new ObjectID(id) });
+        return await collection.deleteOne({
+            _id: new mongoose.Types.ObjectId(id),
+        });
     } catch (e) {
         throw e;
     }

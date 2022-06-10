@@ -1,4 +1,3 @@
-import { ObjectID } from 'mongodb';
 import mongoose from 'mongoose';
 import collectionFromLocation from '../lib/collectionFromLocation';
 
@@ -11,7 +10,7 @@ async function getSuspendedSale(id, location) {
         const db = await mongoose.connection.db;
         const doc = await db
             .collection(collectionFromLocation(location).suspendedSales)
-            .findOne({ _id: new ObjectID(id) });
+            .findOne({ _id: new mongoose.Types.ObjectId(id) });
 
         return doc;
     } catch (e) {

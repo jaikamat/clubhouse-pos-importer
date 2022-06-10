@@ -1,4 +1,3 @@
-import { ObjectID } from 'mongodb';
 import mongoose from 'mongoose';
 import { ScryfallApiCard } from '../common/ScryfallApiCard';
 import { ClubhouseLocation, Collection } from '../common/types';
@@ -11,7 +10,7 @@ async function getReceivingById(id: string, location: ClubhouseLocation) {
 
         let aggregation = [];
 
-        const match = { _id: new ObjectID(id) };
+        const match = { _id: new mongoose.Types.ObjectId(id) };
 
         const addFields = {
             created_at: {

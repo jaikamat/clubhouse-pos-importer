@@ -1,4 +1,3 @@
-import { ObjectID } from 'mongodb';
 import mongoose from 'mongoose';
 import { Collection } from '../common/types';
 
@@ -16,7 +15,7 @@ export default async function getUserById(id: string): Promise<User> {
 
         // TODO: remove any and replace with mongoose schema queries
         const user: any = await db.collection(Collection.users).findOne({
-            _id: new ObjectID(id),
+            _id: new mongoose.Types.ObjectId(id),
         });
 
         return user;

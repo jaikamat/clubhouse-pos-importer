@@ -6,7 +6,7 @@ import { ScryfallCard } from '../schemas/ScryfallCardSchema';
  */
 async function findBulkById(id: string): Promise<ScryfallCard> {
     try {
-        return await ScryfallCardModel.findOne({ _id: id });
+        return await ScryfallCardModel.findOne({ _id: id }).exec();
     } catch (err) {
         throw err;
     }

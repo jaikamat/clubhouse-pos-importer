@@ -26,6 +26,7 @@
         "jsonwebtoken": "^8.5.1",
         "moment": "^2.29.1",
         "mongodb": "^3.6.3",
+        "mongoose": "^6.3.6",
         "morgan": "^1.10.0",
         "request": "^2.88.2",
         "request-promise-native": "^1.0.9",

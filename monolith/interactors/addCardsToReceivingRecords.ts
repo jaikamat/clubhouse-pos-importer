@@ -1,7 +1,6 @@
 import moment from 'moment';
-import mongoose from 'mongoose';
 import { ClubhouseLocation } from '../common/types';
-import collectionFromLocation from '../lib/collectionFromLocation';
+import getReceivedCardsModel from '../models/ReceivedCardsModel';
 import { ReceivingCard } from './addCardToInventoryReceiving';
 
 interface Args {
@@ -22,16 +21,16 @@ async function addCardsToReceivingRecords({
     customerContact,
 }: Args) {
     try {
-        await mongoose.connection.db
-            .collection(collectionFromLocation(location).receivedCards)
-            .insertOne({
-                created_at: moment().utc().toDate(),
-                employee_number: employeeNumber,
-                received_card_list: cards,
-                created_by: userId,
-                customer_name: customerName,
-                customer_contact: customerContact,
-            });
+        const ReceivedCardsModel = getReceivedCardsModel(location);
+
+        await ReceivedCardsModel.create({
+            created_at: moment().utc().toDate(),
+            employee_number: employeeNumber,
+            received_card_list: cards,
+            created_by: userId,
+            customer_name: customerName,
+            customer_contact: customerContact,
+        });
 
         console.log(`Recorded ${cards.length} received cards at ${location}`);
     } catch (err) {

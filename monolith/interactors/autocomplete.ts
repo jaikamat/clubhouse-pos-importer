@@ -6,6 +6,7 @@ async function autocomplete(term: string) {
         const db = await mongoose.connection.db;
         const collection = db.collection(Collection.scryfallBulkCards);
 
+        // TODO: how to handle aggregation pipelines in mongoose?
         const results: any[] = await collection
             .aggregate([
                 {

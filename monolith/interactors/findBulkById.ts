@@ -1,18 +1,12 @@
-import mongoose from 'mongoose';
-import RawScryfallCard from '../common/RawScryfallCard';
-import { Collection } from '../common/types';
+import ScryfallCardModel from '../models/ScryfallCardModel';
+import { ScryfallCard } from '../schemas/ScryfallCardSchema';
 
 /**
  * Finds a bulk card by its associated `_id`
  */
-async function findBulkById(id: string): Promise<RawScryfallCard> {
+async function findBulkById(id: string): Promise<ScryfallCard> {
     try {
-        // TODO: remove any and replace with mongoose schema queries
-        const card: any = await mongoose.connection.db
-            .collection(Collection.scryfallBulkCards)
-            .findOne({ _id: id });
-
-        return card;
+        return await ScryfallCardModel.findOne({ _id: id });
     } catch (err) {
         throw err;
     }

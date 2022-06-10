@@ -3,10 +3,10 @@ import ScryfallCardSchema, {
     ScryfallCard,
 } from '../schemas/ScryfallCardSchema';
 
-const ScryfallCard = model<ScryfallCard>(
+const ScryfallCardModel = model<ScryfallCard>(
     'ScryfallCard',
     ScryfallCardSchema,
     'scryfall_bulk_cards'
 );
 
-export default ScryfallCard;
+export default ScryfallCardModel;

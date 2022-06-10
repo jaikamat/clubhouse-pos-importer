@@ -1,7 +1,7 @@
+import mongoose from 'mongoose';
 import request from 'request-promise-native';
 import { ScryfallApiCard } from '../common/ScryfallApiCard';
 import { ClubhouseLocation, FinishSaleCard } from '../common/types';
-import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import createLightspeedSale from './createLightspeedSale';
 import findBulkById from './findBulkById';
@@ -85,7 +85,7 @@ export async function updateInventoryCards(
     location: ClubhouseLocation
 ) {
     try {
-        const db = await getDatabaseConnection();
+        const db = await mongoose.connection.db;
         const dbInserts = cards.map((card) =>
             updateCardInventory(db, card, location)
         );
@@ -109,7 +109,7 @@ async function createSale(
     location: ClubhouseLocation
 ) {
     try {
-        const db = await getDatabaseConnection();
+        const db = await mongoose.connection.db;
 
         // Aggregate bulk of all the target cards
         const promisedCards = cardList.map((card) => findBulkById(card.id));

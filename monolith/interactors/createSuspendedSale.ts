@@ -1,7 +1,7 @@
 import moment from 'moment';
+import mongoose from 'mongoose';
 import { ScryfallApiCard } from '../common/ScryfallApiCard';
 import { ClubhouseLocation, FinishSaleCard } from '../common/types';
-import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import findBulkById from './findBulkById';
 import isValidInventory from './isValidInventory';
@@ -21,7 +21,7 @@ async function createSuspendedSale(
     location: ClubhouseLocation
 ) {
     try {
-        const db = await getDatabaseConnection();
+        const db = await mongoose.connection.db;
         const collection = db.collection(
             collectionFromLocation(location).suspendedSales
         );

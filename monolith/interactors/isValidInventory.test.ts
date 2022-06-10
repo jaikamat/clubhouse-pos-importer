@@ -1,6 +1,7 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import mongoose from 'mongoose';
 import { FinishSaleCard } from '../common/types';
-import getDatabaseConnection from '../database';
+import { Connection } from '../database';
 import addCardToInventory from './addCardToInventory';
 import isValidInventory from './isValidInventory';
 
@@ -11,7 +12,9 @@ let db;
 beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     const uri = mongoServer.getUri();
-    db = await getDatabaseConnection(uri);
+
+    await Connection.open(uri);
+    db = mongoose.connection.db;
 
     // Seed card in inventory with lower quantity
     await addCardToInventory({

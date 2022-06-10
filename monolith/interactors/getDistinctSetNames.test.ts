@@ -1,5 +1,6 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import getDatabaseConnection from '../database';
+import mongoose from 'mongoose';
+import { Connection } from '../database';
 import addCardToInventory from './addCardToInventory';
 import getDistinctSetNames from './getDistinctSetNames';
 
@@ -12,7 +13,9 @@ let db;
 beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     const uri = mongoServer.getUri();
-    db = await getDatabaseConnection(uri);
+
+    await Connection.open(uri);
+    db = mongoose.connection.db;
 
     // Add some cards to store inventory collection with differing set namees
     const inserts = [

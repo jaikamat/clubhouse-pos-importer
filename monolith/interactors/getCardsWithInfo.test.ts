@@ -1,5 +1,6 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import getDatabaseConnection from '../database';
+import mongoose from 'mongoose';
+import { Connection } from '../database';
 import bulkCard from '../fixtures/fixtures';
 import addCardToInventory from './addCardToInventory';
 import getCardsWithInfo from './getCardsWithInfo';
@@ -13,7 +14,9 @@ let db;
 beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     const uri = mongoServer.getUri();
-    db = await getDatabaseConnection(uri);
+
+    await Connection.open(uri);
+    db = mongoose.connection.db;
 
     // Create fake bulk collection
     const bulkCollection = await db.createCollection(SCRYFALL_BULK);

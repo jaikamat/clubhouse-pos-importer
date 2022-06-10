@@ -1,5 +1,5 @@
+import mongoose from 'mongoose';
 import { Collection } from '../common/types';
-import getDatabaseConnection from '../database';
 
 export interface User {
     _id: string;
@@ -12,9 +12,10 @@ export interface User {
 
 export default async function getUserByName(username: string): Promise<User> {
     try {
-        const db = await getDatabaseConnection();
+        const db = await mongoose.connection.db;
 
-        const user: User = await db.collection(Collection.users).findOne({
+        // TODO: remove any and replace with mongoose schema queries
+        const user: any = await db.collection(Collection.users).findOne({
             username,
         });
 

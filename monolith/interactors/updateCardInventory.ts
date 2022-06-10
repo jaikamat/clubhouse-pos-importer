@@ -1,5 +1,5 @@
+import mongoose from 'mongoose';
 import { ClubhouseLocation, FinishSaleCard } from '../common/types';
-import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 
 /**
@@ -18,7 +18,7 @@ async function updateCardInventory(
             `Suspend sale, QTY: ${qtyToSell}, ${finishCondition}, ${name}, ${id}, LOCATION: ${location}`
         );
 
-        const db = await getDatabaseConnection();
+        const db = mongoose.connection.db;
         const collection = db.collection(
             collectionFromLocation(location).cardInventory
         );

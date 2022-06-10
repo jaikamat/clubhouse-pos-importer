@@ -1,6 +1,6 @@
 import moment from 'moment';
+import mongoose from 'mongoose';
 import { ClubhouseLocation } from '../common/types';
-import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import { ReceivingCard } from './addCardToInventoryReceiving';
 
@@ -22,9 +22,7 @@ async function addCardsToReceivingRecords({
     customerContact,
 }: Args) {
     try {
-        const db = await getDatabaseConnection();
-
-        await db
+        await mongoose.connection.db
             .collection(collectionFromLocation(location).receivedCards)
             .insertOne({
                 created_at: moment().utc().toDate(),

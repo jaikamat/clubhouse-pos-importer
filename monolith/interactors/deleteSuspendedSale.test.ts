@@ -1,6 +1,7 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import mongoose from 'mongoose';
 import { FinishSaleCard } from '../common/types';
-import getDatabaseConnection from '../database';
+import { Connection } from '../database';
 import timeSpiral from '../fixtures/fixtures';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import addCardToInventory from './addCardToInventory';
@@ -16,7 +17,9 @@ const bulkId = timeSpiral.id;
 beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     const uri = mongoServer.getUri();
-    db = await getDatabaseConnection(uri);
+
+    await Connection.open(uri);
+    db = mongoose.connection.db;
 
     // Seed bulk data
     await db.collection('scryfall_bulk_cards').bulkWrite([

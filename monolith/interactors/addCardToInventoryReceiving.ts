@@ -1,6 +1,5 @@
-import { Collection } from 'mongodb';
+import mongoose, { Collection } from 'mongoose';
 import { ClubhouseLocation, Trade } from '../common/types';
-import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 
 export type ReceivingCard = {
@@ -19,7 +18,8 @@ export type ReceivingCard = {
 // `finishCondition` Refers to the configuration of Finishes and Conditions ex. NONFOIL_NM or FOIL_LP
 async function addCardToInventoryReceiving(
     { quantity, finishCondition, id, name, set_name, set }: ReceivingCard,
-    collection: Collection
+    // TODO: remove any and replace with mongoose schema queries
+    collection: any
 ) {
     try {
         console.log(
@@ -49,7 +49,7 @@ async function wrapAddCardToInventoryReceiving(
     location: ClubhouseLocation
 ) {
     try {
-        const db = await getDatabaseConnection();
+        const db = mongoose.connection.db;
 
         const collection = db.collection(
             collectionFromLocation(location).cardInventory

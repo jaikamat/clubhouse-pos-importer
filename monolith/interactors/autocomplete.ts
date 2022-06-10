@@ -1,12 +1,12 @@
+import mongoose from 'mongoose';
 import { Collection } from '../common/types';
-import getDatabaseConnection from '../database';
 
 async function autocomplete(term: string) {
     try {
-        const db = await getDatabaseConnection();
+        const db = await mongoose.connection.db;
         const collection = db.collection(Collection.scryfallBulkCards);
 
-        const results: { name: string }[] = await collection
+        const results: any[] = await collection
             .aggregate([
                 {
                     $search: {

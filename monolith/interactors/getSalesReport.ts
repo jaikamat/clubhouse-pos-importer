@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import RawScryfallCard from '../common/RawScryfallCard';
 import { ScryfallApiCard } from '../common/ScryfallApiCard';
 import {
@@ -6,7 +7,6 @@ import {
     FinishCondition,
     QOH,
 } from '../common/types';
-import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import isNonfoil from '../lib/isNonfoil';
 import parseQoh from '../lib/parseQoh';
@@ -40,7 +40,7 @@ interface Args {
 
 async function getSalesReport({ location, startDate, endDate }: Args) {
     try {
-        const db = await getDatabaseConnection();
+        const db = await mongoose.connection.db;
         const collection = collectionFromLocation(location).salesData;
 
         const aggregation = [];
@@ -135,7 +135,8 @@ async function getSalesReport({ location, startDate, endDate }: Args) {
             .aggregate(aggregation)
             .toArray();
 
-        const result: QueryResult = doc[0];
+        // TODO: remove any and replace with mongoose schema queries
+        const result: any = doc[0];
 
         /**
          * Transform the data with a custom _id for client use and

@@ -1,5 +1,5 @@
+import mongoose from 'mongoose';
 import { ClubhouseLocation, FinishSaleCard } from '../common/types';
-import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 
 /**
@@ -11,7 +11,7 @@ async function isValidInventory(
 ) {
     try {
         const { qtyToSell, finishCondition, name, id } = saleCard;
-        const db = await getDatabaseConnection();
+        const db = await mongoose.connection.db;
         const collection = db.collection(
             collectionFromLocation(location).cardInventory
         );

@@ -1,5 +1,5 @@
+import mongoose from 'mongoose';
 import { ClubhouseLocation } from '../common/types';
-import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 
 interface Args {
@@ -16,7 +16,7 @@ async function getCardsFromReceiving({
     cardName,
 }: Args) {
     try {
-        const db = await getDatabaseConnection();
+        const db = await mongoose.connection.db;
 
         const collection = await db.collection(
             collectionFromLocation(location).receivedCards

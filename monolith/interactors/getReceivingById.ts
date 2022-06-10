@@ -1,12 +1,12 @@
 import { ObjectID } from 'mongodb';
+import mongoose from 'mongoose';
 import { ScryfallApiCard } from '../common/ScryfallApiCard';
 import { ClubhouseLocation, Collection } from '../common/types';
-import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 
 async function getReceivingById(id: string, location: ClubhouseLocation) {
     try {
-        const db = await getDatabaseConnection();
+        const db = await mongoose.connection.db;
         const collection = collectionFromLocation(location).receivedCards;
 
         let aggregation = [];

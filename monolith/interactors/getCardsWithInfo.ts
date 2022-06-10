@@ -1,7 +1,7 @@
+import mongoose from 'mongoose';
 import RawScryfallCard from '../common/RawScryfallCard';
 import { ScryfallApiCard } from '../common/ScryfallApiCard';
 import { ClubhouseLocation, Collection, QOH } from '../common/types';
-import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 
 type AggregationCard = RawScryfallCard & { qoh: QOH };
@@ -14,7 +14,7 @@ async function getCardsWithInfo(
     location: ClubhouseLocation
 ): Promise<ReturnCard[]> {
     try {
-        const db = await getDatabaseConnection();
+        const db = await mongoose.connection.db;
 
         const pipeline = [];
 
@@ -88,7 +88,8 @@ async function getCardsWithInfo(
         pipeline.push(addFields);
         if (matchInStock) pipeline.push(inventoryMatch);
 
-        const cards: AggregationCard[] = await db
+        // TODO: remove any and replace with mongoose schema queries
+        const cards: any = await db
             .collection(Collection.scryfallBulkCards)
             .aggregate(pipeline)
             .toArray();

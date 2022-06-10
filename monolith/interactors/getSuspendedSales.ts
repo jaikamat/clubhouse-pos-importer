@@ -1,5 +1,5 @@
+import mongoose from 'mongoose';
 import { ClubhouseLocation } from '../common/types';
-import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 
 /**
@@ -7,7 +7,7 @@ import collectionFromLocation from '../lib/collectionFromLocation';
  */
 async function getSuspendedSales(location: ClubhouseLocation) {
     try {
-        const db = await getDatabaseConnection();
+        const db = await mongoose.connection.db;
 
         const docs = await db
             .collection(collectionFromLocation(location).suspendedSales)

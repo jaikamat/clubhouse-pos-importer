@@ -1,6 +1,6 @@
+import mongoose from 'mongoose';
 import { ClubhouseLocation, Collection } from '../common/types';
 import { GetCardsByFilterQuery } from '../controllers/getCardsByFilterController';
-import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 const LIMIT = 100;
 
@@ -41,7 +41,7 @@ const getCardsByFilter = async (
     location: ClubhouseLocation
 ) => {
     try {
-        const db = await getDatabaseConnection();
+        const db = await mongoose.connection.db;
 
         const collection = db.collection(
             collectionFromLocation(location).cardInventory

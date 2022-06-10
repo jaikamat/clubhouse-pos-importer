@@ -1,6 +1,6 @@
+import mongoose from 'mongoose';
 import RawScryfallCard from '../common/RawScryfallCard';
 import { Collection } from '../common/types';
-import getDatabaseConnection from '../database';
 import cardDisplayName from '../lib/cardDisplayName';
 import cardImageUrl from '../lib/cardImageUrl';
 
@@ -36,7 +36,7 @@ const MAX_RESULTS = 50;
 
 async function getCardPrintings(cardName: string) {
     try {
-        const db = await getDatabaseConnection();
+        const db = await mongoose.connection.db;
 
         const pipeline = [];
 
@@ -68,7 +68,8 @@ async function getCardPrintings(cardName: string) {
             .aggregate(pipeline)
             .toArray();
 
-        const bulk = cards.map((c) => new BulkCard(c));
+        // TODO: remove any and replace with mongoose schema queries
+        const bulk = cards.map((c) => new BulkCard(c as any));
 
         return (
             bulk

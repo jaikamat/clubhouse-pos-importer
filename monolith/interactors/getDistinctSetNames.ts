@@ -1,5 +1,5 @@
+import mongoose from 'mongoose';
 import { ClubhouseLocation } from '../common/types';
-import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 
 /**
@@ -9,7 +9,7 @@ async function getDistinctSetNames(
     location: ClubhouseLocation
 ): Promise<string[]> {
     try {
-        const db = await getDatabaseConnection();
+        const db = await mongoose.connection.db;
         const collection = db.collection(
             collectionFromLocation(location).cardInventory
         );

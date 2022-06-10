@@ -1,6 +1,6 @@
 import { ObjectID } from 'mongodb';
+import mongoose from 'mongoose';
 import { ClubhouseLocation } from '../common/types';
-import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import updateCardInventory from './updateCardInventory';
 
@@ -10,7 +10,7 @@ import updateCardInventory from './updateCardInventory';
  */
 async function deleteSuspendedSale(id: string, location: ClubhouseLocation) {
     try {
-        const db = await getDatabaseConnection();
+        const db = await mongoose.connection.db;
         const collection = db.collection(
             collectionFromLocation(location).suspendedSales
         );

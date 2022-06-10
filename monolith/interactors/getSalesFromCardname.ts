@@ -1,5 +1,5 @@
+import mongoose from 'mongoose';
 import { ClubhouseLocation } from '../common/types';
-import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 
 async function getSalesFromCardname(
@@ -7,7 +7,7 @@ async function getSalesFromCardname(
     location: ClubhouseLocation
 ) {
     try {
-        const db = await getDatabaseConnection();
+        const db = await mongoose.connection.db;
 
         // Returns only the relevant queried cards from the card_list array of cards involved in the sale
         // Refer to https://blog.fullstacktraining.com/retrieve-only-queried-element-in-an-object-array-in-mongodb-collection/

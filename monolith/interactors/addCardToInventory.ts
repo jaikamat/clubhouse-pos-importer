@@ -1,5 +1,5 @@
+import mongoose from 'mongoose';
 import { ClubhouseLocation, QOH } from '../common/types';
-import getDatabaseConnection from '../database';
 import collectionFromLocation from '../lib/collectionFromLocation';
 
 type Card = {
@@ -28,9 +28,10 @@ export default async function addCardToInventory({
     set_name,
     set,
     location,
-}: Card): Promise<ReturnCard> {
+}: // TODO: remove any and replace with mongoose schema queries
+Card): Promise<any> {
     try {
-        const db = await getDatabaseConnection();
+        const db = mongoose.connection.db;
         const collection = db.collection(
             collectionFromLocation(location).cardInventory
         );

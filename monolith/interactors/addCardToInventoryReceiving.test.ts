@@ -1,6 +1,7 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import mongoose from 'mongoose';
 import { Trade } from '../common/types';
-import getDatabaseConnection from '../database';
+import { Connection } from '../database';
 import addCardToInventoryReceiving from './addCardToInventoryReceiving';
 
 let mongoServer;
@@ -10,7 +11,9 @@ let db;
 beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     const uri = mongoServer.getUri();
-    db = await getDatabaseConnection(uri);
+
+    await Connection.open(uri);
+    db = mongoose.connection.db;
 });
 
 afterAll(async () => {

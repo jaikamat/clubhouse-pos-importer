@@ -32,7 +32,7 @@ test('Receive one', async () => {
         [
             {
                 quantity: 1,
-                finishCondition: 'NONFOIL_NM',
+                finishCondition: 'NONFOIL_NM' as const,
                 id: '3678',
                 name: 'Black Lotus',
                 set_name: 'Limted Edition Alpha',
@@ -41,7 +41,7 @@ test('Receive one', async () => {
             },
             {
                 quantity: 4,
-                finishCondition: 'NONFOIL_NM',
+                finishCondition: 'NONFOIL_NM' as const,
                 id: '2386',
                 name: 'Mox Diamond',
                 set_name: 'Stronghold',
@@ -50,7 +50,7 @@ test('Receive one', async () => {
             },
             {
                 quantity: 7,
-                finishCondition: 'ETCHED_LP',
+                finishCondition: 'ETCHED_LP' as const,
                 id: '9987',
                 name: 'Mox Diamond',
                 set_name: 'Stronghold',
@@ -108,7 +108,7 @@ test('Receive more', async () => {
     const receiveMore = [
         {
             quantity: 1,
-            finishCondition: 'NONFOIL_NM',
+            finishCondition: 'NONFOIL_NM' as const,
             id: '3678',
             name: 'Black Lotus',
             set_name: 'Limted Edition Alpha',
@@ -117,7 +117,7 @@ test('Receive more', async () => {
         },
         {
             quantity: 4,
-            finishCondition: 'NONFOIL_NM',
+            finishCondition: 'NONFOIL_NM' as const,
             id: '2386',
             name: 'Mox Diamond',
             set_name: 'Stronghold',
@@ -126,7 +126,7 @@ test('Receive more', async () => {
         },
         {
             quantity: 2,
-            finishCondition: 'FOIL_NM',
+            finishCondition: 'FOIL_NM' as const,
             id: '3456',
             name: 'Crystal Quarry',
             set_name: 'Odyssey',

@@ -45,7 +45,7 @@ const ReceivedCardsSchema = new Schema<ReceivedCards>({
     received_card_list: { type: [ReceivingCardSchema], required: true },
     created_by: { type: String, required: true },
     customer_name: { type: String, required: true },
-    customer_contact: { type: String, required: true },
+    customer_contact: { type: String },
 });
 
 export default ReceivedCardsSchema;

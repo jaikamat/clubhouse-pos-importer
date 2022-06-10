@@ -1,9 +1,9 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import { connect } from 'mongoose';
 import getDatabaseConnection from '../database';
 import bulkCard from '../fixtures/fixtures';
+import ScryfallCard from '../models/ScryfallCard';
 import findBulkById from './findBulkById';
-
-const SCRYFALL_BULK = 'scryfall_bulk_cards';
 
 let mongoServer;
 let db;
@@ -14,11 +14,12 @@ beforeAll(async () => {
     const uri = mongoServer.getUri();
     db = await getDatabaseConnection(uri);
 
-    // Create fake bulk collection
-    const bulkCollection = await db.createCollection(SCRYFALL_BULK);
+    // Separately connect with mongoose
+    await connect(uri);
 
-    // Insert one bulk card, mimic the database seed script by overwriting `_id` with `card.id`
-    await bulkCollection.insert({ _id: bulkCard.id, ...bulkCard });
+    // Create a new bulk card, the db seed script overwrites `_id` with scryfall's `id`
+    const BulkCard = new ScryfallCard({ _id: bulkCard.id, ...bulkCard });
+    await BulkCard.save();
 });
 
 afterAll(async () => {

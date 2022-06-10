@@ -123,11 +123,11 @@ interface Prices {
 }
 
 const PricesSchema = new Schema({
-    usd: { type: String, required: true },
-    usd_foil: { type: String, required: true },
-    eur: { type: String, required: true },
-    eur_foil: { type: String, required: true },
-    tix: { type: String, required: true },
+    usd: { type: String },
+    usd_foil: { type: String },
+    eur: { type: String },
+    eur_foil: { type: String },
+    tix: { type: String },
 });
 
 interface RelatedUris {
@@ -159,6 +159,7 @@ const PurchaseUrisSchema = new Schema<PurchaseUris>({
 });
 
 export interface ScryfallCard {
+    _id: string;
     object: string;
     id: string;
     oracle_id: string;
@@ -222,6 +223,7 @@ export interface ScryfallCard {
 }
 
 const ScryfallCardSchema = new Schema<ScryfallCard>({
+    _id: { type: String, required: true },
     object: { type: String, required: true },
     id: { type: String, required: true },
     oracle_id: { type: String, required: true },
@@ -280,7 +282,7 @@ const ScryfallCardSchema = new Schema<ScryfallCard>({
     purchase_uris: { type: PurchaseUrisSchema },
     image_uris: { type: ImageUrisSchema },
     finishes: { type: [String], required: true },
-    printed_name: { type: String, required: true },
+    printed_name: { type: String },
     colors: { type: [String], required: true },
 });
 

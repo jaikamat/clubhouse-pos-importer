@@ -73,7 +73,7 @@ test('Deleting suspended sale restores inventory', async () => {
     const suspendedSales = await getSuspendedSales('ch1');
     expect(suspendedSales.length).toBe(1);
 
-    const suspendedSaleId = suspendedSales[0]._id;
+    const suspendedSaleId = suspendedSales[0]._id.toString();
 
     const beforeSuspendDoc = await db
         .collection(collectionFromLocation('ch1').cardInventory)

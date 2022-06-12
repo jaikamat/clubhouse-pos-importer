@@ -1,8 +1,7 @@
-import mongoose from 'mongoose';
-import RawScryfallCard from '../common/RawScryfallCard';
-import { Collection } from '../common/types';
 import cardDisplayName from '../lib/cardDisplayName';
 import cardImageUrl from '../lib/cardImageUrl';
+import ScryfallCardModel from '../models/ScryfallCardModel';
+import { ScryfallCard } from '../schemas/ScryfallCardSchema';
 
 class BulkCard {
     public scryfall_id: string;
@@ -15,7 +14,7 @@ class BulkCard {
     public frame: string;
     public image: string;
 
-    constructor(card: RawScryfallCard) {
+    constructor(card: ScryfallCard) {
         this.scryfall_id = card.id;
         this.name = card.name;
         this.display_name = cardDisplayName(card);
@@ -36,40 +35,26 @@ const MAX_RESULTS = 50;
 
 async function getCardPrintings(cardName: string) {
     try {
-        const db = await mongoose.connection.db;
-
-        const pipeline = [];
-
-        // Match only english cards
-        const match = {
-            lang: 'en',
-        };
-
-        // Text match on card title
-        const search = {
-            index: 'autocomplete',
-            autocomplete: {
-                query: cardName,
-                path: 'name',
-                tokenOrder: 'sequential',
-                fuzzy: {
-                    maxEdits: 1,
-                    maxExpansions: 50,
-                    prefixLength: 3,
+        const results = await ScryfallCardModel.aggregate()
+            // Text match on card title
+            .search({
+                index: 'autocomplete',
+                autocomplete: {
+                    query: cardName,
+                    path: 'name',
+                    tokenOrder: 'sequential',
+                    fuzzy: {
+                        maxEdits: 1,
+                        maxExpansions: 50,
+                        prefixLength: 3,
+                    },
                 },
-            },
-        };
+            })
+            // Match only english cards
+            .match({ lang: 'en' });
 
-        pipeline.push({ $search: search });
-        pipeline.push({ $match: match });
-
-        const cards = await db
-            .collection(Collection.scryfallBulkCards)
-            .aggregate(pipeline)
-            .toArray();
-
-        // TODO: remove any and replace with mongoose schema queries
-        const bulk = cards.map((c) => new BulkCard(c as any));
+        // TODO: remove and replace with mongoose model static methods?
+        const bulk = results.map((c) => new BulkCard(c));
 
         return (
             bulk

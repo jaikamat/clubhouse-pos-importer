@@ -1,9 +1,9 @@
-import RawScryfallCard from '../common/RawScryfallCard';
+import { ScryfallCard } from '../schemas/ScryfallCardSchema';
 
 /**
  * Creates a detailed user-friendly name for cards to discern what they are, without imagery
  */
-function cardDisplayName(card: RawScryfallCard): string {
+function cardDisplayName(card: ScryfallCard): string {
     const treatments: string[] = [];
     const baseTitle = card.name;
     const setName = card.set_name;

@@ -33,9 +33,9 @@ class BulkCard {
  */
 const MAX_RESULTS = 50;
 
-async function getCardPrintings(cardName: string) {
+async function getCardPrintings(cardName: string): Promise<BulkCard[]> {
     try {
-        const results = await ScryfallCardModel.aggregate()
+        const results = await ScryfallCardModel.aggregate<ScryfallCard>()
             // Text match on card title
             .search({
                 index: 'autocomplete',

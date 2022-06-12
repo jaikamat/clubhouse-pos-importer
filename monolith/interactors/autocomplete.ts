@@ -1,4 +1,5 @@
 import ScryfallCardModel from '../models/ScryfallCardModel';
+import { ScryfallCard } from '../schemas/ScryfallCardSchema';
 
 /**
  * Sorts and manipulates the resultant autocomplete data
@@ -16,7 +17,7 @@ const curateResults = (data: { name: string }[]) => {
 
 async function autocomplete(term: string) {
     try {
-        const results = await ScryfallCardModel.aggregate()
+        const results = await ScryfallCardModel.aggregate<ScryfallCard>()
             .search({
                 index: 'autocomplete',
                 autocomplete: {

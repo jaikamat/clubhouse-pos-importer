@@ -1,3 +1,4 @@
+import e from 'express';
 import mongoose from 'mongoose';
 import { ScryfallApiCard } from '../common/ScryfallApiCard';
 import { ClubhouseLocation, Collection } from '../common/types';
@@ -85,14 +86,16 @@ async function getReceivingById(id: string, location: ClubhouseLocation) {
 
         const received = results[0];
 
-        return {
-            ...received,
-            received_cards: received.received_cards.map((r) => ({
-                ...r,
-                // Transform all bulk cards in the received list
-                bulk_card_data: new ScryfallApiCard(r.bulk_card_data),
-            })),
-        };
+        // If there are results, then iterate over them and transform
+        const received_cards = received
+            ? received.received_cards.map((card) => ({
+                  ...card,
+                  // Transform all bulk cards in the received list
+                  bulk_card_data: new ScryfallApiCard(card.bulk_card_data),
+              }))
+            : [];
+
+        return { ...received, received_cards };
     } catch (e) {
         throw e;
     }

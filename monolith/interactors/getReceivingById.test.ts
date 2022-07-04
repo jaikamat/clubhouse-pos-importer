@@ -44,10 +44,20 @@ afterAll(async () => {
     await mongoServer.stop();
 });
 
-test.only('Fetch the receiving entity to ensure it persisted', async () => {
+test('Fetch the receiving entity to ensure it persisted', async () => {
     const foundDoc: any = await getReceivingById('receiving-id', 'ch1');
 
     expect(foundDoc.customer_name).toBe('Jane Doe');
     expect(foundDoc.received_cards.length).toBe(1);
     expect(foundDoc.received_cards[0].bulk_card_data.id).toBe(bulkCard.id);
+});
+
+test('Fetching from the wrong location returns nothing', async () => {
+    const foundDoc: any = await getReceivingById('receiving-id', 'ch2');
+
+    expect(foundDoc).toMatchInlineSnapshot(`
+Object {
+  "received_cards": Array [],
+}
+`);
 });

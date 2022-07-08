@@ -1,9 +1,9 @@
-import e from 'express';
 import mongoose from 'mongoose';
 import { ScryfallApiCard } from '../common/ScryfallApiCard';
-import { ClubhouseLocation, Collection } from '../common/types';
+import { ClubhouseLocation } from '../common/types';
 import collectionFromLocation from '../lib/collectionFromLocation';
 import getReceivedCardsModel from '../models/ReceivedCardsModel';
+import ScryfallCardModel from '../models/ScryfallCardModel';
 import { ScryfallCard } from '../schemas/ScryfallCardSchema';
 
 interface AggregateResult {
@@ -29,7 +29,7 @@ async function getReceivingById(id: string, location: ClubhouseLocation) {
                 },
             })
             .lookup({
-                from: Collection.scryfallBulkCards,
+                from: ScryfallCardModel.collection.name,
                 localField: 'received_card_list.id',
                 foreignField: 'id',
                 as: 'scryfall_cards',

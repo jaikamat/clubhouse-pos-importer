@@ -1,6 +1,6 @@
 import { Grid } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useInventoryContext } from '../context/InventoryContext';
 import ControlledSearchBar from '../ui/ControlledSearchBar';
 import Loading from '../ui/Loading';

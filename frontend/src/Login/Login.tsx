@@ -1,6 +1,5 @@
 import { Box, Container, makeStyles, Paper } from '@material-ui/core';
 import { FormikErrors, useFormik } from 'formik';
-import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { ClubhouseLocation, useAuthContext } from '../context/AuthProvider';
 import Button from '../ui/Button';
@@ -96,7 +95,7 @@ const Login = () => {
         validateOnChange: false,
     });
 
-    if (isLoggedIn()) return <Redirect to="/manage-inventory" />;
+    if (isLoggedIn()) return <Redirect to="/" />;
 
     return (
         <Container maxWidth="xs">

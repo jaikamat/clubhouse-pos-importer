@@ -1,4 +1,5 @@
 import { Divider, List, ListItem, ListItemIcon } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
@@ -7,16 +8,30 @@ import ListAltIcon from '@material-ui/icons/ListAlt';
 import QueueIcon from '@material-ui/icons/Queue';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthProvider';
 
 const NavLinks: FC<{}> = () => {
     const { pathname } = useLocation();
-    const { handleLogout } = useAuthContext();
+    const { handleLogout, admin } = useAuthContext();
 
     return (
         <List>
+            {admin && (
+                <ListItem
+                    button
+                    component={RouterLink}
+                    to="/manage-inventory"
+                    selected={pathname === '/manage-inventory'}
+                    replace
+                >
+                    <ListItemIcon>
+                        <AddIcon color="primary" />
+                    </ListItemIcon>
+                    Manage Inventory
+                </ListItem>
+            )}
             <ListItem
                 button
                 component={RouterLink}

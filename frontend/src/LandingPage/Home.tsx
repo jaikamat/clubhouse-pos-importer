@@ -6,7 +6,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import PhoneIcon from '@material-ui/icons/Phone';
 import RoomIcon from '@material-ui/icons/Room';
 import WatchLaterIcon from '@material-ui/icons/WatchLater';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import ch2 from './ch2.jpg';
@@ -337,8 +337,7 @@ const Home: FC = () => {
                                             <CenterIcon>
                                                 <WatchLaterIcon fontSize="large" />
                                             </CenterIcon>
-                                            Mon - Fri 12pm to 7pm, Sat - Sun
-                                            11am to 7pm
+                                            11am - 9pm Daily
                                         </Description>
                                         <br />
                                         <Description inverted>
@@ -371,8 +370,7 @@ const Home: FC = () => {
                                             <CenterIcon>
                                                 <WatchLaterIcon fontSize="large" />
                                             </CenterIcon>
-                                            Mon - Fri 12pm to 7pm, Sat - Sun
-                                            11am to 7pm
+                                            10am - 7pm Daily
                                         </Description>
                                         <br />
                                         <Description inverted>

@@ -12,7 +12,7 @@ import { getPrice } from '../common/Price';
 import { Trade } from '../context/ReceivingContext';
 import MetaData from '../ui/MetaData';
 import displayEmpty from '../utils/displayEmpty';
-import formatDate from '../utils/formatDate';
+import formatDateTime from '../utils/formatDateTime';
 import pluralize from '../utils/pluralize';
 import BrowseReceivingListDialog from './BrowseReceivingListDialog';
 import { Received } from './browseReceivingQuery';
@@ -23,12 +23,8 @@ interface Props {
 
 const BrowseReceivingItem: FC<Props> = ({ received }) => {
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-    const {
-        received_card_list,
-        created_at,
-        created_by,
-        customer_name,
-    } = received;
+    const { received_card_list, created_at, created_by, customer_name } =
+        received;
 
     const cashPrice = sum(
         received_card_list
@@ -71,7 +67,9 @@ const BrowseReceivingItem: FC<Props> = ({ received }) => {
                                 </Typography>
                                 <Typography color="textSecondary">
                                     <MetaData>
-                                        <span>{formatDate(created_at)}</span>
+                                        <span>
+                                            {formatDateTime(created_at)}
+                                        </span>
                                         <span>
                                             Received by {created_by.username}
                                         </span>
